@@ -1,0 +1,21 @@
+<h3>{{filename}}</h3>
+<a class="btn btn-success" ng-click="save()">Save</a>
+<div ng-repeat="line in file" class="line">
+    
+    <div ng-repeat="block in line" class="block">
+        
+        <div class="pinyin" contenteditable="true" ng-model="block.p" strip-br="true" strip-tags="true" select-non-editable="true">
+            {{block.p }}
+        </div>
+        
+        <div class="character" contenteditable="true" ng-model="block.c" strip-br="true" strip-tags="true" select-non-editable="true">
+            {{block.c }}
+        </div>
+        
+    </div>
+    
+    <a class="btn" ng-click="addBlock(line)">+ block</a>
+    
+</div>
+<div class="clearfix"></div>
+<a class="btn" ng-click="addLine()">+ line</a>

@@ -1,0 +1,32 @@
+:root {
+  --block-width: 25px;
+}
+
+#container {
+    width: 1024px;
+    margin: auto;
+}
+
+.line {
+    clear: both;
+}
+
+.block {
+    float: left;
+    text-align: center;
+    padding: 10px;
+    min-width: var(--block-width);
+}
+
+.pinyin {
+    font-size: 16px;
+    height: 22px;
+    min-width: var(--block-width);
+}
+
+.character {
+    font-size: 24px;
+    font-weight: bold;
+    height: 34px;
+    min-width: var(--block-width);
+}

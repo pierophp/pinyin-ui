@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html ng-app="app.pinyin">
+<head>
+    <title>Pinyin</title>
+    <meta charset="utf-8">
+    <link href="/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/lib/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+    <script src="/lib/angular/angular.min.js"></script>
+    <script src="/lib/angular-animate/angular-animate.min.js"></script>
+    <script src="/lib/angular-route/angular-route.min.js"></script>
+    <script src="/lib/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script src="/lib/angular-contenteditable/angular-contenteditable.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/controllers/filesCtrl.js"></script>
+    <script src="/js/controllers/fileCtrl.js"></script>
+    <script src="/js/services/filesAPIService.js"></script>
+    <script src="/js/config/routeConfig.js"></script>
+</head>
+<body>
+    <a href="/auth/google">Sign In with Google</a>
+    <div id="container" ng-view>
+         
+    </div>
+</body>
+</html>
