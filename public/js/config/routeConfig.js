@@ -1,4 +1,5 @@
-angular.module("app.pinyin").config(function ($routeProvider) {
+angular.module("app").config(function ($routeProvider) {
+
 
     $routeProvider
         .when('/', {

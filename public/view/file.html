@@ -1,21 +1,35 @@
-<h3>{{filename}}</h3>
-<a class="btn btn-success" ng-click="save()">Save</a>
-<div ng-repeat="line in file" class="line">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{filename}}</h3>
+        <a class="btn btn-success" ng-click="save()">Save</a>
+  </div>
+  <div class="panel-body">
     
-    <div ng-repeat="block in line" class="block">
-        
-        <div class="pinyin" contenteditable="true" ng-model="block.p" strip-br="true" strip-tags="true" select-non-editable="true">
-            {{block.p }}
+    <div ng-repeat="line in file" class="line">
+    
+        <div ng-repeat="block in line" class="block">
+            
+            <div class="pinyin" contenteditable="true" ng-model="block.p" strip-br="true" strip-tags="true" select-non-editable="true">
+                {{block.p }}
+            </div>
+            
+            <div class="character" contenteditable="true" ng-model="block.c" strip-br="true" strip-tags="true" select-non-editable="true">
+                {{block.c }}
+            </div>
         </div>
-        
-        <div class="character" contenteditable="true" ng-model="block.c" strip-br="true" strip-tags="true" select-non-editable="true">
-            {{block.c }}
-        </div>
-        
+    
+        <span uib-dropdown>
+        <a href class="btn" uib-dropdown-toggle>+ block</a>
+        <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+            <li>
+            <a href ng-click="addBlock(line)">Empty</a>
+            <a href ng-click="openModal()">Paste</a>
+            </li>
+        </ul>
+        </span>
+    
     </div>
-    
-    <a class="btn" ng-click="addBlock(line)">+ block</a>
-    
+    <div class="clearfix"></div>
+    <a class="btn" ng-click="addLine()">+ line</a>
+  </div>
 </div>
-<div class="clearfix"></div>
-<a class="btn" ng-click="addLine()">+ line</a>

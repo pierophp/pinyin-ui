@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "karma": "node node_modules/karma/bin/karma start karma.conf.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -14,5 +15,11 @@
     "express": "^4.13.4",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0"
+  },
+  "devDependencies": {
+    "jasmine": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-jasmine": "^1.0.2"
   }
 }

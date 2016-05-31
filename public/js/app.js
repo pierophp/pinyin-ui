@@ -1,1 +1,6 @@
-var app = angular.module('app.pinyin', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'contenteditable']);
+var app = angular.module('app', [
+    'ngRoute', 
+    'ngAnimate', 
+    'ui.bootstrap', 
+    'contenteditable'
+]); 
