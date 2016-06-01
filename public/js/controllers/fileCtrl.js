@@ -15,30 +15,34 @@ angular.module("app").controller("fileCtrl", function ($scope, file, filename, f
         filesAPI.save($scope.filename, $scope.file);
     };
 
-    $scope.openModal = function (size) {
+    $scope.openModal = function (size, line) {
+
         var modalInstance = $uibModal.open({
             templateUrl: 'view/modals/filePaste.html',
             controller: 'ModalFileCtrl',
             size: size,
             resolve: {
-                items: function () {
-                    return $scope.items;
+                line: function () {
+                    return line;
                 }
             }
         });
 
-        modalInstance.result.then(function (selectedItem) {
-            $scope.selected = selectedItem;
+        modalInstance.result.then(function (text, line) {
+            line = _.concat(line, filesAPI.parseClipboard(text));
         }, function () {
 
         });
     };
 });
 
-angular.module('app').controller('ModalFileCtrl', function ($scope, $uibModalInstance) {
+angular.module('app').controller('ModalFileCtrl', function ($scope, $uibModalInstance, line) {
+
+    $scope.line = line;
+    $scope.text;
 
     $scope.ok = function () {
-        $uibModalInstance.close();
+        $uibModalInstance.close($scope.text, line);
     };
 
     $scope.cancel = function () {
