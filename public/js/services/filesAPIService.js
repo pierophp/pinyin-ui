@@ -21,10 +21,7 @@ angular.module("app").factory("filesAPI", function ($http) {
         var pinyin = '';
 
         parts.forEach(function (part) {
-            
-            console.log(part);
-            console.log(_isChinese(part));
-            
+           
             if (_isChinese(part)) {
                 char = part;
                 row.push({ "p": pinyin, "c": char });
