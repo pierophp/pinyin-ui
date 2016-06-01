@@ -24,7 +24,7 @@ module.exports = function (config) {
       'public/lib/lodash/dist/lodash.core.min.js',
       'public/js/app.js',
       'public/js/services/filesAPIService.js',
-      'tests/*.js'
+      'tests/*/*.js'
     ],
     
 
