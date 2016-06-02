@@ -9,12 +9,12 @@
     
         <div ng-repeat="block in line" class="block">
             
-            <div class="pinyin" contenteditable="true" ng-model="block.p" strip-br="true" strip-tags="true" select-non-editable="true">
-                {{block.p }}
+            <div class="pinyin">
+                <input ng-model="block.p" ng-pinyin pu-elastic-input/>
             </div>
             
-            <div class="character" contenteditable="true" ng-model="block.c" strip-br="true" strip-tags="true" select-non-editable="true">
-                {{block.c }}
+            <div class="character">
+                <input ng-model="block.c" pu-elastic-input/>
             </div>
         </div>
     

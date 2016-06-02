@@ -19,7 +19,6 @@ module.exports = function (config) {
       'public/lib/angular-route/angular-route.min.js',
       'public/lib/angular-animate/angular-animate.min.js',
       'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
-      'public/lib/angular-contenteditable/angular-contenteditable.js',
       'public/lib/angular-mocks/angular-mocks.js',
       'public/lib/lodash/dist/lodash.core.min.js',
       'public/js/app.js',

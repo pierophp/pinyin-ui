@@ -13,23 +13,39 @@
 
 .block {
     float: left;
-    text-align: center;
     padding: 5px;
     min-width: var(--block-width);
+    text-align: center;
+}
+
+.block:hover{
+    background: #ffeb9a;
 }
 
 .pinyin {
-    font-size: 16px;
-    height: 22px;
-    min-width: var(--block-width);
     margin-bottom: 2px;
 }
 
-.character {
+.pinyin input{
+    background: #fff;
+    font-size: 16px;
+    height: 22px;
+    min-width: var(--block-width);
+    border: 0;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+}
+
+.character input{
     font-size: 24px;
     font-weight: bold;
     height: 34px;
     min-width: var(--block-width);
+    border: 0;
+    width: 100%;
+    text-align: center;
+    margin: auto;
 }
 
 .modal-body textarea{
