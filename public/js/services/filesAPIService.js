@@ -21,14 +21,14 @@ angular.module("app").factory("filesAPI", function ($http) {
         var pinyin = '';
 
         parts.forEach(function (part) {
-           
+
             if (_isChinese(part)) {
                 char = part;
                 row.push({ "p": pinyin, "c": char });
                 char = '';
                 pinyin = '';
             } else {
-
+                
                 if (pinyin) {
                     row.push({ "p": pinyin, "c": char });
                     char = '';
@@ -37,7 +37,11 @@ angular.module("app").factory("filesAPI", function ($http) {
                 pinyin = part;
             }
         });
-        
+
+        if (pinyin) {
+            row.push({ "p": pinyin, "c": char });
+        }
+
         return row;
     };
 

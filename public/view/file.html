@@ -5,7 +5,7 @@
   </div>
   <div class="panel-body">
     
-    <div ng-repeat="line in file" class="line">
+    <div ng-repeat="(lineIndex,line) in file.lines" class="line">
     
         <div ng-repeat="block in line" class="block">
             
@@ -22,8 +22,10 @@
         <a href class="btn" uib-dropdown-toggle>+ block</a>
         <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
             <li>
-            <a href ng-click="addBlock(line)">Empty</a>
-            <a href ng-click="openModal()">Paste</a>
+                <a href ng-click="addBlock(line)">Empty</a>
+            </li>
+            <li>
+                <a href ng-click="openModal('', line, lineIndex)">Paste</a>
             </li>
         </ul>
         </span>

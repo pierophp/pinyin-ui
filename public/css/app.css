@@ -22,7 +22,6 @@
     font-size: 16px;
     height: 22px;
     min-width: var(--block-width);
-    background: rgb(255, 251, 223);
     margin-bottom: 2px;
 }
 
@@ -31,7 +30,6 @@
     font-weight: bold;
     height: 34px;
     min-width: var(--block-width);
-    background: rgb(255, 251, 223);
 }
 
 .modal-body textarea{
