@@ -14,6 +14,10 @@ angular.module("app").controller("fileCtrl", function ($scope, file, filename, f
     $scope.removeLine = function(lineIndex){
         _.pullAt($scope.file.lines, [lineIndex]);
     };
+    
+    $scope.removeBlock = function(line, blockIndex){
+        _.pullAt(line, [blockIndex]);
+    };
 
     $scope.save = function () {
         filesAPI.save($scope.filename, $scope.file);

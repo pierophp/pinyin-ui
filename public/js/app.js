@@ -3,5 +3,6 @@ var app = angular.module('app', [
     'ngAnimate', 
     'ng-pinyin',
     'ui.bootstrap', 
-    'puElasticInput'
+    'puElasticInput',
+    'dndLists'
 ]); 

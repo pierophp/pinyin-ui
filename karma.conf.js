@@ -23,6 +23,7 @@ module.exports = function (config) {
       'public/lib/lodash/dist/lodash.min.js',
       'public/lib/ng-pinyin/ng-pinyin.min.js',
       'public/lib/angular-elastic-input/dist/angular-elastic-input.min.js',
+      'public/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js',
       'public/js/app.js',
       'public/js/services/filesAPIService.js',
       'tests/client/*.js'

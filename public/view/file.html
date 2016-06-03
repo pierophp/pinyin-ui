@@ -3,13 +3,20 @@
         <h3 class="panel-title">{{filename}}</h3>
         <a class="btn btn-success" ng-click="save()">Save</a>
     </div>
-    <div class="panel-body">
+    <div class="panel-body" dnd-list="file.lines">
+        
+        <div ng-repeat="(lineIndex,line) in file.lines" 
+             class="line bs-callout bs-callout-primary" 
+             dnd-draggable="line" 
+             dnd-moved="file.lines.splice($index, 1)" 
+             dnd-effect-allowed="move">
 
-        <div ng-repeat="(lineIndex,line) in file.lines" class="line bs-callout bs-callout-primary">
-
-            <div ng-repeat="block in line" class="block">
+            <div ng-repeat="(blockIndex,block) in line" class="block">
+                
+                <a href class="remove" ng-click="removeBlock(line, blockIndex)">X</a>
+                
                 <div class="pinyin">
-                    <input ng-model="block.p" ng-pinyin pu-elastic-input/>
+                    <input ng-pinyin ng-model="block.p" pu-elastic-input/>
                 </div>
 
                 <div class="character">

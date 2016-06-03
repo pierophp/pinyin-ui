@@ -13,7 +13,11 @@ angular.module("app").factory("filesAPI", function ($http) {
     };
 
     var _parseClipboard01 = function (content) {
-
+        
+        content = content.replace(/(\r\n|\n|\r)/gm, ' ');
+        
+        console.log(content);
+            
         var parts = _.compact(content.split(' '));
         var row = [];
         var block = {};
@@ -88,6 +92,8 @@ angular.module("app").factory("filesAPI", function ($http) {
         [0xfe30, 0xfe4f], // https://en.wikipedia.org/wiki/CJK_Compatibility_Forms
         [0xf900, 0xfaff], // https://en.wikipedia.org/wiki/CJK_Compatibility_Ideographs
         [0x2f800, 0x2fa1f], // https://en.wikipedia.org/wiki/CJK_Compatibility_Ideographs_Supplement
+        [65311, 65311], // ponctuation ？
+        
     ];
 
     var _isChinese = function (str) {
@@ -97,6 +103,7 @@ angular.module("app").factory("filesAPI", function ($http) {
         var range;
 
         for (var i = 0; i < str.length;) {
+            
             charCode = str.codePointAt(i);
             flag = false;
 

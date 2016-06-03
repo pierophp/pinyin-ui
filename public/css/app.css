@@ -13,13 +13,26 @@
 
 .block {
     float: left;
-    padding: 5px;
+    padding: 5px 10px;
     min-width: var(--block-width);
     text-align: center;
+    position: relative;
 }
 
 .block:hover{
-    background: #ffeb9a;
+    background: #fff4c5;
+}
+
+.block .remove {
+    display: none;
+    position: absolute;
+    top:0;
+    right: 2px;
+    font-size: 10px;
+}
+
+.block:hover .remove {
+    display: block;
 }
 
 .pinyin {
@@ -56,3 +69,4 @@
     padding: 0 10px;
     border-left-width: 4px;
 }
+
