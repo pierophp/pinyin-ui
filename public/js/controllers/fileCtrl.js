@@ -21,7 +21,7 @@ angular.module("app").controller("fileCtrl", function ($scope, file, filename, f
     
     $scope.currentLineIndex;
 
-    $scope.openModal = function (size, line, lineIndex) {
+    $scope.openModalClipBoard01 = function (size, line, lineIndex) {
 
         $scope.currentLineIndex = lineIndex;
 
@@ -37,7 +37,30 @@ angular.module("app").controller("fileCtrl", function ($scope, file, filename, f
         });
 
         modalInstance.result.then(function (data) {
-            $scope.file.lines[$scope.currentLineIndex] = _.concat(data.line, filesAPI.parseClipboard(data.text));
+            $scope.file.lines[$scope.currentLineIndex] = _.concat(data.line, filesAPI.parseClipboard01(data.text));
+        }, function () {
+
+        });
+    };
+    
+    
+    $scope.openModalClipBoard02 = function (size, line, lineIndex) {
+
+        $scope.currentLineIndex = lineIndex;
+
+        var modalInstance = $uibModal.open({
+            templateUrl: 'view/modals/filePaste.html',
+            controller: 'ModalFileCtrl',
+            size: size,
+            resolve: {
+                line: function () {
+                    return line;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (data) {
+            $scope.file.lines[$scope.currentLineIndex] = _.concat(data.line, filesAPI.parseClipboard02(data.text));
         }, function () {
 
         });

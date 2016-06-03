@@ -12,7 +12,7 @@ angular.module("app").factory("filesAPI", function ($http) {
         return $http.post("/files/save?filename=" + filename, { content: angular.toJson(content) });
     };
 
-    var _parseClipboard = function (content) {
+    var _parseClipboard01 = function (content) {
 
         var parts = _.compact(content.split(' '));
         var row = [];
@@ -28,7 +28,7 @@ angular.module("app").factory("filesAPI", function ($http) {
                 char = '';
                 pinyin = '';
             } else {
-                
+
                 if (pinyin) {
                     row.push({ "p": pinyin, "c": char });
                     char = '';
@@ -42,6 +42,36 @@ angular.module("app").factory("filesAPI", function ($http) {
             row.push({ "p": pinyin, "c": char });
         }
 
+        return row;
+    };
+
+    var _parseClipboard02 = function (content) {
+
+        var row = [];
+        var lines = _.compact(content.split('\n'));
+
+        var hanziLine = lines[0];
+        var pinyinLine = lines[1];
+        
+        var pinyinWords = pinyinLine.split(' ');
+        
+        var i = 0;
+        
+        pinyinWords.forEach(function (pinyinWord) {
+            var syllables = _separatePinyinInSyllables(pinyinWord);
+            var words = syllables.split(' ');
+            var pinyin = '';
+            var char = '';
+            words.forEach(function(word){
+                var hanziWord = hanziLine.substr(i, 1);
+                pinyin += word;
+                char += hanziWord;
+                i++;
+            });
+            
+            row.push({ "p": pinyin, "c": char});
+        });
+        
         return row;
     };
 
@@ -92,10 +122,25 @@ angular.module("app").factory("filesAPI", function ($http) {
         return true;
     }
 
+    var _separatePinyinInSyllables = function (pinyin) {
+
+        var vowels = 'aāáǎàeēéěèiīíǐìoōóǒòuūúǔù';
+
+        return pinyin
+            .replace(new RegExp('([' + vowels + '])([^' + vowels + 'nr\w\s])'), '$1 $2')
+            .replace(new RegExp('(\w)([csz]h)'), '$1 $2')
+            .replace(new RegExp('(n)([^' + vowels + 'vg\w\s])'), '$1 $2')
+            .replace(new RegExp('([' + vowels + 'v])([^' + vowels + '\w\s])([' + vowels + 'v])'), '$1 $2$3')
+            .replace(new RegExp('([' + vowels + 'v])(n)(g)([' + vowels + 'v])'), '$1$2 $3$4')
+            .replace(new RegExp('([gr])([^' + vowels + '\w\s])'), '$1 $2')
+            .replace(new RegExp('([^e\w\s])(r)'), '$1 $2');
+    };
+
     return {
         getFiles: _getFiles,
         getFile: _getFile,
         save: _save,
-        parseClipboard: _parseClipboard
+        parseClipboard01: _parseClipboard01,
+        parseClipboard02: _parseClipboard02
     };
 });

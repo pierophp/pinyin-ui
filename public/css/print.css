@@ -1,0 +1,19 @@
+.bs-callout {
+    border: none;
+}
+
+.panel-default {
+    border: none;
+}
+
+.panel-heading {
+    display: none;
+}
+
+.dropdown {
+    display: none;
+}
+
+.footer {
+    display: none;
+}

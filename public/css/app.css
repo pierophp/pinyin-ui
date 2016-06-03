@@ -51,3 +51,8 @@
 .modal-body textarea{
     height: 150px;
 }
+
+.bs-callout {
+    padding: 0 10px;
+    border-left-width: 4px;
+}

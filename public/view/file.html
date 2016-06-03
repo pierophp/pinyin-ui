@@ -2,38 +2,54 @@
     <div class="panel-heading">
         <h3 class="panel-title">{{filename}}</h3>
         <a class="btn btn-success" ng-click="save()">Save</a>
-  </div>
-  <div class="panel-body">
-    
-    <div ng-repeat="(lineIndex,line) in file.lines" class="line">
-    
-        <div ng-repeat="block in line" class="block">
-            
-            <div class="pinyin">
-                <input ng-model="block.p" ng-pinyin pu-elastic-input/>
-            </div>
-            
-            <div class="character">
-                <input ng-model="block.c" pu-elastic-input/>
-            </div>
-        </div>
-    
-        <span uib-dropdown>
-        <a href class="btn" uib-dropdown-toggle>Options</a>
-        <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
-            <li>
-                <a href ng-click="addBlock(line)">Add Empty Block</a>
-            </li>
-            <li>
-                <a href ng-click="openModal('', line, lineIndex)">Paste (pinyin + " " + char)</a>
-            </li>
-            <li>
-                <a href ng-click="removeLine(lineIndex)">Remove line</a>
-            </li>
-        </ul>
-        </span>
     </div>
-    <div class="clearfix"></div>
-    <a class="btn" ng-click="addLine()">+ line</a>
-  </div>
+    <div class="panel-body">
+
+        <div ng-repeat="(lineIndex,line) in file.lines" class="line bs-callout bs-callout-primary">
+
+            <div ng-repeat="block in line" class="block">
+                <div class="pinyin">
+                    <input ng-model="block.p" ng-pinyin pu-elastic-input/>
+                </div>
+
+                <div class="character">
+                    <input ng-model="block.c" pu-elastic-input/>
+                </div>
+            </div>
+
+            <div uib-dropdown class="btn-group">
+                <a href class="btn btn-default" uib-dropdown-toggle>Options <span class="caret"></a>
+                <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+                    <li>
+                        <a href ng-click="addBlock(line)">
+                            <i class="glyphicon glyphicon-plus"></i> Add Empty Block
+                        </a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <a href ng-click="openModalClipBoard01('', line, lineIndex)">
+                            <i class="glyphicon glyphicon-paste"></i> Paste (pinyin + space + hanzi)
+                        </a>
+                    </li>
+                    <li>
+                        <a href ng-click="openModalClipBoard02('', line, lineIndex)">
+                            <i class="glyphicon glyphicon-paste"></i> Paste (2 lines)
+                        </a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <a href ng-click="removeLine(lineIndex)">
+                            <i class="glyphicon glyphicon-trash"></i> Remove line
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="footer">
+            <a class="btn btn-success" ng-click="addLine()">+ line</a>
+        </div>
+    </div>
 </div>

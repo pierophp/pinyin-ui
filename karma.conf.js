@@ -20,10 +20,12 @@ module.exports = function (config) {
       'public/lib/angular-animate/angular-animate.min.js',
       'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'public/lib/angular-mocks/angular-mocks.js',
-      'public/lib/lodash/dist/lodash.core.min.js',
+      'public/lib/lodash/dist/lodash.min.js',
+      'public/lib/ng-pinyin/ng-pinyin.min.js',
+      'public/lib/angular-elastic-input/dist/angular-elastic-input.min.js',
       'public/js/app.js',
       'public/js/services/filesAPIService.js',
-      'tests/*/*.js'
+      'tests/client/*.js'
     ],
     
 
