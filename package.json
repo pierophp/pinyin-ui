@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "init": "nodemon index.js",
     "test": "node node_modules/karma/bin/karma start karma.conf.js",
+    "test-node": "node node_modules/.bin/mocha --reporter spec tests/server",
     "test-travis": "node node_modules/karma/bin/karma start karma.conf.js --single-run"
   },
   "author": "",
@@ -14,13 +16,17 @@
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
     "passport": "^0.3.2",
-    "passport-google-oauth": "^1.0.0"
+    "passport-google-oauth": "^1.0.0",
+    "unicode-mandarin-readings": "^1.0.0",
+    "xml2js": "^0.4.16"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "jasmine": "^2.4.1",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",
     "karma-firefox-launcher": "^1.0.0",
-    "karma-jasmine": "^1.0.2"
+    "karma-jasmine": "^1.0.2",
+    "mocha": "^2.5.3"
   }
 }

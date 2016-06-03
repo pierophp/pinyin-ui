@@ -19,17 +19,19 @@
         </div>
     
         <span uib-dropdown>
-        <a href class="btn" uib-dropdown-toggle>+ block</a>
+        <a href class="btn" uib-dropdown-toggle>Options</a>
         <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
             <li>
-                <a href ng-click="addBlock(line)">Empty</a>
+                <a href ng-click="addBlock(line)">Add Empty Block</a>
             </li>
             <li>
-                <a href ng-click="openModal('', line, lineIndex)">Paste</a>
+                <a href ng-click="openModal('', line, lineIndex)">Paste (pinyin + " " + char)</a>
+            </li>
+            <li>
+                <a href ng-click="removeLine(lineIndex)">Remove line</a>
             </li>
         </ul>
         </span>
-    
     </div>
     <div class="clearfix"></div>
     <a class="btn" ng-click="addLine()">+ line</a>

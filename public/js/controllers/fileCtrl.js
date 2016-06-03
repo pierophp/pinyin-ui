@@ -8,7 +8,11 @@ angular.module("app").controller("fileCtrl", function ($scope, file, filename, f
     };
 
     $scope.addLine = function () {
-        $scope.file.push([]);
+        $scope.file.lines.push([]);
+    };
+    
+    $scope.removeLine = function(lineIndex){
+        _.pullAt($scope.file.lines, [lineIndex]);
     };
 
     $scope.save = function () {
