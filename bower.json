@@ -24,5 +24,8 @@
     "lodash": "^4.13.1",
     "ng-pinyin": "^0.3.0",
     "angular-elastic-input": "^2.2.0"
+  },
+  "resolutions": {
+    "angular": "1.5.6"
   }
 }
