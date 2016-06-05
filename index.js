@@ -6,6 +6,7 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use('/auth', require('./controllers/AuthController'));
 app.use('/files', require('./controllers/FilesController'));
+app.use('/unihan', require('./controllers/UnihanController'));
 
 app.listen(9000, function() {
     console.log('Pinyin app listening on port 9000!');

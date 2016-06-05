@@ -1,12 +1,12 @@
 
 var expect = require("chai").expect;
 
-var UnihanDatabaseParser = require('../../service/UnihanDatabaseParser');
+var UnihanDatabaseParser = require('../../services/UnihanDatabaseParser');
 var udp = new UnihanDatabaseParser();
 
 describe("XML Test", function () {
 
-    it("should multiply 2 and 3", function () {
+    it("Load file", function () {
         
         udp.loadFile(__dirname + '/resources/UnihanDatabase.xml');
         //expect(1).to.equal(1);
