@@ -8,6 +8,6 @@ app.use('/auth', require('./controllers/AuthController'));
 app.use('/files', require('./controllers/FilesController'));
 app.use('/unihan', require('./controllers/UnihanController'));
 
-app.listen(9000, function() {
-    console.log('Pinyin app listening on port 9000!');
+app.listen(9090, function() {
+    console.log('Pinyin app listening on port 9090!');
 });
