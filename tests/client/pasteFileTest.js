@@ -19,6 +19,7 @@ describe('Parse Clipboard', function () {
     
     
     it('Clipboard 02', inject(function (filesAPI) {
+        
         var expectParsed = [
             {'p': 'Nǐ', 'c': '你'}, 
             {'p': 'xiǎng', 'c': '想'}, 

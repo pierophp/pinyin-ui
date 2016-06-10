@@ -148,6 +148,7 @@ angular.module("app").factory("filesAPI", function ($http) {
         getFile: _getFile,
         save: _save,
         parseClipboard01: _parseClipboard01,
-        parseClipboard02: _parseClipboard02
+        parseClipboard02: _parseClipboard02,
+        separatePinyinInSyllables: _separatePinyinInSyllables
     };
 });

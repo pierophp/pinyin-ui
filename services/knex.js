@@ -14,7 +14,7 @@ var params = {
 var knex = require('knex')(params);
 
 knex.on('query', function (queryData) {
-    console.log(queryData);
+    //console.log(queryData);
 });
 
 module.exports = knex;

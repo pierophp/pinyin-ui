@@ -1,8 +1,10 @@
 <div class="panel panel-default">
+    
     <div class="panel-heading">
         <h3 class="panel-title">{{filename}}</h3>
         <a class="btn btn-success" ng-click="save()">Save</a>
     </div>
+
     <div class="panel-body" dnd-list="file.lines">
         
         <div ng-repeat="(lineIndex,line) in file.lines" 
@@ -16,7 +18,12 @@
                 <a href class="remove" ng-click="removeBlock(line, blockIndex)">X</a>
                 
                 <div class="pinyin">
-                    <input ng-pinyin ng-model="block.p" pu-elastic-input/>
+                    <input ng-model="block.p" ng-pinyin pu-elastic-input autocomplete autocomplete-suggestions="autocompleteSuggestions" autocomplete-output="block.c" autocomplete-callback="pinyinAutocomplete"/>
+                    <div class="autocomplete" >
+                        <a href ng-repeat="item in autocompleteSuggestions.items" ng-click="pinyinSelectAutocomplete(block, item.ideogram, autocompleteSuggestions)">
+                            {{ item.ideogram | ideogram }}
+                        </a>
+                    </div>
                 </div>
 
                 <div class="character">

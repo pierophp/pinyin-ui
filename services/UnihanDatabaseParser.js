@@ -1,6 +1,7 @@
 'use strict';
 var knex = require('./knex');
 var removeDiacritics = require('diacritics').remove;
+var Promise = require('bluebird');
 
 module.exports = class UnihanDatabaseParser {
 
@@ -19,10 +20,10 @@ module.exports = class UnihanDatabaseParser {
 
             var chars = result.ucd.repertoire[0].char;
 
-            for (let char of chars) {
+            Promise.map(chars, function (char) {
 
                 if (!char.$.kMandarin) {
-                    continue;
+                    return false;
                 }
 
                 var frequency = char.$.kFrequency;
@@ -31,7 +32,7 @@ module.exports = class UnihanDatabaseParser {
                     frequency = 999;
                 }
 
-                knex('cjk').insert({
+                return knex('cjk').insert({
                     ideogram: char.$.cp,
                     pronunciation: char.$.kMandarin,
                     pronunciation_unaccented: removeDiacritics(char.$.kMandarin),
@@ -40,10 +41,12 @@ module.exports = class UnihanDatabaseParser {
                     language_id: 1,
                     usage: 0,
                     created_at: new Date()
-                }).then(function (id) {
-                    
                 });
-            }
+
+            }, {concurrency: 10}).then(function () {
+
+            });
+
         });
 
     }

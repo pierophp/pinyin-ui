@@ -70,3 +70,14 @@
     border-left-width: 4px;
 }
 
+.autocomplete{
+    background: #fff;
+}
+
+.autocomplete a{
+    font-size: 16px;
+}   
+
+.autocomplete a.selected{
+    font-weight: bold;
+}

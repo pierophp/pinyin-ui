@@ -4,5 +4,7 @@ var app = angular.module('app', [
     'ng-pinyin',
     'ui.bootstrap', 
     'puElasticInput',
+    'autocomplete',
+    'autoFocus',
     'dndLists'
 ]); 

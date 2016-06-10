@@ -1,4 +1,5 @@
-angular.module("app").directive('autoFocus', function($timeout) {
+var app = angular.module('autoFocus', []);
+app.directive('autoFocus', function($timeout) {
     return {
         restrict: 'AC',
         link: function(_scope, _element) {

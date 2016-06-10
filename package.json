@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "init": "nodemon index.js",
+    "knex": "node node_modules/knex/src/bin/cli.js",
     "test": "node node_modules/karma/bin/karma start karma.conf.js",
     "test-node": "node node_modules/.bin/mocha --reporter spec tests/server",
     "test-travis": "node node_modules/karma/bin/karma start karma.conf.js --single-run"
