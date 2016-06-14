@@ -33,7 +33,7 @@ module.exports = class UnihanDatabaseParser {
                 }
 
                 var definition = char.$.kDefinition;
-                if (defintion) {
+                if (definition) {
                     definition = definition.substr(0, 255);
                 }
                 

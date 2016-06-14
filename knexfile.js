@@ -18,12 +18,12 @@ module.exports = {
   },
 
   staging: {
-    client: 'postgresql',
+    client: 'mysql',
     connection: {
       host: '127.0.0.1',
-      database: 'my_db',
-      user:     'username',
-      password: 'password',
+      database: 'pinyin',
+      user:     'root',
+      password: 'root',
       charset: 'utf8'
     },
     pool: {
@@ -36,12 +36,12 @@ module.exports = {
   },
 
   production: {
-    client: 'postgresql',
+    client: 'mysql',
     connection: {
       host: '127.0.0.1',
-      database: 'my_db',
-      user:     'username',
-      password: 'password',
+      database: 'pinyin',
+      user:     'root',
+      password: 'root',
       charset: 'utf8'
     },
     pool: {
