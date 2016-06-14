@@ -8,7 +8,7 @@ exports.up = function (knex, Promise) {
         table.index('pronunciation');
         table.string('pronunciation_unaccented');
         table.index('pronunciation_unaccented');
-        table.string('definition');
+        table.text('definition');
         table.integer('frequency');
         table.integer('usage');
         table.integer('language_id').notNullable().unsigned().index().references('language.id');
