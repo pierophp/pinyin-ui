@@ -32,8 +32,11 @@ module.exports = class UnihanDatabaseParser {
                     frequency = 999;
                 }
 
-                var definition = char.$.kDefinition.substr(0, 255);
-
+                var definition = char.$.kDefinition;
+                if (defintion) {
+                    definition = definition.substr(0, 255);
+                }
+                
                 return knex('cjk').insert({
                     ideogram: char.$.cp,
                     pronunciation: char.$.kMandarin,
@@ -45,7 +48,7 @@ module.exports = class UnihanDatabaseParser {
                     created_at: new Date()
                 });
 
-            }, {concurrency: 10}).then(function () {
+            }, { concurrency: 10 }).then(function () {
 
             });
 
