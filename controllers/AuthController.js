@@ -7,7 +7,7 @@ var env = require('../env');
 passport.use(new GoogleStrategy({
     clientID: env.google_client_id,
     clientSecret: env.google_client_secret,
-    callbackURL: "http://local.nodejs.org:9000/auth/google/callback"
+    callbackURL: env.base_url + "/auth/google/callback"
 },
     function (accessToken, refreshToken, profile, done) {
         //return done(err, user);
