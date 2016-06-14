@@ -32,11 +32,13 @@ module.exports = class UnihanDatabaseParser {
                     frequency = 999;
                 }
 
+                var definition = char.$.kDefinition.substr(0, 255);
+
                 return knex('cjk').insert({
                     ideogram: char.$.cp,
                     pronunciation: char.$.kMandarin,
                     pronunciation_unaccented: removeDiacritics(char.$.kMandarin),
-                    definition: char.$.kDefinition,
+                    definition: definition,
                     frequency: frequency,
                     language_id: 1,
                     usage: 0,
