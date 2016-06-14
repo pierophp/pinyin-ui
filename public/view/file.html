@@ -7,7 +7,7 @@
 
     <div class="panel-body" dnd-list="file.lines">
         
-        <div ng-repeat="(lineIndex,line) in file.lines" 
+        <div ng-repeat="(lineIndex,line) in file.lines track by $index" 
              class="line bs-callout bs-callout-primary" 
              dnd-draggable="line" 
              dnd-moved="file.lines.splice($index, 1)" 
@@ -20,8 +20,11 @@
                 <div class="pinyin">
                     <input ng-model="block.p" ng-pinyin pu-elastic-input autocomplete autocomplete-suggestions="autocompleteSuggestions" autocomplete-output="block.c" autocomplete-callback="pinyinAutocomplete"/>
                     <div class="autocomplete" >
-                        <a href ng-repeat="item in autocompleteSuggestions.items" ng-click="pinyinSelectAutocomplete(block, item.ideogram, autocompleteSuggestions)">
-                            {{ item.ideogram | ideogram }}
+                        <a href 
+                           ng-repeat="item in autocompleteSuggestions.items track by $index" 
+                           ng-click="pinyinSelectAutocomplete(block, item.ideogram, autocompleteSuggestions)" 
+                           ng-class="{'selected': $index == autocompleteSuggestions.selected}">
+                            {{ item.ideogram | ideogram }} 
                         </a>
                     </div>
                 </div>
@@ -37,6 +40,11 @@
                     <li>
                         <a href ng-click="addBlock(line)">
                             <i class="glyphicon glyphicon-plus"></i> Add Empty Block
+                        </a>
+                    </li>
+                    <li>
+                        <a href ng-click="convertToPinyin(line)">
+                            <i class="glyphicon glyphicon-font"></i> Convert to Pinyin
                         </a>
                     </li>
                     <li role="separator" class="divider"></li>

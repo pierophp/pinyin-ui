@@ -12,6 +12,10 @@ angular.module("app").factory("filesAPI", function ($http) {
         return $http.post("/files/save?filename=" + filename, { content: angular.toJson(content) });
     };
 
+    var _toPinyin= function (ideograms) {
+        return $http.get("/unihan/to_pinyin?ideograms=" + ideograms);
+    };
+
     var _parseClipboard01 = function (content) {
         
         content = content.replace(/(\r\n|\n|\r)/gm, ' ');
@@ -147,6 +151,7 @@ angular.module("app").factory("filesAPI", function ($http) {
         getFiles: _getFiles,
         getFile: _getFile,
         save: _save,
+        toPinyin: _toPinyin,
         parseClipboard01: _parseClipboard01,
         parseClipboard02: _parseClipboard02,
         separatePinyinInSyllables: _separatePinyinInSyllables

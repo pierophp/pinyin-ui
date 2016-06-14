@@ -13,11 +13,7 @@ router.get('/load', function (req, res) {
     res.send('Status 200');
 });
 
-
 router.get('/search', function (req, res) {
-
-    //var char = '人';
-    //console.log(char.charCodeAt(0).toString(16));
 
     var pinyin = req.query.pinyin.toLowerCase();
 
@@ -44,6 +40,40 @@ router.get('/search', function (req, res) {
             var result = {};
             result.items = mostUsed;
             result.lessUsed = lessUsed;
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify(result));
+        });
+});
+
+router.get('/to_pinyin', function (req, res) {
+
+    var ideograms = req.query.ideograms;
+    var ideogramPromises = [];
+
+    for (let i = 0; i < ideograms.length; i++) {
+
+        var ideogramConverted = ideograms[i].charCodeAt(0).toString(16);
+
+        ideogramPromises.push(knex('cjk')
+            .where({
+                ideogram: ideogramConverted
+            })
+            .where('frequency', '<', 5)
+            .orderBy('frequency', 'ASC')
+            .orderBy('usage', 'DESC')
+            .select('id', 'pronunciation')
+        );
+    }
+
+    Promise.all(ideogramPromises).then(
+
+        function (ideograms) {
+            var result = {};
+            result.pinyin = '';
+            for (let ideogram of ideograms) {
+                result.pinyin += ideogram[0].pronunciation;
+            }
+
             res.setHeader('Content-Type', 'application/json');
             res.send(JSON.stringify(result));
         });

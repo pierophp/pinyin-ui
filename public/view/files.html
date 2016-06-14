@@ -1,1 +1,11 @@
-<a ng-repeat="file in files" href="#files/file/{{ file }}">{{ file }}</a>
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Simple Pinyin Editor</h3>
+        <a href class="btn btn-success" ng-click="addFile()">New File</a>
+    </div>
+
+    <div class="panel-body">
+        <a ng-repeat="file in files" href="#files/file/{{ file }}">{{ file }}</a>
+    </div>
+</div>

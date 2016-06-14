@@ -22,7 +22,8 @@ app.directive('autocomplete', function ($parse) {
 
           if (newValue) {
             scope.autocompleteCallback()(newValue).then(function (response) {
-              scope.autocompleteSuggestions  = response.data;
+              scope.autocompleteSuggestions = response.data;
+              scope.autocompleteSuggestions.selected = 0;
             });
 
           }
@@ -30,14 +31,19 @@ app.directive('autocomplete', function ($parse) {
       });
 
       element[0].addEventListener('blur', function (e) {
+        scope.autocompleteSuggestions.items = [];
         stopWatch();
       });
 
       element[0].addEventListener('keydown', function (e) {
         var keycode = e.keyCode || e.which;
+        var key = { left: 37, up: 38, right: 39, down: 40, enter: 13, esc: 27, tab: 9 };
+        if (keycode == key.enter) {
+          var suggestion = scope.autocompleteSuggestions.items[scope.autocompleteSuggestions.selected];
+          //var suggestion.ideogram;
+        }
       });
 
-      var key = { left: 37, up: 38, right: 39, down: 40, enter: 13, esc: 27, tab: 9 };
 
     }
   };

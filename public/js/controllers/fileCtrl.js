@@ -25,7 +25,7 @@ angular.module("app").controller("fileCtrl", function ($scope, $http, $filter, f
     };
 
     $scope.pinyinAutocomplete = function (value) {
-    
+
         let syllables = filesAPI.separatePinyinInSyllables(value).split(' ');
 
         let lastSyllable = syllables[syllables.length - 1];
@@ -33,12 +33,28 @@ angular.module("app").controller("fileCtrl", function ($scope, $http, $filter, f
         return $http.get("/unihan/search?pinyin=" + lastSyllable);
     };
 
-    $scope.pinyinSelectAutocomplete = function(block, value, autocomplete){
+    $scope.pinyinSelectAutocomplete = function (block, value, autocomplete) {
         block.c += $filter('ideogram')(value);
         autocomplete.items = [];
     };
 
     $scope.currentLineIndex;
+
+    $scope.convertToPinyin = function (line) {
+        
+        for (let block of line) {
+
+            (function () {
+                
+                var pinyinBlock = block;
+
+                filesAPI.toPinyin(block.c).then(function (response) {
+                    pinyinBlock.p = response.data.pinyin;
+                });
+            })();
+        }
+
+    };
 
     $scope.openModalClipBoard01 = function (size, line, lineIndex) {
 
