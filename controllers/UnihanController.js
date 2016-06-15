@@ -21,7 +21,7 @@ router.get('/search', function (req, res) {
         .where({
             pronunciation: pinyin
         })
-        .where('frequency', '<', 5)
+        .where('frequency', '<=', 5)
         .orderBy('frequency', 'ASC')
         .orderBy('usage', 'DESC')
         .select('id', 'pronunciation', 'ideogram', 'frequency', 'usage');
@@ -30,7 +30,7 @@ router.get('/search', function (req, res) {
         .where({
             pronunciation: pinyin
         })
-        .where('frequency', '>=', 5)
+        .where('frequency', '>', 5)
         .orderBy('frequency', 'ASC')
         .orderBy('usage', 'DESC')
         .select('id', 'pronunciation', 'ideogram', 'frequency', 'usage');
@@ -58,7 +58,6 @@ router.get('/to_pinyin', function (req, res) {
             .where({
                 ideogram: ideogramConverted
             })
-            .where('frequency', '<', 5)
             .orderBy('frequency', 'ASC')
             .orderBy('usage', 'DESC')
             .select('id', 'pronunciation')
@@ -69,9 +68,15 @@ router.get('/to_pinyin', function (req, res) {
 
         function (ideograms) {
             var result = {};
+
             result.pinyin = '';
+
             for (let ideogram of ideograms) {
-                result.pinyin += ideogram[0].pronunciation;
+                if (ideogram.length == 0) {
+                    result.pinyin += "__";
+                } else {
+                    result.pinyin += ideogram[0].pronunciation;
+                }
             }
 
             res.setHeader('Content-Type', 'application/json');
