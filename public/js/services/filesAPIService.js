@@ -12,7 +12,7 @@ angular.module("app").factory("filesAPI", function ($http) {
         return $http.post("/files/save?filename=" + filename, { content: angular.toJson(content) });
     };
 
-    var _toPinyin= function (ideograms) {
+    var _toPinyin = function (ideograms) {
         return $http.get("/unihan/to_pinyin?ideograms=" + ideograms);
     };
 
@@ -20,8 +20,6 @@ angular.module("app").factory("filesAPI", function ($http) {
         
         content = content.replace(/(\r\n|\n|\r)/gm, ' ');
         
-        console.log(content);
-            
         var parts = _.compact(content.split(' '));
         var row = [];
         var block = {};
@@ -131,7 +129,7 @@ angular.module("app").factory("filesAPI", function ($http) {
         }
 
         return true;
-    }
+    };
 
     var _separatePinyinInSyllables = function (pinyin) {
 
