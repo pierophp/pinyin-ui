@@ -17,3 +17,7 @@
 .footer {
     display: none;
 }
+
+.character input{
+    font-weight: normal;
+}
