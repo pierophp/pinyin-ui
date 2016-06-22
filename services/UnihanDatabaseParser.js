@@ -44,6 +44,7 @@ module.exports = class UnihanDatabaseParser {
                     definition: definition,
                     frequency: frequency,
                     language_id: 1,
+                    type: 'C',
                     usage: 0,
                     created_at: new Date()
                 });

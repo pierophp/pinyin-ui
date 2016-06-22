@@ -2,13 +2,18 @@
 A simple pinyin editor
 
 ## Install
-Run
+Run:
+
+```
 npm install
 npm install -g bower
+npm install -g knex
 bower install
+knex migrate:latest
+npm run init
+```
+Create a env.js file base on env.js.example
 
-Download de Unihan Database in XML format
-http://www.unicode.org/Public/UCD/latest/ucdxml/
 
-Unzip and put in storage/ucd.unihan.flat.xml
+Load the Unihan Database:
 http://localhost:9090/unihan/load
