@@ -23,7 +23,7 @@ module.exports = {
       host: '127.0.0.1',
       database: 'pinyin',
       user:     'root',
-      password: 'root',
+      password: null,
       charset: 'utf8'
     },
     pool: {
