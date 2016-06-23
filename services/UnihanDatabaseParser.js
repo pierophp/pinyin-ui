@@ -9,6 +9,34 @@ module.exports = class UnihanDatabaseParser {
 
     }
 
+    saveWord(pinyin, ideograms) {
+
+        let ideogramsConverted = '';
+
+        for (let i = 0; i < ideograms.length; i++) {
+            ideogramsConverted += ideograms[i].charCodeAt(0).toString(16);
+        }
+
+        return new Promise(function (resolve, reject) {
+
+            knex('cjk').insert({
+                ideogram: ideogramsConverted,
+                pronunciation: pinyin,
+                pronunciation_unaccented: removeDiacritics(pinyin),
+                definition: '',
+                frequency: 1,
+                language_id: 1,
+                type: 'W',
+                usage: 0,
+                created_at: new Date()
+            }).then(function () {
+                resolve();
+            });
+
+
+        });
+    }
+
     loadFile(file) {
 
         var fs = require('fs');
@@ -36,7 +64,7 @@ module.exports = class UnihanDatabaseParser {
                 if (definition) {
                     definition = definition.substr(0, 255);
                 }
-                
+
                 return knex('cjk').insert({
                     ideogram: char.$.cp,
                     pronunciation: char.$.kMandarin,

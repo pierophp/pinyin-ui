@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var UnihanDatabaseParser = require('../services/UnihanDatabaseParser');
+var UnihanSearch = require('../services/UnihanSearch');
 var udp = new UnihanDatabaseParser();
+var unihanSearch = new UnihanSearch();
 var knex = require('../services/knex');
 var Promise = require('bluebird');
 var fs = require('fs');
@@ -49,7 +51,7 @@ router.get('/load', function (req, res) {
     };
 
     knex('cjk').count('id as total').then(function (data) {
-        
+
         if (data[0]['total'] > 0) {
 
             res.setHeader('Content-Type', 'application/json');
@@ -106,40 +108,13 @@ router.get('/search', function (req, res) {
 router.get('/to_pinyin', function (req, res) {
 
     var ideograms = req.query.ideograms;
-    var ideogramPromises = [];
 
-    for (let i = 0; i < ideograms.length; i++) {
+    unihanSearch.toPinyin(ideograms).then(function (result) {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(result));
+    });
 
-        var ideogramConverted = ideograms[i].charCodeAt(0).toString(16);
 
-        ideogramPromises.push(knex('cjk')
-            .where({
-                ideogram: ideogramConverted
-            })
-            .orderBy('frequency', 'ASC')
-            .orderBy('usage', 'DESC')
-            .select('id', 'pronunciation')
-        );
-    }
-
-    Promise.all(ideogramPromises).then(
-
-        function (ideograms) {
-            var result = {};
-
-            result.pinyin = '';
-
-            for (let ideogram of ideograms) {
-                if (ideogram.length == 0) {
-                    result.pinyin += "__";
-                } else {
-                    result.pinyin += ideogram[0].pronunciation;
-                }
-            }
-
-            res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify(result));
-        });
 });
 
 module.exports = router;
