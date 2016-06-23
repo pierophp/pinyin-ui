@@ -7,8 +7,12 @@ language: node_js
 node_js:
   - "6"
 
-services:
-  - mysql
+addons:
+  apt:
+    packages:
+    - mysql-server-5.6
+    - mysql-client-core-5.6
+    - mysql-client-5.6
 
 cache:
   directories:
@@ -25,7 +29,7 @@ before_install:
 before_script:
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
-- mysql -e "CREATE DATABASE pinyin;" -uroot
+- mysql -u root -e "CREATE DATABASE pinyin;" 
 - export NODE_ENV=staging 
 - knex migrate:latest
 
