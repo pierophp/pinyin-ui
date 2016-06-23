@@ -25,6 +25,7 @@ before_install:
 - npm install bower -g
 - npm install knex -g
 - bower install
+- npm install -g strongloop
 
 before_script:
 - export CHROME_BIN=chromium-browser
@@ -37,3 +38,6 @@ before_script:
 script:
 - npm run test-travis
 - npm run test-node
+
+after_success:
+- slc build
