@@ -1,5 +1,5 @@
 :root {
-  --block-width: 25px;
+    --block-width: 25px;
 }
 
 #container {
@@ -11,6 +11,10 @@
     clear: both;
 }
 
+.panel-heading .btn{
+    color: #fff !important;
+}
+
 .block {
     float: left;
     padding: 5px 10px;
@@ -19,14 +23,14 @@
     position: relative;
 }
 
-.block:hover{
+.block:hover {
     background: #fff4c5;
 }
 
 .block .remove {
     display: none;
     position: absolute;
-    top:0;
+    top: 0;
     right: 2px;
     font-size: 10px;
 }
@@ -39,7 +43,8 @@
     margin-bottom: 2px;
 }
 
-.pinyin input{
+.pinyin input,
+.pinyin span {
     background: #fff;
     font-size: 22px;
     height: 22px;
@@ -50,7 +55,8 @@
     margin: auto;
 }
 
-.character input{
+.character input,
+.character span {
     font-size: 24px;
     font-weight: bold;
     height: 34px;
@@ -61,7 +67,7 @@
     margin: auto;
 }
 
-.modal-body textarea{
+.modal-body textarea {
     height: 150px;
 }
 
@@ -70,14 +76,40 @@
     border-left-width: 4px;
 }
 
-.autocomplete{
+.autocomplete {
     background: #fff;
 }
 
-.autocomplete a{
+.autocomplete a {
     font-size: 16px;
-}   
+}
 
-.autocomplete a.selected{
+.autocomplete a.selected {
     font-weight: bold;
+}
+
+/* PRINT */
+
+.larger-print .pinyin span {
+    font-size: 40px;
+    height: 43px;
+}
+
+
+.larger-print .character span {
+    font-size: 42px;
+    height: 42px;
+}
+
+.print .character span {
+    font-weight: normal;
+}
+ 
+
+.print .block {
+    page-break-inside: avoid;
+}
+
+.print .block:hover {
+    background: #fff;
 }

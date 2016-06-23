@@ -1,0 +1,18 @@
+<div class="panel print" ng-class="class">
+    <div ng-repeat="(lineIndex,line) in file.lines track by $index" class="line">
+        <div ng-repeat="(blockIndex,block) in line" class="block">
+
+            <div class="pinyin">
+                <span>
+                    {{ block.p }}
+                </span>
+            </div>
+
+            <div class="character">
+                <span>
+                    {{ block.c }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

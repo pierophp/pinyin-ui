@@ -26,6 +26,21 @@ angular.module("app").config(function ($routeProvider) {
                     return $route.current.params.filename;
                 }
             }
+        }).when('/files/print/:filename', {
+            templateUrl: 'view/print.html',
+            controller: 'printCtrl',
+            resolve: {
+                file: function (filesAPI, $route) {
+                    
+                    var filename = $route.current.params.filename;
+
+                    return filesAPI.getFile(filename);
+                },
+                filename: function ($route) {
+
+                    return $route.current.params.filename;
+                }
+            }
         });
 
 });
