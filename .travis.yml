@@ -43,8 +43,8 @@ script:
 - npm run test-node
 after_success:
 - slc build --pack
+- export SSH_KEY="~/.ssh/id_rsa"
 - export CMD="slc deploy --size 2 --service pinyin http+ssh://${SSH_HOST}"
-- echo $SSH_USER
-- echo $SSH_PORT
+
 - $CMD 
 # &>/dev/null
