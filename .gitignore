@@ -4,3 +4,6 @@ public/lib/*
 storage/*
 .vscode/*
 newrelic.js
+newrelic_agent.log
+deploy/id_rsa
+deploy/env.js

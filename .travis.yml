@@ -1,43 +1,41 @@
 sudo: required
-
 dist: trusty
-
 language: node_js
-
 node_js:
-  - "6"
-
+- '6'
 addons:
   apt:
     packages:
     - mysql-server-5.6
     - mysql-client-core-5.6
     - mysql-client-5.6
-
 cache:
   directories:
   - node_modules
   - "$HOME/.npm"
   - "$HOME/.cache/bower"
-  
 before_install:
+- openssl aes-256-cbc -K $encrypted_a302f581c94b_key -iv $encrypted_a302f581c94b_iv
+  -in id_rsa.enc -out deploy/id_rsa -d
+- openssl aes-256-cbc -K $encrypted_a302f581c94b_key -iv $encrypted_a302f581c94b_iv
+  -in env.js.enc -out deploy/env.js -d
+- mv deploy/id_rsa $HOME/.ssh/id_rsa
+- mv deploy/env.js env.js
+- mv rm -Rf deploy
 - npm install
 - npm install bower -g
 - npm install knex -g
 - bower install
 - npm install -g strongloop
-
 before_script:
 - export CHROME_BIN=chromium-browser
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
-- mysql -u root -e "CREATE DATABASE pinyin;" 
-- export NODE_ENV=staging 
+- mysql -u root -e "CREATE DATABASE pinyin;"
+- export NODE_ENV=staging
 - knex migrate:latest
-
 script:
 - npm run test-travis
 - npm run test-node
-
 after_success:
-- slc build
+- slc build --pack
