@@ -38,6 +38,7 @@ before_script:
 - mysql -u root -e "CREATE DATABASE pinyin;"
 - export NODE_ENV=staging
 - knex migrate:latest
+- mkdir storage
 script:
 - npm run test-travis
 - npm run test-node

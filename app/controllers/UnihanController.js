@@ -9,11 +9,17 @@ var Promise = require('bluebird');
 var fs = require('fs');
 var wget = require('wget');
 var AdmZip = require('adm-zip');
+var env = require('../../env');
+
+var storage_path = __dirname + '/../../storage/';
+if (env.storage_path) {
+    storage_path = env.storage_path;
+}
 
 router.get('/load', function (req, res) {
 
-    let filename = __dirname + '/../../storage/ucd.unihan.flat.xml';
-    let filenameZip = __dirname + '/../../storage/ucd.unihan.flat.zip';
+    let filename = storage_path + 'ucd.unihan.flat.xml';
+    let filenameZip = storage_path + 'ucd.unihan.flat.zip';
 
     let importFile = function () {
         udp.loadFile(filename);
@@ -46,7 +52,7 @@ router.get('/load', function (req, res) {
 
     let unzipFile = function () {
         let zip = new AdmZip(filenameZip);
-        zip.extractAllTo(__dirname + '/../../storage', true);
+        zip.extractAllTo(storage_path, true);
         importFile();
     };
 

@@ -2,7 +2,11 @@ var express = require('express');
 var router = express.Router();
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require("fs"));
+var env = require('../../env');
 var dirname = __dirname + '/../../storage/files/';
+if (env.storage_path) {
+    dirname = env.storage_path + 'files/';
+}
 
 router.get('/', function (req, res) {
 
@@ -10,7 +14,7 @@ router.get('/', function (req, res) {
         res.setHeader('Content-Type', 'application/json');
         res.send(files);
     });
-    
+
 });
 
 router.get('/file', function (req, res) {
