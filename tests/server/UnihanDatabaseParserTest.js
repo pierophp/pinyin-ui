@@ -1,7 +1,7 @@
 
 var expect = require("chai").expect;
 
-var UnihanDatabaseParser = require('../../services/UnihanDatabaseParser');
+var UnihanDatabaseParser = require('../../app/services/UnihanDatabaseParser');
 var udp = new UnihanDatabaseParser();
 
 describe("XML Test", function () {

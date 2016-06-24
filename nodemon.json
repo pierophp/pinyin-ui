@@ -5,6 +5,8 @@
     "public/*", 
     "storage/*", 
     "tests/*",
+    "travis/*",
+    "migrations/*",
     "README.md"
     ]
 }

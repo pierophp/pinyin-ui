@@ -1,5 +1,5 @@
 var Promise = require('bluebird');
-var knex = require('../services/knex');
+var knex = require('./knex');
 
 module.exports = class UnihanSearch {
 

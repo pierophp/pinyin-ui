@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var env = require('../env');
+var env = require('../../env');
 
 
 if (env.google_client_id && env.google_client_secret) {

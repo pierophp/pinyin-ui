@@ -12,8 +12,8 @@ var AdmZip = require('adm-zip');
 
 router.get('/load', function (req, res) {
 
-    let filename = __dirname + '/../storage/ucd.unihan.flat.xml';
-    let filenameZip = __dirname + '/../storage/ucd.unihan.flat.zip';
+    let filename = __dirname + '/../../storage/ucd.unihan.flat.xml';
+    let filenameZip = __dirname + '/../../storage/ucd.unihan.flat.zip';
 
     let importFile = function () {
         udp.loadFile(filename);
@@ -46,28 +46,33 @@ router.get('/load', function (req, res) {
 
     let unzipFile = function () {
         let zip = new AdmZip(filenameZip);
-        zip.extractAllTo(__dirname + '/../storage', true);
+        zip.extractAllTo(__dirname + '/../../storage', true);
         importFile();
     };
 
-    knex('cjk').count('id as total').then(function (data) {
+    knex('cjk')
+        .count('id as total')
+        .where({
+            type: 'C'
+        })
+        .then(function (data) {
 
-        if (data[0]['total'] > 0) {
+            if (data[0]['total'] > 0) {
 
-            res.setHeader('Content-Type', 'application/json');
-            res.send('Data already imported');
+                res.setHeader('Content-Type', 'application/json');
+                res.send('Data already imported');
 
-        } else {
+            } else {
 
-            try {
-                fs.statSync(filename);
-                importFile();
-            } catch (e) {
-                downloadFile();
+                try {
+                    fs.statSync(filename);
+                    importFile();
+                } catch (e) {
+                    downloadFile();
+                }
+
             }
-
-        }
-    });
+        });
 
 
 

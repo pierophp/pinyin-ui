@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require("fs"));
-var dirname = __dirname + '/../storage/files/';
+var dirname = __dirname + '/../../storage/files/';
 
 router.get('/', function (req, res) {
 

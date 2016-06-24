@@ -1,5 +1,5 @@
 var env = process.env.NODE_ENV || 'development';
-var config = require(__dirname + '/../knexfile')[env];
+var config = require(__dirname + '/../../knexfile')[env];
 var params = {
     client: config.client,
     connection: {
