@@ -44,5 +44,6 @@ script:
 after_success:
 - slc build --pack
 - export CMD="slc deploy --size 2 --service pinyin http+ssh://${SSH_HOST}"
+- echo $CMD
 - $CMD 
 # &>/dev/null
