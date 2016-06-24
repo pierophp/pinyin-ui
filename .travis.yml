@@ -24,7 +24,7 @@ before_install:
   -in travis/secrets.tar.enc -out travis/secrets.tar -d
 - tar xvf travis/secrets.tar
 - mv id_rsa ~/.ssh/id_rsa
-- mv rm -Rf travis
+- rm -Rf travis
 - npm install
 - npm install bower -g
 - npm install knex -g
