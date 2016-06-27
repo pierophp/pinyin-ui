@@ -1,4 +1,4 @@
-angular.module("app").controller("fileCtrl", function ($scope, $http, $filter, file, filename, filesAPI, $uibModal) {
+angular.module("app").controller("fileController", function ($scope, $http, $filter, file, filename, filesAPI, $uibModal) {
 
     $scope.file = file.data;
     $scope.filename = filename;
@@ -62,7 +62,7 @@ angular.module("app").controller("fileCtrl", function ($scope, $http, $filter, f
 
         var modalInstance = $uibModal.open({
             templateUrl: 'view/modals/filePaste.html',
-            controller: 'ModalFileCtrl',
+            controller: 'ModalFileController',
             size: size,
             resolve: {
                 line: function () {
@@ -85,7 +85,7 @@ angular.module("app").controller("fileCtrl", function ($scope, $http, $filter, f
 
         var modalInstance = $uibModal.open({
             templateUrl: 'view/modals/filePaste.html',
-            controller: 'ModalFileCtrl',
+            controller: 'ModalFileController',
             size: size,
             resolve: {
                 line: function () {
@@ -102,7 +102,7 @@ angular.module("app").controller("fileCtrl", function ($scope, $http, $filter, f
     };
 });
 
-angular.module('app').controller('ModalFileCtrl', function ($scope, $uibModalInstance, line) {
+angular.module('app').controller('ModalFileController', function ($scope, $uibModalInstance, line) {
 
     $scope.line = line;
     $scope.text;

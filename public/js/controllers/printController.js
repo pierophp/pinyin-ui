@@ -1,4 +1,4 @@
-angular.module("app").controller("printCtrl", function ($scope, $routeParams, file, filename) {
+angular.module("app").controller("printController", function ($scope, $routeParams, file, filename) {
 
     $scope.file = file.data;
     $scope.filename = filename;

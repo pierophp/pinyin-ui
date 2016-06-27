@@ -1,7 +1,9 @@
 <div class="panel panel-default">
 
     <div class="panel-heading">
+
         <h3 class="panel-title">{{filename}}</h3>
+
         <a class="btn btn-success" ng-click="save()">
             <i class="glyphicon glyphicon-save-file"></i> Save
         </a>
@@ -24,6 +26,9 @@
                 </li>
             </ul>
         </div>
+
+        <a href="/auth/logout" class="btn btn-danger"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
+        
     </div>
 
     <div class="panel-body larger-print" dnd-list="file.lines">

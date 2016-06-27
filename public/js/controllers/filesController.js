@@ -1,4 +1,4 @@
-angular.module("app").controller("filesCtrl", function ($scope, files, $uibModal, filesAPI) {
+angular.module("app").controller("filesController", function ($scope, files, $uibModal, filesAPI) {
 
     $scope.files = files.data;
 
@@ -6,7 +6,7 @@ angular.module("app").controller("filesCtrl", function ($scope, files, $uibModal
 
         var modalInstance = $uibModal.open({
             templateUrl: 'view/modals/newFile.html',
-            controller: 'ModalNewFileCtrl',
+            controller: 'ModalNewFileController',
             size: size
         });
 
@@ -23,7 +23,7 @@ angular.module("app").controller("filesCtrl", function ($scope, files, $uibModal
 
 
 
-angular.module('app').controller('ModalNewFileCtrl', function ($scope, $uibModalInstance) {
+angular.module('app').controller('ModalNewFileController', function ($scope, $uibModalInstance) {
     $scope.text;
 
     $scope.ok = function () {

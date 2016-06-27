@@ -3,8 +3,17 @@ angular.module("app").config(function ($routeProvider) {
 
     $routeProvider
         .when('/', {
+            templateUrl: 'view/login.html',
+            controller: 'loginController',
+            resolve: {
+                files: function (filesAPI, $route) {
+                    return filesAPI.getFiles();
+                }
+            }
+        })
+        .when('/files', {
             templateUrl: 'view/files.html',
-            controller: 'filesCtrl',
+            controller: 'filesController',
             resolve: {
                 files: function (filesAPI, $route) {
                     return filesAPI.getFiles();
@@ -13,7 +22,7 @@ angular.module("app").config(function ($routeProvider) {
         })
         .when('/files/file/:filename', {
             templateUrl: 'view/file.html',
-            controller: 'fileCtrl',
+            controller: 'fileController',
             resolve: {
                 file: function (filesAPI, $route) {
 
@@ -28,7 +37,7 @@ angular.module("app").config(function ($routeProvider) {
             }
         }).when('/files/print/:filename', {
             templateUrl: 'view/print.html',
-            controller: 'printCtrl',
+            controller: 'printController',
             resolve: {
                 file: function (filesAPI, $route) {
                     
