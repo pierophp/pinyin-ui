@@ -1,30 +1,36 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var env = require('../../env');
 
+router.get('/is_logged_in', function (req, res) {
 
-if (env.google_client_id && env.google_client_secret) {
+    var user = {};
 
-    passport.use(new GoogleStrategy({
-        clientID: env.google_client_id,
-        clientSecret: env.google_client_secret,
-        callbackURL: env.base_url + "/auth/google/callback"
-    },
-        function (accessToken, refreshToken, profile, done) {
-            //return done(err, user);
-        }
-    ));
-} else {
-    console.log('define google_client_id and google_client_secret in your env.js file');
-}
+    if (req.isAuthenticated()) {
+        user.id = req.user.id;
+        user.name = req.user.name;
+        user.email = req.user.email;
+    }
 
-router.get('/google',
-    passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+    var response = {
+        isAuthenticated: req.isAuthenticated(),
+        user: user
+    };
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(response);
+});
+
+router.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+});
+
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login' }),
+
+    passport.authenticate('google', { failureRedirect: '/auth/login' }),
     function (req, res) {
 
         console.log('Google Callback');

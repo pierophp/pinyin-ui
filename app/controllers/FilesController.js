@@ -10,16 +10,35 @@ if (env.storage_path) {
 
 router.get('/', function (req, res) {
 
-    fs.readdirAsync(dirname, 'utf8').then(function (files) {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(files);
-    });
+    let filesPath = dirname + req.user.id + '/';
+    
+    let getFiles = function () {
+        fs.readdirAsync(filesPath, 'utf8').then(function (files) {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(files);
+        });
+    };
+
+    fs.statAsync(filesPath)
+        .then(function () {
+            getFiles();
+        })
+        .error(function () {
+            fs.mkdirAsync(filesPath).then(function () {
+                getFiles();
+            });
+        });
+
 
 });
 
 router.get('/file', function (req, res) {
+
     var filename = req.query.filename;
-    fs.readFileAsync(dirname + filename, 'utf8').then(function (content) {
+
+    var filesPath = dirname + req.user.id + '/';
+
+    fs.readFileAsync(filesPath + filename, 'utf8').then(function (content) {
         res.setHeader('Content-Type', 'application/json');
         res.send(content);
     });
@@ -28,7 +47,8 @@ router.get('/file', function (req, res) {
 router.post('/save', function (req, res) {
     var filename = req.query.filename;
     var content = req.body.content;
-    fs.writeFileAsync(dirname + filename, content).then(function () {
+    var filesPath = dirname + req.user.id + '/';
+    fs.writeFileAsync(filesPath + filename, content).then(function () {
         res.setHeader('Content-Type', 'application/json');
         res.send({});
     });
