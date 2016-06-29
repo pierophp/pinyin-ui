@@ -2,8 +2,13 @@
     --block-width: 25px;
 }
 
+@media (min-width: 1024px) {
+    #container {
+        width: 1024px;
+    }
+}
+
 #container {
-    width: 1024px;
     margin: auto;
 }
 
@@ -11,7 +16,7 @@
     clear: both;
 }
 
-.panel-heading .btn{
+.panel-heading .btn {
     color: #fff !important;
 }
 
@@ -88,6 +93,7 @@
     font-weight: bold;
 }
 
+
 /* PRINT */
 
 .larger-print .pinyin span {
@@ -103,7 +109,6 @@
 .print .character span {
     font-weight: normal;
 }
- 
 
 .print .block {
     page-break-inside: avoid;
