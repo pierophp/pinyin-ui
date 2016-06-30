@@ -8,7 +8,7 @@ module.exports = class UnihanSearch {
     }
 
     toPinyin(ideograms) {
- 
+
         let specialsChars = {
             "。": ".",
             "？": "?",
@@ -26,6 +26,11 @@ module.exports = class UnihanSearch {
             "0": "0"
         };
 
+        let changeToneRules = {
+            '不': { 4: 'bú' },
+            '一': { 1: 'yì', 2: 'yì', 3: 'yì', 4: 'yí' }
+        };
+
         let searchByWord = function (ideograms) {
 
             let ideogramsConverted = '';
@@ -41,7 +46,7 @@ module.exports = class UnihanSearch {
                 .orderBy('frequency', 'ASC')
                 .orderBy('usage', 'DESC')
                 .select('id', 'pronunciation');
-        }
+        };
 
         let searchByIdeograms = function (ideograms) {
 
@@ -63,8 +68,71 @@ module.exports = class UnihanSearch {
             }
 
             return Promise.all(ideogramPromises);
-        }
+        };
 
+        let extractPinyinTone = function (pinyin) {
+
+            let tones = [
+                { tone: 1, letters: ['ā', 'ē', 'ī', 'ō', 'ū', 'ǖ'] },
+                { tone: 2, letters: ['á', 'é', 'í', 'ó', 'ú', 'ǘ'] },
+                { tone: 3, letters: ['ǎ', 'ě', 'ǐ', 'ǒ', 'ǔ', 'ǚ'] },
+                { tone: 4, letters: ['à', 'è', 'ì', 'ò', 'ù', 'ǜ'] }
+            ];
+
+            for (let tone of tones) {
+
+                for (let letter of tone.letters) {
+                    if (pinyin.indexOf(letter) > -1) {
+                        return tone.tone;
+                    }
+                }
+            }
+
+            return 0;
+        };
+
+        let parseResultByIdeograms = function (ideogramsList, ideograms) {
+
+            let result = {};
+
+            result.pinyin = '';
+
+            let i = 0;
+
+            for (let ideogram of ideogramsList) {
+
+                let character = ideograms[i];
+
+                if (ideogram.length == 0) {
+                    if (specialsChars[character]) {
+                        result.pinyin += specialsChars[character];
+                    } else {
+                        result.pinyin += "__";
+                    }
+
+                } else {
+
+                    if (changeToneRules[character] && ideogramsList[i + 1] && ideogramsList[i + 1][0]) {
+
+                        let tone = extractPinyinTone(ideogramsList[i + 1][0].pronunciation);
+
+                        if (changeToneRules[character][tone]) {
+                            result.pinyin += changeToneRules[character][tone];
+                        } else {
+                            result.pinyin += ideogram[0].pronunciation;
+                        }
+
+                    } else {
+                        result.pinyin += ideogram[0].pronunciation;
+                    }
+
+                }
+
+                i++;
+            }
+
+            return result;
+        };
 
         return new Promise(function (resolve, reject) {
 
@@ -77,33 +145,7 @@ module.exports = class UnihanSearch {
                 } else {
 
                     searchByIdeograms(ideograms).then(function (ideogramsList) {
-
-                        var result = {};
-
-                        result.pinyin = '';
-
-                        let i = 0;
-                        for (let ideogram of ideogramsList) {
-                            if (ideogram.length == 0) {
-
-                                let character = ideograms[i];
-
-                                if (specialsChars[character]) {
-                                    result.pinyin += specialsChars[character];
-                                } else {
-                                    result.pinyin += "__";
-                                }
-
-
-                            } else {
-                                result.pinyin += ideogram[0].pronunciation;
-                            }
-
-                            i++;
-                        }
-
-                        resolve(result);
-
+                        resolve(parseResultByIdeograms(ideogramsList, ideograms));
                     });
                 }
             });
