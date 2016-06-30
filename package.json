@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "gulp": "^3.9.1",
     "jasmine": "^2.4.1",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",

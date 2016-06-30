@@ -64,10 +64,12 @@ angular.module("app").factory("filesAPI", function ($http) {
         var i = 0;
         
         pinyinWords.forEach(function (pinyinWord) {
+            
             var syllables = _separatePinyinInSyllables(pinyinWord);
             var words = syllables.split(' ');
             var pinyin = '';
             var char = '';
+
             words.forEach(function(word){
                 var hanziWord = hanziLine.substr(i, 1);
                 pinyin += word;
@@ -97,22 +99,32 @@ angular.module("app").factory("filesAPI", function ($http) {
         [65311, 65311], // ponctuation ？
         [12289, 12290], // 、。
         [65306, 65306], // ：
-        [48, 57] // Numeros
     ];
 
     var _isChinese = function (str) {
 
         var charCode;
-        var flag;
+        var flag = false;
         var range;
+
+        str = str
+           .replace(1, '')
+           .replace(2, '')
+           .replace(3, '')
+           .replace(4, '')
+           .replace(5, '')
+           .replace(6, '')
+           .replace(7, '')
+           .replace(8, '')
+           .replace(9, '')
+           .replace(0, '');
 
         for (var i = 0; i < str.length;) {
             
             charCode = str.codePointAt(i);
+
             flag = false;
             
-            // console.log(charCode);
-
             for (var j = 0; j < chineseRange.length; j++) {
                 range = chineseRange[j];
                 if (charCode >= range[0] && charCode <= range[1]) {
@@ -132,7 +144,7 @@ angular.module("app").factory("filesAPI", function ($http) {
             }
         }
 
-        return true;
+        return flag;
     };
 
     var _separatePinyinInSyllables = function (pinyin) {

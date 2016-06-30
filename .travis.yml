@@ -42,6 +42,7 @@ script:
 - npm run test-travis
 - npm run test-node
 after_success:
+- npm install --production
 - slc build --pack
 - export SSH_KEY="/home/travis/.ssh/id_rsa"
 - export CMD="slc deploy --size 2 --service pinyin http+ssh://${SSH_HOST}"
