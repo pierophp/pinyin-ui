@@ -95,7 +95,9 @@ angular.module("app").factory("filesAPI", function ($http) {
         [0xf900, 0xfaff], // https://en.wikipedia.org/wiki/CJK_Compatibility_Ideographs
         [0x2f800, 0x2fa1f], // https://en.wikipedia.org/wiki/CJK_Compatibility_Ideographs_Supplement
         [65311, 65311], // ponctuation ？
-        
+        [12289, 12290], // 、。
+        [65306, 65306], // ：
+        [48, 57] // Numeros
     ];
 
     var _isChinese = function (str) {
@@ -108,6 +110,8 @@ angular.module("app").factory("filesAPI", function ($http) {
             
             charCode = str.codePointAt(i);
             flag = false;
+            
+            // console.log(charCode);
 
             for (var j = 0; j < chineseRange.length; j++) {
                 range = chineseRange[j];

@@ -64,7 +64,6 @@ router.get('/load', function (req, res) {
         .then(function (data) {
 
             if (data[0]['total'] > 0) {
-
                 res.setHeader('Content-Type', 'application/json');
                 res.send('Data already imported');
 
