@@ -8,6 +8,7 @@ Run:
 npm install
 npm install -g bower
 npm install -g knex
+npm install -g gulp
 bower install
 knex migrate:latest
 npm run init

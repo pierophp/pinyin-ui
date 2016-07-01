@@ -21,8 +21,6 @@ angular.module("app").controller("filesController", function ($scope, files, $ui
 
 }); 
 
-
-
 angular.module('app').controller('ModalNewFileController', function ($scope, $uibModalInstance) {
     $scope.text;
 

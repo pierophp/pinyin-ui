@@ -9,7 +9,7 @@ if (env.storage_path) {
 }
 
 router.get('/', function (req, res) {
-
+    
     let filesPath = dirname + req.user.id + '/';
     
     let getFiles = function () {
