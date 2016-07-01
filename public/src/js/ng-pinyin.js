@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var app = angular.module('ng-pinyin', []);
+    var app = angular.module('ngPinyin', []);
 
     app.filter('pinyin', function() {
 

@@ -1,7 +1,7 @@
 var app = angular.module('app', [
     'ngRoute', 
     'ngAnimate', 
-    'ng-pinyin',
+    'ngPinyin',
     'ui.bootstrap', 
     'puElasticInput',
     'autocomplete',
