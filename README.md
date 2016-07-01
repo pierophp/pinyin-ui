@@ -1,5 +1,5 @@
-# pinyin editor
-A simple pinyin editor
+# Simple Pinyin Editor
+A simple pinyin editor made in node.js
 
 ## Install
 Run:
@@ -13,10 +13,11 @@ bower install
 knex migrate:latest
 npm run init
 ```
+
 Create a env.js file based on env.js.example
 
 
 Load the Unihan Database:
 http://localhost:9090/unihan/load
 
-Test
+<img src="https://travis-ci.org/pierophp/pinyin.svg" alt="build:passed">
