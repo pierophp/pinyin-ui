@@ -24,7 +24,7 @@ module.exports = function (config) {
       'public/lib/ng-pinyin/ng-pinyin.min.js',
       'public/lib/angular-elastic-input/dist/angular-elastic-input.min.js',
       'public/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js',
-      'public/js/dist/all.js',
+      'public/dist/js/all.js',
       'tests/client/*.js'
     ],
     
