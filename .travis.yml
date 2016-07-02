@@ -50,7 +50,6 @@ script:
 - npm run test-node
 
 after_success:
-
 - rm -Rf node_modules/* 
 - npm install --production
 - slc build --pack

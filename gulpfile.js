@@ -8,6 +8,8 @@ gulp.task('minify-css', function () {
         .pipe($.sourcemaps.init())
         .pipe($.cleanCss({ compatibility: 'ie8' }))
         .pipe($.sourcemaps.write())
+        .pipe($.livereload())
+        .pipe($.concat('all.css'))
         .pipe(gulp.dest('public/dist/css/'));
 });
 
@@ -29,6 +31,7 @@ gulp.task('minify-js', function () {
         .pipe($.uglify({
             mangle: false
         }))
+        .pipe($.livereload())
         .pipe($.concat('all.js'))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest('public/dist/js/'));
@@ -41,11 +44,11 @@ gulp.task('nodemon', function (done) {
         let nodemonConfig = JSON.parse(content);
 
         $.nodemon({
-            script: 'server.js'
-            , ext: 'js css'
-            , ignore: nodemonConfig.ignore
-            , env: { 'NODE_ENV': 'development' }
-        });
+            script: 'server.js', 
+            ext: 'js css', 
+            ignore: nodemonConfig.ignore, 
+            env: { 'NODE_ENV': 'development' 
+        }});
 
         done();
     });
@@ -53,7 +56,7 @@ gulp.task('nodemon', function (done) {
 
 gulp.task('default', ['minify-css', 'minify-js', 'nodemon'], function () {
 
-    gulp.watch('public/src/css/**/.css', ['minify-css']);
+    gulp.watch('public/src/css/**/*.css', ['minify-css']);
     gulp.watch('public/src/js/**/*.js', ['minify-js']);
-
+    $.livereload.listen();
 });
