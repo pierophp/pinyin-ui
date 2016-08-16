@@ -17,9 +17,9 @@ angular.module("app").factory("filesAPI", function ($http) {
     };
 
     var _parseClipboard01 = function (content) {
-        
+
         content = content.replace(/(\r\n|\n|\r)/gm, ' ');
-        
+
         var parts = _.compact(content.split(' '));
         var row = [];
         var block = {};
@@ -58,28 +58,28 @@ angular.module("app").factory("filesAPI", function ($http) {
 
         var hanziLine = lines[0];
         var pinyinLine = lines[1];
-        
+
         var pinyinWords = pinyinLine.split(' ');
-        
+
         var i = 0;
-        
+
         pinyinWords.forEach(function (pinyinWord) {
-            
+
             var syllables = _separatePinyinInSyllables(pinyinWord);
             var words = syllables.split(' ');
             var pinyin = '';
             var char = '';
 
-            words.forEach(function(word){
+            words.forEach(function (word) {
                 var hanziWord = hanziLine.substr(i, 1);
                 pinyin += word;
                 char += hanziWord;
                 i++;
             });
-            
-            row.push({ "p": pinyin, "c": char});
+
+            row.push({ "p": pinyin, "c": char });
         });
-        
+
         return row;
     };
 
@@ -108,23 +108,23 @@ angular.module("app").factory("filesAPI", function ($http) {
         var range;
 
         str = str
-           .replace(1, '')
-           .replace(2, '')
-           .replace(3, '')
-           .replace(4, '')
-           .replace(5, '')
-           .replace(6, '')
-           .replace(7, '')
-           .replace(8, '')
-           .replace(9, '')
-           .replace(0, '');
+            .replace(1, '')
+            .replace(2, '')
+            .replace(3, '')
+            .replace(4, '')
+            .replace(5, '')
+            .replace(6, '')
+            .replace(7, '')
+            .replace(8, '')
+            .replace(9, '')
+            .replace(0, '');
 
         for (var i = 0; i < str.length;) {
-            
+
             charCode = str.codePointAt(i);
 
             flag = false;
-            
+
             for (var j = 0; j < chineseRange.length; j++) {
                 range = chineseRange[j];
                 if (charCode >= range[0] && charCode <= range[1]) {
@@ -152,13 +152,34 @@ angular.module("app").factory("filesAPI", function ($http) {
         var vowels = 'aāáǎàeēéěèiīíǐìoōóǒòuūúǔù';
 
         return pinyin
-            .replace(new RegExp('([' + vowels + '])([^' + vowels + 'nr\w\s])'), '$1 $2')
-            .replace(new RegExp('(\w)([csz]h)'), '$1 $2')
-            .replace(new RegExp('(n)([^' + vowels + 'vg\w\s])'), '$1 $2')
-            .replace(new RegExp('([' + vowels + 'v])([^' + vowels + '\w\s])([' + vowels + 'v])'), '$1 $2$3')
-            .replace(new RegExp('([' + vowels + 'v])(n)(g)([' + vowels + 'v])'), '$1$2 $3$4')
-            .replace(new RegExp('([gr])([^' + vowels + '\w\s])'), '$1 $2')
-            .replace(new RegExp('([^e\w\s])(r)'), '$1 $2');
+            .replace(new RegExp('([' + vowels + '])([^' + vowels + 'nr])', 'g'), '$1 $2') // This line does most of the work
+            .replace(new RegExp('(\w)([csz]h)'), '$1 $2') // double-consonant initials
+            .replace(new RegExp('(n)([^' + vowels + 'vg])'), '$1 $2') // cleans up most n compounds
+            .replace(new RegExp('([' + vowels + 'v])([^' + vowels + '\w\s])([' + vowels + 'v])'), '$1 $2$3') // assumes correct Pinyin (i.e., no missing apostrophes)
+            .replace(new RegExp('([' + vowels + 'v])(n)(g)([' + vowels + 'v])'), '$1$2 $3$4') // assumes correct Pinyin, i.e. changan = chan + gan
+            .replace(new RegExp('([gr])([^' + vowels + '])'), '$1 $2') // fixes -ng and -r finals not followed by vowels
+        //            .replace(new RegExp('([^e\w\s])(r)'), '$1 $2'); // r an initial, except in er
+    };
+
+    let _extractPinyinTone = function (pinyin) {
+
+        let tones = [
+            { tone: 1, letters: ['ā', 'ē', 'ī', 'ō', 'ū', 'ǖ'] },
+            { tone: 2, letters: ['á', 'é', 'í', 'ó', 'ú', 'ǘ'] },
+            { tone: 3, letters: ['ǎ', 'ě', 'ǐ', 'ǒ', 'ǔ', 'ǚ'] },
+            { tone: 4, letters: ['à', 'è', 'ì', 'ò', 'ù', 'ǜ'] }
+        ];
+
+        for (let tone of tones) {
+
+            for (let letter of tone.letters) {
+                if (pinyin.indexOf(letter) > -1) {
+                    return tone.tone;
+                }
+            }
+        }
+
+        return 0;
     };
 
     return {
@@ -168,6 +189,7 @@ angular.module("app").factory("filesAPI", function ($http) {
         toPinyin: _toPinyin,
         parseClipboard01: _parseClipboard01,
         parseClipboard02: _parseClipboard02,
-        separatePinyinInSyllables: _separatePinyinInSyllables
+        separatePinyinInSyllables: _separatePinyinInSyllables,
+        extractPinyinTone: _extractPinyinTone
     };
 });

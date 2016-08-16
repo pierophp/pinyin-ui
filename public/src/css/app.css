@@ -63,7 +63,6 @@
 .character input,
 .character span {
     font-size: 24px;
-    font-weight: bold;
     height: 34px;
     min-width: var(--block-width);
     border: 0;
@@ -116,4 +115,20 @@
 
 .print .block:hover {
     background: #fff;
+}
+
+.tone-1 {
+    color: #ff0000!important;
+}
+
+.tone-2 {
+    color: #d89000!important;
+}
+
+.tone-3 {
+    color: #00a000!important;
+}
+
+.tone-4 {
+    color: #0000ff!important;
 }
