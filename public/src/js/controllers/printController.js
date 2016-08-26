@@ -12,6 +12,7 @@ angular.module("app").controller("printController", function ($scope, $routePara
         var pinyin = filesAPI.separatePinyinInSyllables(block.p).split(' ');
 
         //console.log(pinyin);
+
         var chars = block.c.toString();
         
         let charsColored = '';
