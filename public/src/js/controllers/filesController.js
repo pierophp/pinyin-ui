@@ -12,20 +12,24 @@ angular.module("app").controller("filesController", function ($scope, files, $ui
 
         modalInstance.result.then(function (data) {
             var filename = data.text + '.json';
-            var fileContent = { lines: [] };
+            var fileContent = {
+                lines: []
+            };
             filesAPI.save(filename, fileContent);
         }, function () {
 
         });
     };
 
-}); 
+});
 
 angular.module('app').controller('ModalNewFileController', function ($scope, $uibModalInstance) {
     $scope.text;
 
     $scope.ok = function () {
-        $uibModalInstance.close({ text: $scope.text });
+        $uibModalInstance.close({
+            text: $scope.text
+        });
     };
 
     $scope.cancel = function () {

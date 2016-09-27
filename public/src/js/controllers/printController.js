@@ -7,16 +7,14 @@ angular.module("app").controller("printController", function ($scope, $routePara
         $scope.class = 'larger-print';
     }
 
-    $scope.printTonesColors = function(block){
+    $scope.printTonesColors = function (block) {
 
         var pinyin = filesAPI.separatePinyinInSyllables(block.p).split(' ');
 
-        //console.log(pinyin);
-
         var chars = block.c.toString();
-        
+
         let charsColored = '';
-        for(let i = 0; i < chars.length; i++){
+        for (let i = 0; i < chars.length; i++) {
             charsColored += '<span class="tone-' + filesAPI.extractPinyinTone(pinyin[i]) + '">' + chars[i] + '</span>';
         }
 

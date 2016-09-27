@@ -9,7 +9,9 @@ angular.module("app").factory("filesAPI", function ($http) {
     };
 
     var _save = function (filename, content) {
-        return $http.post("/files/save?filename=" + filename, { content: angular.toJson(content) });
+        return $http.post("/files/save?filename=" + filename, {
+            content: angular.toJson(content)
+        });
     };
 
     var _toPinyin = function (ideograms) {
@@ -30,13 +32,19 @@ angular.module("app").factory("filesAPI", function ($http) {
 
             if (_isChinese(part)) {
                 char = part;
-                row.push({ "p": pinyin, "c": char });
+                row.push({
+                    "p": pinyin,
+                    "c": char
+                });
                 char = '';
                 pinyin = '';
             } else {
 
                 if (pinyin) {
-                    row.push({ "p": pinyin, "c": char });
+                    row.push({
+                        "p": pinyin,
+                        "c": char
+                    });
                     char = '';
                 }
 
@@ -45,7 +53,10 @@ angular.module("app").factory("filesAPI", function ($http) {
         });
 
         if (pinyin) {
-            row.push({ "p": pinyin, "c": char });
+            row.push({
+                "p": pinyin,
+                "c": char
+            });
         }
 
         return row;
@@ -77,7 +88,10 @@ angular.module("app").factory("filesAPI", function ($http) {
                 i++;
             });
 
-            row.push({ "p": pinyin, "c": char });
+            row.push({
+                "p": pinyin,
+                "c": char
+            });
         });
 
         return row;
@@ -158,19 +172,26 @@ angular.module("app").factory("filesAPI", function ($http) {
             .replace(new RegExp('([' + vowels + 'v])([^' + vowels + '\w\s])([' + vowels + 'v])'), '$1 $2$3') // assumes correct Pinyin (i.e., no missing apostrophes)
             .replace(new RegExp('([' + vowels + 'v])(n)(g)([' + vowels + 'v])'), '$1$2 $3$4') // assumes correct Pinyin, i.e. changan = chan + gan
             .replace(new RegExp('([gr])([^' + vowels + '])'), '$1 $2') // fixes -ng and -r finals not followed by vowels
-        
-        
+
+
         //            .replace(new RegExp('([^e\w\s])(r)'), '$1 $2'); // r an initial, except in er
     };
 
     let _extractPinyinTone = function (pinyin) {
 
-        let tones = [
-            { tone: 1, letters: ['ā', 'ē', 'ī', 'ō', 'ū', 'ǖ'] },
-            { tone: 2, letters: ['á', 'é', 'í', 'ó', 'ú', 'ǘ'] },
-            { tone: 3, letters: ['ǎ', 'ě', 'ǐ', 'ǒ', 'ǔ', 'ǚ'] },
-            { tone: 4, letters: ['à', 'è', 'ì', 'ò', 'ù', 'ǜ'] }
-        ];
+        let tones = [{
+            tone: 1,
+            letters: ['ā', 'ē', 'ī', 'ō', 'ū', 'ǖ']
+        }, {
+            tone: 2,
+            letters: ['á', 'é', 'í', 'ó', 'ú', 'ǘ']
+        }, {
+            tone: 3,
+            letters: ['ǎ', 'ě', 'ǐ', 'ǒ', 'ǔ', 'ǚ']
+        }, {
+            tone: 4,
+            letters: ['à', 'è', 'ì', 'ò', 'ù', 'ǜ']
+        }];
 
         for (let tone of tones) {
 

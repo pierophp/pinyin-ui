@@ -3,6 +3,7 @@ module.exports = function (app, passport) {
     app.use('/auth', require('./controllers/AuthController'));
     app.use('/files', isAuthenticated, require('./controllers/FilesController'));
     app.use('/unihan', isAuthenticated, require('./controllers/UnihanController'));
+    app.use('/cccedict', require('./controllers/CcCeDictController'));
 
     function isAuthenticated(req, res, next) {
 

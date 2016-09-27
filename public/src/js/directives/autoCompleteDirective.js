@@ -1,4 +1,3 @@
-
 var app = angular.module('autocomplete', []);
 
 app.directive('autocomplete', function ($parse) {
@@ -14,7 +13,7 @@ app.directive('autocomplete', function ($parse) {
     restrict: 'A',
     link: function (scope, element, attrs) {
 
-      var stopWatch = function () { };
+      var stopWatch = function () {};
 
       element[0].addEventListener('focus', function (e) {
 
@@ -37,7 +36,15 @@ app.directive('autocomplete', function ($parse) {
 
       element[0].addEventListener('keydown', function (e) {
         var keycode = e.keyCode || e.which;
-        var key = { left: 37, up: 38, right: 39, down: 40, enter: 13, esc: 27, tab: 9 };
+        var key = {
+          left: 37,
+          up: 38,
+          right: 39,
+          down: 40,
+          enter: 13,
+          esc: 27,
+          tab: 9
+        };
         if (keycode == key.enter) {
           var suggestion = scope.autocompleteSuggestions.items[scope.autocompleteSuggestions.selected];
           //var suggestion.ideogram;

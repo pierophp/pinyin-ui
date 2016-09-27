@@ -79,8 +79,6 @@ router.get('/load', function (req, res) {
             }
         });
 
-
-
 });
 
 router.get('/search', function (req, res) {

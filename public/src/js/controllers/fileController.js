@@ -5,7 +5,10 @@ angular.module("app").controller("fileController", function ($scope, $http, $fil
     $scope.autocomplete = '';
 
     $scope.addBlock = function (line) {
-        line.push({ "p": "", "c": "" });
+        line.push({
+            "p": "",
+            "c": ""
+        });
     };
 
     $scope.addLine = function () {
@@ -41,11 +44,11 @@ angular.module("app").controller("fileController", function ($scope, $http, $fil
     $scope.currentLineIndex;
 
     $scope.convertToPinyin = function (line) {
-        
+
         for (let block of line) {
 
             (function () {
-                
+
                 var pinyinBlock = block;
 
                 filesAPI.toPinyin(block.c).then(function (response) {
@@ -108,7 +111,10 @@ angular.module('app').controller('ModalFileController', function ($scope, $uibMo
     $scope.text;
 
     $scope.ok = function () {
-        $uibModalInstance.close({ text: $scope.text, line: $scope.line });
+        $uibModalInstance.close({
+            text: $scope.text,
+            line: $scope.line
+        });
     };
 
     $scope.cancel = function () {

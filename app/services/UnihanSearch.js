@@ -27,8 +27,15 @@ module.exports = class UnihanSearch {
         };
 
         let changeToneRules = {
-            '不': { 4: 'bú' },
-            '一': { 1: 'yì', 2: 'yì', 3: 'yì', 4: 'yí' }
+            '不': {
+                4: 'bú'
+            },
+            '一': {
+                1: 'yì',
+                2: 'yì',
+                3: 'yì',
+                4: 'yí'
+            }
         };
 
         let searchByWord = function (ideograms) {
@@ -72,12 +79,19 @@ module.exports = class UnihanSearch {
 
         let extractPinyinTone = function (pinyin) {
 
-            let tones = [
-                { tone: 1, letters: ['ā', 'ē', 'ī', 'ō', 'ū', 'ǖ'] },
-                { tone: 2, letters: ['á', 'é', 'í', 'ó', 'ú', 'ǘ'] },
-                { tone: 3, letters: ['ǎ', 'ě', 'ǐ', 'ǒ', 'ǔ', 'ǚ'] },
-                { tone: 4, letters: ['à', 'è', 'ì', 'ò', 'ù', 'ǜ'] }
-            ];
+            let tones = [{
+                tone: 1,
+                letters: ['ā', 'ē', 'ī', 'ō', 'ū', 'ǖ']
+            }, {
+                tone: 2,
+                letters: ['á', 'é', 'í', 'ó', 'ú', 'ǘ']
+            }, {
+                tone: 3,
+                letters: ['ǎ', 'ě', 'ǐ', 'ǒ', 'ǔ', 'ǚ']
+            }, {
+                tone: 4,
+                letters: ['à', 'è', 'ì', 'ò', 'ù', 'ǜ']
+            }];
 
             for (let tone of tones) {
 
@@ -151,5 +165,66 @@ module.exports = class UnihanSearch {
             });
 
         });
+    }
+
+    pinyinTonesNumbersToAccents(text) {
+
+        function getUpperCaseIndices(str) {
+            var indices = [];
+            for (var i = 0; i < str.length; i++) {
+                if (str[i] === str[i].toUpperCase()) {
+                    indices.push(i);
+                }
+            }
+            return indices;
+        }
+
+        function revertToUpperCase(str, indices) {
+            var chars = str.split('');
+            indices.map(function (idx) {
+                chars[idx] = chars[idx].toUpperCase();
+            });
+            return chars.join('');
+        }
+
+        var tonePtn = /([aeiouvüAEIOUVÜ]{1,2}(n|ng|r|\'er|N|NG|R|\'ER){0,1}[1234])/g;
+        var toneMap = {
+            a: ['ā', 'á', 'ǎ', 'à'],
+            ai: ['āi', 'ái', 'ǎi', 'ài'],
+            ao: ['āo', 'áo', 'ǎo', 'ào'],
+            e: ['ē', 'é', 'ě', 'è'],
+            ei: ['ēi', 'éi', 'ěi', 'èi'],
+            i: ['ī', 'í', 'ǐ', 'ì'],
+            ia: ['iā', 'iá', 'iǎ', 'ià'],
+            ie: ['iē', 'ié', 'iě', 'iè'],
+            io: ['iō', 'ió', 'iǒ', 'iò'],
+            iu: ['iū', 'iú', 'iǔ', 'iù'],
+            o: ['ō', 'ó', 'ǒ', 'ò'],
+            ou: ['ōu', 'óu', 'ǒu', 'òu'],
+            u: ['ū', 'ú', 'ǔ', 'ù'],
+            ua: ['uā', 'uá', 'uǎ', 'uà'],
+            ue: ['uē', 'ué', 'uě', 'uè'],
+            ui: ['uī', 'uí', 'uǐ', 'uì'],
+            uo: ['uō', 'uó', 'uǒ', 'uò'],
+            v: ['ǖ', 'ǘ', 'ǚ', 'ǜ'],
+            ve: ['üē', 'üé', 'üě', 'üè'],
+            ü: ['ǖ', 'ǘ', 'ǚ', 'ǜ'],
+            üe: ['üē', 'üé', 'üě', 'üè'],
+        };
+        var tones = text.match(tonePtn);
+        if (tones) {
+            tones.forEach(function (coda, idx, arr) {
+                var toneIdx = parseInt(coda.slice(-1)) - 1;
+                var vowel = coda.slice(0, -1);
+                var suffix = vowel.match(/(n|ng|r|\'er|N|NG|R|\'ER)$/);
+                vowel = vowel.replace(/(n|ng|r|\'er|N|NG|R|\'ER)$/, '');
+                var upperCaseIdxs = getUpperCaseIndices(vowel);
+                vowel = vowel.toLowerCase();
+                var replacement = suffix && toneMap[vowel][toneIdx] + suffix[0] || toneMap[vowel][toneIdx];
+                text = text.replace(coda, revertToUpperCase(replacement, upperCaseIdxs));
+            });
+        }
+
+        return text;
     }
 }
