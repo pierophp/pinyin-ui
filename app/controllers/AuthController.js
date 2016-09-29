@@ -1,29 +1,28 @@
-var express = require('express');
-var router = express.Router();
-var passport = require('passport');
+const express = require('express');
+const router = express.Router();
+const passport = require('passport');
 
-router.get('/is_logged_in', function (req, res) {
+router.get('/is_logged_in', (req, res) => {
+  const user = {};
 
-    var user = {};
+  if (req.isAuthenticated()) {
+    user.id = req.user.id;
+    user.name = req.user.name;
+    user.email = req.user.email;
+  }
 
-    if (req.isAuthenticated()) {
-        user.id = req.user.id;
-        user.name = req.user.name;
-        user.email = req.user.email;
-    }
+  const response = {
+    isAuthenticated: req.isAuthenticated(),
+    user,
+  };
 
-    var response = {
-        isAuthenticated: req.isAuthenticated(),
-        user: user
-    };
-
-    res.setHeader('Content-Type', 'application/json');
-    res.send(response);
+  res.setHeader('Content-Type', 'application/json');
+  res.send(response);
 });
 
-router.get('/logout', function (req, res) {
-    req.logout();
-    res.redirect('/');
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/');
 });
 
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -31,9 +30,9 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 router.get('/google/callback',
 
     passport.authenticate('google', { failureRedirect: '/' }),
-    
-    function (req, res) {
-        res.redirect('/');
+
+    (req, res) => {
+      res.redirect('/');
     });
 
 module.exports = router;

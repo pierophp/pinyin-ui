@@ -1,57 +1,53 @@
-var express = require('express');
-var router = express.Router();
-var Promise = require('bluebird');
-var fs = Promise.promisifyAll(require("fs"));
-var env = require('../../env');
-var dirname = __dirname + '/../../storage/files/';
+const express = require('express');
+const router = express.Router();
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('fs'));
+const env = require('../../env');
+let dirname = `${__dirname}/../../storage/files/`;
 if (env.storage_path) {
-    dirname = env.storage_path + 'files/';
+  dirname = `${env.storage_path}files/`;
 }
 
-router.get('/', function (req, res) {
-    
-    let filesPath = dirname + req.user.id + '/';
-    
-    let getFiles = function () {
-        fs.readdirAsync(filesPath, 'utf8').then(function (files) {
-            res.setHeader('Content-Type', 'application/json');
-            res.send(files);
-        });
-    };
+router.get('/', (req, res) => {
+  const filesPath = `${dirname + req.user.id}/`;
 
-    fs.statAsync(filesPath)
-        .then(function () {
-            getFiles();
+  const getFiles = function () {
+    fs.readdirAsync(filesPath, 'utf8').then((files) => {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(files);
+    });
+  };
+
+  fs.statAsync(filesPath)
+        .then(() => {
+          getFiles();
         })
-        .error(function () {
-            fs.mkdirAsync(filesPath).then(function () {
-                getFiles();
-            });
+        .error(() => {
+          fs.mkdirAsync(filesPath).then(() => {
+            getFiles();
+          });
         });
-
-
 });
 
-router.get('/file', function (req, res) {
+router.get('/file', (req, res) => {
+  const filename = req.query.filename;
 
-    var filename = req.query.filename;
+  const filesPath = `${dirname + req.user.id}/`;
 
-    var filesPath = dirname + req.user.id + '/';
-
-    fs.readFileAsync(filesPath + filename, 'utf8').then(function (content) {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(content);
-    });
+  fs.readFileAsync(filesPath + filename, 'utf8').then((content) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(content);
+  });
 });
 
-router.post('/save', function (req, res) {
-    var filename = req.query.filename;
-    var content = req.body.content;
-    var filesPath = dirname + req.user.id + '/';
-    fs.writeFileAsync(filesPath + filename, content).then(function () {
-        res.setHeader('Content-Type', 'application/json');
-        res.send({});
-    });
+router.post('/save', (req, res) => {
+  const filename = req.query.filename;
+  const content = req.body.content;
+  const filesPath = `${dirname + req.user.id}/`;
+  fs.writeFileAsync(filesPath + filename, content).then(() => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send({});
+  });
 });
 
 module.exports = router;

@@ -4,7 +4,7 @@ module.exports = {
     connection: {
       host: '127.0.0.1',
       database: 'pinyin',
-      user:     'root',
+      user: 'root',
       password: null,
       charset: 'utf8'
     },
@@ -22,7 +22,7 @@ module.exports = {
     connection: {
       host: '127.0.0.1',
       database: 'pinyin',
-      user:     'root',
+      user: 'root',
       password: null,
       charset: 'utf8'
     },
@@ -40,7 +40,7 @@ module.exports = {
     connection: {
       host: '127.0.0.1',
       database: 'pinyin',
-      user:     'root',
+      user: 'root',
       password: 'root',
       charset: 'utf8'
     },

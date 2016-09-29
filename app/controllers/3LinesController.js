@@ -40,7 +40,7 @@ router.get('/load', (req, res) => {
 
     download.on('error', (err) => {
       res.setHeader('Content-Type', 'application/json');
-      res.send(`Error${err}`);
+      res.send('Error');
     });
 
     download.on('end', (output) => {

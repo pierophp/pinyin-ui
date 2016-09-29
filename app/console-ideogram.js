@@ -1,12 +1,12 @@
 
-var program = require('commander');
-var UnihanDatabaseParser = require('../services/UnihanDatabaseParser');
-var udp = new UnihanDatabaseParser();
+const program = require('commander');
+const UnihanDatabaseParser = require('./services/UnihanDatabaseParser');
+const udp = new UnihanDatabaseParser();
 
 program.option('-p, --pinyin [type]', 'Pinyin');
 program.option('-i, --ideogram [type]', 'Ideogram');
 program.parse(process.argv);
 
-udp.saveWord(program.pinyin, program.ideogram).then(function(){
-   process.exit(); 
+udp.saveWord(program.pinyin, program.ideogram).then(() => {
+  process.exit();
 });
