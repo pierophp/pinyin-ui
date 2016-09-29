@@ -1,6 +1,6 @@
-
 const program = require('commander');
 const UnihanDatabaseParser = require('./services/UnihanDatabaseParser');
+
 const udp = new UnihanDatabaseParser();
 
 program.option('-p, --pinyin [type]', 'Pinyin');

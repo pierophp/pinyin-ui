@@ -4,9 +4,7 @@ const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require("fs"));
 
 gulp.task('lint', () => {
-
-  //gulp.src(['app/**/*.js'])
-  return gulp.src(['app/services/UnihanSearch.js'])
+  return gulp.src(['app/**/*.js'])
     .pipe($.eslint())
     .pipe($.eslint.format())
     // .pipe($.eslint.failAfterError())

@@ -3,7 +3,69 @@ const knex = require('./knex');
 
 module.exports = class UnihanSearch {
 
-  toPinyin(ideograms) {
+  static searchByIdeograms(ideograms) {
+    const ideogramPromises = [];
+
+    for (let i = 0; i < ideograms.length; i += 1) {
+      const ideogramConverted = ideograms[i].charCodeAt(0).toString(16);
+
+      ideogramPromises.push(knex('cjk')
+        .where({
+          ideogram: ideogramConverted,
+          type: 'C',
+        })
+        .orderBy('frequency', 'ASC')
+        .orderBy('usage', 'DESC')
+        .select('id', 'pronunciation')
+      );
+    }
+
+    return Promise.all(ideogramPromises);
+  }
+
+  static searchByWord(ideograms) {
+    let ideogramsConverted = '';
+    for (let i = 0; i < ideograms.length; i += 1) {
+      ideogramsConverted += ideograms[i].charCodeAt(0).toString(16);
+    }
+
+    return knex('cjk')
+      .where({
+        ideogram: ideogramsConverted,
+        type: 'W',
+      })
+      .orderBy('frequency', 'ASC')
+      .orderBy('usage', 'DESC')
+      .select('id', 'pronunciation');
+  }
+
+  static extractPinyinTone(pinyin) {
+    const tones = [{
+      tone: 1,
+      letters: ['ā', 'ē', 'ī', 'ō', 'ū', 'ǖ'],
+    }, {
+      tone: 2,
+      letters: ['á', 'é', 'í', 'ó', 'ú', 'ǘ'],
+    }, {
+      tone: 3,
+      letters: ['ǎ', 'ě', 'ǐ', 'ǒ', 'ǔ', 'ǚ'],
+    }, {
+      tone: 4,
+      letters: ['à', 'è', 'ì', 'ò', 'ù', 'ǜ'],
+    }];
+
+    for (const tone of tones) {
+      for (const letter of tone.letters) {
+        if (pinyin.indexOf(letter) > -1) {
+          return tone.tone;
+        }
+      }
+    }
+
+    return 0;
+  }
+
+  static parseResultByIdeograms(ideogramsList, ideograms) {
     const specialsChars = {
       '。': '.',
       '？': '?',
@@ -33,124 +95,57 @@ module.exports = class UnihanSearch {
       },
     };
 
-    const searchByWord = function (ideograms) {
-      let ideogramsConverted = '';
-      for (let i = 0; i < ideograms.length; i++) {
-        ideogramsConverted += ideograms[i].charCodeAt(0).toString(16);
-      }
+    const result = {};
+    result.pinyin = '';
 
-      return knex('cjk')
-        .where({
-          ideogram: ideogramsConverted,
-          type: 'W',
-        })
-        .orderBy('frequency', 'ASC')
-        .orderBy('usage', 'DESC')
-        .select('id', 'pronunciation');
-    };
+    let i = 0;
 
-    const searchByIdeograms = function (ideograms) {
-      const ideogramPromises = [];
+    for (const ideogram of ideogramsList) {
+      const character = ideograms[i];
 
-      for (let i = 0; i < ideograms.length; i++) {
-        const ideogramConverted = ideograms[i].charCodeAt(0).toString(16);
-
-        ideogramPromises.push(knex('cjk')
-          .where({
-            ideogram: ideogramConverted,
-            type: 'C',
-          })
-          .orderBy('frequency', 'ASC')
-          .orderBy('usage', 'DESC')
-          .select('id', 'pronunciation')
-        );
-      }
-
-      return Promise.all(ideogramPromises);
-    };
-
-    const extractPinyinTone = function (pinyin) {
-      const tones = [{
-        tone: 1,
-        letters: ['ā', 'ē', 'ī', 'ō', 'ū', 'ǖ'],
-      }, {
-        tone: 2,
-        letters: ['á', 'é', 'í', 'ó', 'ú', 'ǘ'],
-      }, {
-        tone: 3,
-        letters: ['ǎ', 'ě', 'ǐ', 'ǒ', 'ǔ', 'ǚ'],
-      }, {
-        tone: 4,
-        letters: ['à', 'è', 'ì', 'ò', 'ù', 'ǜ'],
-      }];
-
-      for (const tone of tones) {
-        for (const letter of tone.letters) {
-          if (pinyin.indexOf(letter) > -1) {
-            return tone.tone;
-          }
-        }
-      }
-
-      return 0;
-    };
-
-    const parseResultByIdeograms = function (ideogramsList, ideograms) {
-      const result = {};
-
-      result.pinyin = '';
-
-      let i = 0;
-
-      for (const ideogram of ideogramsList) {
-        const character = ideograms[i];
-
-        if (ideogram.length == 0) {
-          if (specialsChars[character]) {
-            result.pinyin += specialsChars[character];
-          } else {
-            result.pinyin += '__';
-          }
+      if (ideogram.length === 0) {
+        if (specialsChars[character]) {
+          result.pinyin += specialsChars[character];
         } else {
-          if (changeToneRules[character] && ideogramsList[i + 1] && ideogramsList[i + 1][0]) {
-            const tone = extractPinyinTone(ideogramsList[i + 1][0].pronunciation);
-
-            if (changeToneRules[character][tone]) {
-              result.pinyin += changeToneRules[character][tone];
-            } else {
-              result.pinyin += ideogram[0].pronunciation;
-            }
-          } else {
-            result.pinyin += ideogram[0].pronunciation;
-          }
+          result.pinyin += '__';
         }
-
-        i++;
+      } else if (changeToneRules[character] && ideogramsList[i + 1] && ideogramsList[i + 1][0]) {
+        const tone = UnihanSearch.extractPinyinTone(ideogramsList[i + 1][0].pronunciation);
+        if (changeToneRules[character][tone]) {
+          result.pinyin += changeToneRules[character][tone];
+        } else {
+          result.pinyin += ideogram[0].pronunciation;
+        }
+      } else {
+        result.pinyin += ideogram[0].pronunciation;
       }
 
-      return result;
-    };
+      i += 1;
+    }
 
+    return result;
+  }
+
+  static toPinyin(ideograms) {
     return new Promise((resolve) => {
-      searchByWord(ideograms).then((words) => {
+      UnihanSearch.searchByWord(ideograms).then((words) => {
         const result = {};
-
         if (words.length > 0) {
           result.pinyin = words[0].pronunciation;
           resolve(result);
         } else {
-          searchByIdeograms(ideograms).then((ideogramsList) => {
-            resolve(parseResultByIdeograms(ideogramsList, ideograms));
+          UnihanSearch.searchByIdeograms(ideograms).then((ideogramsList) => {
+            resolve(UnihanSearch.parseResultByIdeograms(ideogramsList, ideograms));
           });
         }
       });
     });
   }
 
-  pinyinTonesNumbersToAccents(text) {
+  static pinyinTonesNumbersToAccents(text) {
     function getUpperCaseIndices(str) {
       const indices = [];
-      for (let i = 0; i < str.length; i++) {
+      for (let i = 0; i < str.length; i += 1) {
         if (str[i] === str[i].toUpperCase()) {
           indices.push(i);
         }
@@ -160,13 +155,13 @@ module.exports = class UnihanSearch {
 
     function revertToUpperCase(str, indices) {
       const chars = str.split('');
-      indices.map((idx) => {
+      for (const idx of indices) {
         chars[idx] = chars[idx].toUpperCase();
-      });
+      }
       return chars.join('');
     }
 
-    const tonePtn = /([aeiouvüAEIOUVÜ]{1,2}(n|ng|r|\'er|N|NG|R|\'ER){0,1}[1234])/g;
+    const tonePtn = /([aeiouvüAEIOUVÜ]{1,2}(n|ng|r|'er|N|NG|R|'ER){0,1}[1234])/g;
     const toneMap = {
       a: ['ā', 'á', 'ǎ', 'à'],
       ai: ['āi', 'ái', 'ǎi', 'ài'],
@@ -192,16 +187,20 @@ module.exports = class UnihanSearch {
     };
     const tones = text.match(tonePtn);
     if (tones) {
-      tones.forEach((coda) => {
-        const toneIdx = parseInt(coda.slice(-1)) - 1;
+      for (const coda of tones) {
+        const toneIdx = parseInt(coda.slice(-1), 10) - 1;
         let vowel = coda.slice(0, -1);
-        const suffix = vowel.match(/(n|ng|r|\'er|N|NG|R|\'ER)$/);
-        vowel = vowel.replace(/(n|ng|r|\'er|N|NG|R|\'ER)$/, '');
+        const suffix = vowel.match(/(n|ng|r|'er|N|NG|R|'ER)$/);
+        vowel = vowel.replace(/(n|ng|r|'er|N|NG|R|'ER)$/, '');
         const upperCaseIdxs = getUpperCaseIndices(vowel);
         vowel = vowel.toLowerCase();
-        const replacement = suffix && toneMap[vowel][toneIdx] + suffix[0] || toneMap[vowel][toneIdx];
+        let replacement = toneMap[vowel][toneIdx];
+        if (suffix) {
+          replacement = toneMap[vowel][toneIdx] + suffix[0];
+        }
+
         text = text.replace(coda, revertToUpperCase(replacement, upperCaseIdxs));
-      });
+      }
     }
 
     return text;

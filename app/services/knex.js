@@ -1,5 +1,7 @@
 const env = process.env.NODE_ENV || 'development';
-const config = require(`${__dirname}/../../knexfile`)[env];
+const config = require('../../knexfile')[env];
+const knex = require('knex');
+
 const params = {
   client: config.client,
   connection: {
@@ -11,11 +13,11 @@ const params = {
   },
 };
 
-const knex = require('knex')(params);
+const knexInstance = knex(params);
 
 
-// knex.on('query', function (queryData) {
+// knexInstance.on('query', function (queryData) {
     // console.log(queryData);
 // });
 
-module.exports = knex;
+module.exports = knexInstance;

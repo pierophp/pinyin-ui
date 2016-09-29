@@ -1,18 +1,15 @@
-
 const knex = require('./knex');
 const removeDiacritics = require('diacritics').remove;
 const Promise = require('bluebird');
+const fs = require('fs');
+const xml2js = require('xml2js');
 
 module.exports = class UnihanDatabaseParser {
 
-  constructor() {
-
-  }
-
-  saveWord(pinyin, ideograms) {
+  static saveWord(pinyin, ideograms) {
     let ideogramsConverted = '';
 
-    for (let i = 0; i < ideograms.length; i++) {
+    for (let i = 0; i < ideograms.length; i += 1) {
       ideogramsConverted += ideograms[i].charCodeAt(0).toString(16);
     }
 
@@ -35,9 +32,7 @@ module.exports = class UnihanDatabaseParser {
     });
   }
 
-  loadFile(file) {
-    const fs = require('fs');
-    const xml2js = require('xml2js');
+  static loadFile(file) {
     const parser = new xml2js.Parser();
     const data = fs.readFileSync(file);
 
@@ -71,7 +66,9 @@ module.exports = class UnihanDatabaseParser {
           usage: 0,
           created_at: new Date(),
         });
-      }, { concurrency: 10 }).then(() => {
+      }, {
+        concurrency: 10,
+      }).then(() => {
 
       });
     });

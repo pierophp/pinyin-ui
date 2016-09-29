@@ -1,8 +1,9 @@
 const express = require('express');
-const router = express.Router();
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 const env = require('../../env');
+
+const router = express.router();
 let dirname = `${__dirname}/../../storage/files/`;
 if (env.storage_path) {
   dirname = `${env.storage_path}files/`;
@@ -11,7 +12,7 @@ if (env.storage_path) {
 router.get('/', (req, res) => {
   const filesPath = `${dirname + req.user.id}/`;
 
-  const getFiles = function () {
+  const getFiles = function getFiles() {
     fs.readdirAsync(filesPath, 'utf8').then((files) => {
       res.setHeader('Content-Type', 'application/json');
       res.send(files);
