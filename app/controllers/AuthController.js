@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 
-const router = express.router();
+const router = express.Router();
 
 router.get('/is_logged_in', (req, res) => {
   const user = {};

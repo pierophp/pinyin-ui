@@ -3,7 +3,7 @@ const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 const env = require('../../env');
 
-const router = express.router();
+const router = express.Router();
 let dirname = `${__dirname}/../../storage/files/`;
 if (env.storage_path) {
   dirname = `${env.storage_path}files/`;

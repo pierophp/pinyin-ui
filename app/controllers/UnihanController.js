@@ -8,7 +8,7 @@ const wget = require('wget');
 const AdmZip = require('adm-zip');
 const env = require('../../env');
 
-const router = express.router();
+const router = express.Router();
 const udp = new UnihanDatabaseParser();
 const unihanSearch = new UnihanSearch();
 

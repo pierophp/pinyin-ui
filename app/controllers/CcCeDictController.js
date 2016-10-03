@@ -6,7 +6,7 @@ const wget = require('wget');
 const AdmZip = require('adm-zip');
 const env = require('../../env');
 
-const router = express.router();
+const router = express.Router();
 const databaseParser = new CcCeDictDatabaseParser();
 let storagePath = `${__dirname}/../../storage/`;
 if (env.storage_path) {
