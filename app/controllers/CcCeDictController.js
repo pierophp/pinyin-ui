@@ -6,8 +6,8 @@ const wget = require('wget');
 const AdmZip = require('adm-zip');
 const env = require('../../env');
 
+// eslint-disable-next-line new-cap
 const router = express.Router();
-const databaseParser = new CcCeDictDatabaseParser();
 let storagePath = `${__dirname}/../../storage/`;
 if (env.storage_path) {
   storagePath = env.storage_path;
@@ -18,7 +18,7 @@ router.get('/load', (req, res) => {
   const filenameZip = `${storagePath}cedict_1_0_ts_utf-8_mdbg.zip`;
 
   const importFile = function importFile() {
-    databaseParser.loadFile(filename);
+    CcCeDictDatabaseParser.loadFile(filename);
     res.setHeader('Content-Type', 'application/json');
     res.send('Status 200');
   };
@@ -53,7 +53,7 @@ router.get('/load', (req, res) => {
     fs.statSync(filename);
     importFile();
   } catch (e) {
-    downloadFile();
+    // downloadFile();
   }
 
 

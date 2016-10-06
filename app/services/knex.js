@@ -14,10 +14,8 @@ const params = {
 };
 
 const knexInstance = knex(params);
-
-
-// knexInstance.on('query', function (queryData) {
-    // console.log(queryData);
+// knexInstance.on('query', (queryData) => {
+//  console.log(queryData);
 // });
 
 module.exports = knexInstance;

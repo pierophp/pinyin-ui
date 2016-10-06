@@ -1,9 +1,12 @@
 #!/usr/bin/env node
-
-var program = require('commander');
+const program = require('commander');
 
 program
   .version('0.0.1')
   .command('ideogram', 'Create a ideogram to pinyin database');
+
+program
+  .version('0.0.1')
+  .command('unihan-load', 'Unihan load');
 
 program.parse(process.argv);

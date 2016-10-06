@@ -3,6 +3,7 @@ const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 const env = require('../../env');
 
+// eslint-disable-next-line new-cap
 const router = express.Router();
 let dirname = `${__dirname}/../../storage/files/`;
 if (env.storage_path) {

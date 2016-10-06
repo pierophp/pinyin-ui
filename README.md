@@ -18,6 +18,8 @@ Create a env.js file based on env.js.example
 
 
 Load the Unihan Database:
-http://localhost:9090/unihan/load
+```
+./app/console unihan-load
+```
 
 <img src="https://travis-ci.org/pierophp/pinyin.svg" alt="build:passed">

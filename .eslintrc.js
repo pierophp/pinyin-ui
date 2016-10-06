@@ -18,15 +18,3 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
   }
 }
-
-/*
-{
-  "plugins": ["node"],
-  "extends": ["eslint:recommended", "plugin:node/recommended"],
-  "rules": {
-    "node/exports-style": ["error", "module.exports"],
-    "node/no-unpublished-bin": "error",
-    "node/process-exit-as-throw": "error"
-  }
-}
-*/

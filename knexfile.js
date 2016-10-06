@@ -6,14 +6,14 @@ module.exports = {
       database: 'pinyin',
       user: 'root',
       password: null,
-      charset: 'utf8'
+      charset: 'utf8',
     },
     pool: {
       min: 2,
-      max: 10
+      max: 10,
     },
     migrations: {
-      tableName: 'migrations'
+      tableName: 'migrations',
     }
   },
 
@@ -24,14 +24,14 @@ module.exports = {
       database: 'pinyin',
       user: 'root',
       password: null,
-      charset: 'utf8'
+      charset: 'utf8',
     },
     pool: {
       min: 2,
-      max: 10
+      max: 10,
     },
     migrations: {
-      tableName: 'migrations'
+      tableName: 'migrations',
     }
   },
 
@@ -42,14 +42,14 @@ module.exports = {
       database: 'pinyin',
       user: 'root',
       password: 'root',
-      charset: 'utf8'
+      charset: 'utf8',
     },
     pool: {
       min: 2,
-      max: 10
+      max: 10,
     },
     migrations: {
-      tableName: 'migrations'
+      tableName: 'migrations',
     }
   }
 

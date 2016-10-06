@@ -1,15 +1,15 @@
+const UnihanDatabaseParser = require('../../app/services/UnihanDatabaseParser');
+const chai = require('chai');
 
-var expect = require("chai").expect;
+const expect = chai.expect;
+const udp = new UnihanDatabaseParser();
 
-var UnihanDatabaseParser = require('../../app/services/UnihanDatabaseParser');
-var udp = new UnihanDatabaseParser();
+describe('XML Test', () => {
 
-describe("XML Test", function () {
+  it('Load file', () => {
 
-    it("Load file", function () {
-        
-        udp.loadFile(__dirname + '/resources/UnihanDatabase.xml');
-        //expect(1).to.equal(1);
-    });
+    udp.loadile('./resources/UnihanDatabase.xml');
+    //expect(1).to.equal(1);
+  });
 
-});    
+});

@@ -10,3 +10,5 @@ travis/id_rsa
 travis/env.js
 travis/newrelic.js
 travis/secrets.tar
+/nbproject/private/
+nbproject/*

@@ -6,6 +6,7 @@ const wget = require('wget');
 const AdmZip = require('adm-zip');
 const env = require('../../env');
 
+// eslint-disable-next-line new-cap
 const router = express.Router();
 const databaseParser = new CcCeDictDatabaseParser();
 let storagePath = `${__dirname}/../../storage/`;

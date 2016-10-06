@@ -66,7 +66,7 @@ gulp.task('nodemon', function (done) {
   });
 });
 
-gulp.task('default', ['minify-css', 'minify-js', 'lint', 'nodemon'], function () {
+gulp.task('default', ['nodemon', 'minify-css', 'minify-js', 'lint'], function () {
   gulp.watch('public/src/css/**/*.css', ['minify-css']);
   gulp.watch('public/src/js/**/*.js', ['minify-js']);
   gulp.watch('app/**/*.js', ['lint']);

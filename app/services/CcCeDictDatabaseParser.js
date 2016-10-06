@@ -38,11 +38,11 @@ module.exports = class CcCeDictDatabaseParser {
 
     lineReader.on('line', (line) => {
       if (line[0] === '#') {
-        return {};
+        return;
       }
 
       let parts = line.split('/');
-      const ideogram = parts[0].split(' ')[1];
+      let ideogram = parts[0].split(' ')[1];
 
       parts = line.split('/');
 
@@ -51,10 +51,13 @@ module.exports = class CcCeDictDatabaseParser {
       pronunciation = UnihanSearch.pinyinTonesNumbersToAccents(pronunciation).replace(new RegExp('5', 'g'), '');
 
       parts.shift();
-      const description = parts[0];
+      const descriptions = [];
       const measureWords = [];
       for (const part of parts) {
         if (part.substr(0, 3) !== 'CL:') {
+          if (part) {
+            descriptions.push(part);
+          }
           continue;
         }
 
@@ -71,13 +74,36 @@ module.exports = class CcCeDictDatabaseParser {
         }
       }
 
-      return {
+      ideogram = UnihanSearch.convertIdeograms(ideogram);
+
+      knex('cjk')
+        .where({
+          ideogram,
+        })
+        .then((data) => {
+          //console.log(data);
+        });
+
+      knex('cjk').insert({
         ideogram,
-        description,
+        pronunciation,
+        pronunciation_unaccented: pronunciationUnaccented,
+        definition_cedict: '',
+        language_id: 1,
+        type: 'W',
+        usage: 0,
+        created_at: new Date(),
+      });
+
+      /*
+      console.log({
+        ideogram,
+        descriptions,
         pronunciation,
         pronunciationUnaccented,
         measureWords,
-      };
+      });
+      */
     });
   }
 };

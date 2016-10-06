@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 
+// eslint-disable-next-line new-cap
 const router = express.Router();
 
 router.get('/is_logged_in', (req, res) => {

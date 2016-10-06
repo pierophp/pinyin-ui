@@ -23,15 +23,19 @@ module.exports = class UnihanSearch {
     return Promise.all(ideogramPromises);
   }
 
-  static searchByWord(ideograms) {
+  static convertIdeograms(ideograms) {
     let ideogramsConverted = '';
     for (let i = 0; i < ideograms.length; i += 1) {
       ideogramsConverted += ideograms[i].charCodeAt(0).toString(16);
     }
 
+    return ideogramsConverted;
+  }
+
+  static searchByWord(ideograms) {
     return knex('cjk')
       .where({
-        ideogram: ideogramsConverted,
+        ideogram: UnihanSearch.convertIdeograms(ideograms),
         type: 'W',
       })
       .orderBy('frequency', 'ASC')
