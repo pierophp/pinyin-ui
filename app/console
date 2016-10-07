@@ -9,4 +9,12 @@ program
   .version('0.0.1')
   .command('unihan-load', 'Unihan load');
 
+program
+  .version('0.0.1')
+  .command('cc-ce-dict-load', 'CC CE Dict load');
+
+program
+  .version('0.0.1')
+  .command('3lines-load', '3 Lines load');
+
 program.parse(process.argv);

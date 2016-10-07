@@ -6,7 +6,7 @@ module.exports = {
       database: 'pinyin',
       user: 'root',
       password: null,
-      charset: 'utf8',
+      charset: 'utf8mb4',
     },
     pool: {
       min: 2,
@@ -14,7 +14,7 @@ module.exports = {
     },
     migrations: {
       tableName: 'migrations',
-    }
+    },
   },
 
   staging: {
@@ -24,7 +24,7 @@ module.exports = {
       database: 'pinyin',
       user: 'root',
       password: null,
-      charset: 'utf8',
+      charset: 'utf8mb4',
     },
     pool: {
       min: 2,
@@ -32,7 +32,7 @@ module.exports = {
     },
     migrations: {
       tableName: 'migrations',
-    }
+    },
   },
 
   production: {
@@ -42,7 +42,7 @@ module.exports = {
       database: 'pinyin',
       user: 'root',
       password: 'root',
-      charset: 'utf8',
+      charset: 'utf8mb4',
     },
     pool: {
       min: 2,
@@ -50,7 +50,7 @@ module.exports = {
     },
     migrations: {
       tableName: 'migrations',
-    }
-  }
+    },
+  },
 
 };

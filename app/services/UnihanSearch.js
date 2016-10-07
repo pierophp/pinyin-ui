@@ -23,10 +23,20 @@ module.exports = class UnihanSearch {
     return Promise.all(ideogramPromises);
   }
 
-  static convertIdeograms(ideograms) {
+  static convertIdeogramsToUtf16(ideograms) {
+    const ideogramsConverted = [];
+    for (let i = 0; i < ideograms.length; i += 1) {
+      ideogramsConverted.push(ideograms[i].charCodeAt(0).toString(16));
+    }
+
+    return ideogramsConverted.join('|');
+  }
+
+  static convertUtf16ToIdeograms(ideogramsUtf16) {
+    const ideograms = ideogramsUtf16.split('|');
     let ideogramsConverted = '';
     for (let i = 0; i < ideograms.length; i += 1) {
-      ideogramsConverted += ideograms[i].charCodeAt(0).toString(16);
+      ideogramsConverted += String.fromCodePoint(parseInt(ideograms[i], 16));
     }
 
     return ideogramsConverted;
@@ -35,7 +45,7 @@ module.exports = class UnihanSearch {
   static searchByWord(ideograms) {
     return knex('cjk')
       .where({
-        ideogram: UnihanSearch.convertIdeograms(ideograms),
+        ideogram: UnihanSearch.convertIdeogramsToUtf16(ideograms),
         type: 'W',
       })
       .orderBy('frequency', 'ASC')

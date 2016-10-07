@@ -1,14 +1,9 @@
 'use strict';
 
-var app = angular.module('app');
+const app = angular.module('app');
 
-app.filter('ideogram', function () {
-
-  return function (input) {
-
-    var output = String.fromCharCode(parseInt(input, 16));
-
-    return output;
-
+app.filter('ideogram', () => {
+  return (input) => {
+    return String.fromCodePoint(parseInt(input, 16));
   }
 });
