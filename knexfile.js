@@ -5,8 +5,9 @@ module.exports = {
       host: '127.0.0.1',
       database: 'pinyin',
       user: 'root',
-      password: null,
+      password: 'root',
       charset: 'utf8mb4',
+      port: 3310,
     },
     pool: {
       min: 2,

@@ -1,0 +1,14 @@
+version: '2'
+services:
+  db:
+    hostname: db
+    container_name: pinyin_db
+    image: mysql:5.7
+    ports:
+      - "3310:3306"
+    environment:
+      MYSQL_DATABASE: "pinyin"
+      MYSQL_ROOT_PASSWORD: "root"
+    volumes:
+      - ./storage/mysql:/var/lib/mysql
+
