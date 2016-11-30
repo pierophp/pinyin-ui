@@ -7,6 +7,7 @@ const params = {
   connection: {
     host: config.connection.host,
     user: config.connection.user,
+    port: config.connection.port,
     password: config.connection.password,
     database: config.connection.database,
     charset: config.connection.charset,

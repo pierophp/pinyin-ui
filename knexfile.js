@@ -4,8 +4,8 @@ module.exports = {
     connection: {
       host: '127.0.0.1',
       database: 'pinyin',
-      user: 'root',
-      password: 'root',
+      user: 'docker',
+      password: 'docker',
       charset: 'utf8mb4',
       port: 3310,
     },

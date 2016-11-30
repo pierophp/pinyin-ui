@@ -1,3 +1,4 @@
+/*
 const knex = require('./knex');
 const removeDiacritics = require('diacritics').remove;
 const Promise = require('bluebird');
@@ -70,10 +71,16 @@ module.exports = class CcCeDictDatabaseParser {
         let ideogram = parts[0].split(' ')[1];
         parts = line.split('/');
 
-        let pronunciation = parts[0].split('[')[1].replace(']', '').toLowerCase().replace(new RegExp(' ', 'g'), '');
+        let pronunciation = parts[0]
+                      .split('[')[1]
+                      .replace(']', '')
+                      .toLowerCase()
+                      .replace(new RegExp(' ', 'g'), '');
 
         const pronunciationUnaccented = pronunciation.replace(new RegExp('[12345]', 'g'), '');
-        pronunciation = UnihanSearch.pinyinTonesNumbersToAccents(pronunciation).replace(new RegExp('5', 'g'), '');
+        pronunciation = UnihanSearch
+                            .pinyinTonesNumbersToAccents(pronunciation)
+                            .replace(new RegExp('5', 'g'), '');
 
         const key = ideogram + pronunciation;
 
@@ -194,12 +201,7 @@ module.exports = class CcCeDictDatabaseParser {
         nextLine(reader);
       });
 
-
-
-
       /*
-
-
 
             const lineReader = readline.createInterface({
               input: fs.createReadStream(file),
@@ -226,7 +228,8 @@ module.exports = class CcCeDictDatabaseParser {
 
             });
 
-            */
+            * /
     });
   }
 };
+*/
