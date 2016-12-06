@@ -179,6 +179,10 @@ angular.module("app").factory("filesAPI", function ($http) {
 
   let _extractPinyinTone = function (pinyin) {
 
+    if(pinyin === undefined){
+      return 0;
+    }
+
     let tones = [{
       tone: 1,
       letters: ['ā', 'ē', 'ī', 'ō', 'ū', 'ǖ']

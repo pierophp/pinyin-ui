@@ -1,0 +1,14 @@
+<template>
+  <div>
+    <div class="modal-header">
+      <h3 class="modal-title">Paste</h3>
+    </div>
+    <div class="modal-body">
+      <textarea class="form-control" auto-focus ng-model="text"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+      <button class="btn btn-danger" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+  </div>
+</template>

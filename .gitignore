@@ -1,11 +1,6 @@
-env.js
-node_modules/*
+.vscode/*
 public/lib/*
 public/dist/*
-storage/*
-.vscode/*
-newrelic.js
-newrelic_agent.log
 travis/id_rsa
 travis/env.js
 travis/newrelic.js
