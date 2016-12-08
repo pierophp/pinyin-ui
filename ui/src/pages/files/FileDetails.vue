@@ -39,12 +39,14 @@
       <a class="btn btn-success" @click.prevent="addEmptyLine()">+ line</a>
     </div>
   </div>
+  <file-paste-modal></file-paste-modal>
 </div>
 </template>
 
 <script>
 
   import FileRow from 'src/components/files/FileRow';
+  import FilePasteModal from 'src/components/modals/FilePaste';
 
   import {
     mapActions,
@@ -64,6 +66,7 @@
 
     components: {
       FileRow,
+      FilePasteModal,
     },
 
     data() {

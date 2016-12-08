@@ -1,7 +1,6 @@
 import pinyinize from 'pinyinize';
 import * as types from './types';
 
-
 export default {
   [types.FILE_MUTATION_SET](state, file) {
     state.file = file;
@@ -23,6 +22,12 @@ export default {
     state.file.push([]);
   },
 
+  [types.FILE_MUTATION_CONCATENATE_LINE](state, data) {
+    data.content.forEach((newBlock) => {
+      state.file[data.lineIndex].push(newBlock);
+    });
+  },
+
   [types.FILE_MUTATION_ADD_EMPTY_BLOCK](state, data) {
     state.file[data.lineIndex].push({
       p: '',
@@ -36,5 +41,9 @@ export default {
 
   [types.FILE_MUTATION_REMOVE_BLOCK](state, data) {
     state.file[data.lineIndex].remove(data.blockIndex);
+  },
+
+  [types.FILE_MUTATION_PASTE_ACTION](state, filePasteAction) {
+    state.filePasteAction = filePasteAction;
   },
 };

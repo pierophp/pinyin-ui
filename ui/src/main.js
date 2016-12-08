@@ -1,5 +1,12 @@
 import Vue from 'vue';
 
+// @todo Implement row ordenation
+// @todo Implement print
+// @todo Implement new file
+// @todo Fix autofocus file paste
+// @todo Implement loader on login
+// @todo Implement logout
+
 import 'bootstrap/dist/js/bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-social/bootstrap-social.css';
@@ -11,7 +18,6 @@ import 'src/helpers/array';
 import App from 'src/pages/App';
 import router from 'src/router';
 import store from 'src/data/store';
-
 
 const Main = Vue.extend(App);
 

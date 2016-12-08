@@ -21,14 +21,14 @@ router.get('/', (req, res) => {
   };
 
   fs.statAsync(filesPath)
-        .then(() => {
-          getFiles();
-        })
-        .error(() => {
-          fs.mkdirAsync(filesPath).then(() => {
-            getFiles();
-          });
-        });
+    .then(() => {
+      getFiles();
+    })
+    .error(() => {
+      fs.mkdirAsync(filesPath).then(() => {
+        getFiles();
+      });
+    });
 });
 
 router.get('/file', (req, res) => {

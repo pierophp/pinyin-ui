@@ -16,12 +16,12 @@
       </li>
       <li role="separator" class="divider"></li>
       <li>
-        <a href ng-click="openModalClipBoard01('', line, lineIndex)">
+        <a href @click.prevent="openModalClipBoard01(lineIndex)">
           <i class="glyphicon glyphicon-paste"></i> Paste (pinyin + space + hanzi)
         </a>
       </li>
       <li>
-        <a href ng-click="openModalClipBoard02('', line, lineIndex)">
+        <a href @click.prevent="openModalClipBoard02(lineIndex)">
           <i class="glyphicon glyphicon-paste"></i> Paste (2 lines)
         </a>
       </li>
@@ -41,9 +41,10 @@
   } from 'vuex';
 
   import {
-    FILE_MUTATION_ADD_EMPTY_BLOCK,
-    FILE_MUTATION_REMOVE_LINE,
     FILE_ACTION_CONVERT_TO_PINYIN,
+    FILE_MUTATION_ADD_EMPTY_BLOCK,
+    FILE_MUTATION_PASTE_ACTION,
+    FILE_MUTATION_REMOVE_LINE,
   } from 'src/data/file/types';
 
   export default {
@@ -58,10 +59,25 @@
       ...mapMutations({
         addEmptyBlock: FILE_MUTATION_ADD_EMPTY_BLOCK,
         removeLine: FILE_MUTATION_REMOVE_LINE,
+        pasteAction: FILE_MUTATION_PASTE_ACTION,
       }),
       ...mapActions({
         convertToPinyin: FILE_ACTION_CONVERT_TO_PINYIN,
       }),
+      openModalClipBoard01(lineIndex) {
+        $('#filePasteModal').modal();
+        this.pasteAction({
+          action: 1,
+          lineIndex,
+        });
+      },
+      openModalClipBoard02(lineIndex) {
+        $('#filePasteModal').modal();
+        this.pasteAction({
+          action: 2,
+          lineIndex,
+        });
+      },
     },
   };
 </script>

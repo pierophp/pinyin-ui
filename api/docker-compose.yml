@@ -1,6 +1,6 @@
 version: '2'
 services:
-  db:
+  pinyin_db:
     hostname: db
     container_name: pinyin_db
     image: mysql:5.7
