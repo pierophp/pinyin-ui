@@ -43,6 +43,7 @@ before_script:
 - sh -e /etc/init.d/xvfb start
 - mysql -u root -e "CREATE DATABASE pinyin;"
 - export NODE_ENV=staging
+- cd ../api/
 - knex migrate:latest
 - mkdir storage
 
