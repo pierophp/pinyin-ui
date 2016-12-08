@@ -28,10 +28,9 @@ before_install:
 - tar xvf travis/secrets.tar
 - mv id_rsa /home/travis/.ssh/id_rsa
 - rm -Rf travis
-- yarn install bower -g
-- yarn install knex -g
-- yarn install gulp-cli -g
-- yarn install strongloop -g
+- npm install knex -g
+- npm install gulp-cli -g
+- npm install strongloop -g
 - cd api
 - yarn install
 - cd ../ui
