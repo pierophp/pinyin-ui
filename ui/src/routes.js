@@ -1,7 +1,7 @@
 import Login from 'src/pages/auth/Login';
 import FilesList from 'src/pages/files/FilesList';
 import FileDetails from 'src/pages/files/FileDetails';
-import FilesPrint from 'src/pages/files/Print';
+import FilePrint from 'src/pages/files/FilePrint';
 
 export default [
   {
@@ -15,13 +15,13 @@ export default [
     component: FilesList,
   },
   {
-    path: '/files/file/:file',
+    path: '/files/file/:filename',
     name: 'file',
     component: FileDetails,
   },
   {
     path: '/files/print/:filename',
-    name: 'home',
-    component: FilesPrint,
+    name: 'print',
+    component: FilePrint,
   },
 ];

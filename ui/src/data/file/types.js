@@ -3,6 +3,7 @@ export const FILE_ACTION_FETCH = 'file/action/fetch';
 export const FILE_ACTION_SAVE = 'file/action/save';
 export const FILE_ACTION_CONVERT_TO_PINYIN = 'file/action/convertToPinyin';
 export const FILE_ACTION_PARSE_PASTE = 'file/action/parsePaste';
+export const FILE_ACTION_NEW_FILE = 'file/action/newFile';
 
 // getters
 export const FILE_GETTER = 'file/getter/file';

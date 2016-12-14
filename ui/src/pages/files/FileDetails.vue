@@ -13,19 +13,15 @@
       </button>
       <ul class="dropdown-menu">
         <li>
-          <a>
-              Normal
-          </a>
+          <router-link :to="{ name: 'print', params: { filename}, query: {size: 'normal' }}">Normal</router-link>
         </li>
         <li>
-          <a>
-              Larger
-          </a>
+          <router-link :to="{ name: 'print', params: { filename}, query: {size: 'larger' }}">Larger</router-link>
         </li>
       </ul>
     </div>
 
-    <a href="/auth/logout" class="btn btn-danger"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
+    <a @click.prevent="logout" class="btn btn-danger"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
   </div>
 
   <div class="panel-body larger-print">
@@ -33,6 +29,14 @@
       v-for="(line, index) in lines"
       :line="line"
       :line-index="index"
+      :data-index="index"
+      v-drag-drop="{
+        group: 'file-row',
+        drop: {
+            css: 'drop',
+            method: moveElement
+        }
+      }"
       ></file-row>
     <div class="clearfix"></div>
     <div class="footer">
@@ -44,9 +48,10 @@
 </template>
 
 <script>
-
+  // import Vue from 'vue';
   import FileRow from 'src/components/files/FileRow';
   import FilePasteModal from 'src/components/modals/FilePaste';
+  import User from 'src/domain/user';
 
   import {
     mapActions,
@@ -81,9 +86,16 @@
       }),
     },
 
+    watch: {
+      $route() {
+        if (this.$route.params.filename) {
+          this.getFile(this.$route.params.filename);
+        }
+      },
+    },
+
     created() {
-      this.filename = this.$route.params.file;
-      this.getFile();
+      this.getFile(this.$route.params.filename);
     },
 
     methods: {
@@ -96,11 +108,40 @@
         addEmptyLine: FILE_MUTATION_ADD_EMPTY_LINE,
       }),
 
-      getFile() {
-        if (!this.lines.length) {
-          this.fetch(this.filename);
+      getFile(filename) {
+        if (!this.lines.length || this.filename !== filename) {
+          this.fetch(filename);
         }
+
+        this.filename = filename;
+      },
+
+      logout() {
+        User.logout();
+      },
+
+      moveElement(draggedElement, droppedElement) {
+        const draggedIndex = draggedElement.getAttribute('data-index');
+        const droppedIndex = droppedElement.getAttribute('data-index');
+        console.log(draggedIndex);
+        console.log(droppedIndex);
+        // const newDraggedElement = this.lines[draggedIndex];
+        // const newDroppedElement = this.lines[droppedIndex];
+        // Vue.set(this.lines, droppedIndex, newDraggedElement);
+        // Vue.set(this.lines, draggedIndex, newDroppedElement);
       },
     },
   };
 </script>
+
+<style>
+  	.list {  }
+		.list li { font-size:14px; font-family:Arial; color:#fff; background-color:#3879d9; padding:7px 20px; border:2px solid transparent; cursor:pointer; }
+		.list li:hover { color:#3879d9; background-color:#fff; border:2px solid #3879d9; }
+		.list li.drag-start { background-color:#C56767; }
+		.list li.drag-over { background-color:#67c58f; }
+		.empty-container { font-size:0; }
+		.empty-container .column { display:inline-block; vertical-align:top; }
+		.empty-container.two-column .column { width:48.5%; margin-right:1.5%; }
+		.empty-container.two-column .column:nth-of-type(2n) { margin-right:0; }
+</style>

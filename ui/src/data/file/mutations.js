@@ -1,4 +1,4 @@
-import pinyinize from 'pinyinize';
+import pinyin from 'src/helpers/pinyin';
 import * as types from './types';
 
 export default {
@@ -7,7 +7,7 @@ export default {
   },
 
   [types.FILE_MUTATION_UPDATE_PINYIN](state, data) {
-    state.file[data.lineIndex][data.blockIndex].p = pinyinize(data.pinyin);
+    state.file[data.lineIndex][data.blockIndex].p = pinyin(data.pinyin);
   },
 
   [types.FILE_MUTATION_UPDATE_CHARACTER](state, data) {
@@ -29,6 +29,10 @@ export default {
   },
 
   [types.FILE_MUTATION_ADD_EMPTY_BLOCK](state, data) {
+    if (state.file[data.lineIndex] === null) {
+      state.file[data.lineIndex] = [];
+    }
+
     state.file[data.lineIndex].push({
       p: '',
       c: '',

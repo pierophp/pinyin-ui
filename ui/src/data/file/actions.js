@@ -62,4 +62,16 @@ export default {
       });
     }
   },
+
+  [types.FILE_ACTION_NEW_FILE]({ commit, state }, data) {
+    http
+    .post(`files/save?filename=${data.filename}.json`, {
+      content: JSON.stringify({ lines: [] }),
+    })
+    .then(() => {
+      // commit(types.FILE_MUTATION_SET, response.data.lines);
+    })
+    .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
+  },
+
 };

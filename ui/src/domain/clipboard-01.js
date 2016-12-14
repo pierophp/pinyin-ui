@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import isChinese from 'src/domain/is-chinese';
+import isChinese from 'src/helpers/is-chinese';
 
 export default function (content) {
   content = content.replace(/(\r\n|\n|\r)/gm, ' ');

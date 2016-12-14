@@ -37,10 +37,10 @@
       };
     },
     created() {
-      console.log('test modal created');
-      $('#filePasteModal').on('shown.bs.modal', () => {
-        console.log('test modal');
-        $('#filePasteModal textarea').focus();
+      $(document).ready(() => {
+        $('#filePasteModal').on('shown.bs.modal', () => {
+          $('#filePasteModal textarea').focus();
+        });
       });
     },
     methods: {

@@ -26,26 +26,13 @@ class User {
   }
 
   static logout() {
-    return new Promise((resolve, reject) => {
-      http
-        .get(`${apiUrl}/logout?token=${LocalStorage.get('token')}`)
-        .then(() => {
-          LocalStorage.remove('token');
-          LocalStorage.remove('user');
-
-          return resolve();
-        })
-        .catch((response) => {
-          const { errorCode } = response.body || {};
-
-          return reject(errorCode);
-        });
-    });
+    LocalStorage.remove('token');
+    LocalStorage.remove('user');
+    window.location = '/';
   }
 
   static isLogged() {
-    return true;
-    // return LocalStorage.has('token');
+    return LocalStorage.has('token');
   }
 
   static getUser() {

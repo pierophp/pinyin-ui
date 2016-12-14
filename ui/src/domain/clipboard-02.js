@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import separatePinyinInSyllables from 'src/domain/separate-pinyin-in-syllables';
+import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
 
 export default function (content) {
   const row = [];
