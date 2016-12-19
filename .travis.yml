@@ -50,6 +50,7 @@ before_script:
 script:
 #- npm run test-travis
 #- npm run test-node
+- echo "Test"
 
 after_success:
 - rm -Rf node_modules/*
