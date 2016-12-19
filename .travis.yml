@@ -48,8 +48,8 @@ before_script:
 - mkdir storage
 
 script:
-- npm run test-travis
-- npm run test-node
+#- npm run test-travis
+#- npm run test-node
 
 after_success:
 - rm -Rf node_modules/*
