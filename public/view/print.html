@@ -3,9 +3,7 @@
         <div ng-repeat="(blockIndex,block) in line" class="block">
 
             <div class="pinyin">
-                <span>
-                    {{ block.p }}
-                </span>
+                <span ng-bind-html="printPinyin(block)"></span>
             </div>
 
             <div class="character">
