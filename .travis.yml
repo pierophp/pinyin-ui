@@ -44,7 +44,7 @@ before_script:
 - mysql -u root -e "CREATE DATABASE pinyin CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
 - export NODE_ENV=staging
 - cd ../api/
-- knex migrate:latest
+#- knex migrate:latest
 - mkdir storage
 
 script:
