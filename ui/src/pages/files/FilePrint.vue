@@ -1,5 +1,5 @@
 <template>
-  <div class="panel print" v-bind:class="sizeClass">
+  <div class="panel print" :class="[sizeClass, typeClass, ideogramColoredClass]">
     <div v-for="(line, index) in lines" class="line">
     <file-block-print
     v-for="(block,index) in line"
@@ -33,6 +33,8 @@
       return {
         filename: '',
         sizeClass: '',
+        typeClass: '',
+        ideogramColoredClass: '',
       };
     },
 
@@ -41,6 +43,8 @@
         if (this.$route.params.filename) {
           this.getFile(this.$route.params.filename);
         }
+
+        this.updateCss();
       },
     },
 
@@ -50,7 +54,7 @@
       }),
     },
     created() {
-      this.sizeClass = this.$route.query.size;
+      this.updateCss();
       this.filename = this.$route.params.filename;
       this.getFile(this.filename);
     },
@@ -63,6 +67,19 @@
       getFile(filename) {
         this.fetch(filename);
       },
+      updateCss() {
+        this.sizeClass = this.$route.query.size;
+
+        this.typeClass = '';
+        if (this.$route.query.type === '2') {
+          this.typeClass = 'character-only';
+        }
+
+        this.ideogramColoredClass = '';
+        if (this.$route.query.ideogramColored === '1') {
+          this.ideogramColoredClass = 'ideogram-colored';
+        }
+      },
     },
 
   };
@@ -70,6 +87,14 @@
 </script>
 
 <style>
+  .character-only .pinyin{
+    display: none;
+  }
+
+  .character-only .block{
+    padding: 5px 0;
+  }
+
   .larger .pinyin span {
     font-size: 40px;
     height: 40px;
@@ -92,26 +117,25 @@
     background: #fff;
   }
 
-  .tone-1 {
+  .ideogram-colored .tone-1 {
     color: #0000ff!important;
   }
 
-  .tone-2 {
+  .ideogram-colored .tone-2 {
     color: #d89000!important;
   }
 
-  .tone-3 {
+  .ideogram-colored .tone-3 {
     color: #00a000!important;
   }
 
-  .tone-4 {
+  .ideogram-colored .tone-4 {
     color: #ff0000!important;
   }
 
   .hide-pinyin {
     display: inline-block;
     width: 30px !important;
-    ;
   }
 
 </style>

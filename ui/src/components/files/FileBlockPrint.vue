@@ -49,8 +49,10 @@
 
           if (myCjk.indexOf(chars[i]) > -1) {
             newPinyin += '<span class="hide-pinyin"> </span>';
-          } else {
+          } else if (pinyin[i]) {
             newPinyin += pinyin[i];
+          } else {
+            newPinyin += '&nbsp;';
           }
         }
 

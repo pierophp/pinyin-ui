@@ -9,7 +9,17 @@
           <h4 class="modal-title">Paste</h4>
         </div>
         <div class="modal-body">
-          <textarea class="form-control" v-model="textarea"></textarea>
+          <div class="form-group">
+            <label>Action</label>
+            <select class="form-control" v-model="action">
+              <option value="1">Multi NWT (pinyin + space + ideogram)</option>
+              <option value="2">2 lines</option>
+              <option value="3">JW.ORG</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <textarea class="form-control" v-model="textarea"></textarea>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -33,6 +43,7 @@
     name: 'modal-file-paste',
     data() {
       return {
+        action: '3',
         textarea: '',
       };
     },
@@ -46,7 +57,10 @@
     methods: {
       confirm() {
         $('#filePasteModal').modal('hide');
-        this.parsePaste(this.textarea);
+        this.parsePaste({
+          action: this.action,
+          content: this.textarea,
+        });
         this.textarea = '';
       },
       ...mapActions({

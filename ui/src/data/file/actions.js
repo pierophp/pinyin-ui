@@ -1,6 +1,7 @@
 import http from 'src/helpers/http';
 import clipboard01 from 'src/domain/clipboard-01';
 import clipboard02 from 'src/domain/clipboard-02';
+import clipboard03 from 'src/domain/clipboard-03';
 
 import * as types from './types';
 
@@ -48,18 +49,28 @@ export default {
     });
   },
   [types.FILE_ACTION_PARSE_PASTE]({ commit, state }, data) {
-    if (state.filePasteAction.action === 1) {
+    if (data.action === '1') {
       commit(types.FILE_MUTATION_CONCATENATE_LINE, {
         lineIndex: state.filePasteAction.lineIndex,
-        content: clipboard01(data),
+        content: clipboard01(data.content),
       });
     }
 
-    if (state.filePasteAction.action === 2) {
+    if (data.action === '2') {
       commit(types.FILE_MUTATION_CONCATENATE_LINE, {
         lineIndex: state.filePasteAction.lineIndex,
-        content: clipboard02(data),
+        content: clipboard02(data.content),
       });
+    }
+
+    if (data.action === '3') {
+      clipboard03(data.content)
+        .then((content) => {
+          commit(types.FILE_MUTATION_CONCATENATE_LINE, {
+            lineIndex: state.filePasteAction.lineIndex,
+            content,
+          });
+        });
     }
   },
 

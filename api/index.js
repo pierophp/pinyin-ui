@@ -16,6 +16,7 @@ app.use(cors());
 app.use(jwt({ secret: env.jwt_key }).unless({ path: [
   '/auth/google',
   '/auth/google/callback',
+  '/unihan/to_pinyin',
 ] }));
 app.use((req, res, next) => {
   res.setHeader('Content-Type', 'application/json');

@@ -15,7 +15,6 @@ router.get('/', (req, res) => {
 
   const getFiles = function getFiles() {
     fs.readdirAsync(filesPath, 'utf8').then((files) => {
-      res.setHeader('Content-Type', 'application/json');
       res.send(files);
     });
   };

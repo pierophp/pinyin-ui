@@ -16,13 +16,8 @@
       </li>
       <li role="separator" class="divider"></li>
       <li>
-        <a href @click.prevent="openModalClipBoard01(lineIndex)">
-          <i class="glyphicon glyphicon-paste"></i> Paste (pinyin + space + hanzi)
-        </a>
-      </li>
-      <li>
-        <a href @click.prevent="openModalClipBoard02(lineIndex)">
-          <i class="glyphicon glyphicon-paste"></i> Paste (2 lines)
+        <a href @click.prevent="openModalClipBoard(lineIndex)">
+          <i class="glyphicon glyphicon-paste"></i> Paste
         </a>
       </li>
       <li role="separator" class="divider"></li>
@@ -64,17 +59,9 @@
       ...mapActions({
         convertToPinyin: FILE_ACTION_CONVERT_TO_PINYIN,
       }),
-      openModalClipBoard01(lineIndex) {
+      openModalClipBoard(lineIndex) {
         $('#filePasteModal').modal();
         this.pasteAction({
-          action: 1,
-          lineIndex,
-        });
-      },
-      openModalClipBoard02(lineIndex) {
-        $('#filePasteModal').modal();
-        this.pasteAction({
-          action: 2,
           lineIndex,
         });
       },

@@ -6,7 +6,12 @@
     <a class="btn btn-success" @click.prevent="save({filename, content: lines})">
       <i class="glyphicon glyphicon-save-file"></i> Save
     </a>
-    <div class="btn-group">
+
+    <a class="btn btn-info" @click.prevent="openPrintModal()">
+      <i class="glyphicon glyphicon-print"></i> Print
+    </a>
+
+    <!-- div class="btn-group">
       <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="glyphicon glyphicon-print"></i> Print
         <span class="caret"></span>
@@ -19,7 +24,7 @@
           <router-link :to="{ name: 'print', params: { filename}, query: {size: 'larger' }}">Larger</router-link>
         </li>
       </ul>
-    </div>
+    </div -->
 
     <a @click.prevent="logout" class="btn btn-danger"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
   </div>
@@ -44,6 +49,7 @@
     </div>
   </div>
   <file-paste-modal></file-paste-modal>
+  <print-modal></print-modal>
 </div>
 </template>
 
@@ -51,6 +57,7 @@
   // import Vue from 'vue';
   import FileRow from 'src/components/files/FileRow';
   import FilePasteModal from 'src/components/modals/FilePaste';
+  import PrintModal from 'src/components/modals/Print';
   import User from 'src/domain/user';
 
   import {
@@ -72,6 +79,7 @@
     components: {
       FileRow,
       FilePasteModal,
+      PrintModal,
     },
 
     data() {
@@ -129,6 +137,10 @@
         // const newDroppedElement = this.lines[droppedIndex];
         // Vue.set(this.lines, droppedIndex, newDraggedElement);
         // Vue.set(this.lines, draggedIndex, newDroppedElement);
+      },
+
+      openPrintModal() {
+        $('#printModal').modal();
       },
     },
   };
