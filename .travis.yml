@@ -34,7 +34,6 @@ before_install:
 - cd api
 - yarn install
 - cd ../ui
-- yarn cache clean
 - yarn install
 - yarn build
 
@@ -65,5 +64,5 @@ after_success:
 - zip -r ~/dist.zip dist
 - export CMD="scp ~/dist.zip ${SSH_HOST}:/home/ubuntu/"
 #- $CMD &>/dev/null
-- $CMD &>/dev/null
+- $CMD
 
