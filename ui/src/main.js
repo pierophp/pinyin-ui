@@ -16,7 +16,7 @@ import App from 'src/pages/App';
 import router from 'src/router';
 import store from 'src/data/store';
 
-Vue.use(require('vue-drag-drop'));
+Vue.use(require('src/components/directives/drag-and-drop'));
 
 const Main = Vue.extend(App);
 

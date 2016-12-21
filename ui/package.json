@@ -23,7 +23,6 @@
     "query-string": "^4.2.3",
     "replaceall": "^0.1.6",
     "vue": "^2.1.0",
-    "vue-drag-drop": "git+ssh://git@github.com/pierophp/vue-drag-drop.git",
     "vue-router": "^2.1.0",
     "vuex": "^2.0.0"
   },
