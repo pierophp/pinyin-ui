@@ -62,7 +62,7 @@ after_success:
 - cd ../ui
 - yarn run build
 - zip -r ~/dist.zip dist
-- export CMD="scp ~/dist.zip ${SSH_HOST}:/home/ubuntu/"
+- export CMD="scp -P ${SSH_PORT} ~/dist.zip ${SSH_HOST}:/home/ubuntu/"
 #- $CMD &>/dev/null
 - $CMD
 
