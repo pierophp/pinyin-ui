@@ -64,3 +64,4 @@ after_success:
 - zip -r ~/dist.zip dist
 - export CMD="scp ~/dist.zip ${SSH_HOST}:~"
 - $CMD &>/dev/null
+
