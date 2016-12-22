@@ -64,6 +64,14 @@ after_success:
 - zip -r /home/travis/dist.zip dist
 - ls -la /home/travis/
 - export CMD="scp -P ${SSH_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /home/travis/dist.zip ${SSH_USER}@${SSH_HOST}:/home/ubuntu/"
-#- $CMD &>/dev/null
-- $CMD
+- $CMD &>/dev/null
+- export SSH_CONNECT="ssh -P ${SSH_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${SSH_USER}@${SSH_HOST}"
+- export CMD="${SSH_CONNECT} 'unzip /home/ubuntu/dist.zip'"
+- $CMD &>/dev/null
+- export CMD="${SSH_CONNECT} 'rm /home/ubuntu/dist.zip'"
+- $CMD &>/dev/null
+- export CMD="${SSH_CONNECT} 'rm -Rf /var/www/pinyin'"
+- $CMD &>/dev/null
+- export CMD="${SSH_CONNECT} 'mv /home/ubuntu/dist/ /var/www/pinyin'"
+- $CMD &>/dev/null
 
