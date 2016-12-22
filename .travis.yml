@@ -67,7 +67,8 @@ after_success:
 - $CMD &>/dev/null
 - export SSH_CONNECT="ssh -P ${SSH_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${SSH_USER}@${SSH_HOST}"
 - export CMD="${SSH_CONNECT} 'unzip /home/ubuntu/dist.zip'"
-- $CMD &>/dev/null
+#- $CMD &>/dev/null
+- $CMD
 - export CMD="${SSH_CONNECT} 'rm /home/ubuntu/dist.zip'"
 - $CMD &>/dev/null
 - export CMD="${SSH_CONNECT} 'rm -Rf /var/www/pinyin'"
