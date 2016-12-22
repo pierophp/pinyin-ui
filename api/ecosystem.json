@@ -1,0 +1,19 @@
+{
+  "apps": [
+    {
+      "name": "Pinyin",
+      "script": "index.js",
+      "env": {
+        "COMMON_VARIABLE": "true"
+      },
+      "env_production": {
+        "NODE_ENV": "production"
+      }
+    }
+  ],
+  "deploy": {
+    "production": {
+
+    }
+  }
+}
