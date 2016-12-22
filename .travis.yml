@@ -35,7 +35,6 @@ before_install:
 - yarn install
 - cd ../ui
 - yarn install
-- yarn build
 
 before_script:
 - export CHROME_BIN=chromium-browser
@@ -55,11 +54,11 @@ script:
 after_success:
 - export SSH_CONNECT="ssh -p ${SSH_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${SSH_USER}@${SSH_HOST}"
 - rm -Rf node_modules/*
-- npm install --production
+- yarn install --production
 - slc build --pack
 - export SSH_KEY="/home/travis/.ssh/id_rsa"
 - export CMD="slc deploy --size 2 --service pinyin http+ssh://${SSH_HOST}"
-- $CMD &>/dev/null
+- $CMD
 - export CMD="${SSH_CONNECT} 'ls -ldt /var/lib/strong-pm/svc/1/work/* | tail -n +3 | sudo xargs rm -rf'"
 - $CMD &>/dev/null
 - cd ../ui
@@ -67,6 +66,8 @@ after_success:
 - zip -r /home/travis/dist.zip dist
 - export CMD="scp -P ${SSH_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /home/travis/dist.zip ${SSH_USER}@${SSH_HOST}:/home/ubuntu/"
 - $CMD &>/dev/null
+- export CMD="${SSH_CONNECT} 'ls -la'"
+- echo $CMD
 - export CMD="${SSH_CONNECT} 'unzip /home/ubuntu/dist.zip'"
 #- $CMD &>/dev/null
 - echo $CMD
