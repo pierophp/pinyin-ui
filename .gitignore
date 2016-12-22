@@ -3,6 +3,7 @@ public/lib/*
 public/dist/*
 travis/id_rsa
 travis/env.js
+travis/ecosystem.config.js
 travis/newrelic.js
 travis/secrets.tar
 /nbproject/private/
