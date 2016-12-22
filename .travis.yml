@@ -20,11 +20,10 @@ env:
   - secure: R1EKUeNYwn0AbHqJlHvXdkN0+VvSInvkqxveoIql2Rso768pkBB3YkIQasz2MsCA/bb1Cqsk4+WCL2ARJtLFUmuVAXCnOh8VPNyipc5CfG0Y37Y45thABmAp8gjgp/51dBM6ngqK0RRhyqc/CJqOkCCoI7ADgRR3lpvVfruklgMa3S4u+4zm2bGNy33rQ5y4kDXi/TACBtifq/Q4wEmqD6iusZemKkpUis8EeqyVbsUUwPujsCSA7Uh99HNZ9MFto5PNJy/kov3+fCKoXdzk/7m6qZHfbiozFZ4Ktt/9XnbKAwDU7n0FUXlAy7QjFmT7vbSWN8NyBD/edvj+441USrIkcGUlDz/jik+i20LEDcnD1m7KVPeqRFdsbA+V3wc0OE0LZf/I10Dt7Ll4odVVlfQL3Z2rujdRQk99J+KmYIfxcuEgwoLuqtJdF2sRefiKX2yNBFwnJohZc37qFvxhIB2X47UxDsIOK52ahRGNqRX7ia3pFPxxVVdWJD4qBdii64fALU3F8sFZis4C6wZ/2lsAcGPkKN9Ps2UWpFbzPRX+Y7i2AVyVF65UStAo66uD8Akp+wLNmtZQA6jm/KMf4zLijSB8Y1He3cs6HxdH/loPlZFbA+AkNKiQxPM7tSEVclvb/lU1lssP2uevTe4pfhxAwb7XNCESB0aDZUCbbLg=
   - secure: NhfzPLf12aIpVyYvjer+INIbSw0aIb6K9+SVtplAFyTcuJd98YeI6GHEQSCH5UkrB+lBAuPBGAsnZwITKu0qSijhX2dcbIFp3e8mI6Xg1GAwfvIGWNMzuoo2UWJVDMk0K48MW69yTV9FMs+1gHnuW/kbwjC1AQT5gMEMlf8DzfALuYzy5pF5Oi9nzdzfurrWWhxFtUMwTa3bZovbFRpOQuNNLUZmWD8eXBjJCDRZbT3nmGPqsGXGAskE3THUmiCKTedUuyz7+fkL9hFDVA4Anq85NDPe6duFbtMXCsPkrY6psZ9+erqWe57CL9XMxCgWaRrRsERMERjdPUuThInoerxgjQ9pINTDNB2zX2t+VHlwXxaynORm82bkOHPL+fef2bhJmA4Yo7zg6sFmDM8UER3YK8d+0Dus/d/Ur1hp7FLHOVFY3yo7KYG0ZBIGzdQ0mRuVDDa9yc3RwWaMNC3xpOVYkGryks2dqndQoneRyynGjvOkrIM9Pn30fLzyBgWBf4Psn7UvOKKjI6RlKpL2sU/oGBhzN12NelrTAfvmaMnzQ8pzdqUrrM8bRu4oSKnSzaTSfIXleODkUUccTWM7tBZ262m8FhOtAgTLiXSzbCi3hBwJR9VHuUqGzd0OrseWbP/7TxiWyTfvM1BwgD8BltjkAcPgSzzOBh16rRKWwdc=
   - secure: ze7WstGiz7kYk64dDWk5Gia/OdnZTTZW/39vmURsd/nKfnzj17durdy9DbeE6bzh6l7DiWY5ksgfAZSVKhgFaXxz0CCWmVf0iNBGeGiRSpqvzqd5Yn6Ixs12YQiP7WMSBundmW1tbn0GzAbRoLupuo+SnPYYcbZPIBii4wdRF7BRUwJ3rEpygcj287y7QpEwg1kc8e4qRbqBLtt60pBgXS8aOAwj5XlxjlZBGw89QQyxTSZX9LO9KPrbhSCrUYNYKrM2CC+I657u8tnTYJ63kzumYukQZ3mFgV7ROAoVhGXyNizzdPZAFg4xvNxIl3lyq5K2LdZo0s/8YbSuRJyxwkauiq3MUq/Aeq1F3SyRVykJ2NudrXzYorCLVCf0ImRfy2AOkTcXcSYxEHXouVoR8lRIHxws5pKcpum/DFMAnIF9BOtp2TP93Or7vFt8M37TJndtAlBoZtkPJ1zjpJxWGuRSKmQvkKJ4h5AEKFghJkBnE5tpysak99Wq7ijbK5E5LzXPawYuXu0Z4mfENqrtP+aqDklKaumnCk0jyOejf/QMf01HM+zCJvuGlXoDZq0JNyYuMlJ9as7CYa2JdlDE+sFQjiyukyJIDLFbVVYsoIOXYXOFQC+9NjFZKelip62q3PFysBhG0PF1id808kgpZTJrD2ov0uLfg2od9+Lh7/o=
-
 before_install:
+- openssl aes-256-cbc -K $encrypted_4a8eabd2975a_key -iv $encrypted_4a8eabd2975a_iv
+  -in secrets.tar.enc -out secrets.tar -d
 - npm install yarn -g
-- openssl aes-256-cbc -K $encrypted_d30023af3f87_key -iv $encrypted_d30023af3f87_iv
-  -in travis/secrets.tar.enc -out travis/secrets.tar -d
 - tar xvf travis/secrets.tar
 - mv id_rsa /home/travis/.ssh/id_rsa
 - rm -Rf travis
@@ -34,7 +33,6 @@ before_install:
 - yarn install
 - cd ../ui
 - yarn install
-
 before_script:
 - export CHROME_BIN=chromium-browser
 - export DISPLAY=:99.0
@@ -42,16 +40,10 @@ before_script:
 - mysql -u root -e "CREATE DATABASE pinyin CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
 - export NODE_ENV=staging
 - cd ../api/
-#- knex migrate:latest
 - mkdir storage
-
 script:
-#- npm run test-travis
-#- npm run test-node
 - echo "Test"
-
 after_success:
 - export SSH_KEY="/home/travis/.ssh/id_rsa"
 - export CMD="pm2 deploy ecosystem.config.js production"
-- $CMD &>/dev/null
-
+- "$CMD &>/dev/null"
