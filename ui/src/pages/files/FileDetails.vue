@@ -26,7 +26,9 @@
       </ul>
     </div -->
 
-    <a @click.prevent="logout" class="btn btn-danger"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
+    <a @click.prevent="logout" class="btn btn-danger">
+      <i class="glyphicon glyphicon-log-out"></i> Logout
+    </a>
   </div>
 
   <div class="panel-body larger-print">
@@ -35,7 +37,7 @@
       :line="line"
       :line-index="index"
       :data-index="index"
-      v-drag-drop="{
+      drag-drop="{
         group: 'file-row',
         drop: {
             css: 'drop',
