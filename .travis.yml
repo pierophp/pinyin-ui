@@ -61,9 +61,9 @@ after_success:
 - $CMD &>/dev/null
 - cd ../ui
 - yarn run build
-- zip -r ~/dist.zip dist
-- ls ~
-- export CMD="scp -P ${SSH_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ~/dist.zip ${SSH_USER}@${SSH_HOST}:/home/ubuntu/"
+- zip -r /home/travis/dist.zip dist
+- ls -la /home/travis/
+- export CMD="scp -P ${SSH_PORT} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /home/travis/dist.zip ${SSH_USER}@${SSH_HOST}:/home/ubuntu/"
 #- $CMD &>/dev/null
 - $CMD
 
