@@ -45,6 +45,9 @@ script:
 - echo "Test"
 after_success:
 - export SSH_KEY="/home/travis/.ssh/id_rsa"
+- pwd
+- ls -la
+- git status
 - export CMD="pm2 deploy ecosystem.config.js production"
 #- "$CMD &>/dev/null"
 - $CMD
