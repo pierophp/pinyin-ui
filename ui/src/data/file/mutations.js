@@ -1,3 +1,4 @@
+import codeToIdeogram from 'src/helpers/code-to-ideogram';
 import pinyin from 'src/helpers/pinyin';
 import * as types from './types';
 
@@ -50,4 +51,23 @@ export default {
   [types.FILE_MUTATION_PASTE_ACTION](state, filePasteAction) {
     state.filePasteAction = filePasteAction;
   },
+
+  [types.FILE_MUTATION_SET_MY_CJK](state, myCjk) {
+    const myCjkIdeograms = [];
+    myCjk.forEach((item) => {
+      myCjkIdeograms.push(codeToIdeogram(item.ideogram));
+    });
+
+    state.myCjk = myCjkIdeograms;
+  },
+
+  [types.FILE_MUTATION_SET_MY_CJK_TEMP](state, myCjk) {
+    state.myCjkTemp = myCjk;
+  },
+
+  [types.FILE_MUTATION_ADD_MY_CJK](state, myCjk) {
+    state.myCjk.push(myCjk);
+  },
+
+
 };

@@ -2,7 +2,7 @@
   <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">Simple Pinyin Editor</h3>
-        <a @click.prevent="newFile" class="btn btn-success" ng-click="addFile()"><i class="glyphicon glyphicon-plus"></i> New File</a>
+        <a @click.prevent="newFile" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> New File</a>
         <a @click.prevent="logout" class="btn btn-danger"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
     </div>
 

@@ -14,7 +14,8 @@
             <select class="form-control" v-model="action">
               <option value="1">Multi NWT (pinyin + space + ideogram)</option>
               <option value="2">2 lines</option>
-              <option value="3">JW.ORG</option>
+              <option value="3">JW.ORG (spaced)</option>
+              <option value="4">Ideograms</option>
             </select>
           </div>
           <div class="form-group">

@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.send({ name: 'Pinyin' });
+  res.send({ name: 'Simple Pinyin Editor' });
 });
 
 module.exports = router;

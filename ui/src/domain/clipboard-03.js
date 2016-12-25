@@ -1,4 +1,3 @@
-import http from 'src/helpers/http';
 import replaceall from 'replaceall';
 
 export default function (content) {
@@ -6,24 +5,16 @@ export default function (content) {
   // remove double spaces
   content = content.replace(/\s{2,}/g, ' ');
 
-  return new Promise((resolve, reject) => {
-    http
-    .post('segmentation/segment', {
-      ideograms: content,
-    })
-    .then((response) => {
-      const row = [];
-      response.data.ideograms.forEach((char) => {
-        row.push({
-          p: '',
-          c: char,
-        });
+  return new Promise((resolve) => {
+    const ideograms = content.split(' ');
+    const row = [];
+    ideograms.forEach((char) => {
+      row.push({
+        p: '',
+        c: char,
       });
-
-      resolve(row);
-    })
-    .catch((error) => {
-      reject(error);
     });
+
+    resolve(row);
   });
 }

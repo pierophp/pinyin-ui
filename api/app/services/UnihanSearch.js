@@ -83,10 +83,12 @@ module.exports = class UnihanSearch {
     const specialsChars = {
       '。': '.',
       '？': '?',
+      '．': '.',
       '、': ',',
       '，': ',',
       ',': ',',
       '：': ':',
+      ' ': ' ',
       1: '1',
       2: '2',
       3: '3',

@@ -5,12 +5,14 @@
     v-for="(block,index) in line"
     :pinyin="block.p"
     :character="block.c"
-    ></file-block-print>
+    />
+    <add-character-modal/>
   </div>
 </template>
 
 <script>
   import FileBlockPrint from 'src/components/files/FileBlockPrint';
+  import AddCharacterModal from 'src/components/modals/AddCharacter';
 
   import {
     mapActions,
@@ -19,6 +21,7 @@
 
   import {
   FILE_ACTION_FETCH,
+  FILE_ACTION_FETCH_MY_CJK,
   FILE_GETTER,
   } from 'src/data/file/types';
 
@@ -27,6 +30,7 @@
 
     components: {
       FileBlockPrint,
+      AddCharacterModal,
     },
 
     data() {
@@ -55,6 +59,7 @@
     },
     created() {
       this.updateCss();
+      this.fetchMyCjk();
       this.filename = this.$route.params.filename;
       this.getFile(this.filename);
     },
@@ -62,6 +67,7 @@
     methods: {
       ...mapActions({
         fetch: FILE_ACTION_FETCH,
+        fetchMyCjk: FILE_ACTION_FETCH_MY_CJK,
       }),
 
       getFile(filename) {
@@ -115,6 +121,14 @@
 
   .print .block:hover {
     background: #fff;
+  }
+
+  .print a{
+    text-decoration: none;
+  }
+
+  .print a:hover{
+    opacity: 0.5;
   }
 
   .ideogram-colored .tone-1 {
