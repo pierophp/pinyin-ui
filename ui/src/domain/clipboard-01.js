@@ -1,3 +1,4 @@
+// Multi NWT
 import _ from 'lodash';
 
 import isChinese from 'src/helpers/is-chinese';

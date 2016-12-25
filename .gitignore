@@ -5,3 +5,4 @@ travis/id_rsa
 travis/secrets.tar
 /nbproject/private/
 nbproject/*
+.DS_Store

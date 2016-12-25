@@ -1,11 +1,9 @@
-/*
 const knex = require('./knex');
 const removeDiacritics = require('diacritics').remove;
 const Promise = require('bluebird');
 const UnihanSearch = require('../services/UnihanSearch');
 const readline = require('readline');
 const fs = require('fs');
-const lineReader = require('line-reader');
 
 module.exports = class CcCeDictDatabaseParser {
 
@@ -39,9 +37,9 @@ module.exports = class CcCeDictDatabaseParser {
 
       function processPromisses() {
         console.log('Promise process init');
-        Promise.map(promises, promiseImport => {
-          return promiseImport();
-        }, {
+        Promise.map(promises, promiseImport =>
+          promiseImport()
+        , {
           concurrency: 2,
         }).then(() => {
           resolve();
@@ -50,23 +48,9 @@ module.exports = class CcCeDictDatabaseParser {
         });
       }
 
-      function closeReader(reader) {
-        reader.close((err) => {
-          if (err) {
-            reject(err);
-          }
-          resolve();
-        });
-      }
-
       const ideogramList = [];
 
-      function readLine(reader, line) {
-        if (line[0] === '#') {
-          nextLine(reader);
-          return;
-        }
-
+      function readLine(line) {
         let parts = line.split('/');
         let ideogram = parts[0].split(' ')[1];
         parts = line.split('/');
@@ -85,14 +69,12 @@ module.exports = class CcCeDictDatabaseParser {
         const key = ideogram + pronunciation;
 
         if (ideogramList.indexOf(key) !== -1) {
-          nextLine(reader);
-          return;
+          return null;
         }
 
         ideogramList.push(key);
         const importPromise = () => {
           return new Promise((resolveImport, rejectImport) => {
-            console.log('Import Promise start');
             parts.shift();
             const descriptions = [];
             const measureWords = [];
@@ -162,74 +144,38 @@ module.exports = class CcCeDictDatabaseParser {
                       rejectImport();
                     });
                 }
-
-                console.log('Import Promise finish');
               })
               .error(() => {
                 rejectImport();
               });
           });
         };
-        promises.push(importPromise);
-        nextLine(reader);
+
+        return importPromise;
       }
 
-      function nextLine(reader) {
-        if (reader.hasNextLine()) {
-          reader.nextLine((readerErr, line) => {
-            try {
-              if (readerErr) {
-                throw readerErr;
-              }
-              readLine(reader, line);
-            } catch (err) {
-              closeReader(reader);
-            }
-          });
-        } else {
-          closeReader(reader);
-          // processPromisses();
-        }
-      }
+      const lineReader = readline.createInterface({
+        input: fs.createReadStream(file),
+      });
 
-      lineReader.open(file, (err, reader) => {
-        if (err) {
-          reject(err);
+      lineReader.on('close', () => {
+        processPromisses();
+      });
+
+      lineReader.on('line', (line) => {
+        if (line[0] === '#') {
           return;
         }
 
-        nextLine(reader);
+        const importPromisse = readLine(line);
+        if (!importPromisse) {
+          return;
+        }
+
+        promises.push(importPromisse);
+        return;
       });
-
-      /*
-
-            const lineReader = readline.createInterface({
-              input: fs.createReadStream(file),
-            });
-
-            let i = 0;
-
-            lineReader.on('close', () => {
-              console.log('Ends');
-              console.log(i);
-              resolve();
-            });
-
-            lineReader.on('line', (line) => {
-              if (line[0] === '#') {
-                return;
-              }
-              console.log('line');
-              i += i;
-              return;
-
-              console.log('Importing line');
-
-
-            });
-
-            * /
     });
   }
 };
-*/
+

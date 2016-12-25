@@ -124,6 +124,7 @@
   }
 
   .print a{
+    color: #000;
     text-decoration: none;
   }
 

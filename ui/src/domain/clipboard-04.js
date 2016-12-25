@@ -1,8 +1,10 @@
+// Ideograms
 import http from 'src/helpers/http';
 import replaceall from 'replaceall';
 
 export default function (content) {
   content = replaceall('+', '', content);
+
   // remove double spaces
   content = content.replace(/\s{2,}/g, ' ');
 

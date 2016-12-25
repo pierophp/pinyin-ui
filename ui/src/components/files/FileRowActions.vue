@@ -14,13 +14,11 @@
           <i class="glyphicon glyphicon-font"></i> Convert to Pinyin
         </a>
       </li>
-      <li role="separator" class="divider"></li>
       <li>
         <a href @click.prevent="openModalClipBoard(lineIndex)">
           <i class="glyphicon glyphicon-paste"></i> Paste
         </a>
       </li>
-      <li role="separator" class="divider"></li>
       <li>
         <a href @click.prevent="removeLine({lineIndex})">
           <i class="glyphicon glyphicon-trash"></i> Remove line

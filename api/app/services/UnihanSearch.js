@@ -90,6 +90,7 @@ module.exports = class UnihanSearch {
       ',': ',',
       '：': ':',
       ' ': ' ',
+      '；': ';',
       1: '1',
       2: '2',
       3: '3',
