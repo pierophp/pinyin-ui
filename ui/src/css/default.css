@@ -14,7 +14,6 @@
 
 .line {
     clear: both;
-    margin-bottom: 25px;
 }
 
 .panel-heading .btn {
@@ -23,7 +22,7 @@
 
 .block {
     float: left;
-    padding: 2px 1px;
+    padding: 10px 5px;
     min-width: var(--block-width);
     text-align: center;
     position: relative;

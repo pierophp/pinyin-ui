@@ -118,6 +118,7 @@
 
   .print .block {
     page-break-inside: avoid;
+    padding: 1px 1px;
   }
 
   .print .block:hover {
@@ -131,6 +132,10 @@
 
   .print a:hover{
     opacity: 0.5;
+  }
+
+  .print .line{
+    margin-bottom: 25px;
   }
 
   .ideogram-colored .tone-1 {
