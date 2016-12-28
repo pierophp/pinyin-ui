@@ -47,8 +47,8 @@
 .pinyin input,
 .pinyin span {
     background: #fff;
-    font-size: 22px;
-    height: 22px;
+    font-size: 18px;
+    height: 18px;
     min-width: var(--block-width);
     width: 100%;
     border: 0;
