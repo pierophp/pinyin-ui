@@ -102,6 +102,12 @@
     padding: 5px 0;
   }
 
+  .print .pinyin input,
+  .print .pinyin span {
+    font-size: 18px;
+    height: 18px;
+  }
+
   .larger .pinyin span {
     font-size: 40px;
     height: 40px;
@@ -111,10 +117,14 @@
     font-size: 34px;
     height: 34px;
   }
+  .print{
+    margin: 10px 2px;
+  }
 
   .print .character span {
     font-weight: normal;
   }
+
 
   .print .block {
     page-break-inside: avoid;

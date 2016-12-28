@@ -55,11 +55,23 @@ module.exports = class CcCeDictDatabaseParser {
         let ideogram = parts[0].split(' ')[1];
         parts = line.split('/');
 
-        let pronunciation = parts[0]
+        let pronunciation = '';
+        const pronunciationList = parts[0]
                       .split('[')[1]
                       .replace(']', '')
                       .toLowerCase()
-                      .replace(new RegExp(' ', 'g'), '');
+                      .split(' ');
+
+        const vogals = ['a', 'e', 'o'];
+        pronunciationList.forEach((p, index) => {
+          if (index > 0) {
+            if (vogals.indexOf(p[0]) > -1) {
+              pronunciation += "'";
+            }
+          }
+          pronunciation += p;
+        });
+
 
         const pronunciationUnaccented = pronunciation.replace(new RegExp('[12345]', 'g'), '');
         pronunciation = UnihanSearch
