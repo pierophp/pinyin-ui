@@ -65,6 +65,11 @@ module.exports = class UnihanDatabaseParser {
             frequency = 999;
           }
 
+          if (char.$.kSimplifiedVariant) {
+            console.log(char.$.kMandarin);
+            console.log(char.$.kSimplifiedVariant);
+          }
+
           const definition = char.$.kDefinition;
 
           return new Promise((resolveItem, rejectItem) => {
