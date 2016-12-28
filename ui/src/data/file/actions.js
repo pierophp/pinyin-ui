@@ -50,7 +50,6 @@ export default {
     });
   },
   [types.FILE_ACTION_PARSE_PASTE]({ commit, state, dispatch }, data) {
-    console.log(dispatch);
     if (data.action === '1') {
       clipboard01(data.content).forEach((row, index) => {
         const lineIndex = state.filePasteAction.lineIndex + index;

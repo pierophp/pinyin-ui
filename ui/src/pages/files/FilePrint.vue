@@ -94,6 +94,13 @@
 </script>
 
 <style>
+  :root {
+      --larger-pinyin-font-size: 23px;
+      --larger-character-font-size: 34px;
+      --normal-pinyin-font-size: 18px;
+      --normal-character-font-size: 24px;
+  }
+
   .character-only .pinyin{
     display: none;
   }
@@ -102,20 +109,33 @@
     padding: 5px 0;
   }
 
-  .print .pinyin input,
+  .print .pinyin,
   .print .pinyin span {
-    font-size: 18px;
-    height: 18px;
+    font-size: var(--normal-pinyin-font-size);
+    height: var(--normal-pinyin-font-size);
+    min-width: 0;
+  }
+
+  .print .character,
+  .print .character span {
+    min-width: 0;
+  }
+
+  .larger.print .pinyin,
+  .larger.print .pinyin span {
+    font-size: var(--larger-pinyin-font-size);
+    height: var(--larger-pinyin-font-size);
   }
 
   .larger .pinyin span {
-    font-size: 40px;
-    height: 40px;
+    font-size: var(--larger-pinyin-font-size);
+    height: var(--larger-pinyin-font-size);
+    line-height: var(--larger-pinyin-font-size);
   }
 
   .larger .character span {
-    font-size: 34px;
-    height: 34px;
+    font-size: var(--larger-character-font-size);
+    height: var(--larger-character-font-size);
   }
   .print{
     margin: 10px 2px;
@@ -125,10 +145,10 @@
     font-weight: normal;
   }
 
-
   .print .block {
     page-break-inside: avoid;
-    padding: 1px 1px;
+    padding: 1px 0;
+    min-width: 0;
   }
 
   .print .block:hover {
@@ -140,7 +160,8 @@
     text-decoration: none;
   }
 
-  .print a:hover{
+  .print .character span:hover{
+    cursor: pointer;
     opacity: 0.5;
   }
 
