@@ -7,6 +7,7 @@
     :character="block.c"
     />
     <add-character-modal/>
+    <div class="clearfix"></div>
   </div>
 </template>
 
