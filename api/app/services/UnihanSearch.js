@@ -43,6 +43,17 @@ module.exports = class UnihanSearch {
   }
 
   static searchByWord(ideograms) {
+    if (ideograms.length === 1) {
+      return knex('cjk')
+        .where({
+          ideogram: UnihanSearch.convertIdeogramsToUtf16(ideograms),
+          type: 'C',
+        })
+        .orderBy('frequency', 'ASC')
+        .orderBy('usage', 'DESC')
+        .select('id', 'pronunciation');
+    }
+
     return knex('cjk')
       .where({
         ideogram: UnihanSearch.convertIdeogramsToUtf16(ideograms),
