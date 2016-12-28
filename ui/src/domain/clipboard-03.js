@@ -25,19 +25,25 @@ export default function (content) {
     content = replaceall(item, ` ${item} `, content);
   });
 
-  // remove double spaces
-  content = content.replace(/\s{2,}/g, ' ');
 
   return new Promise((resolve) => {
-    const ideograms = content.split(' ');
-    const row = [];
-    ideograms.forEach((char) => {
-      row.push({
-        p: '',
-        c: char,
+    const rows = [];
+    const lines = content.split('\n').filter((line) => line);
+
+    lines.forEach((line) => {
+      const row = [];
+      // remove double spaces
+      line = line.replace(/\s{2,}/g, ' ');
+      const ideograms = line.split(' ');
+      ideograms.forEach((char) => {
+        row.push({
+          p: '',
+          c: char,
+        });
       });
+      rows.push(row);
     });
 
-    resolve(row);
+    resolve(rows);
   });
 }

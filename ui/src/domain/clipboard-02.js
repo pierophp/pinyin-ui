@@ -3,6 +3,7 @@ import _ from 'lodash';
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
 
 export default function (content) {
+  const rows = [];
   const row = [];
   const lines = _.compact(content.split('\n'));
 
@@ -30,7 +31,9 @@ export default function (content) {
       p: pinyin,
       c: char,
     });
+
+    rows.push(row);
   });
 
-  return row;
+  return rows;
 }

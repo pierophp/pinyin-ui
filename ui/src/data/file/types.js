@@ -22,6 +22,7 @@ export const FILE_MUTATION_UPDATE_PINYIN = 'file/mutation/UPDATE_PINYIN';
 export const FILE_MUTATION_UPDATE_CHARACTER = 'file/mutation/UPDATE_CHARACTER';
 export const FILE_MUTATION_ADD_EMPTY_BLOCK = 'file/mutation/ADD_EMPTY_BLOCK';
 export const FILE_MUTATION_ADD_EMPTY_LINE = 'file/mutation/ADD_EMPTY_LINE';
+export const FILE_MUTATION_ADD_LINE = 'file/mutation/ADD_LINE';
 export const FILE_MUTATION_REMOVE_BLOCK = 'file/mutation/REMOVE_BLOCK';
 export const FILE_MUTATION_REMOVE_LINE = 'file/mutation/REMOVE_LINE';
 export const FILE_MUTATION_PASTE_ACTION = 'file/mutation/PASTE_ACTION';

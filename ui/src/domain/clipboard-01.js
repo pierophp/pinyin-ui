@@ -7,6 +7,7 @@ export default function (content) {
   content = content.replace(/(\r\n|\n|\r)/gm, ' ');
 
   const parts = _.compact(content.split(' '));
+  const rows = [];
   const row = [];
   let char = '';
   let pinyin = '';
@@ -40,5 +41,7 @@ export default function (content) {
     });
   }
 
-  return row;
+  rows.push(row);
+
+  return rows;
 }

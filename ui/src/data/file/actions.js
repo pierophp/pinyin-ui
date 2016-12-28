@@ -49,27 +49,60 @@ export default {
           .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
     });
   },
-  [types.FILE_ACTION_PARSE_PASTE]({ commit, state }, data) {
+  [types.FILE_ACTION_PARSE_PASTE]({ commit, state, dispatch }, data) {
+    console.log(dispatch);
     if (data.action === '1') {
-      commit(types.FILE_MUTATION_CONCATENATE_LINE, {
-        lineIndex: state.filePasteAction.lineIndex,
-        content: clipboard01(data.content),
+      clipboard01(data.content).forEach((row, index) => {
+        const lineIndex = state.filePasteAction.lineIndex + index;
+        if (index === 0) {
+          commit(types.FILE_MUTATION_CONCATENATE_LINE, {
+            lineIndex,
+            content: row,
+          });
+        } else {
+          commit(types.FILE_MUTATION_ADD_LINE, {
+            lineIndex,
+            content: row,
+          });
+        }
       });
     }
 
     if (data.action === '2') {
-      commit(types.FILE_MUTATION_CONCATENATE_LINE, {
-        lineIndex: state.filePasteAction.lineIndex,
-        content: clipboard02(data.content),
+      clipboard02(data.content).forEach((row, index) => {
+        const lineIndex = state.filePasteAction.lineIndex + index;
+        if (index === 0) {
+          commit(types.FILE_MUTATION_CONCATENATE_LINE, {
+            lineIndex,
+            content: row,
+          });
+        } else {
+          commit(types.FILE_MUTATION_ADD_LINE, {
+            lineIndex,
+            content: row,
+          });
+        }
       });
     }
 
     if (data.action === '3') {
       clipboard03(data.content)
         .then((content) => {
-          commit(types.FILE_MUTATION_CONCATENATE_LINE, {
-            lineIndex: state.filePasteAction.lineIndex,
-            content,
+          content.forEach((row, index) => {
+            const lineIndex = state.filePasteAction.lineIndex + index;
+            if (index === 0) {
+              commit(types.FILE_MUTATION_CONCATENATE_LINE, {
+                lineIndex,
+                content: row,
+              });
+            } else {
+              commit(types.FILE_MUTATION_ADD_LINE, {
+                lineIndex,
+                content: row,
+              });
+            }
+
+            dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex });
           });
         });
     }
@@ -77,9 +110,20 @@ export default {
     if (data.action === '4') {
       clipboard04(data.content)
         .then((content) => {
-          commit(types.FILE_MUTATION_CONCATENATE_LINE, {
-            lineIndex: state.filePasteAction.lineIndex,
-            content,
+          content.forEach((row, index) => {
+            const lineIndex = state.filePasteAction.lineIndex + index;
+            if (index === 0) {
+              commit(types.FILE_MUTATION_CONCATENATE_LINE, {
+                lineIndex,
+                content: row,
+              });
+            } else {
+              commit(types.FILE_MUTATION_ADD_LINE, {
+                lineIndex,
+                content: row,
+              });
+            }
+            dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex });
           });
         });
     }

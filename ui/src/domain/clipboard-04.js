@@ -14,6 +14,7 @@ export default function (content) {
       ideograms: content,
     })
     .then((response) => {
+      const rows = [];
       const row = [];
       response.data.ideograms.forEach((char) => {
         row.push({
@@ -22,7 +23,8 @@ export default function (content) {
         });
       });
 
-      resolve(row);
+      rows.push(row);
+      resolve(rows);
     })
     .catch((error) => {
       reject(error);

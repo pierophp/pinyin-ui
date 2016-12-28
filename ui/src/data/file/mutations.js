@@ -28,6 +28,9 @@ export default {
       state.file[data.lineIndex].push(newBlock);
     });
   },
+  [types.FILE_MUTATION_ADD_LINE](state, data) {
+    state.file.splice(data.lineIndex, 0, data.content);
+  },
 
   [types.FILE_MUTATION_ADD_EMPTY_BLOCK](state, data) {
     if (state.file[data.lineIndex] === null) {
