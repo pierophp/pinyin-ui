@@ -15,7 +15,7 @@ module.exports = {
       repo: 'git@github.com:pierophp/pinyin.git',
       ssh_options: 'StrictHostKeyChecking=no',
       path: '/var/www/api.pinyin',
-      'post-deploy': 'export NODE_ENV="production"; cd ui && npm install && npm run build && cd .. && rm -Rf /var/www/pinyin && cp -R ./ui/dist /var/www/pinyin && cd api && cp ../../env/* . && npm install --production && knex migrate:latest --env production && pm2 startOrRestart ecosystem.json --env production',
+      'post-deploy': 'cd ui && npm install && npm run build && cd .. && rm -Rf /var/www/pinyin && cp -R ./ui/dist /var/www/pinyin && cd api && cp ../../env/* . && npm install --production && knex migrate:latest --env production && pm2 startOrRestart ecosystem.json --env production',
     },
   },
 };
