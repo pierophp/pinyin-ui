@@ -6,9 +6,7 @@
       </span>
     </div>
     <div class="character">
-      <span v-for="data in printData" :class="[data.toneClass]" @click.prevent="openModal(data.character)">
-        {{data.character}}
-      </span>
+      <span v-for="data in printData" :class="[data.toneClass]" @click.prevent="openModal(data.character)">{{data.character}}</span>
     </div>
   </div>
   </div>
