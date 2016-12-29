@@ -94,7 +94,7 @@
 </script>
 
 <style>
-  @import url(http://fonts.googleapis.com/earlyaccess/notosanssc.css);
+  @import url(https://fonts.googleapis.com/earlyaccess/notosanssc.css);
 
   :root {
       --larger-pinyin-font-size: 23px;
@@ -146,7 +146,7 @@
   }
 
   .print .character span {
-    font-weight: normal;
+    font-weight: 300;
   }
 
   .print .block {
