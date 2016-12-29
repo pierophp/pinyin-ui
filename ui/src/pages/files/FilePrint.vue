@@ -94,6 +94,8 @@
 </script>
 
 <style>
+  @import url(http://fonts.googleapis.com/earlyaccess/notosanssc.css);
+
   :root {
       --larger-pinyin-font-size: 23px;
       --larger-character-font-size: 34px;
@@ -119,6 +121,8 @@
   .print .character,
   .print .character span {
     min-width: 0;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-weight: lighter;
   }
 
   .larger.print .pinyin,
