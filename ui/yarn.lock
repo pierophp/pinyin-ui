@@ -255,10 +255,6 @@ autoprefixer@^6.3.1, autoprefixer@^6.4.0:
     postcss "^5.2.6"
     postcss-value-parser "^3.2.3"
 
-autosize-input@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/autosize-input/-/autosize-input-0.4.0.tgz#a5cdb43110e31f6a1d9fb695ccb747495af0bb5e"
-
 aws-sign2@~0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/aws-sign2/-/aws-sign2-0.6.0.tgz#14342dd38dbcc94d0e5b87d763cd63612c0e794f"
@@ -3757,6 +3753,10 @@ math-expression-evaluator@^1.2.14:
 media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
+
+medium-editor@^5.22.1:
+  version "5.22.1"
+  resolved "https://registry.yarnpkg.com/medium-editor/-/medium-editor-5.22.1.tgz#feecc430b67abe48a86d2eb404c8647d51a9b939"
 
 memory-fs@^0.2.0:
   version "0.2.0"

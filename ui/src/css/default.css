@@ -52,6 +52,7 @@
 }
 
 .pinyin input,
+.pinyin .div-input,
 .pinyin span {
   background: #fff;
   font-size: 22px;
@@ -64,6 +65,7 @@
 }
 
 .character input,
+.character .div-input,
 .character span {
   font-size: 24px;
   height: 34px;

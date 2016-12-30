@@ -2,17 +2,17 @@
   <div class="block">
     <a href class="remove" @click.prevent="removeBlock({lineIndex, blockIndex})">X</a>
     <div class="pinyin">
-      <input :value="pinyin" ref="pinyinInput" @input="updatePinyin" />
+      <medium-editor :content="pinyin" @content="updatePinyin"></medium-editor>
     </div>
     <div class="character">
-      <input :value="character" ref="characterInput" @input="updateCharacter"  />
+      <medium-editor :content="character" @content="updateCharacter"></medium-editor>
     </div>
   </div>
 </template>
 
 <script>
-  import autosizeInput from 'autosize-input';
-
+  // import autosizeInput from 'autosize-input';
+  import MediumEditor from 'src/components/common/editor/MediumEditor';
   import {
     mapMutations,
   } from 'vuex';
@@ -25,6 +25,9 @@
 
   export default {
     name: 'file-block',
+    components: {
+      MediumEditor,
+    },
     props: {
       pinyin: {
         // eslint-disable-next-line quote-props
@@ -44,16 +47,8 @@
       },
     },
     mounted() {
-      this.autosizeInputPinyin = autosizeInput(this.$refs.pinyinInput);
-      this.autosizeInputCharacter = autosizeInput(this.$refs.characterInput);
-    },
-    watch: {
-      pinyin() {
-        this.$nextTick(this.autosizeInputPinyin);
-      },
-      character() {
-        this.$nextTick(this.autosizeInputCharacter);
-      },
+      // this.autosizeInputPinyin = autosizeInput(this.$refs.pinyinInput);
+      // this.autosizeInputCharacter = autosizeInput(this.$refs.characterInput);
     },
     methods: {
       ...mapMutations({
@@ -62,19 +57,19 @@
         removeBlock: FILE_MUTATION_REMOVE_BLOCK,
       }),
 
-      updatePinyin(e) {
+      updatePinyin(pinyin) {
         const { lineIndex, blockIndex } = this;
         this.updatePinyinMutation({
-          pinyin: e.target.value,
+          pinyin,
           lineIndex,
           blockIndex,
         });
       },
 
-      updateCharacter(e) {
+      updateCharacter(character) {
         const { lineIndex, blockIndex } = this;
         this.updateCharacterMutation({
-          character: e.target.value,
+          character,
           lineIndex,
           blockIndex,
         });
@@ -84,5 +79,7 @@
 </script>
 
 <style>
-
+  .div-input{
+    background:#fff;
+  }
 </style>

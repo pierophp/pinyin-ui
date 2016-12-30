@@ -26,7 +26,7 @@
       SideNav,
     },
     created() {
-      console.log(this.$route.meta.topBar);
+      // console.log(this.$route.meta.topBar);
     },
     methods: {
       toggle() {

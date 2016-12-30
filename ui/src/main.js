@@ -13,6 +13,8 @@ import 'vue-material/dist/vue-material.css';
 import 'src/css/default.css';
 import 'src/css/bootstrap-callout.css';
 import 'src/helpers/array';
+import 'medium-editor/dist/css/medium-editor.css';
+import 'medium-editor/dist/css/themes/default.css';
 
 import App from 'src/pages/App';
 import router from 'src/router';
