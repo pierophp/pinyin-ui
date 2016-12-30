@@ -25,7 +25,6 @@ export default function (content) {
     content = replaceall(item, ` ${item} `, content);
   });
 
-
   return new Promise((resolve) => {
     const rows = [];
     const lines = content.split('\n').filter((line) => line);
@@ -33,7 +32,7 @@ export default function (content) {
     lines.forEach((line) => {
       const row = [];
       // remove double spaces
-      line = line.replace(/\s{2,}/g, ' ');
+      line = line.replace(/\s{2,}/g, ' ').trim();
       const ideograms = line.split(' ');
       ideograms.forEach((char) => {
         row.push({
