@@ -5,7 +5,7 @@
           Simple Pinyin Editor
       </div>
 
-      <div class="panel-body" ng-show="showLogin" >
+      <div class="panel-body">
           <a class="btn btn-social btn-lg btn-google" :href="authGoogleUrl">
           <i class="fa fa-google"></i>
           Sign in with Google</a>
@@ -14,6 +14,7 @@
   </div>
 
 </template>
+
 <script>
   import User from 'src/domain/user';
   import QueryString from 'query-string';
@@ -51,3 +52,9 @@
     },
   };
 </script>
+
+<style>
+.btn-google{
+  color: #fff !important;
+}
+</style>

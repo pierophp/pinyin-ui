@@ -10,25 +10,6 @@
     <a class="btn btn-info" @click.prevent="openPrintModal()">
       <i class="glyphicon glyphicon-print"></i> Print
     </a>
-
-    <!-- div class="btn-group">
-      <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="glyphicon glyphicon-print"></i> Print
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <li>
-          <router-link :to="{ name: 'print', params: { filename}, query: {size: 'normal' }}">Normal</router-link>
-        </li>
-        <li>
-          <router-link :to="{ name: 'print', params: { filename}, query: {size: 'larger' }}">Larger</router-link>
-        </li>
-      </ul>
-    </div -->
-
-    <a @click.prevent="logout" class="btn btn-danger">
-      <i class="glyphicon glyphicon-log-out"></i> Logout
-    </a>
   </div>
 
   <div class="panel-body larger-print">
@@ -129,12 +110,12 @@
       logout() {
         User.logout();
       },
-
+      // eslint-disable-next-line
       moveElement(draggedElement, droppedElement) {
-        const draggedIndex = draggedElement.getAttribute('data-index');
-        const droppedIndex = droppedElement.getAttribute('data-index');
-        console.log(draggedIndex);
-        console.log(droppedIndex);
+        // const draggedIndex = draggedElement.getAttribute('data-index');
+        // const droppedIndex = droppedElement.getAttribute('data-index');
+        // console.log(draggedIndex);
+        // console.log(droppedIndex);
         // const newDraggedElement = this.lines[draggedIndex];
         // const newDroppedElement = this.lines[droppedIndex];
         // Vue.set(this.lines, droppedIndex, newDraggedElement);
@@ -149,6 +130,11 @@
 </script>
 
 <style>
+    /* REMOVE THIS */
+    .modal-backdrop{
+      z-index: -1;
+    }
+
   	.list {  }
 		.list li { font-size:14px; font-family:Arial; color:#fff; background-color:#3879d9; padding:7px 20px; border:2px solid transparent; cursor:pointer; }
 		.list li:hover { color:#3879d9; background-color:#fff; border:2px solid #3879d9; }

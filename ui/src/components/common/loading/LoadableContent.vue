@@ -1,7 +1,7 @@
 <template>
   <div class="loadable-content">
     <div class="loadable-loader" v-show="loading">
-      <loader :visible="loading"></loader>
+      <md-spinner md-indeterminate :visible="loading"></md-spinner>
     </div>
 
     <slot></slot>
@@ -9,14 +9,8 @@
 </template>
 
 <script>
-import Loader from './Loader';
-
 export default {
   name: 'loadable-content',
-
-  components: {
-    Loader,
-  },
 
   props: {
     loading: {

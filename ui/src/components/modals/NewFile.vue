@@ -1,5 +1,5 @@
 <template>
-  <div class="modal fade" tabindex="-1" role="dialog" id="newFileModal">
+  <!--div class="modal fade" tabindex="-1" role="dialog" id="newFileModal">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -17,6 +17,27 @@
         </div>
       </div>
     </div>
+  </div-->
+  <div>
+    <md-button class="md-fab md-fab-bottom-left md-mini" @click="openDialog('newFileModal')">
+      <md-icon>add</md-icon>
+    </md-button>
+
+    <md-dialog md-open-from="#newFileModal" md-close-to="#newFileModal" ref="newFileModal" @open="onOpen">
+      <md-dialog-title>New File</md-dialog-title>
+
+      <md-dialog-content>
+         <md-input-container>
+          <label>Filename</label>
+          <md-input placeholder="Filename" v-model="filename" ref="inputFilename"></md-input>
+        </md-input-container>
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="closeDialog('newFileModal')">Cancel</md-button>
+        <md-button class="md-primary" @click.prevent="confirm">Ok</md-button>
+      </md-dialog-actions>
+    </md-dialog>
   </div>
 </template>
 
@@ -37,19 +58,33 @@
       };
     },
     created() {
+      /*
       $(document).ready(() => {
         $('#newFileModal').on('shown.bs.modal', () => {
-          $('#newFileModal input[type=text]').focus();
+
         });
       });
+      */
     },
     methods: {
       confirm() {
-        $('#newFileModal').modal('hide');
+        // $('#newFileModal').modal('hide');
+        this.closeDialog('newFileModal');
         this.newFile({
           filename: this.filename,
         });
         this.filename = '';
+      },
+      openDialog(ref) {
+        this.$refs[ref].open();
+      },
+      closeDialog(ref) {
+        this.$refs[ref].close();
+      },
+      onOpen() {
+        setTimeout(() => {
+          this.$refs.inputFilename.$el.focus();
+        }, 10);
       },
       ...mapActions({
         newFile: FILE_ACTION_NEW_FILE,

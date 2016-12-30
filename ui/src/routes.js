@@ -2,7 +2,9 @@ import Login from 'src/pages/auth/Login';
 import FilesList from 'src/pages/files/FilesList';
 import FileDetails from 'src/pages/files/FileDetails';
 import FilePrint from 'src/pages/files/FilePrint';
+import FileTest from 'src/pages/files/FileTest';
 import MyCjkList from 'src/pages/my-cjk/MyCjkList';
+import FileDetailsTopBar from 'src/components/files/FileDetailsTopBar';
 
 export default [
   {
@@ -16,9 +18,15 @@ export default [
     component: FilesList,
   },
   {
+    path: '/file/test',
+    name: 'files-test',
+    component: FileTest,
+  },
+  {
     path: '/files/file/:filename',
     name: 'file',
     component: FileDetails,
+    meta: { topBar: FileDetailsTopBar },
   },
   {
     path: '/files/print/:filename',
@@ -26,8 +34,8 @@ export default [
     component: FilePrint,
   },
   {
-    path: '/my_cjk',
-    name: 'my_cjk',
+    path: '/my-cjk',
+    name: 'my-cjk',
     component: MyCjkList,
   },
 ];

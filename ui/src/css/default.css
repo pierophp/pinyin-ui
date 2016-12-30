@@ -1,89 +1,96 @@
 :root {
-    --block-width: 25px;
+  --block-width: 25px;
 }
 
 @media (min-width: 1024px) {
-    #container {
-        width: 1024px;
-    }
+  #container {}
 }
 
 #container {
-    margin: auto;
+  height: 100vh;
+  display: flex;
+  flex-flow: column;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.content {
+  overflow: auto;
 }
 
 .line {
-    clear: both;
+  clear: both;
 }
 
 .panel-heading .btn {
-    color: #fff !important;
+  color: #fff !important;
 }
 
 .block {
-    float: left;
-    padding: 10px 5px;
-    min-width: var(--block-width);
-    text-align: center;
-    position: relative;
+  float: left;
+  padding: 10px 5px;
+  min-width: var(--block-width);
+  text-align: center;
+  position: relative;
 }
 
 .block:hover {
-    background: #fff4c5;
+  background: #fff4c5;
 }
 
 .block .remove {
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 2px;
-    font-size: 10px;
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 2px;
+  font-size: 10px;
 }
 
 .block:hover .remove {
-    display: block;
+  display: block;
 }
 
 .pinyin input,
 .pinyin span {
-    background: #fff;
-    font-size: 22px;
-    height: 22px;
-    min-width: var(--block-width);
-    width: 100%;
-    border: 0;
-    text-align: center;
-    margin: auto;
+  background: #fff;
+  font-size: 22px;
+  height: 22px;
+  min-width: var(--block-width);
+  width: 100%;
+  border: 0;
+  text-align: center;
+  margin: auto;
 }
 
 .character input,
 .character span {
-    font-size: 24px;
-    height: 34px;
-    min-width: var(--block-width);
-    border: 0;
-    width: 100%;
-    text-align: center;
-    margin: auto;
+  font-size: 24px;
+  height: 34px;
+  min-width: var(--block-width);
+  border: 0;
+  width: 100%;
+  text-align: center;
+  margin: auto;
 }
 
 .modal-body textarea {
-    height: 150px;
+  height: 150px;
 }
 
 .bs-callout {
-    padding: 0 10px;
-    border-left-width: 4px;
+  padding: 0 10px;
+  border-left-width: 4px;
 }
 
 .autocomplete {
-    background: #fff;
+  background: #fff;
 }
 
 .autocomplete a {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .autocomplete a.selected {
-    font-weight: bold;
+  font-weight: bold;
 }
