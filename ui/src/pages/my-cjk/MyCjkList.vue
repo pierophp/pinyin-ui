@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>Total: {{total}}</h3>
+    <h3>My Total: {{total}}</h3>
     <md-table>
       <md-table-header>
         <md-table-row>

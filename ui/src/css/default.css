@@ -55,26 +55,28 @@
 .pinyin input,
 .pinyin .div-input,
 .pinyin span {
+  min-height: 0;
   background: #fff;
   font-size: 22px;
-  height: 22px;
   min-width: var(--block-width);
   width: 100%;
   border: 0;
   text-align: center;
   margin: auto;
+  float: none;
 }
 
 .character input,
 .character .div-input,
 .character span {
+  min-height: 0;
   font-size: 24px;
-  height: 34px;
   min-width: var(--block-width);
   border: 0;
   width: 100%;
   text-align: center;
   margin: auto;
+  float: none;
 }
 
 .modal-body textarea {
