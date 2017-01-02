@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3>Total: {{total}}</h3>
-    <md-table v-once>
+    <md-table>
       <md-table-header>
         <md-table-row>
           <md-table-head>Frequency</md-table-head>

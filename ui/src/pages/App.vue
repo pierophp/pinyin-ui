@@ -11,6 +11,7 @@
   </div>
 
   <side-nav ref="sidenav"></side-nav>
+
 </div>
 </template>
 
@@ -20,13 +21,11 @@
 
   export default {
     name: 'app',
-
     components: {
       ToolBar,
       SideNav,
     },
     created() {
-      // console.log(this.$route.meta.topBar);
     },
     methods: {
       toggle() {
