@@ -1,35 +1,46 @@
 <template>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Simple Pinyin Editor</h3>
-    </div>
-
-    <div class="panel-body">
-      <table class="">
-        <thead>
-          <tr>
-            <th>Ideogram</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div>
+    <h3>Total: {{total}}</h3>
+    <md-table v-once>
+      <md-table-header>
+        <md-table-row>
+          <md-table-head>Frequency</md-table-head>
+          <md-table-head>Total</md-table-head>
+          <md-table-head>My Ideograms</md-table-head>
+          <md-table-head>Percent</md-table-head>
+        </md-table-row>
+      </md-table-header>
+      <md-table-body>
+        <md-table-row v-for="row in report">
+          <md-table-cell>{{row.frequency}}</md-table-cell>
+          <md-table-cell>{{row.total}}</md-table-cell>
+          <md-table-cell>{{row.total_my}}</md-table-cell>
+          <md-table-cell>{{row.percent}}%</md-table-cell>
+        </md-table-row>
+      </md-table-body>
+    </md-table>
   </div>
 </template>
 
 <script>
   import http from 'src/helpers/http';
 
-  http
-    .get('my-cjk')
-    .then(() => {
-    });
-
   export default {
+    name: 'my-cjk-list',
+    data() {
+      return {
+        total: 0,
+        report: [],
+      };
+    },
+    created() {
+      http
+      .get('my-cjk/report')
+      .then((result) => {
+        this.total = result.data.total;
+        this.report = result.data.report;
+      });
+    },
   };
 </script>
 

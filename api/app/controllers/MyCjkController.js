@@ -16,6 +16,25 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/report', (req, res) => {
+  knex('cjk')
+    .select(knex.raw('cjk.frequency, count(*) as total, COUNT(my_cjk.id) total_my, round(COUNT(my_cjk.id) / count(*) * 100) percent'))
+    .leftJoin('my_cjk', function leftJoin(){
+      this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
+    })
+    .where({
+      type: 'C',
+    })
+    .groupBy('cjk.frequency')
+    .then((report) => {
+      let total = 0;
+      report.forEach((item) => {
+        total += item.total_my;
+      });
+      res.send({ total, report });
+    });
+});
+
 router.post('/', (req, res) => {
   const ideogramConverted = req.body.ideogram.charCodeAt(0).toString(16);
 
