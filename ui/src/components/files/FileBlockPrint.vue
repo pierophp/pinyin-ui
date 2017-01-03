@@ -1,16 +1,19 @@
 <template>
-  <div class="block">
+  <div class="block" :data-line="lineIndex" :data-block="blockIndex" :class="classHighlight">
     <div class="pinyin">
       <span>
         <span v-for="data in printData" :class="[data.pinyinClass]">{{data.pinyin}}</span>
       </span>
     </div>
     <div class="character">
-      <span v-for="data in printData" :class="[data.toneClass]" @click.prevent="openModal(data.character)">{{data.character}}</span>
+      <span v-for="data in printData" :class="[data.toneClass]" @click.prevent="openModal(data.character)">
+        {{data.character}}
+      </span>
     </div>
   </div>
   </div>
 </template>
+
 <script>
   import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
   import extractPinyinTone from 'src/helpers/extract-pinyin-tone';
@@ -29,12 +32,22 @@
     name: 'file-block',
     data() {
       return {
+        classHighlight: '',
         printData: [],
       };
     },
     props: {
       pinyin: '',
       character: '',
+      lineIndex: {
+        type: Number,
+        default: 0,
+      },
+      blockIndex: {
+        type: Number,
+        default: 0,
+      },
+      highlight: '',
     },
     watch: {
       pinyin() {
@@ -42,6 +55,10 @@
       },
 
       character() {
+        this.updateRender();
+      },
+
+      highlight() {
         this.updateRender();
       },
 
@@ -54,16 +71,19 @@
         myCjk: FILE_GETTER_MY_CJK,
       }),
     },
+    created() {
+      this.updateRender();
+    },
     methods: {
       ...mapMutations({
         setMyCjkTemp: FILE_MUTATION_SET_MY_CJK_TEMP,
       }),
 
       updateRender() {
+        this.classHighlight = `highlight-${this.highlight}`;
         const printData = [];
         const pinyin = separatePinyinInSyllables(this.pinyin).split(' ');
         const chars = this.character.toString();
-
         for (let i = 0; i < chars.length; i += 1) {
           let newPinyin = '';
           let pinyinClass = '';

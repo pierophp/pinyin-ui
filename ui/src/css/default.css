@@ -6,6 +6,11 @@
   #container {}
 }
 
+@media print
+{
+  .md-toolbar { display: none !important; }
+}
+
 #container {
   height: 100vh;
   display: flex;
@@ -18,6 +23,7 @@
 .content {
   padding: 0 10px;
   overflow: auto;
+  position: relative;
 }
 
 .line {

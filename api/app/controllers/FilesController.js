@@ -15,7 +15,12 @@ router.get('/', (req, res) => {
 
   const getFiles = function getFiles() {
     fs.readdirAsync(filesPath, 'utf8').then((files) => {
-      res.send(files);
+      const filesList = [];
+      files.forEach((file) => {
+        filesList.push(file.replace('.json', ''));
+      });
+
+      res.send(filesList);
     });
   };
 

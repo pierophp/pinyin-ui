@@ -15,7 +15,6 @@ export default [
     path: '/files',
     name: 'files',
     component: FilesList,
-    meta: { topBar: '<div>Lastname: {{name}}</div>' },
   },
   {
     path: '/files/file/:filename',

@@ -1,19 +1,24 @@
 <template>
   <div class="panel print" :class="[sizeClass, typeClass, ideogramColoredClass]">
-    <div v-for="(line, index) in lines" class="line">
-    <file-block-print
-    v-for="(block,index) in line"
-    :pinyin="block.p"
-    :character="block.c"
-    />
+    <div v-for="(line, lineIndex) in lines" class="line">
+      <file-block-print v-for="(block,index) in line"
+        :pinyin="block.p"
+        :character="block.c"
+        :highlight="block.h"
+        :line-index="lineIndex"
+        :block-index="index" />
+
+    </div>
+
     <add-character-modal/>
     <div class="clearfix"></div>
+    <highlight-modal/>
   </div>
 </template>
-
 <script>
   import FileBlockPrint from 'src/components/files/FileBlockPrint';
   import AddCharacterModal from 'src/components/modals/AddCharacter';
+  import HighlightModal from 'src/components/modals/Highlight';
 
   import {
     mapActions,
@@ -21,9 +26,9 @@
   } from 'vuex';
 
   import {
-  FILE_ACTION_FETCH,
-  FILE_ACTION_FETCH_MY_CJK,
-  FILE_GETTER,
+    FILE_ACTION_FETCH,
+    FILE_ACTION_FETCH_MY_CJK,
+    FILE_GETTER,
   } from 'src/data/file/types';
 
   export default {
@@ -32,6 +37,7 @@
     components: {
       FileBlockPrint,
       AddCharacterModal,
+      HighlightModal,
     },
 
     data() {
@@ -92,27 +98,40 @@
   };
 
 </script>
-
 <style>
   @import url(https://fonts.googleapis.com/earlyaccess/notosanssc.css);
-
   :root {
-      --larger-pinyin-font-size: 23px;
-      --larger-character-font-size: 34px;
-      --normal-pinyin-font-size: 18px;
-      --normal-character-font-size: 24px;
+    --larger-pinyin-font-size: 23px;
+    --larger-character-font-size: 34px;
+    --normal-pinyin-font-size: 18px;
+    --normal-character-font-size: 24px;
   }
 
-  .character-only .pinyin{
+  ::selection {
+    background: #a8d1ff !important;
+    color: #000 !important;
+  }
+
+  .content{
+    padding-top:50px;
+  }
+
+  @media print
+  {
+    padding-top:0;
+  }
+
+  .character-only .pinyin {
     display: none;
   }
 
-  .character-only .block{
+  .character-only .block {
     padding: 5px 0;
   }
 
   .print .pinyin,
   .print .pinyin span {
+    background: none !important;
     font-size: var(--normal-pinyin-font-size);
     height: var(--normal-pinyin-font-size);
     min-width: 0;
@@ -141,7 +160,8 @@
     font-size: var(--larger-character-font-size);
     height: var(--larger-character-font-size);
   }
-  .print{
+
+  .print {
     margin: 10px 2px;
   }
 
@@ -159,17 +179,17 @@
     background: #fff;
   }
 
-  .print a{
+  .print a {
     color: #000;
     text-decoration: none;
   }
 
-  .print .character span:hover{
+  .print .character span:hover {
     cursor: pointer;
     opacity: 0.5;
   }
 
-  .print .line{
+  .print .line {
     margin-bottom: 25px;
   }
 
@@ -192,6 +212,30 @@
   .hide-pinyin {
     display: inline-block;
     width: 30px !important;
+  }
+
+  .highlight-1,
+  .highlight-1:hover {
+    background: #fffabf !important;
+  }
+
+  .highlight-2,
+  .highlight-2:hover {
+    background: #d4ffd1 !important;
+  }
+
+  .highlight-3,
+  .highlight-3:hover {
+    background: #ddf9ff !important;
+  }
+
+  .highlight-4,
+  .highlight-4:hover {
+    background: #ffe0fe !important;
+  }
+
+  .clearfix {
+    user-select: none;
   }
 
 </style>

@@ -22,6 +22,14 @@
   </div>
 </template>
 
+<style>
+.md-table .md-table-head-text,
+.md-table .md-table-cell .md-table-cell-container {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+</style>
+
 <script>
   import http from 'src/helpers/http';
 

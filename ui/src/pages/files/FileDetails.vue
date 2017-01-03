@@ -1,6 +1,6 @@
 <template>
-<div class="panel panel-default">
-  <div class="panel-heading">
+<div>
+  <div>
     <h3 class="panel-title">{{filename}}</h3>
 
     <a class="btn btn-success" @click.prevent="save({filename, content: lines})">
@@ -12,7 +12,7 @@
     </a>
   </div>
 
-  <div class="panel-body larger-print">
+  <div class="larger-print">
     <file-row
       v-for="(line, index) in lines"
       :line="line"
@@ -28,7 +28,7 @@
       ></file-row>
     <div class="clearfix"></div>
     <div class="footer">
-      <a class="btn btn-success" @click.prevent="addEmptyLine()">+ line</a>
+      <md-button class="md-raised md-primary" @click.prevent="addEmptyLine()">+ Line</md-button>
     </div>
   </div>
   <file-paste-modal></file-paste-modal>

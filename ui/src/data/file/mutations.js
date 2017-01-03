@@ -4,7 +4,19 @@ import * as types from './types';
 
 export default {
   [types.FILE_MUTATION_SET](state, file) {
+    file.forEach((line, lineIndex) => {
+      line.forEach((block, blockIndex) => {
+        if (block.h === undefined) {
+          file[lineIndex][blockIndex].h = '';
+        }
+      });
+    });
+
     state.file = file;
+  },
+
+  [types.FILES_MUTATION_SET](state, files) {
+    state.files = files;
   },
 
   [types.FILE_MUTATION_UPDATE_PINYIN](state, data) {
@@ -13,6 +25,26 @@ export default {
 
   [types.FILE_MUTATION_UPDATE_CHARACTER](state, data) {
     state.file[data.lineIndex][data.blockIndex].c = data.character;
+  },
+
+  [types.FILE_MUTATION_ADD_HIGHLIGHT](state, data) {
+    for (let i = parseInt(data.startLine, 10); i <= parseInt(data.endLine, 10); i += 1) {
+      let startBlock = 0;
+      let endBlock = state.file[i].length - 1;
+      if (i === parseInt(data.startLine, 10)) {
+        startBlock = data.startBlock;
+      }
+
+      if (i === parseInt(data.endLine, 10)) {
+        endBlock = data.endBlock;
+      }
+
+      for (let j = parseInt(startBlock, 10); j <= parseInt(endBlock, 10); j += 1) {
+        state.file[i][j].h = data.type;
+      }
+    }
+
+    window.getSelection().removeAllRanges();
   },
 
   [types.FILE_MUTATION_ADD_EMPTY_LINE](state) {

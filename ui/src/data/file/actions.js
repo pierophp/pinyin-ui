@@ -3,6 +3,7 @@ import clipboard01 from 'src/domain/clipboard-01';
 import clipboard02 from 'src/domain/clipboard-02';
 import clipboard03 from 'src/domain/clipboard-03';
 import clipboard04 from 'src/domain/clipboard-04';
+import LocalStorage from 'src/helpers/local-storage';
 
 import * as types from './types';
 
@@ -11,7 +12,7 @@ export default {
     http
     .get('files/file', {
       params: {
-        filename,
+        filename: `${filename}.json`,
       },
     })
     .then((response) => {
@@ -20,9 +21,19 @@ export default {
     .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
   },
 
+  [types.FILES_ACTION_FETCH]({ commit }) {
+    http
+    .get('files')
+    .then((response) => {
+      LocalStorage.save('files', response.data);
+      commit(types.FILES_MUTATION_SET, response.data);
+    })
+    .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
+  },
+
   [types.FILE_ACTION_SAVE]({ commit }, data) {
     http
-    .post(`files/save?filename=${data.filename}`, {
+    .post(`files/save?filename=${data.filename}.json`, {
       content: JSON.stringify({ lines: data.content }),
     })
     .then(() => {

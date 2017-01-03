@@ -1,6 +1,9 @@
 import * as types from './types';
 
 export default {
+  [types.FILES_GETTER]({ files }) {
+    return files;
+  },
   [types.FILE_GETTER]({ file }) {
     return file;
   },
