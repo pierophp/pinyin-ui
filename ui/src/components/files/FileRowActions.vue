@@ -1,31 +1,26 @@
 <template>
-  <div class="btn-group">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Options <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li>
-        <a href @click.prevent="addEmptyBlock({lineIndex})">
-          <i class="glyphicon glyphicon-plus"></i> Add Empty Block
-        </a>
-      </li>
-      <li>
-        <a href @click.prevent="convertToPinyin({lineIndex})">
-          <i class="glyphicon glyphicon-font"></i> Convert to Pinyin
-        </a>
-      </li>
-      <li>
-        <a href @click.prevent="openModalClipBoard(lineIndex)">
-          <i class="glyphicon glyphicon-paste"></i> Paste
-        </a>
-      </li>
-      <li>
-        <a href @click.prevent="removeLine({lineIndex})">
-          <i class="glyphicon glyphicon-trash"></i> Remove line
-        </a>
-      </li>
-    </ul>
-  </div>
+  <md-menu md-align-trigger  md-size="4">
+    <md-button md-menu-trigger>Options</md-button>
+
+    <md-menu-content>
+      <md-menu-item @click="addEmptyBlock({lineIndex})">
+        <md-icon>add</md-icon>
+        <span>Add Empty Block</span>
+      </md-menu-item>
+      <md-menu-item @click="convertToPinyin({lineIndex})">
+        <md-icon>font_download</md-icon>
+        <span>Convert to Pinyin</span>
+      </md-menu-item>
+      <md-menu-item @click="openModalClipBoard(lineIndex)">
+        <md-icon>content_paste</md-icon>
+        <span>Paste</span>
+      </md-menu-item>
+      <md-menu-item @click="removeLine({lineIndex})">
+        <md-icon>delete</md-icon>
+        <span>Remove line</span>
+      </md-menu-item>
+    </md-menu-content>
+  </md-menu>
 </template>
 <script>
   import {

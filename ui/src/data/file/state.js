@@ -8,6 +8,7 @@ if (LocalStorage.has('files')) {
 export default {
   files,
   file: {},
+  fileChangeTimestamp: null,
   filePasteAction: '',
   myCjk: [],
   myCjkTemp: '',

@@ -35,3 +35,4 @@ export const FILE_MUTATION_PASTE_ACTION = 'file/mutation/PASTE_ACTION';
 export const FILE_MUTATION_CONCATENATE_LINE = 'file/mutation/CONCATENATE_LINE';
 export const FILE_MUTATION_ADD_MY_CJK = 'file/mutation/ADD_MY_CJK';
 export const FILE_MUTATION_ADD_HIGHLIGHT = 'file/mutation/ADD_HIGHLIGHT';
+export const FILE_MUTATION_REMOVE_HIGHLIGHT = 'file/mutation/REMOVE_HIGHLIGHT';

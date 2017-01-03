@@ -22,6 +22,7 @@ import store from 'src/data/store';
 
 Vue.use(VueMaterial);
 
+
 // Vue.use(require('src/components/directives/drag-and-drop'));
 
 const Main = Vue.extend(App);

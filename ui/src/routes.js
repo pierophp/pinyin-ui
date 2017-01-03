@@ -22,7 +22,7 @@ export default [
     name: 'file',
     component: FileDetails,
     meta: {
-      topBar: '<div><md-button class="md-icon-button"><md-icon>offline_pin</md-icon></md-button><md-button class="md-icon-button"><md-icon>print</md-icon></md-button></div>',
+      topBar: '<div><md-button class="md-icon-button"><md-icon>print</md-icon></md-button></div>',
     },
   },
   {

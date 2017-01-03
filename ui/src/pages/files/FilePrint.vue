@@ -3,7 +3,7 @@
     <h2>{{filename}}</h2>
 
     <div v-for="(line, lineIndex) in lines" class="line">
-      <file-block-print v-for="(block,index) in line"
+      <file-block-print v-for="(block,index) in line"@click="blockClick()"
         :pinyin="block.p"
         :character="block.c"
         :highlight="block.h"
@@ -29,6 +29,7 @@
   import {
     FILE_ACTION_FETCH,
     FILE_ACTION_FETCH_MY_CJK,
+    FILE_ACTION_SAVE,
     FILE_GETTER,
   } from 'src/data/file/types';
 
@@ -70,12 +71,23 @@
       this.fetchMyCjk();
       this.filename = this.$route.params.filename;
       this.getFile(this.filename);
+      this.timer = setInterval(() => {
+        this.save({
+          filename: this.filename,
+          content: this.lines,
+        });
+      }, 3000);
+    },
+
+    destroyed() {
+      clearInterval(this.timer);
     },
 
     methods: {
       ...mapActions({
         fetch: FILE_ACTION_FETCH,
         fetchMyCjk: FILE_ACTION_FETCH_MY_CJK,
+        save: FILE_ACTION_SAVE,
       }),
 
       getFile(filename) {

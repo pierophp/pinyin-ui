@@ -4,12 +4,13 @@
     <div class="circle highlight-2" @click="addHighlight(2)"></div>
     <div class="circle highlight-3" @click="addHighlight(3)"></div>
     <div class="circle highlight-4" @click="addHighlight(4)"></div>
-    <div class="trash">
+    <div class="trash" @click="removeHighlight()">
       <md-icon>delete</md-icon>
     </div>
     <span class="arrow"></span>
   </div>
 </template>
+
 <script>
   import MobileDetect from 'mobile-detect';
   import {
@@ -18,6 +19,7 @@
 
   import {
     FILE_MUTATION_ADD_HIGHLIGHT,
+    FILE_MUTATION_REMOVE_HIGHLIGHT,
   } from 'src/data/file/types';
 
   const md = new MobileDetect(window.navigator.userAgent);
@@ -101,7 +103,7 @@
     }
 
     if (md.mobile() !== null) {
-      that.top -= 33;
+      that.top -= 35;
     }
   }
 
@@ -141,6 +143,7 @@
     methods: {
       ...mapMutations({
         addHighlightMutation: FILE_MUTATION_ADD_HIGHLIGHT,
+        removeHighlightMutation: FILE_MUTATION_REMOVE_HIGHLIGHT,
       }),
       addHighlight(type) {
         this.addHighlightMutation({
@@ -149,6 +152,14 @@
           startBlock: this.startBlock,
           endBlock: this.endBlock,
           type,
+        });
+      },
+      removeHighlight() {
+        this.removeHighlightMutation({
+          startLine: this.startLine,
+          endLine: this.endLine,
+          startBlock: this.startBlock,
+          endBlock: this.endBlock,
         });
       },
     },

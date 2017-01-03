@@ -1,5 +1,5 @@
 <template>
-  <div class="block" :data-line="lineIndex" :data-block="blockIndex" :class="classHighlight">
+  <div class="block" :data-line="lineIndex" :data-block="blockIndex" :class="classHighlight" @click="blockClick()" ref="block">
     <div class="pinyin">
       <span>
         <span v-for="data in printData" :class="[data.pinyinClass]">{{data.pinyin}}</span>
@@ -78,6 +78,19 @@
       ...mapMutations({
         setMyCjkTemp: FILE_MUTATION_SET_MY_CJK_TEMP,
       }),
+
+      blockClick() {
+        if (!this.highlight) {
+          return;
+        }
+
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.setStart(this.$refs.block.childNodes[0], 0);
+        range.setEnd(this.$refs.block.childNodes[1], 0);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      },
 
       updateRender() {
         this.classHighlight = `highlight-${this.highlight}`;

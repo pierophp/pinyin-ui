@@ -1,16 +1,7 @@
 <template>
 <div>
-  <div>
-    <h2>{{filename}}</h2>
-
-    <a class="btn btn-success" @click.prevent="save({filename, content: lines})">
-      <i class="glyphicon glyphicon-save-file"></i> Save
-    </a>
-
-    <a class="btn btn-info" @click.prevent="openPrintModal()">
-      <i class="glyphicon glyphicon-print"></i> Print
-    </a>
-  </div>
+  <h2>{{filename}}</h2>
+  <md-button @click="openPrintModal()" class="md-accent">Print</md-button>
 
   <div class="larger-print">
     <file-row
@@ -67,6 +58,7 @@
 
     data() {
       return {
+        timer: null,
         filename: '',
       };
     },
@@ -87,6 +79,17 @@
 
     created() {
       this.getFile(this.$route.params.filename);
+
+      this.timer = setInterval(() => {
+        this.save({
+          filename: this.filename,
+          content: this.lines,
+        });
+      }, 3000);
+    },
+
+    destroyed() {
+      clearInterval(this.timer);
     },
 
     methods: {
@@ -130,6 +133,10 @@
 </script>
 
 <style>
+
+    .md-list-item .md-list-item-holder>.md-icon:first-child {
+      margin-right: 14px;
+    }
     /* REMOVE THIS */
     .modal-backdrop{
       z-index: -1;
