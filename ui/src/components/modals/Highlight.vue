@@ -110,7 +110,8 @@
       let selectionIndex = 0;
       let currentSelectionIndex = 0;
       // eslint-disable-next-line
-      document.addEventListener('selectionchange', function updateSelection() {
+      document.addEventListener('selectionchange', function updateSelection(e) {
+        e.preventDefault();
         selectionIndex += 1;
         const localSelectionIndex = selectionIndex;
         currentSelectionIndex = selectionIndex;
