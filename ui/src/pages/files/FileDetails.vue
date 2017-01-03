@@ -1,7 +1,7 @@
 <template>
 <div>
   <div>
-    <h3 class="panel-title">{{filename}}</h3>
+    <h2>{{filename}}</h2>
 
     <a class="btn btn-success" @click.prevent="save({filename, content: lines})">
       <i class="glyphicon glyphicon-save-file"></i> Save

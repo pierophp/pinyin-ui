@@ -28,6 +28,12 @@
         </router-link>
       </md-list-item>
 
+      <md-list-item @click="$refs.sidenav.toggle()" class="md-primary">
+        <router-link :to="{ name: 'config' }">
+          <md-icon>settings</md-icon> <span>Settings</span>
+        </router-link>
+      </md-list-item>
+
       <md-list-item @click="logout()">
         <md-icon>power_settings_new</md-icon> <span>Logout</span>
       </md-list-item>

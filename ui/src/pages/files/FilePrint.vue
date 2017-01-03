@@ -1,5 +1,7 @@
 <template>
   <div class="print" :class="[sizeClass, typeClass, ideogramColoredClass]">
+    <h2>{{filename}}</h2>
+
     <div v-for="(line, lineIndex) in lines" class="line">
       <file-block-print v-for="(block,index) in line"
         :pinyin="block.p"
@@ -7,7 +9,6 @@
         :highlight="block.h"
         :line-index="lineIndex"
         :block-index="index" />
-
     </div>
 
     <add-character-modal/>
@@ -113,7 +114,7 @@
   }
 
   .print{
-    padding-top:50px;
+    padding-top: 10px;
     position: relative;
   }
 
