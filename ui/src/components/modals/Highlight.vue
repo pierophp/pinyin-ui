@@ -101,7 +101,7 @@
     }
 
     if (md.mobile() !== null) {
-      that.top -= 30;
+      that.top -= 33;
     }
   }
 
