@@ -126,7 +126,7 @@
   }
 
   .print{
-    padding-top: 15px;
+    padding-top: 25px;
     position: relative;
   }
 

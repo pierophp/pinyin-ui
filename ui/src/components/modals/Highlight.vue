@@ -103,7 +103,7 @@
     }
 
     if (md.mobile() !== null) {
-      that.top -= 35;
+      that.top -= 40;
     }
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="files-container">
     <md-list class="md-double-line">
       <md-list-item  v-for="file in files"  @click="goToFile(file)">
 
@@ -64,3 +64,9 @@
     },
   };
 </script>
+
+<style>
+.files-container{
+  padding-bottom: 60px;
+}
+</style>

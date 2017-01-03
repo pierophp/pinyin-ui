@@ -1,6 +1,6 @@
 <template>
   <md-menu md-align-trigger  md-size="4">
-    <md-button md-menu-trigger>Options</md-button>
+    <md-button class="md-accent" md-menu-trigger>Options</md-button>
 
     <md-menu-content>
       <md-menu-item @click="addEmptyBlock({lineIndex})">
