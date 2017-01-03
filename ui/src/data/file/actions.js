@@ -9,6 +9,11 @@ import * as types from './types';
 
 export default {
   [types.FILE_ACTION_FETCH]({ commit }, filename) {
+    const fileKey = `file_${filename}`;
+    if (LocalStorage.has(fileKey)) {
+      commit(types.FILE_MUTATION_SET, LocalStorage.get(fileKey));
+    }
+
     http
     .get('files/file', {
       params: {
@@ -16,6 +21,7 @@ export default {
       },
     })
     .then((response) => {
+      LocalStorage.save(fileKey, response.data.lines);
       commit(types.FILE_MUTATION_SET, response.data.lines);
     })
     .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
