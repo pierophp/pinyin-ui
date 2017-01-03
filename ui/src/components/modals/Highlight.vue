@@ -100,8 +100,8 @@
       that.left = minLeft;
     }
 
-    if (md.mobile()) {
-      that.top += 30;
+    if (md.mobile() !== null) {
+      that.top -= 30;
     }
   }
 
