@@ -9,10 +9,10 @@
         :highlight="block.h"
         :line-index="lineIndex"
         :block-index="index" />
+        <div class="clearfix"></div>
     </div>
 
     <add-character-modal/>
-    <div class="clearfix"></div>
     <highlight-modal/>
   </div>
 </template>
