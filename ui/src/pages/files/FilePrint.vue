@@ -1,5 +1,5 @@
 <template>
-  <div class="panel print" :class="[sizeClass, typeClass, ideogramColoredClass]">
+  <div class="print" :class="[sizeClass, typeClass, ideogramColoredClass]">
     <div v-for="(line, lineIndex) in lines" class="line">
       <file-block-print v-for="(block,index) in line"
         :pinyin="block.p"
@@ -112,8 +112,9 @@
     color: #000 !important;
   }
 
-  .content{
+  .print{
     padding-top:50px;
+    position: relative;
   }
 
   @media print

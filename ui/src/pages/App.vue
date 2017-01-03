@@ -3,11 +3,11 @@
   <tool-bar @toggle-sidebar="toggle()"></tool-bar>
 
   <div class="content">
-    <transition name="fade-page">
-        <keep-alive>
-          <router-view />
+    <router-view />
+    <!--transition name="fade-page">
+      <keep-alive>
       </keep-alive>
-    </transition>
+    </transition-->
   </div>
 
   <side-nav ref="sidenav"></side-nav>

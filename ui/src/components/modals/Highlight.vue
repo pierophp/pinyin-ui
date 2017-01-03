@@ -1,5 +1,5 @@
 <template>
-  <div class="highlight-modal" v-show="visible" :style="{ top: (top - 50) + 'px', left: (left - 131) + 'px'  }">
+  <div class="highlight-modal" v-show="visible" :style="{ top: top  + 'px', left: left + 'px'  }">
     <div class="circle highlight-1" @click="addHighlight(1)"></div>
     <div class="circle highlight-2" @click="addHighlight(2)"></div>
     <div class="circle highlight-3" @click="addHighlight(3)"></div>
@@ -11,6 +11,7 @@
   </div>
 </template>
 <script>
+  import MobileDetect from 'mobile-detect';
   import {
     mapMutations,
   } from 'vuex';
@@ -18,6 +19,8 @@
   import {
     FILE_MUTATION_ADD_HIGHLIGHT,
   } from 'src/data/file/types';
+
+  const md = new MobileDetect(window.navigator.userAgent);
 
   function getParentBlockSelected(element) {
     if (element == null) {
@@ -87,9 +90,19 @@
     that.endLine = endLine;
     that.startBlock = startBlock;
     that.endBlock = endBlock;
-    that.top = startNode.offsetTop;
-    // eslint-disable-next-line
-    that.left = startBounds.left + ((Math.max(startBounds.right, endBounds.right) - startBounds.left) / 2);
+    that.top = startNode.offsetTop - 50;
+
+    const leftAdd = (Math.max(startBounds.right, endBounds.right) - startBounds.left) / 2;
+    const minLeft = 5;
+    that.left = startBounds.left + leftAdd;
+    that.left -= 131;
+    if (that.left < minLeft) {
+      that.left = minLeft;
+    }
+
+    if (md.mobile()) {
+      that.top += 30;
+    }
   }
 
   export default {
