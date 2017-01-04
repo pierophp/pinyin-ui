@@ -104,7 +104,7 @@
           const tone = extractPinyinTone(pinyin[i]);
           if (this.myCjk.indexOf(chars[i]) > -1) {
             pinyinClass = 'hide-pinyin';
-            newPinyin = '&nbsp;';
+            newPinyin = '&nbsp;&nbsp;';
           } else if (pinyin[i]) {
             newPinyin = pinyin[i];
           } else {

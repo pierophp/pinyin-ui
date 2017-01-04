@@ -4,7 +4,7 @@
       <md-button class="md-icon-button" @click="$emit('toggle-sidebar')">
         <md-icon>menu</md-icon>
       </md-button>
-      <h2 class="md-title">Simple Pinyin Editor</h2>
+      <h2 class="md-title">Pinyin Editor</h2>
       <span style="flex: 1"></span>
       <dynamic :template="dynamicTemplate" :data="dynamicData" />
 
