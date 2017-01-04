@@ -8,6 +8,7 @@ export const FILE_ACTION_CONVERT_TO_PINYIN = 'file/action/convertToPinyin';
 export const FILE_ACTION_PARSE_PASTE = 'file/action/parsePaste';
 export const FILE_ACTION_NEW_FILE = 'file/action/newFile';
 export const FILE_ACTION_ADD_MY_CJK = 'file/action/ADD_MY_CJK';
+export const FILE_ACTION_REMOVE_MY_CJK = 'file/action/REMOVE_MY_CJK';
 
 // getters
 export const FILES_GETTER = 'file/getter/files';
@@ -34,5 +35,6 @@ export const FILE_MUTATION_REMOVE_LINE = 'file/mutation/REMOVE_LINE';
 export const FILE_MUTATION_PASTE_ACTION = 'file/mutation/PASTE_ACTION';
 export const FILE_MUTATION_CONCATENATE_LINE = 'file/mutation/CONCATENATE_LINE';
 export const FILE_MUTATION_ADD_MY_CJK = 'file/mutation/ADD_MY_CJK';
+export const FILE_MUTATION_REMOVE_MY_CJK = 'file/mutation/REMOVE_MY_CJK';
 export const FILE_MUTATION_ADD_HIGHLIGHT = 'file/mutation/ADD_HIGHLIGHT';
 export const FILE_MUTATION_REMOVE_HIGHLIGHT = 'file/mutation/REMOVE_HIGHLIGHT';

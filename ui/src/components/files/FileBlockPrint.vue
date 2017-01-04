@@ -122,8 +122,13 @@
         this.printData = printData;
       },
       openModal(character) {
+        let add = true;
+        if (this.myCjk.indexOf(character) > -1) {
+          add = false;
+        }
+
         this.setMyCjkTemp(character);
-        $('#addCharacterModal').modal();
+        this.$emit('open-modal', add);
       },
     },
   };

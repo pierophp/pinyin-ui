@@ -1,0 +1,69 @@
+<template>
+  <div>
+    <md-dialog md-open-from="#addCharacterModal" md-close-to="#addCharacterModal" ref="modal">
+      <md-dialog-title v-if="add">Add Character</md-dialog-title>
+      <md-dialog-title v-if="!add">Remove Character</md-dialog-title>
+      <md-dialog-content>
+        <span v-if="add">Would you like to add "{{myCjkTemp}}" to your known list?</span>
+        <span v-if="!add">Would you like to remove "{{myCjkTemp}}" to your known list?</span>
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="closeDialog()">Cancel</md-button>
+        <md-button class="md-primary" @click.prevent="confirm">Ok</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+  </div>
+</template>
+
+<script>
+  import {
+      mapGetters,
+      mapActions,
+    } from 'vuex';
+
+  import {
+    FILE_ACTION_ADD_MY_CJK,
+    FILE_ACTION_REMOVE_MY_CJK,
+    FILE_GETTER_MY_CJK_TEMP,
+  } from 'src/data/file/types';
+
+  export default {
+    name: 'modal-add-character',
+    computed: {
+      ...mapGetters({
+        myCjkTemp: FILE_GETTER_MY_CJK_TEMP,
+      }),
+    },
+    data() {
+      return {
+        add: true,
+      };
+    },
+    methods: {
+      confirm() {
+        this.closeDialog('addCharacterModal');
+        if (this.add) {
+          this.addMyCjk({
+            myCjk: this.myCjkTemp,
+          });
+        } else {
+          this.removeMyCjk({
+            myCjk: this.myCjkTemp,
+          });
+        }
+      },
+      openDialog(add) {
+        this.add = add;
+        this.$refs.modal.open();
+      },
+      closeDialog() {
+        this.$refs.modal.close();
+      },
+      ...mapActions({
+        addMyCjk: FILE_ACTION_ADD_MY_CJK,
+        removeMyCjk: FILE_ACTION_REMOVE_MY_CJK,
+      }),
+    },
+  };
+</script>

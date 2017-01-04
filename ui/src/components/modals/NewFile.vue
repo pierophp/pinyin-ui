@@ -1,10 +1,10 @@
 <template>
   <div>
-    <md-button class="md-fab md-fab-bottom-left" @click="openDialog('newFileModal')">
+    <md-button class="md-fab md-fab-bottom-left" @click="openDialog()">
       <md-icon>add</md-icon>
     </md-button>
 
-    <md-dialog md-open-from="#newFileModal" md-close-to="#newFileModal" ref="newFileModal" @open="onOpen">
+    <md-dialog md-open-from="#newFileModal" md-close-to="#newFileModal" ref="modal" @open="onOpen">
       <md-dialog-title>New File</md-dialog-title>
 
       <md-dialog-content>
@@ -15,7 +15,7 @@
       </md-dialog-content>
 
       <md-dialog-actions>
-        <md-button class="md-primary" @click="closeDialog('newFileModal')">Cancel</md-button>
+        <md-button class="md-primary" @click="closeDialog()">Cancel</md-button>
         <md-button class="md-primary" @click.prevent="confirm">Ok</md-button>
       </md-dialog-actions>
     </md-dialog>
@@ -46,11 +46,11 @@
         });
         this.filename = '';
       },
-      openDialog(ref) {
-        this.$refs[ref].open();
+      openDialog() {
+        this.$refs.modal.open();
       },
-      closeDialog(ref) {
-        this.$refs[ref].close();
+      closeDialog() {
+        this.$refs.modal.close();
       },
       onOpen() {
         setTimeout(() => {

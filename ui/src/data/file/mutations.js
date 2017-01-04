@@ -205,4 +205,7 @@ export default {
     state.myCjk.push(myCjk);
   },
 
+  [types.FILE_MUTATION_REMOVE_MY_CJK](state, myCjk) {
+    state.myCjk.splice(state.myCjk.indexOf(myCjk), 1);
+  },
 };

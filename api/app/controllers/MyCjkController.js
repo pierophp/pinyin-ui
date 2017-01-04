@@ -47,10 +47,38 @@ router.post('/', (req, res) => {
     .orderBy('usage', 'DESC')
     .select('id')
     .then((result) =>
-      knex('my_cjk').insert({
+      knex('my_cjk')
+      .insert({
         cjk_id: result[0].id,
         user_id: req.user.id,
       })
+    )
+    .then(() => {
+      res.send({ status: 'SUCCESS' });
+    })
+    .catch(() => {
+      res.send({ status: 'ERROR' });
+    });
+});
+
+router.delete('/', (req, res) => {
+  const ideogramConverted = req.body.ideogram.charCodeAt(0).toString(16);
+
+  knex('cjk')
+    .where({
+      ideogram: ideogramConverted,
+      type: 'C',
+    })
+    .orderBy('frequency', 'ASC')
+    .orderBy('usage', 'DESC')
+    .select('id')
+    .then((result) =>
+      knex('my_cjk')
+      .where({
+        cjk_id: result[0].id,
+        user_id: req.user.id,
+      })
+      .del()
     )
     .then(() => {
       res.send({ status: 'SUCCESS' });

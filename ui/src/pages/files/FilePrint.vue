@@ -3,7 +3,7 @@
     <h2>{{filename}}</h2>
 
     <div v-for="(line, lineIndex) in lines" class="line">
-      <file-block-print v-for="(block,index) in line"@click="blockClick()"
+      <file-block-print v-for="(block,index) in line"@click="blockClick()"@open-modal="openModal"
         :pinyin="block.p"
         :character="block.c"
         :highlight="block.h"
@@ -11,14 +11,13 @@
         :block-index="index" />
         <div class="clearfix"></div>
     </div>
-
-    <add-character-modal/>
+    <add-remove-character-modal ref="addRemoveCharacterModal"/>
     <highlight-modal/>
   </div>
 </template>
 <script>
   import FileBlockPrint from 'src/components/files/FileBlockPrint';
-  import AddCharacterModal from 'src/components/modals/AddCharacter';
+  import AddRemoveCharacterModal from 'src/components/modals/AddRemoveCharacter';
   import HighlightModal from 'src/components/modals/Highlight';
 
   import {
@@ -38,7 +37,7 @@
 
     components: {
       FileBlockPrint,
-      AddCharacterModal,
+      AddRemoveCharacterModal,
       HighlightModal,
     },
 
@@ -93,6 +92,7 @@
       getFile(filename) {
         this.fetch(filename);
       },
+
       updateCss() {
         this.sizeClass = this.$route.query.size;
 
@@ -105,6 +105,10 @@
         if (this.$route.query.ideogramColored === '1') {
           this.ideogramColoredClass = 'ideogram-colored';
         }
+      },
+
+      openModal(add) {
+        this.$refs.addRemoveCharacterModal.openDialog(add);
       },
     },
 
