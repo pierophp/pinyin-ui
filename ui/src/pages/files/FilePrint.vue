@@ -147,7 +147,7 @@
   .print .pinyin span {
     background: none !important;
     font-size: var(--normal-pinyin-font-size);
-    height: var(--normal-pinyin-font-size);
+    height: calc(var(--normal-pinyin-font-size) + 1);
     min-width: 0;
   }
 
@@ -161,7 +161,7 @@
   .larger.print .pinyin,
   .larger.print .pinyin span {
     font-size: var(--larger-pinyin-font-size);
-    height: var(--larger-pinyin-font-size);
+    height: calc(var(--larger-pinyin-font-size) + 2);
   }
 
   .larger .pinyin span {

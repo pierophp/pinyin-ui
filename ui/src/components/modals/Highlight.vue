@@ -60,11 +60,11 @@
 
     that.visible = true;
 
-    let startLine = startNode.getAttribute('data-line');
-    let startBlock = startNode.getAttribute('data-block');
+    let startLine = parseInt(startNode.getAttribute('data-line'), 10);
+    let startBlock = parseInt(startNode.getAttribute('data-block'), 10);
 
-    let endLine = endNode.getAttribute('data-line');
-    let endBlock = endNode.getAttribute('data-block');
+    let endLine = parseInt(endNode.getAttribute('data-line'), 10);
+    let endBlock = parseInt(endNode.getAttribute('data-block'), 10);
     let startBounds = startNode.getBoundingClientRect();
     let endBounds = endNode.getBoundingClientRect();
 

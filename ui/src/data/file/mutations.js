@@ -23,6 +23,67 @@ function addHighlight(state, data) {
   window.getSelection().removeAllRanges();
 }
 
+function findRange(state, data) {
+  let startLine = parseInt(data.startLine, 10);
+  let startBlock = parseInt(data.startBlock, 10);
+  let endLine = parseInt(data.endtLine, 10);
+  let endBlock = parseInt(data.endBlock, 10);
+  const highlight = state.file[startLine][startBlock].h;
+
+  function findRangeStart(line, block) {
+    if (state.file[line][block].h !== highlight) {
+      return;
+    }
+
+    startLine = line;
+    startBlock = block;
+
+    block -= 1;
+    if (block < 0) {
+      line -= 1;
+      if (line < 0) {
+        return;
+      }
+
+      block = state.file[line].length - 1;
+    }
+
+    findRangeStart(line, block);
+  }
+
+  findRangeStart(startLine, startBlock);
+
+  function findRangeEnd(line, block) {
+    if (state.file[line][block].h !== highlight) {
+      return;
+    }
+
+    endLine = line;
+    endBlock = block;
+
+    block += 1;
+    if (block === state.file[line].length) {
+      line += 1;
+      block = 0;
+    }
+
+    if (line === state.file.length) {
+      return;
+    }
+
+    findRangeEnd(line, block);
+  }
+
+  findRangeEnd(startLine, startBlock);
+
+  return [
+    startLine,
+    startBlock,
+    endLine,
+    endBlock,
+  ];
+}
+
 export default {
   [types.FILE_MUTATION_SET](state, file) {
     file.forEach((line, lineIndex) => {
@@ -51,61 +112,27 @@ export default {
   },
 
   [types.FILE_MUTATION_ADD_HIGHLIGHT](state, data) {
+    let startLine = null;
+    let startBlock = null;
+    let endLine = null;
+    let endBlock = null;
+    if (state.file[data.startLine][data.startBlock].h) {
+      [startLine, startBlock, endLine, endBlock] = findRange(state, data);
+      data.startLine = startLine;
+      data.startBlock = startBlock;
+      data.endLine = endLine;
+      data.endBlock = endBlock;
+    }
     addHighlight(state, data);
   },
 
   [types.FILE_MUTATION_REMOVE_HIGHLIGHT](state, data) {
-    let startLine = parseInt(data.startLine, 10);
-    let startBlock = parseInt(data.startBlock, 10);
-    let endLine = parseInt(data.endtLine, 10);
-    let endBlock = parseInt(data.endBlock, 10);
-    const highlight = state.file[startLine][startBlock].h;
+    let startLine = null;
+    let startBlock = null;
+    let endLine = null;
+    let endBlock = null;
 
-    function findRangeStart(line, block) {
-      if (state.file[line][block].h !== highlight) {
-        return;
-      }
-
-      startLine = line;
-      startBlock = block;
-
-      block -= 1;
-      if (block < 0) {
-        line -= 1;
-        block = state.file[line].length - 1;
-      }
-
-      if (line < 0) {
-        return;
-      }
-
-      findRangeStart(line, block);
-    }
-
-    findRangeStart(startLine, startBlock);
-
-    function findRangeEnd(line, block) {
-      if (state.file[line][block].h !== highlight) {
-        return;
-      }
-
-      endLine = line;
-      endBlock = block;
-
-      block += 1;
-      if (block === state.file[line].length) {
-        line += 1;
-        block = 0;
-      }
-
-      if (line === state.file.length) {
-        return;
-      }
-
-      findRangeEnd(line, block);
-    }
-
-    findRangeEnd(startLine, startBlock);
+    [startLine, startBlock, endLine, endBlock] = findRange(state, data);
 
     addHighlight(state, {
       startLine,

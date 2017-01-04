@@ -2,7 +2,7 @@
   <div class="block" :data-line="lineIndex" :data-block="blockIndex" :class="classHighlight" @click="blockClick()" ref="block">
     <div class="pinyin">
       <span>
-        <span v-for="data in printData" :class="[data.pinyinClass]">{{data.pinyin}}</span>
+        <span v-for="data in printData" :class="[data.pinyinClass]" v-html="data.pinyin"></span>
       </span>
     </div>
     <div class="character">
@@ -104,7 +104,7 @@
           const tone = extractPinyinTone(pinyin[i]);
           if (this.myCjk.indexOf(chars[i]) > -1) {
             pinyinClass = 'hide-pinyin';
-            newPinyin = ' ';
+            newPinyin = '&nbsp;';
           } else if (pinyin[i]) {
             newPinyin = pinyin[i];
           } else {
