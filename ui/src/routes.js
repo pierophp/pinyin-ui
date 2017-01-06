@@ -11,6 +11,9 @@ export default [
     path: '/',
     name: 'login',
     component: Login,
+    meta: {
+      hideTopBar: true,
+    },
   },
   {
     path: '/files',

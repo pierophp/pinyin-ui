@@ -10,7 +10,9 @@ router.get('/', (req, res) => {
       user_id: req.user.id,
     })
     .join('cjk', 'cjk.id', '=', 'my_cjk.cjk_id')
-    .select('my_cjk.id', 'cjk.ideogram', 'cjk.frequency')
+    .select('my_cjk.id', 'cjk.ideogram', 'cjk.frequency', 'cjk.pronunciation')
+    .orderBy('frequency', 'ASC')
+    .orderBy('usage', 'DESC')
     .then((result) => {
       res.send({ ideograms: result });
     });
