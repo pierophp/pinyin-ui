@@ -168,6 +168,15 @@ export default {
     .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
   },
 
+  [types.FILE_ACTION_DELETE_FILE]({ commit, state }, data) {
+    http
+    .delete(`files?filename=${data.filename}.json`)
+    .then(() => {
+      state.files.splice(state.files.indexOf(data.filename), 1);
+    })
+    .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
+  },
+
   [types.FILE_ACTION_FETCH_MY_CJK]({ commit }) {
     http
     .get('my-cjk')

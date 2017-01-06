@@ -7,6 +7,7 @@ export const FILE_ACTION_SAVE = 'file/action/save';
 export const FILE_ACTION_CONVERT_TO_PINYIN = 'file/action/convertToPinyin';
 export const FILE_ACTION_PARSE_PASTE = 'file/action/parsePaste';
 export const FILE_ACTION_NEW_FILE = 'file/action/newFile';
+export const FILE_ACTION_DELETE_FILE = 'file/action/deleteFile';
 export const FILE_ACTION_ADD_MY_CJK = 'file/action/ADD_MY_CJK';
 export const FILE_ACTION_REMOVE_MY_CJK = 'file/action/REMOVE_MY_CJK';
 

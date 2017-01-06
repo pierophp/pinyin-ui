@@ -54,4 +54,12 @@ router.post('/save', (req, res) => {
   });
 });
 
+router.delete('/', (req, res) => {
+  const filename = req.query.filename;
+  const filesPath = `${dirname + req.user.id}/`;
+  fs.unlinkAsync(filesPath + filename).then(() => {
+    res.send({});
+  });
+});
+
 module.exports = router;
