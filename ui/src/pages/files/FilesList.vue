@@ -11,12 +11,16 @@
           {{ file }}
         </div>
 
-        <md-menu>
+        <md-menu md-size="4">
           <md-button md-menu-trigger class="md-icon-button md-list-action">
             <md-icon>more_vert</md-icon>
           </md-button>
 
           <md-menu-content>
+            <md-menu-item @click="visualizationMode(file)">
+              <md-icon>visibility</md-icon>
+              <span>Visualization mode</span>
+            </md-menu-item>
             <md-menu-item @click="openDeleteDialog(file)">
               <md-icon>delete</md-icon>
               <span>Delete</span>
@@ -81,6 +85,12 @@
       openDeleteDialog(file) {
         this.deleteFilename = file;
         this.$refs.deleteModal.openDialog();
+      },
+      visualizationMode() {
+        this.$router.push({
+          name: 'print',
+          params: { filename: this.$route.params.filename },
+        });
       },
     },
   };
