@@ -1,18 +1,18 @@
 <template>
   <div class="files-container">
     <md-list class="md-double-line">
-      <md-list-item  v-for="file in files">
+      <md-list-item  @click="goToFile(file)" v-for="file in files">
 
-        <md-button @click="goToFile(file)" class="md-icon-button list-icon">
+        <md-button class="md-icon-button list-icon">
           <md-icon class="md-primary">collections</md-icon>
         </md-button>
 
-        <div @click="goToFile(file)"class="md-list-text-container">
+        <div class="md-list-text-container">
           {{ file }}
         </div>
 
         <md-menu md-size="4">
-          <md-button md-menu-trigger class="md-icon-button md-list-action">
+          <md-button md-menu-trigger class="md-icon-button md-list-action" @click="openOptions">
             <md-icon>more_vert</md-icon>
           </md-button>
 
@@ -64,6 +64,7 @@
 
     data() {
       return {
+        redirect: true,
         deleteFilename: '',
       };
     },
@@ -77,10 +78,22 @@
         fetch: FILES_ACTION_FETCH,
       }),
       goToFile(filename) {
-        this.$router.push({
-          name: 'file',
-          params: { filename },
-        });
+        this.redirect = true;
+        setTimeout(() => {
+          if (!this.redirect) {
+            return;
+          }
+
+          this.$router.push({
+            name: 'file',
+            params: { filename },
+          });
+        }, 200);
+      },
+      openOptions() {
+        setTimeout(() => {
+          this.redirect = false;
+        }, 100);
       },
       openDeleteDialog(file) {
         this.deleteFilename = file;

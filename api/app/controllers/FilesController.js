@@ -20,6 +20,10 @@ router.get('/', (req, res) => {
         filesList.push(file.replace('.json', ''));
       });
 
+      filesList.sort((a, b) => {
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+      });
+
       res.send(filesList);
     });
   };
