@@ -39,5 +39,6 @@ module.exports = {
       'document': true,
       'location': true,
       'window': true,
+      'navigator': true,
   }
 }

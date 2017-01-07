@@ -1,17 +1,16 @@
 <template>
-    <md-dialog md-open-from="#newFileModal" md-close-to="#deleteModal" ref="modal">
-      <md-dialog-title>Delete File</md-dialog-title>
+  <md-dialog md-open-from="#deleteModal" md-close-to="#deleteModal" ref="modal">
+    <md-dialog-title>{{ $t('delete_file') }}</md-dialog-title>
 
-      <md-dialog-content>
-        Are you sure to delete this file?
-      </md-dialog-content>
+    <md-dialog-content>
+      {{ $t('sure_delete_file') }}
+    </md-dialog-content>
 
-      <md-dialog-actions>
-        <md-button class="md-primary" @click="closeDialog()">Cancel</md-button>
-        <md-button class="md-primary" @click.prevent="confirm">Ok</md-button>
-      </md-dialog-actions>
-    </md-dialog>
-  </div>
+    <md-dialog-actions>
+      <md-button class="md-primary" @click="closeDialog()">{{ $t('cancel') }}</md-button>
+      <md-button class="md-primary" @click.prevent="confirm">{{ $t('delete') }}</md-button>
+    </md-dialog-actions>
+  </md-dialog>
 </template>
 
 <script>

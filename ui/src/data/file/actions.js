@@ -45,7 +45,7 @@ export default {
 
     const fileKey = `file_${data.filename}`;
 
-    (function () {
+    (function actionSave() {
       const fileChangeTimestamp = state.fileChangeTimestamp;
       LocalStorage.save(fileKey, data.content);
       http

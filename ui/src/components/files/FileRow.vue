@@ -9,7 +9,7 @@
       >
     </file-block>
 
-    <file-row-actions :line-index="lineIndex"></file-row-actions>
+    <file-row-actions :line-index="lineIndex" @open-file-paste-modal="$emit('open-file-paste-modal')"></file-row-actions>
 
     <div class="clearfix"></div>
   </div>

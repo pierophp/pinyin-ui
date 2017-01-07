@@ -1,35 +1,35 @@
 <template>
   <div>
-    <h3>Settings</h3>
+    <h3>{{ $t('settings') }}</h3>
     <md-tabs>
-      <md-tab id="visualization" md-label="Visualization">
+      <md-tab id="visualization" :md-label="$t('visualization_mode')">
         <md-input-container>
-          <label for="size">Size</label>
+          <label for="size">{{ $t('size') }}</label>
           <md-select name="size" id="size" v-model="size">
-            <md-option value="normal">Normal</md-option>
-            <md-option value="larger">Larger</md-option>
+            <md-option value="normal">{{ $t('normal') }}</md-option>
+            <md-option value="larger">{{ $t('larger') }}</md-option>
           </md-select>
         </md-input-container>
 
         <md-input-container>
-          <label for="type">Type</label>
+          <label for="type">{{ $t('type') }}</label>
           <md-select name="type" id="type" v-model="type">
-            <md-option value="1">Pinyin + Ideograms</md-option>
-            <md-option value="2">Ideograms only</md-option>
+            <md-option value="1">{{ $t('pinyin_ideograms') }}</md-option>
+            <md-option value="2">{{ $t('ideograms_only') }}</md-option>
           </md-select>
         </md-input-container>
 
         <md-input-container>
-          <label for="ideogramColored">Ideogram colored</label>
+          <label for="ideogramColored">{{ $t('ideograms_colored') }}</label>
           <md-select name="ideogramColored" id="ideogramColored" v-model="ideogramColored">
-            <md-option value="1">Yes</md-option>
-            <md-option value="0">No</md-option>
+            <md-option value="1">{{ $t('yes') }}</md-option>
+            <md-option value="0">{{ $t('no') }}</md-option>
           </md-select>
         </md-input-container>
       </md-tab>
     </md-tabs>
 
-    <md-button class="md-raised md-primary" @click="save()">Save</md-button>
+    <md-button class="md-raised md-primary" @click="save()">{{ $t('save') }}</md-button>
   </div>
 </template>
 

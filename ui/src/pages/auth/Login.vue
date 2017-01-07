@@ -3,7 +3,7 @@
       <br/>
       <a class="btn btn-social btn-lg btn-google" :href="authGoogleUrl">
         <i class="fa fa-google"></i>
-        Sign in with Google
+        {{ $t("sign_in_google") }}
       </a>
   </loadable-content>
 </template>

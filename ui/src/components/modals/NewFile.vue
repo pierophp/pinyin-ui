@@ -5,18 +5,18 @@
     </md-button>
 
     <md-dialog md-open-from="#newFileModal" md-close-to="#newFileModal" ref="modal" @open="onOpen">
-      <md-dialog-title>New File</md-dialog-title>
+      <md-dialog-title>{{ $t('new_file') }}</md-dialog-title>
 
       <md-dialog-content>
          <md-input-container>
-          <label>Filename</label>
-          <md-input placeholder="Filename" v-model="filename" ref="inputFilename"></md-input>
+          <label>{{ $t('filename') }}</label>
+          <md-input :placeholder="$t('filename')" v-model="filename" ref="inputFilename"></md-input>
         </md-input-container>
       </md-dialog-content>
 
       <md-dialog-actions>
-        <md-button class="md-primary" @click="closeDialog()">Cancel</md-button>
-        <md-button class="md-primary" @click.prevent="confirm">Ok</md-button>
+        <md-button class="md-primary" @click="closeDialog()">{{ $t('cancel') }}</md-button>
+        <md-button class="md-primary" @click.prevent="confirm">{{ $t('ok') }}</md-button>
       </md-dialog-actions>
     </md-dialog>
   </div>

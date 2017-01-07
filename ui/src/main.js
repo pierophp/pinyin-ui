@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
+import VueI18n from 'vue-i18n';
 
 // @todo Implement autocomplete
 // @todo melhorar ordenação
@@ -19,9 +20,17 @@ import 'medium-editor/dist/css/themes/default.css';
 import App from 'src/pages/App';
 import router from 'src/router';
 import store from 'src/data/store';
+import localeEn from 'src/data/locale/en';
+import localePt from 'src/data/locale/pt';
 
 Vue.use(VueMaterial);
+Vue.use(VueI18n);
 
+Vue.locale('en', localeEn);
+Vue.locale('pt', localePt);
+
+Vue.config.lang = navigator.language.split('-')[0];
+Vue.config.fallbackLang = 'en';
 
 // Vue.use(require('src/components/directives/drag-and-drop'));
 

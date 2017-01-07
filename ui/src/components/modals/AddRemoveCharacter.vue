@@ -1,16 +1,16 @@
 <template>
   <div>
     <md-dialog md-open-from="#addCharacterModal" md-close-to="#addCharacterModal" ref="modal">
-      <md-dialog-title v-if="add">Add Character</md-dialog-title>
-      <md-dialog-title v-if="!add">Remove Character</md-dialog-title>
+      <md-dialog-title v-if="add">{{ $t('add_ideogram') }}</md-dialog-title>
+      <md-dialog-title v-if="!add">{{ $t('remove_ideogram') }}</md-dialog-title>
       <md-dialog-content>
-        <span v-if="add">Would you like to add "{{myCjkTemp}}" to your known list?</span>
-        <span v-if="!add">Would you like to remove "{{myCjkTemp}}" to your known list?</span>
+        <span v-if="add">{{ $t('confirmation_add_ideogram', { ideogram: myCjkTemp}) }}</span>
+        <span v-if="!add">{{ $t('confirmation_remove_ideogram', { ideogram: myCjkTemp}) }}</span>
       </md-dialog-content>
 
       <md-dialog-actions>
-        <md-button class="md-primary" @click="closeDialog()">Cancel</md-button>
-        <md-button class="md-primary" @click.prevent="confirm">Ok</md-button>
+        <md-button class="md-primary" @click="closeDialog()">{{ $t('cancel') }}</md-button>
+        <md-button class="md-primary" @click.prevent="confirm">{{ $t('ok') }}</md-button>
       </md-dialog-actions>
     </md-dialog>
   </div>

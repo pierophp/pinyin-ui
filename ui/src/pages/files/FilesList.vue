@@ -19,11 +19,11 @@
           <md-menu-content>
             <md-menu-item @click="visualizationMode(file)">
               <md-icon>visibility</md-icon>
-              <span>Visualization mode</span>
+              <span>{{ $t("visualization_mode") }}</span>
             </md-menu-item>
             <md-menu-item @click="openDeleteDialog(file)">
               <md-icon>delete</md-icon>
-              <span>Delete</span>
+              <span>{{ $t("delete") }}</span>
             </md-menu-item>
           </md-menu-content>
         </md-menu>

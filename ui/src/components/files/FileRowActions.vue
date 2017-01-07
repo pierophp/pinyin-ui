@@ -1,23 +1,22 @@
 <template>
-  <md-menu md-align-trigger  md-size="4">
-    <md-button class="md-accent" md-menu-trigger>Options</md-button>
-
+  <md-menu md-align-trigger  md-size="5">
+    <md-button class="md-accent" md-menu-trigger>{{ $t("options") }}</md-button>
     <md-menu-content>
       <md-menu-item @click="addEmptyBlock({lineIndex})">
         <md-icon>add</md-icon>
-        <span>Add Empty Block</span>
+        <span>{{ $t("add_empty_block") }}</span>
       </md-menu-item>
       <md-menu-item @click="convertToPinyin({lineIndex})">
         <md-icon>font_download</md-icon>
-        <span>Convert to Pinyin</span>
+        <span>{{ $t("convert_to_pinyin") }}</span>
       </md-menu-item>
       <md-menu-item @click="openModalClipBoard(lineIndex)">
         <md-icon>content_paste</md-icon>
-        <span>Paste</span>
+        <span>{{ $t("paste") }}</span>
       </md-menu-item>
       <md-menu-item @click="removeLine({lineIndex})">
         <md-icon>delete</md-icon>
-        <span>Remove line</span>
+        <span>{{ $t("remove_line") }}</span>
       </md-menu-item>
     </md-menu-content>
   </md-menu>
@@ -53,7 +52,7 @@
         convertToPinyin: FILE_ACTION_CONVERT_TO_PINYIN,
       }),
       openModalClipBoard(lineIndex) {
-        $('#filePasteModal').modal();
+        this.$emit('open-file-paste-modal');
         this.pasteAction({
           lineIndex,
         });

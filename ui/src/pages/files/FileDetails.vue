@@ -15,13 +15,14 @@
             method: moveElement
         }
       }"
+      @open-file-paste-modal="$refs.filePasteModal.openDialog()"
       ></file-row>
     <div class="clearfix"></div>
     <div class="footer">
-      <md-button class="md-raised md-primary" @click.prevent="addEmptyLine()">+ Line</md-button>
+      <md-button class="md-raised md-primary" @click.prevent="addEmptyLine()">+ {{ $t("line") }}</md-button>
     </div>
   </div>
-  <file-paste-modal></file-paste-modal>
+  <file-paste-modal ref="filePasteModal"></file-paste-modal>
 </div>
 </template>
 

@@ -18,24 +18,24 @@
     <md-list>
       <md-list-item @click="$refs.sidenav.toggle()" class="md-primary">
         <router-link :to="{ name: 'files' }">
-          <md-icon>insert_drive_file</md-icon> <span>My files</span>
+          <md-icon>insert_drive_file</md-icon> <span>{{ $t("menu.my_files") }}</span>
         </router-link>
       </md-list-item>
 
       <md-list-item @click="$refs.sidenav.toggle()" class="md-primary">
         <router-link :to="{ name: 'my-cjk' }">
-          <md-icon>translate</md-icon> <span>My Ideograms</span>
+          <md-icon>translate</md-icon> <span>{{ $t("menu.my_ideograms") }}</span>
         </router-link>
       </md-list-item>
 
       <md-list-item @click="$refs.sidenav.toggle()" class="md-primary">
         <router-link :to="{ name: 'config' }">
-          <md-icon>settings</md-icon> <span>Settings</span>
+          <md-icon>settings</md-icon> <span>{{ $t("menu.settings") }}</span>
         </router-link>
       </md-list-item>
 
       <md-list-item @click="logout()">
-        <md-icon>power_settings_new</md-icon> <span>Logout</span>
+        <md-icon>power_settings_new</md-icon> <span>{{ $t("menu.logout") }}</span>
       </md-list-item>
     </md-list>
   </md-sidenav>

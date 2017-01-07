@@ -1,34 +1,29 @@
 <template>
-  <div class="modal fade" tabindex="-1" role="dialog" id="filePasteModal">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <h4 class="modal-title">Paste</h4>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label>Action</label>
-            <select class="form-control" v-model="action">
-              <option value="1">Multi NWT (pinyin + space + ideogram)</option>
-              <option value="2">2 lines</option>
-              <option value="3">JW.ORG (spaced)</option>
-              <option value="4">Ideograms</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <textarea class="form-control" v-model="textarea"></textarea>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" @click.prevent="confirm">OK</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <md-dialog md-open-from="#filePasteModal" md-close-to="#filePasteModal" ref="modal" @open="onOpen">
+    <md-dialog-title>{{ $t('paste') }}</md-dialog-title>
+
+    <md-dialog-content>
+      <md-input-container>
+        <label for="action">{{ $t('action') }}</label>
+        <md-select name="action" id="action" v-model="action">
+          <md-option value="1">{{ $t('paste_action.multi_nwt') }}</md-option>
+          <md-option value="2">{{ $t('paste_action.jw_language') }}</md-option>
+          <md-option value="3">{{ $t('paste_action.jw_org') }}</md-option>
+          <md-option value="4">{{ $t('paste_action.ideograms') }}</md-option>
+        </md-select>
+      </md-input-container>
+
+      <md-input-container>
+        <label for="action">{{ $t('paste') }}</label>
+        <md-textarea v-model="textarea" ref="textarea"></md-textarea>
+      </md-input-container>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+      <md-button class="md-primary" @click="closeDialog()">{{ $t('cancel') }}</md-button>
+      <md-button class="md-primary" @click.prevent="confirm">{{ $t('ok') }}</md-button>
+    </md-dialog-actions>
+  </md-dialog>
 </template>
 
 <script>
@@ -48,21 +43,25 @@
         textarea: '',
       };
     },
-    created() {
-      $(document).ready(() => {
-        $('#filePasteModal').on('shown.bs.modal', () => {
-          $('#filePasteModal textarea').focus();
-        });
-      });
-    },
     methods: {
       confirm() {
-        $('#filePasteModal').modal('hide');
+        this.closeDialog('filePasteModal');
         this.parsePaste({
           action: this.action,
           content: this.textarea,
         });
         this.textarea = '';
+      },
+      openDialog() {
+        this.$refs.modal.open();
+      },
+      closeDialog() {
+        this.$refs.modal.close();
+      },
+      onOpen() {
+        setTimeout(() => {
+          this.$refs.textarea.$el.focus();
+        }, 500);
       },
       ...mapActions({
         parsePaste: FILE_ACTION_PARSE_PASTE,
@@ -70,3 +69,11 @@
     },
   };
 </script>
+
+<style>
+.md-dialog-content textarea{
+  width:500px;
+  min-height: 120px;
+}
+
+</style>

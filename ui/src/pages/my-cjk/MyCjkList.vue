@@ -1,16 +1,16 @@
 <template>
   <div>
-    <h3>My Total: {{total}}</h3>
+    <h3>{{ $t('my_total') }}: {{total}}</h3>
 
     <md-tabs>
-      <md-tab id="summary" md-label="Summary">
+      <md-tab id="summary" :md-label="$t('summary')">
         <md-table>
           <md-table-header>
             <md-table-row>
-              <md-table-head>Frequency</md-table-head>
-              <md-table-head>Total</md-table-head>
-              <md-table-head>My Ideograms</md-table-head>
-              <md-table-head>Percent</md-table-head>
+              <md-table-head>{{ $t('frequency') }}</md-table-head>
+              <md-table-head>{{ $t('total') }}</md-table-head>
+              <md-table-head>{{ $t('my_ideograms') }}</md-table-head>
+              <md-table-head>{{ $t('percent') }}</md-table-head>
             </md-table-row>
           </md-table-header>
           <md-table-body>
@@ -24,13 +24,13 @@
         </md-table>
       </md-tab>
 
-      <md-tab id="ideograms" md-label="My Ideograms">
+      <md-tab id="ideograms" :md-label="$t('my_ideograms')">
         <md-table>
           <md-table-header>
             <md-table-row>
-              <md-table-head>Ideogram</md-table-head>
-              <md-table-head>Pronunciation</md-table-head>
-              <md-table-head>Frequency</md-table-head>
+              <md-table-head>{{ $t('ideogram') }}</md-table-head>
+              <md-table-head>{{ $t('pronunciation') }}</md-table-head>
+              <md-table-head>{{ $t('frequency') }}</md-table-head>
             </md-table-row>
           </md-table-header>
           <md-table-body>
