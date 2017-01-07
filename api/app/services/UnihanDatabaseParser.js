@@ -3,6 +3,7 @@ const removeDiacritics = require('diacritics').remove;
 const Promise = require('bluebird');
 const fs = require('fs');
 const xml2js = require('xml2js');
+const replaceall = require('replaceall');
 
 module.exports = class UnihanDatabaseParser {
 
@@ -65,11 +66,6 @@ module.exports = class UnihanDatabaseParser {
             frequency = 999;
           }
 
-          if (char.$.kSimplifiedVariant) {
-            console.log(char.$.kMandarin);
-            console.log(char.$.kSimplifiedVariant);
-          }
-
           const definition = char.$.kDefinition;
 
           return new Promise((resolveItem, rejectItem) => {
@@ -79,11 +75,28 @@ module.exports = class UnihanDatabaseParser {
               })
               .then((dataCjk) => {
                 if (dataCjk.length === 0) {
+                  let simplified = 1;
+                  let traditional = 1;
+                  let variants = [];
+
+                  if (char.$.kTraditionalVariant !== undefined) {
+                    traditional = 0;
+                    variants = replaceall('U+', '', char.$.kTraditionalVariant).split(' ');
+                  }
+
+                  if (char.$.kSimplifiedVariant !== undefined) {
+                    simplified = 0;
+                    variants = replaceall('U+', '', char.$.kSimplifiedVariant).split(' ');
+                  }
+
                   knex('cjk').insert({
                     ideogram,
                     pronunciation: char.$.kMandarin,
                     pronunciation_unaccented: removeDiacritics(char.$.kMandarin),
                     definition_unihan: definition,
+                    simplified,
+                    variants: JSON.stringify(variants),
+                    traditional,
                     frequency,
                     language_id: 1,
                     type: 'C',

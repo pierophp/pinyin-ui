@@ -36,8 +36,12 @@ const unzipFile = function unzipFile() {
 const downloadFile = function downloadFile() {
   const src = 'http://www.unicode.org/Public/UCD/latest/ucdxml/ucd.unihan.flat.zip';
 
-  fs.statSync(filenameZip);
-  fs.unlinkSync(filenameZip);
+  try {
+    fs.statSync(filenameZip);
+    fs.unlinkSync(filenameZip);
+  } catch (e) {
+    // just ignore
+  }
 
   const download = wget.download(src, filenameZip);
 
