@@ -5,21 +5,18 @@ const Loading = {
 export default {
   functional: true,
   props: {
-    template: String,
-    data: {
-      type: Object,
-      default: () => ({}),
-    },
+    options: Object,
   },
   render(h, context) {
-    const template = context.props.template;
+    const options = context.props.options;
+    if (!options) {
+      return h(Loading);
+    }
     const dynComponent = {
-      template,
-      data() {
-        return context.props.data;
-      },
+      template: options.template,
+      methods: options.methods,
     };
-    const component = template ? dynComponent : Loading;
-    return h(component);
+
+    return h(dynComponent);
   },
 };

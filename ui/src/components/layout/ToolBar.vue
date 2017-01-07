@@ -6,7 +6,7 @@
       </md-button>
       <h2 class="md-title">Pinyin Editor</h2>
       <span style="flex: 1"></span>
-      <dynamic :template="dynamicTemplate" :data="dynamicData" />
+      <dynamic :options="topBar"/>
     </div>
   </md-whiteframe>
 </template>
@@ -19,17 +19,14 @@
     },
     watch: {
       $route() {
-        this.dynamicTemplate = this.$route.meta.topBar;
+        this.topBar = this.$route.meta.topBar;
         this.hideTopBar = this.$route.meta.hideTopBar;
       },
     },
     data() {
       return {
+        topBar: this.$route.meta.topBar,
         hideTopBar: this.$route.meta.hideTopBar,
-        dynamicTemplate: this.$route.meta.topBar,
-        dynamicData: {
-          name: 'Piero',
-        },
       };
     },
   };

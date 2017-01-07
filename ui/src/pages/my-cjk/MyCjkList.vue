@@ -99,18 +99,22 @@
 
   #summary .md-table-head-text,
   #ideograms .md-table-head-text{
-    font-size: 20px !important;
+    font-size: 16px !important;
   }
 
   #summary .md-table-cell-container,
   #ideograms .md-table-cell-container{
-    font-size: 18px   ;
+    font-size: 16px;
   }
 
   .ideogram .md-table-cell-container{
     font-family: 'Noto Sans SC', sans-serif;
     font-size: 26px !important;
     font-weight: 300 !important;
+  }
+
+  .md-table .md-table-head-text{
+    padding-right:0 !important;
   }
 </style>
 

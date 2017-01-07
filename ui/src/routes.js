@@ -4,7 +4,8 @@ import FileDetails from 'src/pages/files/FileDetails';
 import FilePrint from 'src/pages/files/FilePrint';
 import MyCjkList from 'src/pages/my-cjk/MyCjkList';
 import Config from 'src/pages/config/Config';
-// import FileDetailsTopBar from 'src/components/files/FileDetailsTopBar';
+import FileDetailsTopBar from 'src/components/files/top-bar/file-details';
+import FilePrintTopBar from 'src/components/files/top-bar/file-print';
 
 export default [
   {
@@ -25,13 +26,16 @@ export default [
     name: 'file',
     component: FileDetails,
     meta: {
-      topBar: '<div><md-button class="md-icon-button"><md-icon>print</md-icon></md-button></div>',
+      topBar: FileDetailsTopBar,
     },
   },
   {
     path: '/files/print/:filename',
     name: 'print',
     component: FilePrint,
+    meta: {
+      topBar: FilePrintTopBar,
+    },
   },
   {
     path: '/my-cjk',

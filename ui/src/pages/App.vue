@@ -4,10 +4,6 @@
 
   <div class="content">
     <router-view />
-    <!--transition name="fade-page">
-      <keep-alive>
-      </keep-alive>
-    </transition-->
   </div>
 
   <side-nav ref="sidenav"></side-nav>

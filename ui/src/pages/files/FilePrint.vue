@@ -19,6 +19,7 @@
   import FileBlockPrint from 'src/components/files/FileBlockPrint';
   import AddRemoveCharacterModal from 'src/components/modals/AddRemoveCharacter';
   import HighlightModal from 'src/components/modals/Highlight';
+  import LocalStorage from 'src/helpers/local-storage';
 
   import {
     mapActions,
@@ -94,16 +95,23 @@
       },
 
       updateCss() {
-        this.sizeClass = this.$route.query.size;
+        let options = LocalStorage.get('options');
+        if (options === null) {
+          options = {
+            size: 'normal',
+          };
+        }
+
+        this.sizeClass = options.size;
 
         this.typeClass = '';
-        if (this.$route.query.type === '2') {
+        if (options.type === '2') {
           this.typeClass = 'character-only';
         }
 
-        this.ideogramColoredClass = '';
-        if (this.$route.query.ideogramColored === '1') {
-          this.ideogramColoredClass = 'ideogram-colored';
+        this.ideogramColoredClass = 'ideogram-colored';
+        if (options.ideogramColored === '0') {
+          this.ideogramColoredClass = '';
         }
       },
 

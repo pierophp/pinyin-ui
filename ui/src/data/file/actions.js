@@ -4,6 +4,7 @@ import clipboard02 from 'src/domain/clipboard-02';
 import clipboard03 from 'src/domain/clipboard-03';
 import clipboard04 from 'src/domain/clipboard-04';
 import LocalStorage from 'src/helpers/local-storage';
+import codeToIdeogram from 'src/helpers/code-to-ideogram';
 
 import * as types from './types';
 
@@ -169,9 +170,12 @@ export default {
   },
 
   [types.FILE_ACTION_DELETE_FILE]({ commit, state }, data) {
+    const fileKey = `file_${data.filename}`;
+
     http
     .delete(`files?filename=${data.filename}.json`)
     .then(() => {
+      LocalStorage.remove(fileKey);
       state.files.splice(state.files.indexOf(data.filename), 1);
     })
     .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
@@ -181,7 +185,12 @@ export default {
     http
     .get('my-cjk')
     .then((response) => {
-      commit(types.FILE_MUTATION_SET_MY_CJK, response.data.ideograms);
+      const myCjkIdeograms = [];
+      response.data.ideograms.forEach((item) => {
+        myCjkIdeograms.push(codeToIdeogram(item.ideogram));
+      });
+      LocalStorage.save('my-cjk', myCjkIdeograms);
+      commit(types.FILE_MUTATION_SET_MY_CJK, myCjkIdeograms);
     })
     .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
   },

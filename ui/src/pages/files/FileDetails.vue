@@ -1,7 +1,6 @@
 <template>
 <div>
   <h2>{{filename}}</h2>
-  <md-button @click="openPrintModal()" class="md-accent">Print</md-button>
 
   <div class="larger-print">
     <file-row
@@ -23,7 +22,6 @@
     </div>
   </div>
   <file-paste-modal></file-paste-modal>
-  <print-modal></print-modal>
 </div>
 </template>
 
@@ -31,7 +29,6 @@
   // import Vue from 'vue';
   import FileRow from 'src/components/files/FileRow';
   import FilePasteModal from 'src/components/modals/FilePaste';
-  import PrintModal from 'src/components/modals/Print';
   import User from 'src/domain/user';
 
   import {
@@ -53,7 +50,6 @@
     components: {
       FileRow,
       FilePasteModal,
-      PrintModal,
     },
 
     data() {
