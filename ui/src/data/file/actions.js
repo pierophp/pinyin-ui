@@ -10,7 +10,7 @@ import codeToIdeogram from 'src/helpers/code-to-ideogram';
 import * as types from './types';
 
 
-function loadFile(file, lineIndex, state, commit) {
+function loadFile(file, lineIndex, state, commit, storage, filename) {
   if (file === undefined) {
     return;
   }
@@ -20,6 +20,22 @@ function loadFile(file, lineIndex, state, commit) {
       state.file.splice(file.length, state.file.length - file.length);
     }
     commit(types.FILE_MUTATION_SET_FILE_LOADING, false);
+    if (storage) {
+      http
+      .get('files/file', {
+        params: {
+          filename: `${filename}.json`,
+        },
+      })
+      .then((response) => {
+        commit(types.FILE_MUTATION_SET_FILE_LOADING, true);
+        // state.fileLoading = true;
+        const fileKey = `file_${filename}`;
+        LocalStorage.save(fileKey, response.data.lines);
+        loadFile(LocalStorage.get(fileKey), 0, state, commit, filename);
+      })
+      .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
+    }
     return;
   }
 
@@ -29,37 +45,28 @@ function loadFile(file, lineIndex, state, commit) {
     line,
     lineIndex,
   });
-
-  Vue.nextTick(() => {
-    lineIndex += 1;
-    setTimeout(() => {
-      loadFile(file, lineIndex, state, commit);
-    }, 50);
-  });
+  lineIndex += 1;
+  if (storage) {
+    Vue.nextTick(() => {
+      setTimeout(() => {
+        loadFile(file, lineIndex, state, commit, storage, filename);
+      }, 300);
+    });
+  } else {
+    loadFile(file, lineIndex, state, commit, storage, filename);
+  }
 }
 
 export default {
   [types.FILE_ACTION_FETCH]({ commit, state }, filename) {
     const fileKey = `file_${filename}`;
+    let lines = [];
     if (LocalStorage.has(fileKey)) {
-      commit(types.FILE_MUTATION_SET_FILE_LOADING, true);
-      loadFile(LocalStorage.get(fileKey), 0, state, commit);
+      lines = LocalStorage.get(fileKey);
     }
 
-    window.requestIdleCallback(() => {
-      http
-      .get('files/file', {
-        params: {
-          filename: `${filename}.json`,
-        },
-      })
-      .then((response) => {
-        // state.fileLoading = true;
-        LocalStorage.save(fileKey, response.data.lines);
-        loadFile(LocalStorage.get(fileKey), 0, state, commit);
-      })
-      .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
-    });
+    commit(types.FILE_MUTATION_SET_FILE_LOADING, true);
+    loadFile(lines, 0, state, commit, true, filename);
   },
 
   [types.FILES_ACTION_FETCH]({ commit }) {
@@ -221,7 +228,7 @@ export default {
   },
 
   [types.FILE_ACTION_FETCH_MY_CJK]({ commit }) {
-    window.requestIdleCallback(() => {
+    setTimeout(() => {
       http
       .get('my-cjk')
       .then((response) => {
@@ -233,7 +240,7 @@ export default {
         commit(types.FILE_MUTATION_SET_MY_CJK, myCjkIdeograms);
       })
       .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
-    });
+    }, 5000);
   },
 
 
