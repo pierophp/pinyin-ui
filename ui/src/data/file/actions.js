@@ -77,6 +77,11 @@ export default {
       return;
     }
 
+    // Disable auto save on file is loading
+    if (state.fileLoading) {
+      return;
+    }
+
     const fileKey = `file_${data.filename}`;
 
     (function actionSave() {
