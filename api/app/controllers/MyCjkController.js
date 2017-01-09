@@ -26,6 +26,7 @@ router.get('/report', (req, res) => {
     })
     .where({
       type: 'C',
+      simplified: 1,
     })
     .groupBy('cjk.frequency')
     .then((report) => {
@@ -74,7 +75,7 @@ router.delete('/', (req, res) => {
     .orderBy('frequency', 'ASC')
     .orderBy('usage', 'DESC')
     .select('id')
-    .then((result) =>
+    .then(result =>
       knex('my_cjk')
       .where({
         cjk_id: result[0].id,

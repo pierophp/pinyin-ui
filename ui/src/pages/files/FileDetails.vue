@@ -74,7 +74,7 @@
       },
     },
 
-    created() {
+    mounted() {
       this.getFile(this.$route.params.filename);
 
       this.timer = setInterval(() => {
@@ -120,10 +120,6 @@
         // const newDroppedElement = this.lines[droppedIndex];
         // Vue.set(this.lines, droppedIndex, newDraggedElement);
         // Vue.set(this.lines, draggedIndex, newDroppedElement);
-      },
-
-      openPrintModal() {
-        $('#printModal').modal();
       },
     },
   };

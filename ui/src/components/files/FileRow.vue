@@ -31,7 +31,6 @@
         default: () => ([]),
       },
       lineIndex: {
-        type: Number,
         default: 0,
       },
     },

@@ -7,6 +7,9 @@ export default {
   [types.FILE_GETTER]({ file }) {
     return file;
   },
+  [types.FILE_GETTER_LOADING]({ fileLoading }) {
+    return fileLoading;
+  },
   [types.FILE_GETTER_MY_CJK]({ myCjk }) {
     return myCjk;
   },

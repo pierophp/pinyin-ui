@@ -11,6 +11,9 @@
         :block-index="index" />
         <div class="clearfix"></div>
     </div>
+    <div class="loading-container">
+      <md-spinner md-indeterminate v-if="fileLoading"></md-spinner>
+    </div>
     <add-remove-character-modal ref="addRemoveCharacterModal"/>
     <highlight-modal/>
   </div>
@@ -31,6 +34,7 @@
     FILE_ACTION_FETCH_MY_CJK,
     FILE_ACTION_SAVE,
     FILE_GETTER,
+    FILE_GETTER_LOADING,
   } from 'src/data/file/types';
 
   export default {
@@ -64,9 +68,10 @@
     computed: {
       ...mapGetters({
         lines: FILE_GETTER,
+        fileLoading: FILE_GETTER_LOADING,
       }),
     },
-    created() {
+    mounted() {
       this.updateCss();
       this.fetchMyCjk();
       this.filename = this.$route.params.filename;
@@ -262,6 +267,10 @@
 
   .clearfix {
     user-select: none;
+  }
+
+  .loading-container{
+    text-align: center;
   }
 
 </style>

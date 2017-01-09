@@ -12,7 +12,8 @@ if (LocalStorage.has('my_cjk')) {
 
 export default {
   files,
-  file: {},
+  file: [],
+  fileLoading: false,
   fileChangeTimestamp: null,
   filePasteAction: '',
   myCjk,

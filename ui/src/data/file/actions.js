@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import http from 'src/helpers/http';
 import clipboard01 from 'src/domain/clipboard-01';
 import clipboard02 from 'src/domain/clipboard-02';
@@ -8,24 +9,57 @@ import codeToIdeogram from 'src/helpers/code-to-ideogram';
 
 import * as types from './types';
 
+
+function loadFile(file, lineIndex, state, commit) {
+  if (file === undefined) {
+    return;
+  }
+
+  if (file.length === lineIndex) {
+    if (state.file.length > file.length) {
+      state.file.splice(file.length, state.file.length - file.length);
+    }
+    commit(types.FILE_MUTATION_SET_FILE_LOADING, false);
+    return;
+  }
+
+  const line = file[lineIndex];
+
+  commit(types.FILE_MUTATION_SET_LINE, {
+    line,
+    lineIndex,
+  });
+
+  Vue.nextTick(() => {
+    lineIndex += 1;
+    setTimeout(() => {
+      loadFile(file, lineIndex, state, commit);
+    }, 50);
+  });
+}
+
 export default {
-  [types.FILE_ACTION_FETCH]({ commit }, filename) {
+  [types.FILE_ACTION_FETCH]({ commit, state }, filename) {
     const fileKey = `file_${filename}`;
     if (LocalStorage.has(fileKey)) {
-      commit(types.FILE_MUTATION_SET, LocalStorage.get(fileKey));
+      commit(types.FILE_MUTATION_SET_FILE_LOADING, true);
+      loadFile(LocalStorage.get(fileKey), 0, state, commit);
     }
 
-    http
-    .get('files/file', {
-      params: {
-        filename: `${filename}.json`,
-      },
-    })
-    .then((response) => {
-      LocalStorage.save(fileKey, response.data.lines);
-      commit(types.FILE_MUTATION_SET, response.data.lines);
-    })
-    .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
+    window.requestIdleCallback(() => {
+      http
+      .get('files/file', {
+        params: {
+          filename: `${filename}.json`,
+        },
+      })
+      .then((response) => {
+        // state.fileLoading = true;
+        LocalStorage.save(fileKey, response.data.lines);
+        loadFile(LocalStorage.get(fileKey), 0, state, commit);
+      })
+      .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
+    });
   },
 
   [types.FILES_ACTION_FETCH]({ commit }) {
@@ -182,17 +216,19 @@ export default {
   },
 
   [types.FILE_ACTION_FETCH_MY_CJK]({ commit }) {
-    http
-    .get('my-cjk')
-    .then((response) => {
-      const myCjkIdeograms = [];
-      response.data.ideograms.forEach((item) => {
-        myCjkIdeograms.push(codeToIdeogram(item.ideogram));
-      });
-      LocalStorage.save('my-cjk', myCjkIdeograms);
-      commit(types.FILE_MUTATION_SET_MY_CJK, myCjkIdeograms);
-    })
-    .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
+    window.requestIdleCallback(() => {
+      http
+      .get('my-cjk')
+      .then((response) => {
+        const myCjkIdeograms = [];
+        response.data.ideograms.forEach((item) => {
+          myCjkIdeograms.push(codeToIdeogram(item.ideogram));
+        });
+        LocalStorage.save('my-cjk', myCjkIdeograms);
+        commit(types.FILE_MUTATION_SET_MY_CJK, myCjkIdeograms);
+      })
+      .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
+    });
   },
 
 

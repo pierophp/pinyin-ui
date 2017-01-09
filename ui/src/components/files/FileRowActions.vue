@@ -38,7 +38,6 @@
     name: 'file-row-actions',
     props: {
       lineIndex: {
-        type: Number,
         default: 0,
       },
     },

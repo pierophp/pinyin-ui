@@ -99,10 +99,10 @@
         this.deleteFilename = file;
         this.$refs.deleteModal.openDialog();
       },
-      visualizationMode() {
+      visualizationMode(filename) {
         this.$router.push({
           name: 'print',
-          params: { filename: this.$route.params.filename },
+          params: { filename },
         });
       },
     },

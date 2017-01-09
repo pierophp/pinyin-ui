@@ -1,5 +1,7 @@
+import Vue from 'vue';
 import pinyin from 'src/helpers/pinyin';
 import * as types from './types';
+
 
 function addHighlight(state, data) {
   for (let i = parseInt(data.startLine, 10); i <= parseInt(data.endLine, 10); i += 1) {
@@ -84,7 +86,7 @@ function findRange(state, data) {
 }
 
 export default {
-  [types.FILE_MUTATION_SET](state, file) {
+  [types.FILE_MUTATION_SET](state, { file }) {
     file.forEach((line, lineIndex) => {
       line.forEach((block, blockIndex) => {
         if (block.h === undefined) {
@@ -94,6 +96,15 @@ export default {
     });
 
     state.file = file;
+  },
+
+  [types.FILE_MUTATION_SET_LINE](state, { line, lineIndex }) {
+    line.forEach((block, blockIndex) => {
+      if (block.h === undefined) {
+        line[blockIndex].h = '';
+      }
+    });
+    Vue.set(state.file, lineIndex, line);
   },
 
   [types.FILES_MUTATION_SET](state, files) {
@@ -108,6 +119,10 @@ export default {
   [types.FILE_MUTATION_UPDATE_CHARACTER](state, data) {
     state.file[data.lineIndex][data.blockIndex].c = data.character;
     state.fileChangeTimestamp = Date.now();
+  },
+
+  [types.FILE_MUTATION_FAILURE](state, data) {
+    console.log(data);
   },
 
   [types.FILE_MUTATION_ADD_HIGHLIGHT](state, data) {
@@ -201,5 +216,9 @@ export default {
 
   [types.FILE_MUTATION_REMOVE_MY_CJK](state, myCjk) {
     state.myCjk.splice(state.myCjk.indexOf(myCjk), 1);
+  },
+
+  [types.FILE_MUTATION_SET_FILE_LOADING](state, fileLoading) {
+    state.fileLoading = fileLoading;
   },
 };

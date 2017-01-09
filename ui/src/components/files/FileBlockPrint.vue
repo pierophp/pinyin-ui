@@ -29,7 +29,7 @@
   } from 'src/data/file/types';
 
   export default {
-    name: 'file-block',
+    name: 'file-block-print',
     data() {
       return {
         classHighlight: '',
@@ -40,11 +40,9 @@
       pinyin: '',
       character: '',
       lineIndex: {
-        type: Number,
         default: 0,
       },
       blockIndex: {
-        type: Number,
         default: 0,
       },
       highlight: '',
