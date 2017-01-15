@@ -117,6 +117,15 @@
           });
         }
 
+        if (chars.length === 0) {
+          printData.push({
+            pinyinClass: '',
+            toneClass: '',
+            character: '',
+            pinyin: `${this.pinyin}&nbsp;`,
+          });
+        }
+
         this.printData = printData;
       },
       openModal(character) {
