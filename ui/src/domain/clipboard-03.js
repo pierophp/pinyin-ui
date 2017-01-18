@@ -5,10 +5,6 @@ import Promise from 'bluebird';
 
 export default function (content) {
   content = replaceall('+', '', content);
-
-  // separate by numbers
-  content = content.split(/(\d+)/).join(' ');
-
   const replaceIdeogramsToSpace = [
     '，',
     '。',
@@ -25,10 +21,6 @@ export default function (content) {
     '》',
   ];
 
-  replaceIdeogramsToSpace.forEach((item) => {
-    content = replaceall(item, ` ${item} `, content);
-  });
-
   return new Promise((resolve) => {
     const lines = content.split('\n').filter((line) => line);
     const promissesLines = [];
@@ -36,14 +28,11 @@ export default function (content) {
     lines.forEach((line) => {
       promissesLines.push(new Promise((resolveLine, rejectLine) => {
         const row = [];
-        // remove double spaces
-        line = line.replace(/\s{2,}/g, ' ').trim();
-        const ideograms = line.split(' ');
 
-        if (ideograms.length === 1) {
+        if (line.split(' ').length === 1) {
           http
             .post('segmentation/segment', {
-              ideograms: content,
+              ideograms: line,
             })
             .then((response) => {
               response.data.ideograms.forEach((char) => {
@@ -61,6 +50,15 @@ export default function (content) {
 
           return;
         }
+        // separate by numbers
+        line = line.split(/(\d+)/).join(' ');
+
+        // remove double spaces
+        replaceIdeogramsToSpace.forEach((item) => {
+          line = replaceall(item, ` ${item} `, line);
+        });
+        line = line.replace(/\s{2,}/g, ' ').trim();
+        const ideograms = line.split(' ');
 
         ideograms.forEach((char) => {
           row.push({
@@ -74,6 +72,7 @@ export default function (content) {
     });
 
     Promise.all(promissesLines).then((rows) => {
+      console.log(rows);
       resolve(rows);
     });
   });
