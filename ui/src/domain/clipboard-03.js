@@ -1,5 +1,7 @@
 // JW ORG (spaced)
+import http from 'src/helpers/http';
 import replaceall from 'replaceall';
+import Promise from 'bluebird';
 
 export default function (content) {
   content = replaceall('+', '', content);
@@ -19,6 +21,8 @@ export default function (content) {
     '！',
     '“',
     '”',
+    '《',
+    '》',
   ];
 
   replaceIdeogramsToSpace.forEach((item) => {
@@ -26,23 +30,51 @@ export default function (content) {
   });
 
   return new Promise((resolve) => {
-    const rows = [];
     const lines = content.split('\n').filter((line) => line);
+    const promissesLines = [];
 
     lines.forEach((line) => {
-      const row = [];
-      // remove double spaces
-      line = line.replace(/\s{2,}/g, ' ').trim();
-      const ideograms = line.split(' ');
-      ideograms.forEach((char) => {
-        row.push({
-          p: '',
-          c: char,
+      promissesLines.push(new Promise((resolveLine, rejectLine) => {
+        const row = [];
+        // remove double spaces
+        line = line.replace(/\s{2,}/g, ' ').trim();
+        const ideograms = line.split(' ');
+
+        if (ideograms.length === 1) {
+          http
+            .post('segmentation/segment', {
+              ideograms: content,
+            })
+            .then((response) => {
+              response.data.ideograms.forEach((char) => {
+                row.push({
+                  p: '',
+                  c: char,
+                });
+              });
+
+              resolveLine(row);
+            })
+            .catch((error) => {
+              rejectLine(error);
+            });
+
+          return;
+        }
+
+        ideograms.forEach((char) => {
+          row.push({
+            p: '',
+            c: char,
+          });
         });
-      });
-      rows.push(row);
+
+        resolveLine(row);
+      }));
     });
 
-    resolve(rows);
+    Promise.all(promissesLines).then((rows) => {
+      resolve(rows);
+    });
   });
 }

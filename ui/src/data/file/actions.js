@@ -129,37 +129,43 @@ export default {
   },
   [types.FILE_ACTION_PARSE_PASTE]({ commit, state, dispatch }, data) {
     if (data.action === '1') {
-      clipboard01(data.content).forEach((row, index) => {
-        const lineIndex = state.filePasteAction.lineIndex + index;
-        if (index === 0) {
-          commit(types.FILE_MUTATION_CONCATENATE_LINE, {
-            lineIndex,
-            content: row,
+      clipboard01(data.content)
+        .then((content) => {
+          content.forEach((row, index) => {
+            const lineIndex = state.filePasteAction.lineIndex + index;
+            if (index === 0) {
+              commit(types.FILE_MUTATION_CONCATENATE_LINE, {
+                lineIndex,
+                content: row,
+              });
+            } else {
+              commit(types.FILE_MUTATION_ADD_LINE, {
+                lineIndex,
+                content: row,
+              });
+            }
           });
-        } else {
-          commit(types.FILE_MUTATION_ADD_LINE, {
-            lineIndex,
-            content: row,
-          });
-        }
-      });
+        });
     }
 
     if (data.action === '2') {
-      clipboard02(data.content).forEach((row, index) => {
-        const lineIndex = state.filePasteAction.lineIndex + index;
-        if (index === 0) {
-          commit(types.FILE_MUTATION_CONCATENATE_LINE, {
-            lineIndex,
-            content: row,
+      clipboard02(data.content)
+        .then((content) => {
+          content.forEach((row, index) => {
+            const lineIndex = state.filePasteAction.lineIndex + index;
+            if (index === 0) {
+              commit(types.FILE_MUTATION_CONCATENATE_LINE, {
+                lineIndex,
+                content: row,
+              });
+            } else {
+              commit(types.FILE_MUTATION_ADD_LINE, {
+                lineIndex,
+                content: row,
+              });
+            }
           });
-        } else {
-          commit(types.FILE_MUTATION_ADD_LINE, {
-            lineIndex,
-            content: row,
-          });
-        }
-      });
+        });
     }
 
     if (data.action === '3') {

@@ -35,5 +35,7 @@ export default function (content) {
     rows.push(row);
   });
 
-  return rows;
+  return new Promise((resolve) => {
+    resolve(rows);
+  });
 }
