@@ -36,16 +36,12 @@ router.get('/search', (req, res) => {
     });
 });
 
-router.get('/to_pinyin', (req, res) => {
-  const ideograms = req.query.ideograms;
-
+router.post('/to_pinyin', (req, res) => {
+  const ideograms = req.body.ideograms;
   UnihanSearch.toPinyin(ideograms).then((result) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(result));
   });
-});
-
-router.get('/my_cjkj', () => {
 });
 
 module.exports = router;

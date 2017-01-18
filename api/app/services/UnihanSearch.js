@@ -1,7 +1,21 @@
 const Promise = require('bluebird');
 const knex = require('./knex');
+const separatePinyinInSyllables = require('../helpers/separate-pinyin-in-syllables');
 
 module.exports = class UnihanSearch {
+  static getChangeToneRules() {
+    return {
+      不: {
+        4: 'bú',
+      },
+      一: {
+        1: 'yì',
+        2: 'yì',
+        3: 'yì',
+        4: 'yí',
+      },
+    };
+  }
 
   static searchByIdeograms(ideograms) {
     const ideogramPromises = [];
@@ -120,38 +134,30 @@ module.exports = class UnihanSearch {
       0: '0',
     };
 
-    const changeToneRules = {
-      不: {
-        4: 'bú',
-      },
-      一: {
-        1: 'yì',
-        2: 'yì',
-        3: 'yì',
-        4: 'yí',
-      },
-    };
 
     const result = {};
+    result.ideogram = '';
     result.pinyin = '';
 
     let i = 0;
 
+    const vogals = ['ā', 'á', 'ǎ', 'à', 'a', 'ē', 'é', 'ě', 'è', 'e', 'ō', 'ó', 'ǒ', 'ò', 'o'];
+
     for (const ideogram of ideogramsList) {
       const character = ideograms[i];
+      result.ideogram += character;
+
+      if (i > 0 && ideogram.length > 0) {
+        if (vogals.indexOf(ideogram[0].pronunciation[0]) > -1) {
+          result.pinyin += "'";
+        }
+      }
 
       if (ideogram.length === 0) {
         if (specialsChars[character]) {
           result.pinyin += specialsChars[character];
         } else {
           result.pinyin += '__';
-        }
-      } else if (changeToneRules[character] && ideogramsList[i + 1] && ideogramsList[i + 1][0]) {
-        const tone = UnihanSearch.extractPinyinTone(ideogramsList[i + 1][0].pronunciation);
-        if (changeToneRules[character][tone]) {
-          result.pinyin += changeToneRules[character][tone];
-        } else {
-          result.pinyin += ideogram[0].pronunciation;
         }
       } else {
         result.pinyin += ideogram[0].pronunciation;
@@ -164,19 +170,58 @@ module.exports = class UnihanSearch {
   }
 
   static toPinyin(ideograms) {
-    return new Promise((resolve) => {
-      UnihanSearch.searchByWord(ideograms).then((words) => {
-        const result = {};
-        if (words.length > 0) {
-          result.pinyin = words[0].pronunciation;
-          resolve(result);
-        } else {
-          UnihanSearch.searchByIdeograms(ideograms).then((ideogramsList) => {
-            resolve(UnihanSearch.parseResultByIdeograms(ideogramsList, ideograms));
-          });
-        }
-      });
+    const pinyinPromisses = [];
+
+    ideograms.forEach((ideogram, ideogramIndex) => {
+      pinyinPromisses.push(new Promise((resolvePinyin) => {
+        UnihanSearch.searchByWord(ideogram).then((words) => {
+          const result = {};
+          if (words.length > 0) {
+            result.ideogram = ideogram;
+            result.pinyin = words[0].pronunciation;
+            resolvePinyin(result);
+          } else {
+            let nextWord = '';
+            if (ideograms[ideogramIndex + 1] !== undefined) {
+              nextWord = ideograms[ideogramIndex + 1];
+            }
+
+            UnihanSearch.searchByIdeograms(ideogram).then((ideogramsList) => {
+              resolvePinyin(UnihanSearch.parseResultByIdeograms(ideogramsList, ideogram, nextWord));
+            });
+          }
+        });
+      }));
     });
+
+    return Promise.all(pinyinPromisses)
+                  .then((result) => {
+                    const changeToneRules = UnihanSearch.getChangeToneRules();
+                    result.forEach((item, itemIndex) => {
+                      const pinyins = separatePinyinInSyllables(item.pinyin).split(' ');
+                      item.ideogram.split('').forEach((ideogram, ideogramIndex) => {
+                        if (!changeToneRules[ideogram]) {
+                          return;
+                        }
+
+                        let nextPronunciation = '';
+                        if (pinyins[ideogramIndex + 1] !== undefined) {
+                          nextPronunciation = pinyins[ideogramIndex + 1];
+                        } else if (result[itemIndex + 1] !== undefined) {
+                          const nextLinePinyin = separatePinyinInSyllables(result[itemIndex + 1].pinyin).replace("'", '').split(' ');
+                          nextPronunciation = nextLinePinyin[0];
+                        }
+
+                        const tone = UnihanSearch.extractPinyinTone(nextPronunciation);
+                        if (changeToneRules[ideogram][tone]) {
+                          pinyins[ideogramIndex] = changeToneRules[ideogram][tone];
+                          result[itemIndex].pinyin = pinyins.join('');
+                        }
+                      });
+                    });
+
+                    return result;
+                  });
   }
 
   static pinyinTonesNumbersToAccents(text) {

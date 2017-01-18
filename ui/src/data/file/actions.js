@@ -15,6 +15,10 @@ function loadFile(file, lineIndex, state, commit, storage, filename) {
     return;
   }
 
+  if (file === 'undefined') {
+    return;
+  }
+
   if (file.length === lineIndex) {
     if (state.file.length > file.length) {
       state.file.splice(file.length, state.file.length - file.length);
@@ -108,22 +112,25 @@ export default {
   },
 
   [types.FILE_ACTION_CONVERT_TO_PINYIN]({ commit, state }, data) {
-    state.file[data.lineIndex].forEach((block, blockIndex) => {
-      http
-          .get('unihan/to_pinyin', {
-            params: {
-              ideograms: block.c,
-            },
-          })
-          .then((response) => {
-            commit(types.FILE_MUTATION_UPDATE_PINYIN, {
-              lineIndex: data.lineIndex,
-              blockIndex,
-              pinyin: response.data.pinyin,
-            });
-          })
-          .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
+    const ideograms = [];
+    state.file[data.lineIndex].forEach((block) => {
+      ideograms.push(block.c);
     });
+
+    http
+      .post('unihan/to_pinyin', {
+        ideograms,
+      })
+      .then((response) => {
+        response.data.forEach((item, blockIndex) => {
+          commit(types.FILE_MUTATION_UPDATE_PINYIN, {
+            lineIndex: data.lineIndex,
+            blockIndex,
+            pinyin: item.pinyin,
+          });
+        });
+      })
+      .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
   },
   [types.FILE_ACTION_PARSE_PASTE]({ commit, state, dispatch }, data) {
     if (data.action === '1') {
