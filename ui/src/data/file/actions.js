@@ -11,14 +11,6 @@ import * as types from './types';
 
 
 function loadFile(file, lineIndex, state, commit, storage, filename) {
-  if (file === undefined) {
-    return;
-  }
-
-  if (file === 'undefined') {
-    return;
-  }
-
   if (file.length === lineIndex) {
     if (state.file.length > file.length) {
       state.file.splice(file.length, state.file.length - file.length);
@@ -36,7 +28,7 @@ function loadFile(file, lineIndex, state, commit, storage, filename) {
         // state.fileLoading = true;
         const fileKey = `file_${filename}`;
         LocalStorage.save(fileKey, response.data.lines);
-        loadFile(LocalStorage.get(fileKey), 0, state, commit, filename);
+        loadFile(LocalStorage.get(fileKey), 0, state, commit, false, filename);
       })
       .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
     }
@@ -54,7 +46,7 @@ function loadFile(file, lineIndex, state, commit, storage, filename) {
     Vue.nextTick(() => {
       setTimeout(() => {
         loadFile(file, lineIndex, state, commit, storage, filename);
-      }, 300);
+      }, 30);
     });
   } else {
     loadFile(file, lineIndex, state, commit, storage, filename);
@@ -70,7 +62,10 @@ export default {
     }
 
     commit(types.FILE_MUTATION_SET_FILE_LOADING, true);
-    loadFile(lines, 0, state, commit, true, filename);
+    Vue.nextTick(() => {
+      commit(types.FILE_MUTATION_SET, { file: [] });
+      loadFile(lines, 0, state, commit, true, filename);
+    });
   },
 
   [types.FILES_ACTION_FETCH]({ commit }) {
