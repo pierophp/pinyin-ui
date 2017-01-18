@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 
 app.use(express.static('public'));
 app.use(passport.initialize());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '5mb' }));
 
 require('./app/routes')(app, passport);
 require('./app/config/passport')(passport);
