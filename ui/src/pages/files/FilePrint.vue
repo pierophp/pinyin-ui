@@ -229,7 +229,7 @@
   }
 
   .ideogram-colored .tone-2 {
-    color: #d89000!important;
+    color: #d16f00!important;
   }
 
   .ideogram-colored .tone-3 {
@@ -247,22 +247,22 @@
 
   .highlight-1,
   .highlight-1:hover {
-    background: #fffabf !important;
+    background: #fffbce !important;
   }
 
   .highlight-2,
   .highlight-2:hover {
-    background: #d4ffd1 !important;
+    background: #e4ffe2 !important;
   }
 
   .highlight-3,
   .highlight-3:hover {
-    background: #ddf9ff !important;
+    background: #e2faff !important;
   }
 
   .highlight-4,
   .highlight-4:hover {
-    background: #ffe0fe !important;
+    background: #fff2fe !important;
   }
 
   .clearfix {
