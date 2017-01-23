@@ -3,7 +3,7 @@ const config = require('../config');
 const utils = require('./utils');
 const webpack = require('webpack');
 const projectRoot = path.resolve(__dirname, '../');
-
+const OfflinePlugin = require('offline-plugin');
 const env = process.env.NODE_ENV;
 // check env & config/index.js to decide weither to enable CSS Sourcemaps for the
 // various preprocessor loaders added to vue-loader at the end of this file
@@ -26,7 +26,8 @@ module.exports = {
       jQuery: "jquery",
       "window.jQuery": "jquery",
       "root.jQuery": "jquery"
-    })
+    }),
+    new OfflinePlugin(),
   ],
   resolve: {
     extensions: ['', '.js', '.vue'],

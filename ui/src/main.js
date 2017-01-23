@@ -1,3 +1,4 @@
+import offlinePlugin from 'offline-plugin/runtime';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import VueI18n from 'vue-i18n';
@@ -31,6 +32,8 @@ Vue.locale('pt', localePt);
 
 Vue.config.lang = navigator.language.split('-')[0];
 Vue.config.fallbackLang = 'en';
+
+offlinePlugin.install();
 
 // Vue.use(require('src/components/directives/drag-and-drop'));
 
