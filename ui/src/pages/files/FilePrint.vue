@@ -71,8 +71,10 @@
         fileLoading: FILE_GETTER_LOADING,
       }),
     },
-    mounted() {
+    created() {
       this.updateCss();
+    },
+    mounted() {
       this.fetchMyCjk();
       this.filename = this.$route.params.filename;
       this.getFile(this.filename);

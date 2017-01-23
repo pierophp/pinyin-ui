@@ -6,8 +6,8 @@ if (LocalStorage.has('files')) {
 }
 
 let myCjk = [];
-if (LocalStorage.has('my_cjk')) {
-  myCjk = LocalStorage.get('my_cjk');
+if (LocalStorage.has('my-cjk')) {
+  myCjk = LocalStorage.get('my-cjk');
 }
 
 export default {
