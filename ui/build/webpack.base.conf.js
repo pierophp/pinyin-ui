@@ -27,7 +27,11 @@ module.exports = {
       "window.jQuery": "jquery",
       "root.jQuery": "jquery"
     }),
-    new OfflinePlugin(),
+    new OfflinePlugin({
+      ServiceWorker: {
+        navigateFallbackURL: 'index.html',
+      },
+    }),
   ],
   resolve: {
     extensions: ['', '.js', '.vue'],
