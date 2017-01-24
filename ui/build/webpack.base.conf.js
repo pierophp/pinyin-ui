@@ -1,7 +1,6 @@
 const path = require('path');
 const config = require('../config');
 const utils = require('./utils');
-const webpack = require('webpack');
 const projectRoot = path.resolve(__dirname, '../');
 const OfflinePlugin = require('offline-plugin');
 const env = process.env.NODE_ENV;
@@ -21,16 +20,14 @@ module.exports = {
     filename: '[name].js',
   },
   plugins: [
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
-      "window.jQuery": "jquery",
-      "root.jQuery": "jquery"
-    }),
     new OfflinePlugin({
       ServiceWorker: {
         navigateFallbackURL: 'index.html',
       },
+      externals: [
+        'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic',
+        'https://fonts.googleapis.com/icon?family=Material+Icons',
+      ],
     }),
   ],
   resolve: {
@@ -41,7 +38,6 @@ module.exports = {
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
       'components': path.resolve(__dirname, '../src/components'),
-      jquery: "jquery/dist/jquery"
     }
   },
   resolveLoader: {

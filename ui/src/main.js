@@ -6,9 +6,7 @@ import VueI18n from 'vue-i18n';
 // @todo Implement autocomplete
 // @todo melhorar ordenação
 
-// import 'bootstrap/dist/js/bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import 'bootstrap/dist/css/bootstrap-theme.min.css';
 import 'bootstrap-social/bootstrap-social.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'vue-material/dist/vue-material.css';
