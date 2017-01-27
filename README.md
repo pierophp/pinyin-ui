@@ -1,4 +1,4 @@
-# Simple Pinyin Editor
+# Pinyin Editor
 A simple pinyin editor made in node.js
 
 ## Install
