@@ -21,6 +21,7 @@ module.exports = {
   },
   plugins: [
     new OfflinePlugin({
+      responseStrategy: 'network-first',
       ServiceWorker: {
         navigateFallbackURL: 'index.html',
       },
