@@ -26,6 +26,15 @@
             <md-option value="0">{{ $t('no') }}</md-option>
           </md-select>
         </md-input-container>
+
+        <md-input-container>
+          <label for="ideogramSpaced">{{ $t('ideograms_spaced') }}</label>
+          <md-select name="ideogramSpaced" id="ideogramSpaced" v-model="ideogramSpaced">
+            <md-option value="1">{{ $t('yes') }}</md-option>
+            <md-option value="0">{{ $t('no') }}</md-option>
+          </md-select>
+        </md-input-container>
+
       </md-tab>
     </md-tabs>
 
@@ -42,6 +51,7 @@ export default{
       size: 'normal',
       type: '1',
       ideogramColored: '1',
+      ideogramSpaced: '1',
     };
   },
   created() {
@@ -52,6 +62,7 @@ export default{
     this.size = options.size;
     this.type = options.type;
     this.ideogramColored = options.ideogramColored;
+    this.ideogramSpaced = options.ideogramSpaced;
   },
   methods: {
     save() {
@@ -59,6 +70,7 @@ export default{
         size: this.size,
         type: this.type,
         ideogramColored: this.ideogramColored,
+        ideogramSpaced: this.ideogramSpaced,
       });
     },
   },

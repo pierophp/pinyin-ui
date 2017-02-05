@@ -95,6 +95,7 @@
         const printData = [];
         const pinyin = separatePinyinInSyllables(this.pinyin).split(' ');
         const chars = this.character.toString();
+        let withoutPinyn = true;
         for (let i = 0; i < chars.length; i += 1) {
           let newPinyin = '';
           let pinyinClass = '';
@@ -102,10 +103,12 @@
           const tone = extractPinyinTone(pinyin[i]);
           if (this.myCjk.indexOf(chars[i]) > -1) {
             pinyinClass = 'hide-pinyin';
-            newPinyin = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            newPinyin = '&nbsp;';
           } else if (pinyin[i]) {
+            withoutPinyn = false;
             newPinyin = pinyin[i];
           } else {
+            withoutPinyn = false;
             newPinyin = ' ';
           }
 
@@ -114,6 +117,12 @@
             toneClass: `tone-${tone}`,
             character: chars[i],
             pinyin: newPinyin,
+          });
+        }
+
+        if (withoutPinyn) {
+          printData.forEach((item, i) => {
+            printData[i].pinyinClass = '';
           });
         }
 

@@ -50,4 +50,5 @@ export default {
   ideograms_colored: 'Ideogramas coloridos',
   yes: 'Sim',
   no: 'Não',
+  ideograms_spaced: 'Ideogramas espaçados',
 };

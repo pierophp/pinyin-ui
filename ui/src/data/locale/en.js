@@ -47,7 +47,8 @@ export default {
   pinyin_ideograms: 'Pinyin + Ideograms',
   ideograms_only: 'Ideograms only',
   save: 'Save',
-  ideograms_colored: 'Ideogramas coloridos',
+  ideograms_colored: 'Colored ideograms',
   yes: 'Yes',
   no: 'No',
+  ideograms_spaced: 'Spaced ideograms',
 };

@@ -1,5 +1,5 @@
 <template>
-  <div class="print" :class="[sizeClass, typeClass, ideogramColoredClass]">
+  <div class="print" :class="[sizeClass, typeClass, ideogramColoredClass, ideogramSpacedClass]">
     <h2>{{filename}}</h2>
 
     <div v-for="(line, lineIndex) in lines" class="line">
@@ -52,6 +52,7 @@
         sizeClass: '',
         typeClass: '',
         ideogramColoredClass: '',
+        ideogramSpacedClass: '',
       };
     },
 
@@ -119,6 +120,11 @@
         this.ideogramColoredClass = 'ideogram-colored';
         if (options.ideogramColored === '0') {
           this.ideogramColoredClass = '';
+        }
+
+        this.ideogramSpacedClass = 'ideogram-spaced';
+        if (options.ideogramSpaced === '0') {
+          this.ideogramSpacedClass = '';
         }
       },
 
@@ -199,7 +205,9 @@
   }
 
   .print .character span {
+    display: inline-block;
     font-weight: 300;
+    width: 25px;
   }
 
   .print .block {
@@ -242,9 +250,13 @@
     color: #ff0000!important;
   }
 
+  .ideogram-spaced .block {
+    margin-right: 6px;
+  }
+
   .hide-pinyin {
     display: inline-block;
-    width: 30px !important;
+    width: 40px !important;
   }
 
   .highlight-1,
