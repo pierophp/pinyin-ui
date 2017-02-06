@@ -172,7 +172,7 @@
   .print .pinyin span {
     background: none !important;
     font-size: var(--normal-pinyin-font-size);
-    height: calc(var(--normal-pinyin-font-size) + 1);
+    height: var(--normal-pinyin-font-size);
     min-width: 0;
   }
 
@@ -186,7 +186,7 @@
   .larger.print .pinyin,
   .larger.print .pinyin span {
     font-size: var(--larger-pinyin-font-size);
-    height: calc(var(--larger-pinyin-font-size) + 2);
+    height: var(--larger-pinyin-font-size);
   }
 
   .larger .pinyin span {
@@ -208,6 +208,18 @@
     display: inline-block;
     font-weight: 300;
     width: 25px;
+  }
+
+  .print .character span.special-ideogram {
+    width: 17px;
+  }
+
+  .larger.print .character span {
+    width: 34px;
+  }
+
+  .larger.print .character span.special-ideogram {
+    width: 24px;
   }
 
   .print .block {
@@ -251,7 +263,7 @@
   }
 
   .ideogram-spaced .block {
-    margin-right: 6px;
+    margin-right: 4px;
   }
 
   .hide-pinyin {

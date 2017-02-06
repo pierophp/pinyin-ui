@@ -6,7 +6,7 @@
       </span>
     </div>
     <div class="character">
-      <span v-for="data in printData" :class="[data.toneClass]" @click.prevent="openModal(data.character)">
+      <span v-for="data in printData" :class="[data.toneClass, data.ideogramClass]" @click.prevent="openModal(data.character)">
         {{data.character}}
       </span>
     </div>
@@ -17,6 +17,7 @@
 <script>
   import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
   import extractPinyinTone from 'src/helpers/extract-pinyin-tone';
+  import specialIdeograms from 'src/helpers/special-ideograms-chars';
 
   import {
     mapMutations,
@@ -96,12 +97,14 @@
         const pinyin = separatePinyinInSyllables(this.pinyin).split(' ');
         const chars = this.character.toString();
         let withoutPinyn = true;
+        const numberRegex = new RegExp('^[0-9]+$');
         for (let i = 0; i < chars.length; i += 1) {
           let newPinyin = '';
           let pinyinClass = '';
+          let ideogramClass = '';
 
           const tone = extractPinyinTone(pinyin[i]);
-          if (this.myCjk.indexOf(chars[i]) > -1) {
+          if (this.myCjk.indexOf(chars[i]) > -1 || pinyin[i] === undefined || pinyin[i] === '') {
             pinyinClass = 'hide-pinyin';
             newPinyin = '&nbsp;';
           } else if (pinyin[i]) {
@@ -112,7 +115,12 @@
             newPinyin = ' ';
           }
 
+          if (specialIdeograms.indexOf(chars[i]) > -1 || numberRegex.test(chars[i])) {
+            ideogramClass = 'special-ideogram';
+          }
+
           printData.push({
+            ideogramClass,
             pinyinClass,
             toneClass: `tone-${tone}`,
             character: chars[i],

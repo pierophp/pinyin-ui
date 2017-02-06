@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
 router.get('/report', (req, res) => {
   knex('cjk')
     .select(knex.raw('cjk.frequency, count(*) as total, COUNT(my_cjk.id) total_my, round(COUNT(my_cjk.id) / count(*) * 100) percent'))
-    .leftJoin('my_cjk', function leftJoin(){
+    .leftJoin('my_cjk', function leftJoin() {
       this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
     })
     .where({
@@ -49,7 +49,7 @@ router.post('/', (req, res) => {
     .orderBy('frequency', 'ASC')
     .orderBy('usage', 'DESC')
     .select('id')
-    .then((result) =>
+    .then(result =>
       knex('my_cjk')
       .insert({
         cjk_id: result[0].id,
