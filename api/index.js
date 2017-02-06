@@ -19,6 +19,7 @@ app.use(jwt({ secret: env.jwt_key }).unless({ path: [
   '/auth/google/callback',
   '/unihan/to_pinyin',
   '/segmentation/segment',
+  '/jw/download',
 ] }));
 app.use((req, res, next) => {
   res.setHeader('Content-Type', 'application/json');

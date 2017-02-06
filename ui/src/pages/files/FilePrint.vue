@@ -1,25 +1,21 @@
 <template>
   <div class="print" :class="[sizeClass, typeClass, ideogramColoredClass, ideogramSpacedClass]">
     <h2>{{filename}}</h2>
+    <file-row-print v-for="(line, lineIndex) in lines"
+        :line="line"
+        :lineIndex="lineIndex"
+        @open-modal="openModal"/>
 
-    <div v-for="(line, lineIndex) in lines" class="line">
-      <file-block-print v-for="(block,index) in line"@click="blockClick()"@open-modal="openModal"
-        :pinyin="block.p"
-        :character="block.c"
-        :highlight="block.h"
-        :line-index="lineIndex"
-        :block-index="index" />
-        <div class="clearfix"></div>
-    </div>
     <div class="loading-container">
       <md-spinner md-indeterminate v-if="fileLoading"></md-spinner>
     </div>
+
     <add-remove-character-modal ref="addRemoveCharacterModal"/>
     <highlight-modal/>
   </div>
 </template>
 <script>
-  import FileBlockPrint from 'src/components/files/FileBlockPrint';
+  import FileRowPrint from 'src/components/files/FileRowPrint';
   import AddRemoveCharacterModal from 'src/components/modals/AddRemoveCharacter';
   import HighlightModal from 'src/components/modals/Highlight';
   import LocalStorage from 'src/helpers/local-storage';
@@ -41,7 +37,7 @@
     name: 'file-print',
 
     components: {
-      FileBlockPrint,
+      FileRowPrint,
       AddRemoveCharacterModal,
       HighlightModal,
     },
@@ -210,12 +206,34 @@
     width: 25px;
   }
 
+  .print .type-h1 .character span {
+    font-size: 36px;
+    width: 34px;
+    font-weight: 400;
+  }
+
+  .print .type-h2 .character span {
+    font-size: 28px;
+    width: 30px;
+    font-weight: 400;
+  }
+
   .print .character span.special-ideogram {
     width: 17px;
   }
 
   .larger.print .character span {
     width: 34px;
+  }
+
+  .larger.print .type-h1 .character span {
+    font-size: 50px;
+    width: 48px;
+  }
+
+  .larger.print .type-h2 .character span {
+    font-size: 36px;
+    width: 35px;
   }
 
   .larger.print .character span.special-ideogram {
