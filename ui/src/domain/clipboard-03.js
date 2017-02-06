@@ -7,7 +7,16 @@ import Promise from 'bluebird';
 export default function (content) {
   content = replaceall('+', '', content);
   return new Promise((resolve) => {
-    const lines = content.split('\n').filter((line) => line);
+    const lines = content
+                  .split('\n')
+                  .filter((line) => line)
+                  .filter((line) => {
+                    if (line.match(/(\d{2}):(\d{4}):(\d{2})/)) {
+                      return null;
+                    }
+
+                    return line;
+                  });
     const promissesLines = [];
 
     lines.forEach((line) => {
