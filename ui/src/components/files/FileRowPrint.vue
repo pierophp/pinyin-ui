@@ -2,6 +2,7 @@
   <div class="line" :class=[type]>
     <file-block-print
       v-for="(block,index) in line"
+      :block="block"
       :pinyin="block.p"
       :character="block.c"
       :highlight="block.h"

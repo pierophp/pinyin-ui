@@ -12,6 +12,7 @@ import * as types from './types';
 
 function loadFile(file, lineIndex, state, commit, storage, filename) {
   if (file.length === lineIndex) {
+    // Remove extra lines
     if (state.file.length > file.length) {
       state.file.splice(file.length, state.file.length - file.length);
     }
@@ -41,6 +42,7 @@ function loadFile(file, lineIndex, state, commit, storage, filename) {
     line,
     lineIndex,
   });
+
   lineIndex += 1;
   if (storage) {
     Vue.nextTick(() => {

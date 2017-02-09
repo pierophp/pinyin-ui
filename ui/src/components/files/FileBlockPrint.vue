@@ -1,11 +1,16 @@
 <template>
   <div class="block" :data-line="lineIndex" :data-block="blockIndex" :class="classHighlight" @click="blockClick()" ref="block">
-    <div class="pinyin">
+
+    <div class="image" v-if="block.small">
+      <img :src="block.small" referrerpolicy="no-referrer"/>
+    </div>
+    <div class="pinyin" v-if="!block.small">
       <span>
         <span v-for="data in printData" :class="[data.pinyinClass]" v-html="data.pinyin"></span>
       </span>
     </div>
-    <div class="character">
+
+    <div class="character" v-if="!block.small">
       <span v-for="data in printData" :class="[data.toneClass, data.ideogramClass]" @click.prevent="openModal(data.character)">
         {{data.character}}
       </span>
@@ -47,6 +52,7 @@
         default: 0,
       },
       highlight: '',
+      block: '',
     },
     watch: {
       pinyin() {

@@ -151,8 +151,7 @@
     position: relative;
   }
 
-  @media print
-  {
+  @media print{
     padding-top:0;
   }
 
@@ -200,6 +199,10 @@
     margin: 10px 2px;
   }
 
+  .print .type-img {
+    margin-bottom: 0 !important;
+  }
+
   .print .character span {
     display: inline-block;
     font-weight: 300;
@@ -207,15 +210,24 @@
   }
 
   .print .type-h1 .character span {
-    font-size: 36px;
-    width: 34px;
+    font-size: 40px;
+    width: 40px;
     font-weight: 400;
   }
 
   .print .type-h2 .character span {
-    font-size: 28px;
-    width: 30px;
+    font-size: 34px;
+    width: 33px;
     font-weight: 400;
+  }
+
+  .print .type-imgcaption .pinyin span {
+    font-size: 15px;
+  }
+
+  .print .type-imgcaption .character span {
+    font-size: 20px;
+    width: 20px;
   }
 
   .print .character span.special-ideogram {
@@ -284,6 +296,14 @@
     margin-right: 4px;
   }
 
+  .ideogram-spaced .type-h1 .block {
+    margin-right: 15px;
+  }
+
+  .ideogram-spaced .type-h2 .block {
+    margin-right: 10px;
+  }
+
   .hide-pinyin {
     display: inline-block;
     width: 40px !important;
@@ -315,6 +335,10 @@
 
   .loading-container{
     text-align: center;
+  }
+
+  .image img {
+    max-height:300px;
   }
 
 </style>

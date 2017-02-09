@@ -92,6 +92,14 @@ export default {
         if (block.h === undefined) {
           file[lineIndex][blockIndex].h = '';
         }
+
+        if (block.p === undefined) {
+          file[lineIndex][blockIndex].p = '';
+        }
+
+        if (block.c === undefined) {
+          file[lineIndex][blockIndex].c = '';
+        }
       });
     });
 
@@ -103,7 +111,16 @@ export default {
       if (block.h === undefined) {
         line[blockIndex].h = '';
       }
+
+      if (block.p === undefined) {
+        line[blockIndex].p = '';
+      }
+
+      if (block.c === undefined) {
+        line[blockIndex].c = '';
+      }
     });
+
     Vue.set(state.file, lineIndex, line);
   },
 

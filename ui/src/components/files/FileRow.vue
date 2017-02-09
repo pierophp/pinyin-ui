@@ -6,6 +6,7 @@
       :character="block.c"
       :line-index="lineIndex"
       :block-index="index"
+      :block="block"
       >
     </file-block>
 
@@ -36,3 +37,9 @@
     },
   };
 </script>
+
+<style>
+  .image img {
+    max-height:150px;
+  }
+</style>
