@@ -210,22 +210,26 @@
   }
 
   .print .type-h1 .character span {
+    line-height: 40px;
     font-size: 40px;
     width: 40px;
     font-weight: 400;
   }
 
   .print .type-h2 .character span {
+    line-height: 34px;
     font-size: 34px;
     width: 33px;
     font-weight: 400;
   }
 
   .print .type-imgcaption .pinyin span {
+    line-height: 15px;
     font-size: 15px;
   }
 
   .print .type-imgcaption .character span {
+    line-height: 20px;
     font-size: 20px;
     width: 20px;
   }
@@ -239,11 +243,13 @@
   }
 
   .larger.print .type-h1 .character span {
+    line-height: 50px;
     font-size: 50px;
     width: 48px;
   }
 
   .larger.print .type-h2 .character span {
+    line-height: 36px;
     font-size: 36px;
     width: 35px;
   }
