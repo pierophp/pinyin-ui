@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <a href class="remove" @click.prevent="removeBlock({lineIndex, blockIndex})">X</a>
-    <div class="image" v-if="block.small">
+    <div class="image-edit" v-if="block.small">
       <img :src="block.small" referrerpolicy="no-referrer"/>
     </div>
 

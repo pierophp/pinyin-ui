@@ -1,14 +1,14 @@
 <template>
   <div id="container">
-  <tool-bar @toggle-sidebar="toggle()"></tool-bar>
+    <tool-bar @toggle-sidebar="toggle()"></tool-bar>
 
-  <div class="content">
-    <router-view />
+    <div class="content">
+      <router-view />
+    </div>
+
+    <side-nav ref="sidenav"></side-nav>
+
   </div>
-
-  <side-nav ref="sidenav"></side-nav>
-
-</div>
 </template>
 
 <script>
@@ -21,7 +21,9 @@
       ToolBar,
       SideNav,
     },
-    created() {
+    mounted() {
+     // this.$refs.snackbar.open();
+      // console.log('snackbar');
     },
     methods: {
       toggle() {

@@ -39,7 +39,7 @@
 </script>
 
 <style>
-  .image img {
+  .image-edit img {
     max-height:150px;
   }
 </style>
