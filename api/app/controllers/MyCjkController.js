@@ -59,8 +59,12 @@ router.post('/', (req, res) => {
     .then(() => {
       res.send({ status: 'SUCCESS' });
     })
-    .catch(() => {
-      res.send({ status: 'ERROR' });
+    .catch((e) => {
+      res.status(500);
+      res.send({
+        status: 'ERROR',
+        message: e.message,
+      });
     });
 });
 

@@ -33,6 +33,8 @@ module.exports = {
     'no-param-reassign': 0,
     // allow using this on classes
     'class-methods-use-this': 0,
+    'no-restricted-syntax': 0,
+
   },
   'globals': {
       '$': true,
