@@ -23,6 +23,7 @@ module.exports = {
     new OfflinePlugin({
       responseStrategy: 'network-first',
       ServiceWorker: {
+        events: true,
         navigateFallbackURL: 'index.html',
       },
       externals: [
