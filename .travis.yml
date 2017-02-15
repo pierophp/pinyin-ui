@@ -33,6 +33,9 @@ before_install:
 - yarn install
 - cd ../ui
 - yarn install
+- yarn build --verbose
+- zip -r ~/pinyin.dist.zip dist > /dev/null
+
 before_script:
 - export CHROME_BIN=chromium-browser
 - export DISPLAY=:99.0
@@ -45,6 +48,8 @@ script:
 - echo "Test"
 after_success:
 - export SSH_KEY="/home/travis/.ssh/id_rsa"
+- export CMD="scp ~/pinyin.dist.zip ${SSH_USER}@${SSH_SERVER}"
+- $CMD
 - export CMD="pm2 deploy ecosystem.config.js production"
 #- "$CMD &>/dev/null"
 - $CMD
