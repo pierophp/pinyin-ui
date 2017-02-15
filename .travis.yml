@@ -48,7 +48,8 @@ script:
 - echo "Test"
 after_success:
 - export SSH_KEY="/home/travis/.ssh/id_rsa"
-- export CMD="scp /home/travis/pinyin.dist.zip ${SSH_USER}@${SSH_SERVER}:~"
+- export CMD="scp /home/travis/pinyin.dist.zip ${SSH_USER}@${SSH_HOST}:~"
+- echo $CMD
 - $CMD
 - export CMD="pm2 deploy ecosystem.config.js production"
 #- "$CMD &>/dev/null"
