@@ -1,7 +1,7 @@
 <template>
   <div class="files-container">
     <md-list class="md-double-line">
-      <md-list-item  @click="goToFile(file)" v-for="file in files">
+      <md-list-item v-for="(file, fileId) in files" @click="openOptions(fileId, $event)" >
 
         <md-button class="md-icon-button list-icon">
           <md-icon class="md-primary">collections</md-icon>
@@ -11,12 +11,15 @@
           {{ file }}
         </div>
 
-        <md-menu md-size="4">
-          <md-button md-menu-trigger class="md-icon-button md-list-action" @click="openOptions">
+        <md-menu md-size="4" :md-offset-x="menuX" ref="menu">
+          <md-button md-menu-trigger class="md-icon-button md-list-action">
             <md-icon>more_vert</md-icon>
           </md-button>
-
           <md-menu-content>
+            <md-menu-item @click="goToFile(file)">
+              <md-icon>edit</md-icon>
+              <span>{{ $t("edition_mode") }}</span>
+            </md-menu-item>
             <md-menu-item @click="visualizationMode(file)">
               <md-icon>visibility</md-icon>
               <span>{{ $t("visualization_mode") }}</span>
@@ -66,6 +69,7 @@
       return {
         redirect: true,
         deleteFilename: '',
+        menuX: 0,
       };
     },
 
@@ -79,21 +83,23 @@
       }),
       goToFile(filename) {
         this.redirect = true;
-        setTimeout(() => {
-          if (!this.redirect) {
-            return;
-          }
+        // setTimeout(() => {
+        if (!this.redirect) {
+          return;
+        }
 
-          this.$router.push({
-            name: 'file',
-            params: { filename },
-          });
-        }, 200);
+        this.$router.push({
+          name: 'file',
+          params: { filename },
+        });
+        // }, 200);
       },
-      openOptions() {
-        setTimeout(() => {
-          this.redirect = false;
-        }, 100);
+      openOptions(fileId, e) {
+        this.menuX = (window.innerWidth - e.clientX) * -1;
+        this.$refs.menu[fileId].open();
+        // setTimeout(() => {
+        //  this.redirect = false;
+        // }, 100);
       },
       openDeleteDialog(file) {
         this.deleteFilename = file;

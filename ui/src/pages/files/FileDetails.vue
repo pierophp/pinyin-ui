@@ -1,27 +1,28 @@
 <template>
 <div>
-  <h2>{{filename}}</h2>
-
-  <div class="larger-print">
-    <file-row
-      v-for="(line, index) in lines"
-      :line="line"
-      :line-index="index"
-      :data-index="index"
-      drag-drop="{
-        group: 'file-row',
-        drop: {
-            css: 'drop',
-            method: moveElement
-        }
-      }"
-      @open-file-paste-modal="$refs.filePasteModal.openDialog()"
-      ></file-row>
-    <div class="clearfix"></div>
-    <div class="footer">
-      <md-button class="md-raised md-primary" @click.prevent="addEmptyLine()">+ {{ $t("line") }}</md-button>
+  <loadable-content :loading="loading">
+    <h2>{{filename}}</h2>
+    <div class="larger-print">
+      <file-row
+        v-for="(line, index) in lines"
+        :line="line"
+        :line-index="index"
+        :data-index="index"
+        drag-drop="{
+          group: 'file-row',
+          drop: {
+              css: 'drop',
+              method: moveElement
+          }
+        }"
+        @open-file-paste-modal="$refs.filePasteModal.openDialog()"
+        ></file-row>
+      <div class="clearfix"></div>
+      <div class="footer">
+        <md-button class="md-raised md-primary" @click.prevent="addEmptyLine()">+ {{ $t("line") }}</md-button>
+      </div>
     </div>
-  </div>
+  </loadable-content>
   <file-paste-modal ref="filePasteModal"></file-paste-modal>
 </div>
 </template>
@@ -31,6 +32,7 @@
   import FileRow from 'src/components/files/FileRow';
   import FilePasteModal from 'src/components/modals/FilePaste';
   import User from 'src/domain/user';
+  import LoadableContent from 'src/components/common/loading/LoadableContent';
 
   import {
     mapActions,
@@ -42,6 +44,7 @@
   FILE_ACTION_FETCH,
   FILE_ACTION_SAVE,
   FILE_GETTER,
+  FILE_GETTER_PARSING,
   FILE_MUTATION_ADD_EMPTY_LINE,
   } from 'src/data/file/types';
 
@@ -51,6 +54,7 @@
     components: {
       FileRow,
       FilePasteModal,
+      LoadableContent,
     },
 
     data() {
@@ -63,6 +67,7 @@
     computed: {
       ...mapGetters({
         lines: FILE_GETTER,
+        loading: FILE_GETTER_PARSING,
       }),
     },
 

@@ -18,7 +18,7 @@ export const FILE_GETTER = 'file/getter/file';
 export const FILE_GETTER_MY_CJK = 'file/getter/myCjk';
 export const FILE_GETTER_MY_CJK_TEMP = 'file/getter/myCjkTemp';
 export const FILE_GETTER_LOADING = 'file/getter/loading';
-
+export const FILE_GETTER_PARSING = 'file/getter/parsing';
 
 // mutations
 export const FILES_MUTATION_SET = 'files/mutation/SET';
@@ -42,3 +42,4 @@ export const FILE_MUTATION_REMOVE_MY_CJK = 'file/mutation/REMOVE_MY_CJK';
 export const FILE_MUTATION_ADD_HIGHLIGHT = 'file/mutation/ADD_HIGHLIGHT';
 export const FILE_MUTATION_REMOVE_HIGHLIGHT = 'file/mutation/REMOVE_HIGHLIGHT';
 export const FILE_MUTATION_SET_FILE_LOADING = 'file/mutation/SET_FILE_LOADING';
+export const FILE_MUTATION_SET_FILE_PARSING = 'file/mutation/SET_FILE_PARSING';

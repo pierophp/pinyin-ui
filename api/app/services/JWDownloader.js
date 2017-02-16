@@ -19,7 +19,7 @@ module.exports = class JwDownloader {
 
       this.text.push({
         type: 'h1',
-        text: $('article header h1').text(),
+        text: this.trim($('article header h1').text()),
       });
 
       const figcaptionsText = [];
@@ -32,7 +32,7 @@ module.exports = class JwDownloader {
           if (boxH2) {
             this.text.push({
               type: 'h2',
-              text: $(boxH2).text(),
+              text: this.trim($(boxH2).text()),
             });
 
             contentText = $(children).find('.boxContent').text();
@@ -45,12 +45,24 @@ module.exports = class JwDownloader {
             if (boxH2 && $(boxH2).text()) {
               this.text.push({
                 type: 'h2',
-                text: $(boxH2).text(),
+                text: this.trim($(boxH2).text()),
               });
             }
 
             $(subChildren).find('div').children().each((k, subChildren02) => {
+              if ($(subChildren02).hasClass('qu')) {
+                this.text.push({
+                  type: 'qu',
+                  text: this.trim($(subChildren02).text()),
+                });
+                return;
+              }
+
               const figure = $(subChildren02).find('figure');
+              if (figure.length && $(subChildren02).get(0).tagName === 'aside') {
+                return;
+              }
+
               if (figure.length) {
                 this.text.push({
                   type: 'img',

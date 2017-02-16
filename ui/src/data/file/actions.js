@@ -9,6 +9,9 @@ import codeToIdeogram from 'src/helpers/code-to-ideogram';
 
 import * as types from './types';
 
+function sortFiles(files) {
+  files.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+}
 
 function loadFile(file, lineIndex, state, commit, storage, filename) {
   if (file.length === lineIndex) {
@@ -74,6 +77,7 @@ export default {
     http
     .get('files')
     .then((response) => {
+      sortFiles(response.data);
       LocalStorage.save('files', response.data);
       commit(types.FILES_MUTATION_SET, response.data);
     })
@@ -109,109 +113,85 @@ export default {
   },
 
   [types.FILE_ACTION_CONVERT_TO_PINYIN]({ commit, state }, data) {
-    const ideograms = [];
-    state.file[data.lineIndex].forEach((block) => {
-      ideograms.push(block.c);
-    });
+    return new Promise((resolve, reject) => {
+      const ideograms = [];
+      state.file[data.lineIndex].forEach((block) => {
+        ideograms.push(block.c);
+      });
 
-    http
-      .post('unihan/to_pinyin', {
-        ideograms,
-      })
-      .then((response) => {
-        response.data.forEach((item, blockIndex) => {
-          commit(types.FILE_MUTATION_UPDATE_PINYIN, {
-            lineIndex: data.lineIndex,
-            blockIndex,
-            pinyin: item.pinyin,
+      http
+        .post('unihan/to_pinyin', {
+          ideograms,
+        })
+        .then((response) => {
+          response.data.forEach((item, blockIndex) => {
+            commit(types.FILE_MUTATION_UPDATE_PINYIN, {
+              lineIndex: data.lineIndex,
+              blockIndex,
+              pinyin: item.pinyin,
+            });
           });
+          resolve();
+        })
+        .catch((error) => {
+          commit(types.FILE_MUTATION_FAILURE, error);
+          reject();
         });
-      })
-      .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
+    });
   },
   [types.FILE_ACTION_PARSE_PASTE]({ commit, state, dispatch }, data) {
+    commit(types.FILE_MUTATION_SET_FILE_PARSING, true);
+
+    let clipboardPromise;
+    let convertToPinyin = false;
+
     if (data.action === '1') {
-      clipboard01(data.content)
-        .then((content) => {
-          content.forEach((row, index) => {
-            const lineIndex = state.filePasteAction.lineIndex + index;
-            if (index === 0) {
-              commit(types.FILE_MUTATION_CONCATENATE_LINE, {
-                lineIndex,
-                content: row,
-              });
-            } else {
-              commit(types.FILE_MUTATION_ADD_LINE, {
-                lineIndex,
-                content: row,
-              });
-            }
-          });
-        });
+      clipboardPromise = clipboard01(data.content);
     }
 
     if (data.action === '2') {
-      clipboard02(data.content)
-        .then((content) => {
-          content.forEach((row, index) => {
-            const lineIndex = state.filePasteAction.lineIndex + index;
-            if (index === 0) {
-              commit(types.FILE_MUTATION_CONCATENATE_LINE, {
-                lineIndex,
-                content: row,
-              });
-            } else {
-              commit(types.FILE_MUTATION_ADD_LINE, {
-                lineIndex,
-                content: row,
-              });
-            }
-          });
-        });
+      clipboardPromise = clipboard02(data.content);
     }
 
     if (data.action === '3') {
-      clipboard03(data.content)
-        .then((content) => {
-          content.forEach((row, index) => {
-            const lineIndex = state.filePasteAction.lineIndex + index;
-            if (index === 0) {
-              commit(types.FILE_MUTATION_CONCATENATE_LINE, {
-                lineIndex,
-                content: row,
-              });
-            } else {
-              commit(types.FILE_MUTATION_ADD_LINE, {
-                lineIndex,
-                content: row,
-              });
-            }
-
-            dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex });
-          });
-        });
+      convertToPinyin = true;
+      clipboardPromise = clipboard03(data.content);
     }
 
     if (data.action === '4') {
-      clipboard04(data.content)
-        .then((content) => {
-          content.forEach((row, index) => {
-            const lineIndex = state.filePasteAction.lineIndex + index;
-            if (index === 0) {
-              commit(types.FILE_MUTATION_CONCATENATE_LINE, {
-                lineIndex,
-                content: row,
-              });
-            } else {
-              commit(types.FILE_MUTATION_ADD_LINE, {
-                lineIndex,
-                content: row,
-              });
-            }
-            dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex });
-          });
-        });
+      convertToPinyin = true;
+      clipboardPromise = clipboard04(data.content);
     }
+
+    const pinyinPromises = [];
+    clipboardPromise.then((content) => {
+      content.forEach((row, index) => {
+        const lineIndex = state.filePasteAction.lineIndex + index;
+        if (index === 0) {
+          commit(types.FILE_MUTATION_CONCATENATE_LINE, {
+            lineIndex,
+            content: row,
+          });
+        } else {
+          commit(types.FILE_MUTATION_ADD_LINE, {
+            lineIndex,
+            content: row,
+          });
+        }
+
+        if (convertToPinyin) {
+          pinyinPromises.push(dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex }));
+        }
+      });
+
+      if (convertToPinyin) {
+        Promise.all(pinyinPromises).then(() => {
+          commit(types.FILE_MUTATION_SET_FILE_PARSING, false);
+        });
+      } else {
+        commit(types.FILE_MUTATION_SET_FILE_PARSING, false);
+      }
+    });
   },
 
   [types.FILE_ACTION_NEW_FILE]({ commit, state }, data) {
@@ -221,6 +201,8 @@ export default {
     })
     .then(() => {
       state.files.push(data.filename);
+      sortFiles(state.files);
+      LocalStorage.save('files', state.files);
     })
     .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
   },

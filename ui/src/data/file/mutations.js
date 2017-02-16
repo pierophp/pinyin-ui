@@ -238,4 +238,9 @@ export default {
   [types.FILE_MUTATION_SET_FILE_LOADING](state, fileLoading) {
     state.fileLoading = fileLoading;
   },
+
+  [types.FILE_MUTATION_SET_FILE_PARSING](state, fileParsing) {
+    state.fileParsing = fileParsing;
+  },
+
 };

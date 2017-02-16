@@ -26,7 +26,6 @@ export default {
   position: relative;
   min-height: 48px;
 }
-
 .loadable-loader {
   position: absolute;
   top: 0;
@@ -39,4 +38,10 @@ export default {
   justify-content: center;
   z-index: 100;
 }
+
+.md-spinner {
+  position: fixed;
+  top: 200px;
+}
+
 </style>

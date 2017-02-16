@@ -216,6 +216,16 @@
     font-weight: 400;
   }
 
+  .print .type-h1 {
+    border-top:1px solid#ff6363;
+    border-bottom:1px solid #ff6363;
+  }
+
+  .print .type-h2 {
+    border-top:1px solid#fcd79c;
+    border-bottom:1px solid #fcd79c;
+  }
+
   .print .type-h2 .character span {
     line-height: 34px;
     font-size: 34px;
@@ -232,6 +242,23 @@
     line-height: 20px;
     font-size: 20px;
     width: 20px;
+  }
+
+  .print .type-qu {
+    border-top:1px solid #ccc;
+    border-bottom:1px solid #ccc;
+  }
+
+  .print .type-qu .pinyin span {
+    line-height: 17px;
+    font-size: 15px;
+    height: 20px;
+  }
+
+  .print .type-qu .character span {
+    line-height: 22px;
+    font-size: 22px;
+    width: 22px;
   }
 
   .print .character span.special-ideogram {
@@ -279,7 +306,8 @@
   }
 
   .print .line {
-    margin-bottom: 25px;
+    margin-bottom: 10px;
+    padding-bottom: 15px;
   }
 
   .ideogram-colored .tone-1 {

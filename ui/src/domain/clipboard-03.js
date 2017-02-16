@@ -43,7 +43,7 @@ export default function (content) {
       contentPromise = parseJW(content);
     } else {
       content = replaceall('+', '', content);
-      contentPromise = parseContent(parseContent);
+      contentPromise = parseContent(content);
     }
 
     contentPromise.then((lines) => {

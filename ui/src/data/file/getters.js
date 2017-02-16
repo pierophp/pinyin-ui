@@ -10,6 +10,9 @@ export default {
   [types.FILE_GETTER_LOADING]({ fileLoading }) {
     return fileLoading;
   },
+  [types.FILE_GETTER_PARSING]({ fileParsing }) {
+    return fileParsing;
+  },
   [types.FILE_GETTER_MY_CJK]({ myCjk }) {
     return myCjk;
   },

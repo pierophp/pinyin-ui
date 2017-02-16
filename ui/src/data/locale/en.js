@@ -6,6 +6,7 @@ export default {
     logout: 'Logout',
   },
   visualization_mode: 'Visualization mode',
+  edition_mode: 'Edition mode',
   delete: 'Delete',
   filename: 'Filename',
   cancel: 'Cancel',

@@ -6,6 +6,7 @@ export default {
     logout: 'Sair',
   },
   visualization_mode: 'Modo visualização',
+  edition_mode: 'Modo edição',
   delete: 'Apagar',
   filename: 'Arquivo',
   cancel: 'Cancelar',

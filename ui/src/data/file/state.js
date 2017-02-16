@@ -14,6 +14,7 @@ export default {
   files,
   file: [],
   fileLoading: false,
+  fileParsing: false,
   fileChangeTimestamp: null,
   filePasteAction: '',
   myCjk,
