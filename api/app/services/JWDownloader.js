@@ -4,118 +4,150 @@ const axios = require('axios');
 module.exports = class JwDownloader {
   static download(url) {
     return axios.get(this.encodeUrl(url))
-    .then((response) => {
-      const $ = cheerio.load(response.data);
-      this.text = [];
+      .then((response) => {
+        const $ = cheerio.load(response.data);
+        this.text = [];
+        this.figcaptionsText = [];
 
-      const mainImage = $('.lsrBannerImage');
-      if (mainImage.length) {
+        const mainImage = $('.lsrBannerImage');
+        if (mainImage.length) {
+          this.text.push({
+            large: $(mainImage).find('span').attr('data-zoom'),
+            small: $(mainImage).find('span').attr('data-img-size-lg'),
+            type: 'img',
+          });
+        }
+
         this.text.push({
-          type: 'img',
-          large: $(mainImage).find('span').attr('data-zoom'),
-          small: $(mainImage).find('span').attr('data-img-size-lg'),
+          text: this.trim($('article header h1').text()),
+          type: 'h1',
+        });
+
+        $('article .docSubContent').children().each((i, children) => {
+          if ($(children).hasClass('blockTeach')) {
+            const boxH2 = $(children).find('aside h2');
+            if (boxH2) {
+              this.text.push({
+                text: this.trim($(boxH2).text()),
+                type: 'h2',
+              });
+
+              this.parseBlock($, $(children).find('.boxContent'));
+            }
+          } else if ($(children).hasClass('bodyTxt')) {
+            $(children).children().each((j, subChildren) => {
+              const boxH2 = $(subChildren).children('h2');
+              if (boxH2 && $(boxH2).text()) {
+                this.text.push({
+                  text: this.trim($(boxH2).text()),
+                  type: 'h2',
+                });
+              }
+
+              $(subChildren).children('div').children().each((k, subChildren02) => {
+                this.parseBlock($, subChildren02);
+              });
+            });
+          } else {
+            this.parseBlock($, children);
+          }
+        });
+
+        return this.text;
+      });
+  }
+
+  static parseBlock($, element) {
+    if ($(element).attr('class') && $(element).attr('class').indexOf('boxSupplement') !== -1) {
+      const boxH2 = $(element).find('h2');
+      if (boxH2 && $(boxH2).text()) {
+        this.text.push({
+          text: this.trim($(boxH2).text()),
+          type: 'box-h2',
         });
       }
 
+      $(element).find('.boxContent').children().each((l, subChildren) => {
+        this.parseContent($, subChildren, 'box');
+      });
+    } else if ($(element).attr('class') && $(element).attr('class').indexOf('groupFootnote') !== -1) {
+      $(element).children().each((l, subChildren) => {
+        this.parseContent($, subChildren, 'foot');
+      });
+    } else {
+      this.parseContent($, element);
+    }
+  }
+
+  static parseContent($, element, type) {
+    if ($(element).hasClass('qu')) {
+      type = 'qu';
+    }
+
+    const figure = $(element).find('figure');
+
+    if (figure.length && $(element).get(0).tagName === 'aside') {
+      return;
+    }
+
+    if (figure.length) {
+      let imgType;
+      if (type) {
+        imgType = `${type}-img`;
+      } else {
+        imgType = 'img';
+      }
+
       this.text.push({
-        type: 'h1',
-        text: this.trim($('article header h1').text()),
+        type: imgType,
+        large: $(figure).find('span').attr('data-zoom'),
+        small: $(figure).find('span').attr('data-img-size-lg'),
       });
 
-      const figcaptionsText = [];
-
-      $('article .docSubContent').children().each((i, children) => {
-        let contentText = $(children).text();
-
-        if ($(children).hasClass('blockTeach')) {
-          const boxH2 = $(children).find('aside h2');
-          if (boxH2) {
-            this.text.push({
-              type: 'h2',
-              text: this.trim($(boxH2).text()),
-            });
-
-            contentText = $(children).find('.boxContent').text();
-          }
+      const figcaption = $(figure).find('figcaption');
+      if (figcaption.length) {
+        let imgCaption;
+        if (type) {
+          imgCaption = `${type}-imgcaption`;
+        } else {
+          imgCaption = 'imgcaption';
         }
 
-        if ($(children).hasClass('bodyTxt')) {
-          $(children).children().each((j, subChildren) => {
-            const boxH2 = $(subChildren).find('h2');
-            if (boxH2 && $(boxH2).text()) {
-              this.text.push({
-                type: 'h2',
-                text: this.trim($(boxH2).text()),
-              });
-            }
+        const text = this.trim($(figcaption).text());
+        this.figcaptionsText.push(text);
 
-            $(subChildren).find('div').children().each((k, subChildren02) => {
-              if ($(subChildren02).hasClass('qu')) {
-                this.text.push({
-                  type: 'qu',
-                  text: this.trim($(subChildren02).text()),
-                });
-                return;
-              }
-
-              const figure = $(subChildren02).find('figure');
-              if (figure.length && $(subChildren02).get(0).tagName === 'aside') {
-                return;
-              }
-
-              if (figure.length) {
-                this.text.push({
-                  type: 'img',
-                  large: $(figure).find('span').attr('data-zoom'),
-                  small: $(figure).find('span').attr('data-img-size-lg'),
-                });
-
-                const figcaption = $(figure).find('figcaption');
-                if (figcaption.length) {
-                  const text = this.trim($(figcaption).text());
-                  figcaptionsText.push(text);
-
-                  this.text.push({
-                    type: 'imgcaption',
-                    text,
-                  });
-                }
-
-                return;
-              }
-              const text = this.trim($(subChildren02).text());
-              if (!text) {
-                return;
-              }
-
-              if (figcaptionsText.indexOf(text) > -1) {
-                return;
-              }
-
-              this.text.push({
-                text,
-              });
-            });
-          });
-          return;
-        }
-
-        this.explodeLines(contentText).forEach((line) => {
-          if (!line) {
-            return;
-          }
-
-          if (figcaptionsText.indexOf(line) > -1) {
-            return;
-          }
-
-          this.text.push({
-            text: line,
-          });
+        this.text.push({
+          type: imgCaption,
+          text,
         });
-      });
+      }
 
-      return this.text;
+      return;
+    }
+
+    const text = this.trim($(element).text());
+    if (!text) {
+      return;
+    }
+
+    if (this.figcaptionsText.indexOf(text) > -1) {
+      return;
+    }
+
+    this.explodeLines(text).forEach((line) => {
+      if (!line) {
+        return;
+      }
+
+      const item = {
+        text: line,
+      };
+
+      if (type) {
+        item.type = type;
+      }
+
+      this.text.push(item);
     });
   }
 

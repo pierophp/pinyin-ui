@@ -147,7 +147,7 @@
   }
 
   .print{
-    padding-top: 25px;
+    margin: 10px 2px;
     position: relative;
   }
 
@@ -195,12 +195,10 @@
     height: var(--larger-character-font-size);
   }
 
-  .print {
-    margin: 10px 2px;
-  }
-
+  .print .type-box-img,
   .print .type-img {
     margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
   }
 
   .print .character span {
@@ -221,11 +219,13 @@
     border-bottom:1px solid #ff6363;
   }
 
+  .print .type-box-h2,
   .print .type-h2 {
     border-top:1px solid#fcd79c;
     border-bottom:1px solid #fcd79c;
   }
 
+  .print .type-box-h2 .character span,
   .print .type-h2 .character span {
     line-height: 34px;
     font-size: 34px;
@@ -233,15 +233,28 @@
     font-weight: 400;
   }
 
+  .print .type-foot .pinyin span,
+  .print .type-box-imgcaption .pinyin span,
   .print .type-imgcaption .pinyin span {
     line-height: 15px;
     font-size: 15px;
   }
 
+  .print .type-foot .character span,
+  .print .type-box-imgcaption .character span,
   .print .type-imgcaption .character span {
     line-height: 20px;
     font-size: 20px;
     width: 20px;
+  }
+
+  .print .type-box-h2,
+  .print .type-box,
+  .print .type-box-img,
+  .print .type-box-imgcaption {
+    border-left:3px solid #93c5ff;
+    border-right:3px solid #93c5ff;
+    padding: 0 10px;
   }
 
   .print .type-qu {
@@ -275,6 +288,7 @@
     width: 48px;
   }
 
+  .larger.print .type-box-h2 .character span,
   .larger.print .type-h2 .character span {
     line-height: 36px;
     font-size: 36px;
@@ -334,6 +348,7 @@
     margin-right: 15px;
   }
 
+  .ideogram-spaced .type-box-h2 .block,
   .ideogram-spaced .type-h2 .block {
     margin-right: 10px;
   }

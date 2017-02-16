@@ -57,7 +57,7 @@ export default function (content) {
         promissesLines.push(new Promise((resolveLine, rejectLine) => {
           const row = [];
 
-          if (line.type !== undefined && line.type === 'img') {
+          if (line.type !== undefined && (line.type === 'img' || line.type === 'box-img')) {
             row.push({
               p: '',
               c: '',
@@ -118,7 +118,9 @@ export default function (content) {
           });
 
           // remove double spaces
-          line.text = line.text.replace(/\s{2,}/g, ' ').trim();
+          if (line.text) {
+            line.text = line.text.replace(/\s{2,}/g, ' ').trim();
+          }
 
           const ideograms = line.text.split(' ');
           const ideogramsFiltered = [];
