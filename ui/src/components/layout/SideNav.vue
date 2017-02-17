@@ -1,5 +1,5 @@
 <template>
-  <md-sidenav @click.native="$refs.sidenav.close()" md-theme="blue" class="md-left" ref="sidenav" md-swipeable>
+  <md-sidenav @click.native="$refs.sidenav.close()" md-theme="blue" class="md-left" ref="sidenav" md-swipeable md-swipe-distance="60">
     <md-toolbar class="md-account-header">
       <md-list class="md-transparent">
         <md-list-item>
