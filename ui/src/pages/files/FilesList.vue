@@ -1,14 +1,15 @@
 <template>
   <div class="files-container">
     <md-list class="md-double-line">
-      <md-list-item v-for="(file, fileId) in files" @click="openOptions(fileId, $event)" >
-
+      <md-list-item v-for="(file, fileId) in files" @click.native="openOptions(fileId, $event)" >
         <md-button class="md-icon-button list-icon">
-          <md-icon class="md-primary">collections</md-icon>
+          <md-icon class="md-primary">
+            {{ file.type == 'file' ? 'collections' : 'folder' }}
+          </md-icon>
         </md-button>
 
         <div class="md-list-text-container">
-          {{ file }}
+          {{ file.path }}
         </div>
 
         <md-menu md-size="4" :md-offset-x="menuX" ref="menu">
@@ -16,15 +17,15 @@
             <md-icon>more_vert</md-icon>
           </md-button>
           <md-menu-content>
-            <md-menu-item @click="goToFile(file)">
+            <md-menu-item @click.native="goToFile(file.path)" v-if="file.type == 'file'">
               <md-icon>edit</md-icon>
               <span>{{ $t("edition_mode") }}</span>
             </md-menu-item>
-            <md-menu-item @click="visualizationMode(file)">
+            <md-menu-item @click.native="visualizationMode(file.path)" v-if="file.type == 'file'">
               <md-icon>visibility</md-icon>
               <span>{{ $t("visualization_mode") }}</span>
             </md-menu-item>
-            <md-menu-item @click="openDeleteDialog(file)">
+            <md-menu-item @click.native="openDeleteDialog(file.path)">
               <md-icon>delete</md-icon>
               <span>{{ $t("delete") }}</span>
             </md-menu-item>
@@ -95,8 +96,11 @@
         // }, 200);
       },
       openOptions(fileId, e) {
-        this.menuX = (window.innerWidth - e.clientX) * -1;
-        this.$refs.menu[fileId].open();
+        this.menuX = (window.innerWidth - (e.clientX + 100)) * -1;
+        this.$nextTick(() => {
+          this.$refs.menu[fileId].open();
+        });
+
         // setTimeout(() => {
         //  this.redirect = false;
         // }, 100);

@@ -2,19 +2,19 @@
   <md-menu md-align-trigger  md-size="5">
     <md-button class="md-accent" md-menu-trigger>{{ $t("options") }}</md-button>
     <md-menu-content>
-      <md-menu-item @click="addEmptyBlock({lineIndex})">
+      <md-menu-item @click.native="addEmptyBlock({lineIndex})">
         <md-icon>add</md-icon>
         <span>{{ $t("add_empty_block") }}</span>
       </md-menu-item>
-      <md-menu-item @click="convertToPinyin({lineIndex})">
+      <md-menu-item @click.native="convertToPinyin({lineIndex})">
         <md-icon>font_download</md-icon>
         <span>{{ $t("convert_to_pinyin") }}</span>
       </md-menu-item>
-      <md-menu-item @click="openModalClipBoard(lineIndex)">
+      <md-menu-item @click.native="openModalClipBoard(lineIndex)">
         <md-icon>content_paste</md-icon>
         <span>{{ $t("paste") }}</span>
       </md-menu-item>
-      <md-menu-item @click="removeLine({lineIndex})">
+      <md-menu-item @click.native="removeLine({lineIndex})">
         <md-icon>delete</md-icon>
         <span>{{ $t("remove_line") }}</span>
       </md-menu-item>

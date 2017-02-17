@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-button class="md-fab md-fab-bottom-left" @click="openDialog()">
+    <md-button class="md-fab md-fab-bottom-left" @click.native="openDialog()">
       <md-icon>add</md-icon>
     </md-button>
 
@@ -15,8 +15,8 @@
       </md-dialog-content>
 
       <md-dialog-actions>
-        <md-button class="md-primary" @click="closeDialog()">{{ $t('cancel') }}</md-button>
-        <md-button class="md-primary" @click.prevent="confirm">{{ $t('ok') }}</md-button>
+        <md-button class="md-primary" @click.native="closeDialog()">{{ $t('cancel') }}</md-button>
+        <md-button class="md-primary" @click.native.prevent="confirm">{{ $t('ok') }}</md-button>
       </md-dialog-actions>
     </md-dialog>
   </div>

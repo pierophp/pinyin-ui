@@ -1,5 +1,5 @@
 <template>
-  <md-sidenav md-theme="blue" class="md-left" ref="sidenav">
+  <md-sidenav @click.native="$refs.sidenav.close()" md-theme="blue" class="md-left" ref="sidenav" md-swipeable>
     <md-toolbar class="md-account-header">
       <md-list class="md-transparent">
         <md-list-item>
@@ -15,26 +15,26 @@
       </md-list>
     </md-toolbar>
 
-    <md-list>
-      <md-list-item @click="$refs.sidenav.toggle()" class="md-primary">
+    <md-list >
+      <md-list-item>
         <router-link :to="{ name: 'files' }">
           <md-icon>insert_drive_file</md-icon> <span>{{ $t("menu.my_files") }}</span>
         </router-link>
       </md-list-item>
 
-      <md-list-item @click="$refs.sidenav.toggle()" class="md-primary">
+      <md-list-item>
         <router-link :to="{ name: 'my-cjk' }">
           <md-icon>translate</md-icon> <span>{{ $t("menu.my_ideograms") }}</span>
         </router-link>
       </md-list-item>
 
-      <md-list-item @click="$refs.sidenav.toggle()" class="md-primary">
+      <md-list-item>
         <router-link :to="{ name: 'config' }">
           <md-icon>settings</md-icon> <span>{{ $t("menu.settings") }}</span>
         </router-link>
       </md-list-item>
 
-      <md-list-item @click="logout()">
+      <md-list-item @click.native="logout()">
         <md-icon>power_settings_new</md-icon> <span>{{ $t("menu.logout") }}</span>
       </md-list-item>
     </md-list>

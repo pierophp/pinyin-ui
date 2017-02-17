@@ -38,7 +38,7 @@
       </md-tab>
     </md-tabs>
 
-    <md-button class="md-raised md-primary" @click="save()">{{ $t('save') }}</md-button>
+    <md-button class="md-raised md-primary" @click.native="save()">{{ $t('save') }}</md-button>
   </div>
 </template>
 

@@ -10,7 +10,16 @@ import codeToIdeogram from 'src/helpers/code-to-ideogram';
 import * as types from './types';
 
 function sortFiles(files) {
-  files.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+  files.sort((a, b) => a.path.toLowerCase().localeCompare(b.path.toLowerCase()));
+}
+
+function arrayObjectIndexOf(array, searchTerm, property) {
+  for (let i = 0, len = array.length; i < len; i += 1) {
+    if (array[i][property] === searchTerm) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 function loadFile(file, lineIndex, state, commit, storage, filename) {
@@ -200,7 +209,7 @@ export default {
       content: JSON.stringify({ lines: [] }),
     })
     .then(() => {
-      state.files.push(data.filename);
+      state.files.push({ path: data.filename, type: 'file' });
       sortFiles(state.files);
       LocalStorage.save('files', state.files);
     })
@@ -214,7 +223,7 @@ export default {
     .delete(`files?filename=${data.filename}.json`)
     .then(() => {
       LocalStorage.remove(fileKey);
-      state.files.splice(state.files.indexOf(data.filename), 1);
+      state.files.splice(arrayObjectIndexOf(state.files, data.filename, 'path'), 1);
     })
     .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
   },

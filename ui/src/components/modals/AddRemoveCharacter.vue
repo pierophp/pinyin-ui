@@ -9,8 +9,8 @@
       </md-dialog-content>
 
       <md-dialog-actions>
-        <md-button class="md-primary" @click="closeDialog()">{{ $t('cancel') }}</md-button>
-        <md-button class="md-primary" @click.prevent="confirm">{{ $t('ok') }}</md-button>
+        <md-button class="md-primary" @click.native="closeDialog()">{{ $t('cancel') }}</md-button>
+        <md-button class="md-primary" @click.native.prevent="confirm">{{ $t('ok') }}</md-button>
       </md-dialog-actions>
     </md-dialog>
   </div>

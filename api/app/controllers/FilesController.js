@@ -14,10 +14,16 @@ router.get('/', (req, res) => {
   const filesPath = `${dirname + req.user.id}/`;
 
   const getFiles = function getFiles() {
-    fs.readdirAsync(filesPath, 'utf8').then((files) => {
+    return fs.readdirAsync(filesPath, 'utf8').then((files) => {
       const filesList = [];
+
+
       files.forEach((file) => {
-        filesList.push(file.replace('.json', ''));
+        const isFile = fs.lstatSync(`${filesPath}${file}`).isFile();
+        filesList.push({
+          type: isFile ? 'file' : 'folder',
+          path: file.replace('.json', ''),
+        });
       });
 
       res.send(filesList);
@@ -37,7 +43,6 @@ router.get('/', (req, res) => {
 
 router.get('/file', (req, res) => {
   const filename = req.query.filename;
-
   const filesPath = `${dirname + req.user.id}/`;
 
   fs.readFileAsync(filesPath + filename, 'utf8').then((content) => {
