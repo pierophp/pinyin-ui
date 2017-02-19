@@ -19,7 +19,7 @@
         ></file-row>
       <div class="clearfix"></div>
       <div class="footer">
-        <md-button class="md-raised md-primary" @click.prevent="addEmptyLine()">+ {{ $t("line") }}</md-button>
+        <md-button class="md-raised md-primary" @click.native="addEmptyLine()">+ {{ $t("line") }}</md-button>
       </div>
     </div>
   </loadable-content>
