@@ -6,7 +6,7 @@ const readline = require('readline');
 const fs = require('fs');
 const replaceall = require('replaceall');
 
-module.exports = class CcCeDictDatabaseParser {
+module.exports = class ThreeLinesDatabaseParser {
 
   static saveWord(pinyin, ideograms) {
     let ideogramsConverted = '';
@@ -56,16 +56,11 @@ module.exports = class CcCeDictDatabaseParser {
           return null;
         }
 
-        let parts = line.split('/');
-        let ideogram = parts[0].split(' ')[1];
-        parts = line.split('/');
+        const parts = line.split('\t');
+        let ideogram = parts[1];
 
         let pronunciation = '';
-        const pronunciationList = parts[0]
-                      .split('[')[1]
-                      .replace(']', '')
-                      .toLowerCase()
-                      .split(' ');
+        const pronunciationList = parts[2].toLowerCase().split(' ');
 
         const vogals = ['a', 'e', 'o'];
         pronunciationList.forEach((p, index) => {
@@ -77,7 +72,7 @@ module.exports = class CcCeDictDatabaseParser {
           pronunciation += p;
         });
 
-        pronunciation = replaceall('u:', 'ü', pronunciation);
+        // pronunciation = replaceall('u:', 'ü', pronunciation);
 
         const pronunciationUnaccented = pronunciation.replace(new RegExp('[12345]', 'g'), '');
         pronunciation = UnihanSearch
@@ -90,30 +85,15 @@ module.exports = class CcCeDictDatabaseParser {
           return null;
         }
 
+        const descriptionParts = parts[7].split('/');
+
         ideogramList.push(key);
         const importPromise = () => {
           return new Promise((resolveImport, rejectImport) => {
-            parts.shift();
             const descriptions = [];
-            const measureWords = [];
-            for (const part of parts) {
-              if (part.substr(0, 3) !== 'CL:') {
-                if (part) {
-                  descriptions.push(part);
-                }
-                continue;
-              }
-
-              const measureWordsTmp = part.replace('CL:', '').split(',');
-              for (let measureWord of measureWordsTmp) {
-                measureWord = measureWord.split('[')[0].split('|');
-                if (measureWord[1] !== undefined) {
-                  measureWord = measureWord[1];
-                } else {
-                  measureWord = measureWord[0];
-                }
-
-                measureWords.push(measureWord);
+            for (const part of descriptionParts) {
+              if (part) {
+                descriptions.push(part.replace(new RegExp('<(.*)>', 'g'), ''));
               }
             }
 
@@ -131,9 +111,8 @@ module.exports = class CcCeDictDatabaseParser {
                     ideogram,
                     pronunciation,
                     pronunciation_unaccented: pronunciationUnaccented,
-                    definition_cedict: JSON.stringify(descriptions),
+                    definition_pt: JSON.stringify(descriptions),
                     language_id: 1,
-                    measure_words: JSON.stringify(measureWords),
                     type: 'W',
                     usage: 0,
                     created_at: new Date(),
@@ -152,8 +131,7 @@ module.exports = class CcCeDictDatabaseParser {
                   knex('cjk')
                     .where('id', '=', dataCjk[0].id)
                     .update({
-                      definition_cedict: JSON.stringify(descriptions),
-                      measure_words: JSON.stringify(measureWords),
+                      definition_pt: JSON.stringify(descriptions),
                     })
                     .then(() => {
                       resolveImport();
@@ -181,7 +159,7 @@ module.exports = class CcCeDictDatabaseParser {
       });
 
       lineReader.on('line', (line) => {
-        if (line[0] === '#') {
+        if (line.trim().substr(0, 11) === 'Traditional') {
           return;
         }
 

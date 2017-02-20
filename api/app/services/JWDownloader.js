@@ -70,10 +70,10 @@ module.exports = class JwDownloader {
 
       $(element).find('.boxContent').children().each((i, subChildren) => {
         if ($(subChildren).get(0).tagName === 'ul') {
-          $(subChildren).children().each((j , subChildrenLi) => {
-            $(subChildrenLi).children().each((k , subChildrenLiContent) => {
+          $(subChildren).children().each((j, subChildrenLi) => {
+            $(subChildrenLi).children().each((k, subChildrenLiContent) => {
               this.parseContent($, subChildrenLiContent, 'box');
-            });  
+            });
           });
         } else {
           this.parseContent($, subChildren, 'box');
