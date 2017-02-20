@@ -4,6 +4,7 @@ const Promise = require('bluebird');
 const UnihanSearch = require('../services/UnihanSearch');
 const readline = require('readline');
 const fs = require('fs');
+const replaceall = require('replaceall');
 
 module.exports = class CcCeDictDatabaseParser {
 
@@ -51,6 +52,10 @@ module.exports = class CcCeDictDatabaseParser {
       const ideogramList = [];
 
       function readLine(line) {
+        if (! line) {
+          return null;
+        }
+        
         let parts = line.split('/');
         let ideogram = parts[0].split(' ')[1];
         parts = line.split('/');
@@ -72,6 +77,7 @@ module.exports = class CcCeDictDatabaseParser {
           pronunciation += p;
         });
 
+        pronunciation = replaceall('u:', 'ü', pronunciation);
 
         const pronunciationUnaccented = pronunciation.replace(new RegExp('[12345]', 'g'), '');
         pronunciation = UnihanSearch

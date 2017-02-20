@@ -36,9 +36,6 @@ const unzipFile = function unzipFile() {
 const downloadFile = function downloadFile() {
   const src = 'http://www.mdbg.net/chindict/export/cedict/cedict_1_0_ts_utf-8_mdbg.zip';
 
-  fs.statSync(filenameZip);
-  fs.unlinkSync(filenameZip);
-
   const download = wget.download(src, filenameZip);
 
   download.on('error', (err) => {
