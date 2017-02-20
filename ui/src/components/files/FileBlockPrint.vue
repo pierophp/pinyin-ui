@@ -4,13 +4,14 @@
     <div class="image" v-if="block.small">
       <img :src="block.small" referrerpolicy="no-referrer"/>
     </div>
+    
     <div class="pinyin" v-if="!block.small">
       <span>
         <span v-for="data in printData" :class="[data.pinyinClass]" v-html="data.pinyin"></span>
       </span>
     </div>
 
-    <div class="character" v-if="!block.small">
+    <div class="character" :class="classBold" v-if="!block.small">
       <span v-for="data in printData" :class="[data.toneClass, data.ideogramClass]" @click.prevent="openModal(data.character)">
         {{data.character}}
       </span>
@@ -39,6 +40,7 @@
     data() {
       return {
         classHighlight: '',
+        classBold: '',
         printData: [],
       };
     },
@@ -49,6 +51,9 @@
         default: 0,
       },
       blockIndex: {
+        default: 0,
+      },
+      isBold: {
         default: 0,
       },
       highlight: '',
@@ -99,6 +104,10 @@
 
       updateRender() {
         this.classHighlight = `highlight-${this.highlight}`;
+        this.classBold = '';
+        if (this.isBold === 1) {
+          this.classBold = 'bold';
+        }
         const printData = [];
         const pinyin = separatePinyinInSyllables(this.pinyin).split(' ');
         const chars = this.character.toString();

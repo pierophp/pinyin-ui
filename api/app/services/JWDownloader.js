@@ -1,5 +1,6 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
+const replaceall = require('replaceall');
 
 module.exports = class JwDownloader {
   static download(url) {
@@ -133,10 +134,17 @@ module.exports = class JwDownloader {
       return;
     }
 
-    const text = this.trim($(element).text());
+    let text = this.trim($(element).text());
     if (!text) {
       return;
     }
+
+    text = replaceall('<strong>', '//STRONG-OPEN//', $(element).html());
+    text = replaceall('</strong>', '//STRONG-CLOSE//', text);
+    text = $('<textarea />').html(text).text();
+    text = replaceall('//STRONG-OPEN//', '<b>', text);
+    text = replaceall('//STRONG-CLOSE//', '</b>', text);
+    text = this.trim(text);
 
     if (this.figcaptionsText.indexOf(text) > -1) {
       return;

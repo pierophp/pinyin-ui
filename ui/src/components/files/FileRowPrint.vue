@@ -5,6 +5,7 @@
       :block="block"
       :pinyin="block.p"
       :character="block.c"
+      :isBold="block.isBold"
       :highlight="block.h"
       :line-index="lineIndex"
       :block-index="index"

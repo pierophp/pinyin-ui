@@ -387,7 +387,11 @@
   }
 
   .image img {
-    max-height:300px;
+    max-height:200px;
+  }
+
+  .bold span {
+    font-weight: 500 !important;
   }
 
 </style>

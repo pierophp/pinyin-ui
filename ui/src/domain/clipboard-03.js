@@ -117,6 +117,9 @@ export default function (content) {
             line.text = replaceall(item, ` ${item}${specialWord} `, line.text);
           });
 
+          line.text = replaceall('<b>', '<b> ', line.text);
+          line.text = replaceall('</b>', '</b> ', line.text);
+
           // remove double spaces
           if (line.text) {
             line.text = line.text.replace(/\s{2,}/g, ' ').trim();
@@ -147,11 +150,29 @@ export default function (content) {
             ideogramsFiltered.push(joinSpecial);
           }
 
+          let isBold = 0;
+
           ideogramsFiltered.forEach((char) => {
-            row.push({
+            if (char === '<b>') {
+              isBold = 1;
+              return;
+            }
+
+            if (char === '</b>') {
+              isBold = 0;
+              return;
+            }
+
+            const item = {
               p: '',
               c: char,
-            });
+            };
+
+            if (isBold === 1) {
+              item.isBold = isBold;
+            }
+
+            row.push(item);
           });
 
           if (line.type !== undefined) {
