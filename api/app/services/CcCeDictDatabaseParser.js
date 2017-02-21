@@ -37,6 +37,7 @@ module.exports = class CcCeDictDatabaseParser {
       const promises = [];
 
       function processPromisses() {
+        // eslint-disable-next-line
         console.log('Promise process init');
         Promise.map(promises, promiseImport =>
           promiseImport()
@@ -145,6 +146,7 @@ module.exports = class CcCeDictDatabaseParser {
                       resolveImport();
                     })
                     .error((err) => {
+                      // eslint-disable-next-line
                       console.log(err);
                       rejectImport();
                     });

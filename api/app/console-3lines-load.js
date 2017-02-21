@@ -16,10 +16,12 @@ const filename = `${storagePath}DicPortugues.txt`;
 const importFile = function importFile() {
   ThreeLinesDatabaseParser.loadFile(filename)
     .then(() => {
+      // eslint-disable-next-line
       console.log('Successfully imported!');
       process.exit();
     })
     .error(() => {
+      // eslint-disable-next-line
       console.log('Error!');
       process.exit();
     });
@@ -31,6 +33,7 @@ const downloadFile = function downloadFile() {
   const download = wget.download(src, filename);
 
   download.on('error', (err) => {
+    // eslint-disable-next-line
     console.log(`Error: ${err}`);
   });
 

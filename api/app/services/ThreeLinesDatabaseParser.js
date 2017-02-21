@@ -4,7 +4,6 @@ const Promise = require('bluebird');
 const UnihanSearch = require('../services/UnihanSearch');
 const readline = require('readline');
 const fs = require('fs');
-const replaceall = require('replaceall');
 
 module.exports = class ThreeLinesDatabaseParser {
 
@@ -37,6 +36,7 @@ module.exports = class ThreeLinesDatabaseParser {
       const promises = [];
 
       function processPromisses() {
+        // eslint-disable-next-line
         console.log('Promise process init');
         Promise.map(promises, promiseImport =>
           promiseImport()
@@ -124,6 +124,7 @@ module.exports = class ThreeLinesDatabaseParser {
                       resolveImport();
                     })
                     .error((err) => {
+                      // eslint-disable-next-line
                       console.log(err);
                       rejectImport();
                     });

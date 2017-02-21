@@ -17,7 +17,7 @@ function separate(pinyin) {
     //.replace(new RegExp('([^e\w\s])(r)'), '$1 $2'); // r an initial, except in er
 }
 
-module.exports = function (pinyin) {
+module.exports = function separatePinyinInSyllables(pinyin) {
   const pinyinSeparated = separate(pinyin).split(' ');
   const newPinyin = [];
   pinyinSeparated.forEach((p) => {

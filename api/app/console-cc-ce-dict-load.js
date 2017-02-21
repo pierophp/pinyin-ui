@@ -18,10 +18,12 @@ const filenameZip = `${storagePath}cedict_1_0_ts_utf-8_mdbg.zip`;
 const importFile = function importFile() {
   CcCeDictDatabaseParser.loadFile(filename)
     .then(() => {
+      // eslint-disable-next-line
       console.log('Successfully imported!');
       process.exit();
     })
     .error(() => {
+      // eslint-disable-next-line
       console.log('Error!');
       process.exit();
     });
@@ -39,6 +41,7 @@ const downloadFile = function downloadFile() {
   const download = wget.download(src, filenameZip);
 
   download.on('error', (err) => {
+    // eslint-disable-next-line
     console.log(`Error: ${err}`);
   });
 
