@@ -76,9 +76,12 @@ export default {
     }
 
     commit(types.FILE_MUTATION_SET_FILE_LOADING, true);
-    Vue.nextTick(() => {
-      commit(types.FILE_MUTATION_SET, { file: [] });
-      loadFile(lines, 0, state, commit, true, filename);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        commit(types.FILE_MUTATION_SET, { file: [] });
+        loadFile(lines, 0, state, commit, true, filename);
+      });
     });
   },
 

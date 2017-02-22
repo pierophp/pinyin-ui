@@ -149,6 +149,7 @@
   .print{
     margin: 10px 2px;
     position: relative;
+    will-change: transform;
   }
 
   @media print{

@@ -1,38 +1,40 @@
 <template>
-  <div class="files-container">
-    <md-list class="md-double-line">
-      <md-list-item v-for="(file, fileId) in files" @click.native="openOptions(fileId, $event)" >
-        <md-button class="md-icon-button list-icon">
-          <md-icon class="md-primary">
-            {{ file.type == 'file' ? 'collections' : 'folder' }}
-          </md-icon>
-        </md-button>
-
-        <div class="md-list-text-container">
-          {{ file.path }}
-        </div>
-
-        <md-menu md-size="4" :md-offset-x="menuX" ref="menu">
-          <md-button md-menu-trigger class="md-icon-button md-list-action">
-            <md-icon>more_vert</md-icon>
+  <div>
+    <div class="files-container">
+      <md-list class="md-double-line">
+        <md-list-item v-for="(file, fileId) in files" @click.native="openOptions(fileId, $event)" >
+          <md-button class="md-icon-button list-icon">
+            <md-icon class="md-primary">
+              {{ file.type == 'file' ? 'collections' : 'folder' }}
+            </md-icon>
           </md-button>
-          <md-menu-content>
-            <md-menu-item @click.native="goToFile(file.path)" v-if="file.type == 'file'">
-              <md-icon>edit</md-icon>
-              <span>{{ $t("edition_mode") }}</span>
-            </md-menu-item>
-            <md-menu-item @click.native="visualizationMode(file.path)" v-if="file.type == 'file'">
-              <md-icon>visibility</md-icon>
-              <span>{{ $t("visualization_mode") }}</span>
-            </md-menu-item>
-            <md-menu-item @click.native="openDeleteDialog(file.path)">
-              <md-icon>delete</md-icon>
-              <span>{{ $t("delete") }}</span>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
-      </md-list-item>
-    </md-list>
+
+          <div class="md-list-text-container">
+            {{ file.path }}
+          </div>
+
+          <md-menu md-size="4" :md-offset-x="menuX" ref="menu">
+            <md-button md-menu-trigger class="md-icon-button md-list-action">
+              <md-icon>more_vert</md-icon>
+            </md-button>
+            <md-menu-content>
+              <md-menu-item @click.native="goToFile(file.path)" v-if="file.type == 'file'">
+                <md-icon>edit</md-icon>
+                <span>{{ $t("edition_mode") }}</span>
+              </md-menu-item>
+              <md-menu-item @click.native="visualizationMode(file.path)" v-if="file.type == 'file'">
+                <md-icon>visibility</md-icon>
+                <span>{{ $t("visualization_mode") }}</span>
+              </md-menu-item>
+              <md-menu-item @click.native="openDeleteDialog(file.path)">
+                <md-icon>delete</md-icon>
+                <span>{{ $t("delete") }}</span>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </md-list-item>
+      </md-list>
+    </div>
     <new-file-modal></new-file-modal>
     <delete-file-modal :filename="deleteFilename" ref="deleteModal"></delete-file-modal>
   </div>
@@ -122,6 +124,7 @@
 <style>
 .files-container{
   padding-bottom: 60px;
+  will-change: transform;
 }
 
 .files-container .md-list-item .list-icon{
