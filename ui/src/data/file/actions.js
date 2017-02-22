@@ -85,6 +85,10 @@ export default {
     });
   },
 
+  [types.FILE_ACTION_CLEAR]({ commit }) {
+    commit(types.FILE_MUTATION_SET, { file: [] });
+  },
+
   [types.FILES_ACTION_FETCH]({ commit }) {
     http
     .get('files')

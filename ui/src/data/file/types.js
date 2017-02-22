@@ -2,6 +2,7 @@
 export const FILES_ACTION_FETCH = 'files/action/fetch';
 
 export const FILE_ACTION_FETCH = 'file/action/fetch';
+export const FILE_ACTION_CLEAR = 'file/action/clear';
 export const FILE_ACTION_FETCH_MY_CJK = 'file/action/fetchMyCjk';
 export const FILE_ACTION_SAVE = 'file/action/save';
 export const FILE_ACTION_CONVERT_TO_PINYIN = 'file/action/convertToPinyin';
