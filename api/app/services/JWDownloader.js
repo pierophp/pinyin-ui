@@ -20,7 +20,7 @@ module.exports = class JwDownloader {
         }
 
         this.text.push({
-          text: this.trim($('article header h1').text()),
+          text: this.getText($, $('article header h1')),
           type: 'h1',
         });
 
@@ -29,7 +29,7 @@ module.exports = class JwDownloader {
             const boxH2 = $(children).find('aside h2');
             if (boxH2) {
               this.text.push({
-                text: this.trim($(boxH2).text()),
+                text: this.getText($, boxH2),
                 type: 'h2',
               });
 
@@ -40,7 +40,7 @@ module.exports = class JwDownloader {
               const boxH2 = $(subChildren).children('h2');
               if (boxH2 && $(boxH2).text()) {
                 this.text.push({
-                  text: this.trim($(boxH2).text()),
+                  text: this.getText($, boxH2),
                   type: 'h2',
                 });
               }
@@ -63,7 +63,7 @@ module.exports = class JwDownloader {
       const boxH2 = $(element).find('h2');
       if (boxH2 && $(boxH2).text()) {
         this.text.push({
-          text: this.trim($(boxH2).text()),
+          text: this.getText($, boxH2),
           type: 'box-h2',
         });
       }
@@ -122,7 +122,7 @@ module.exports = class JwDownloader {
           imgCaption = 'imgcaption';
         }
 
-        const text = this.trim($(figcaption).text());
+        const text = this.getText($, figcaption);
         this.figcaptionsText.push(text);
 
         this.text.push({
@@ -139,12 +139,7 @@ module.exports = class JwDownloader {
       return;
     }
 
-    text = replaceall('<strong>', '//STRONG-OPEN//', $(element).html());
-    text = replaceall('</strong>', '//STRONG-CLOSE//', text);
-    text = $('<textarea />').html(text).text();
-    text = replaceall('//STRONG-OPEN//', '<b>', text);
-    text = replaceall('//STRONG-CLOSE//', '</b>', text);
-    text = this.trim(text);
+    text = this.getText($, element);
 
     if (this.figcaptionsText.indexOf(text) > -1) {
       return;
@@ -165,6 +160,17 @@ module.exports = class JwDownloader {
 
       this.text.push(item);
     });
+  }
+
+  static getText($, element) {
+    let text = replaceall('<strong>', '//STRONG-OPEN//', $(element).html());
+    text = replaceall('</strong>', '//STRONG-CLOSE//', text);
+    text = replaceall('<wbr>', ' ', text);
+    text = $('<textarea />').html(text).text();
+    text = replaceall('//STRONG-OPEN//', '<b>', text);
+    text = replaceall('//STRONG-CLOSE//', '</b>', text);
+    text = this.trim(text);
+    return text;
   }
 
   static explodeLines(text) {
