@@ -29,7 +29,13 @@ export default function (pinyin) {
 
     if (p.length > 6 || totalTones > 1) {
       separate(p).split(' ').forEach((newP) => {
-        newPinyin.push(newP);
+        if (newP.length > 6 || totalTones > 1) {
+          separate(newP).split(' ').forEach((newP2) => {
+            newPinyin.push(newP2);
+          });
+        } else {
+          newPinyin.push(newP);
+        }
       });
     } else {
       newPinyin.push(p);

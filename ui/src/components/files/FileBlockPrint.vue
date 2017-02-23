@@ -4,7 +4,7 @@
     <div class="image" v-if="block.small">
       <img :src="block.small" referrerpolicy="no-referrer"/>
     </div>
-    
+
     <div class="pinyin" v-if="!block.small">
       <span>
         <span v-for="data in printData" :class="[data.pinyinClass]" v-html="data.pinyin"></span>
