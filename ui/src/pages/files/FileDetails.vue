@@ -42,6 +42,7 @@
 
   import {
   FILE_ACTION_FETCH,
+  FILE_ACTION_CLEAR,
   FILE_ACTION_SAVE,
   FILE_GETTER,
   FILE_GETTER_PARSING,
@@ -90,13 +91,15 @@
       }, 3000);
     },
 
-    destroyed() {
+    beforeDestroy() {
       clearInterval(this.timer);
+      this.clear();
     },
 
     methods: {
       ...mapActions({
         fetch: FILE_ACTION_FETCH,
+        clear: FILE_ACTION_CLEAR,
         save: FILE_ACTION_SAVE,
       }),
 

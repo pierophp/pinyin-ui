@@ -23,6 +23,11 @@ function arrayObjectIndexOf(array, searchTerm, property) {
 }
 
 function loadFile(file, lineIndex, state, commit, storage, filename) {
+  if (!state.fileLoading) {
+    return;
+  }
+
+
   if (file.length === lineIndex) {
     // Remove extra lines
     if (state.file.length > file.length) {
@@ -58,12 +63,18 @@ function loadFile(file, lineIndex, state, commit, storage, filename) {
   lineIndex += 1;
   if (storage) {
     Vue.nextTick(() => {
-      setTimeout(() => {
-        loadFile(file, lineIndex, state, commit, storage, filename);
-      }, 30);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          loadFile(file, lineIndex, state, commit, storage, filename);
+        });
+      });
     });
   } else {
-    loadFile(file, lineIndex, state, commit, storage, filename);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        loadFile(file, lineIndex, state, commit, storage, filename);
+      });
+    });
   }
 }
 
@@ -86,6 +97,7 @@ export default {
   },
 
   [types.FILE_ACTION_CLEAR]({ commit }) {
+    commit(types.FILE_MUTATION_SET_FILE_LOADING, false);
     commit(types.FILE_MUTATION_SET, { file: [] });
   },
 

@@ -84,7 +84,7 @@
       }, 3000);
     },
 
-    destroyed() {
+    beforeDestroy() {
       clearInterval(this.timer);
       this.clear();
     },
