@@ -3,6 +3,8 @@ export default function (pinyin) {
     return 0;
   }
 
+  pinyin = pinyin.toLowerCase();
+
   const tones = [{
     tone: 1,
     letters: ['ā', 'ē', 'ī', 'ō', 'ū', 'ǖ'],
