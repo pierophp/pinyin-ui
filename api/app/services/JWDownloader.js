@@ -163,7 +163,12 @@ module.exports = class JwDownloader {
   }
 
   static getText($, element) {
-    let text = replaceall('<strong>', '//STRONG-OPEN//', $(element).html());
+    let text = $(element).html();
+    if (text === null) {
+      return '';
+    }
+
+    text = replaceall('<strong>', '//STRONG-OPEN//', text);
     text = replaceall('</strong>', '//STRONG-CLOSE//', text);
     text = replaceall('<wbr>', ' ', text);
     text = $('<textarea />').html(text).text();

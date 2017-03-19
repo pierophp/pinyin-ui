@@ -11,7 +11,7 @@ router.get('/download', (req, res) => {
     res.send({ status: 200, text });
   })
   .catch((e) => {
-    res.send({ status: 500, error: e });
+    res.send({ status: 500, error: e.message });
   });
 });
 
