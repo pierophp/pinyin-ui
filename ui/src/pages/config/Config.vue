@@ -14,8 +14,9 @@
         <md-input-container>
           <label for="type">{{ $t('type') }}</label>
           <md-select name="type" id="type" v-model="type">
-            <md-option value="1">{{ $t('pinyin_ideograms') }}</md-option>
+            <md-option value="1">{{ $t('pinyin_ideograms_without_knew') }}</md-option>
             <md-option value="2">{{ $t('ideograms_only') }}</md-option>
+            <md-option value="3">{{ $t('pinyin_ideograms') }}</md-option>
           </md-select>
         </md-input-container>
 

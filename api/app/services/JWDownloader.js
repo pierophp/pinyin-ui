@@ -27,7 +27,7 @@ module.exports = class JwDownloader {
         $('article .docSubContent').children().each((i, children) => {
           if ($(children).hasClass('blockTeach')) {
             const boxH2 = $(children).find('aside h2');
-            if (boxH2) {
+            if (boxH2 && $(boxH2).text()) {
               this.text.push({
                 text: this.getText($, boxH2),
                 type: 'h2',

@@ -24,6 +24,7 @@
   import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
   import extractPinyinTone from 'src/helpers/extract-pinyin-tone';
   import specialIdeograms from 'src/helpers/special-ideograms-chars';
+  import LocalStorage from 'src/helpers/local-storage';
 
   import {
     mapMutations,
@@ -103,6 +104,7 @@
       },
 
       updateRender() {
+        const options = LocalStorage.get('options');
         this.classHighlight = `highlight-${this.highlight}`;
         this.classBold = '';
         if (this.isBold === 1) {
@@ -119,7 +121,7 @@
           let ideogramClass = '';
 
           const tone = extractPinyinTone(pinyin[i]);
-          if (this.myCjk.indexOf(chars[i]) > -1 || pinyin[i] === undefined || pinyin[i] === '') {
+          if (options.type !== '3' && (this.myCjk.indexOf(chars[i]) > -1 || pinyin[i] === undefined || pinyin[i] === '')) {
             pinyinClass = 'hide-pinyin';
             newPinyin = '&nbsp;';
           } else if (pinyin[i]) {

@@ -45,6 +45,7 @@ export default {
   normal: 'Normal',
   larger: 'Grande',
   type: 'Tipo',
+  pinyin_ideograms_without_knew: 'Pinyin (sem conhecidos) + Ideogramas',
   pinyin_ideograms: 'Pinyin + Ideogramas',
   ideograms_only: 'Somente ideogramas',
   save: 'Salvar',
