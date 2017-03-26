@@ -106,6 +106,7 @@
         if (options === null) {
           options = {
             size: 'normal',
+            type: 1,
           };
         }
 

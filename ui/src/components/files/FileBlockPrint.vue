@@ -104,7 +104,12 @@
       },
 
       updateRender() {
-        const options = LocalStorage.get('options');
+        let options = LocalStorage.get('options');
+        if (options === null) {
+          options = {
+            type: 1,
+          };
+        }
         this.classHighlight = `highlight-${this.highlight}`;
         this.classBold = '';
         if (this.isBold === 1) {
