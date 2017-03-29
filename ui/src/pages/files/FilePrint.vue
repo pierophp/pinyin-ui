@@ -1,21 +1,27 @@
 <template>
-  <div class="print" :class="[sizeClass, typeClass, ideogramColoredClass, ideogramSpacedClass]">
-    <h2>{{filename}}</h2>
-    <file-row-print v-for="(line, lineIndex) in lines"
-        :line="line"
-        :lineIndex="lineIndex"
-        @open-modal="openModal"/>
+  <div class="print-container">
+    <div class="print-scroll">
+      <div class="print" :class="[sizeClass, typeClass, ideogramColoredClass, ideogramSpacedClass]">
+        <h2>{{filename}}</h2>
+        <file-row-print v-for="(line, lineIndex) in lines"
+            :line="line"
+            :lineIndex="lineIndex"
+            @open-bottom-bar="openBottomBar"/>
 
-    <div class="loading-container">
-      <md-spinner md-indeterminate v-if="fileLoading"></md-spinner>
+        <div class="loading-container">
+          <md-spinner md-indeterminate v-if="fileLoading"></md-spinner>
+        </div>
+
+        <add-remove-character-modal ref="addRemoveCharacterModal"/>
+        <highlight-modal/>
+      </div>
     </div>
-
-    <add-remove-character-modal ref="addRemoveCharacterModal"/>
-    <highlight-modal/>
+    <file-bottom-bar ref="fileBottomBar" @open-modal="openModal"/>
   </div>
 </template>
 <script>
   import FileRowPrint from 'src/components/files/FileRowPrint';
+  import FileBottomBar from 'src/components/files/FileBottomBar';
   import AddRemoveCharacterModal from 'src/components/modals/AddRemoveCharacter';
   import HighlightModal from 'src/components/modals/Highlight';
   import LocalStorage from 'src/helpers/local-storage';
@@ -41,6 +47,7 @@
       FileRowPrint,
       AddRemoveCharacterModal,
       HighlightModal,
+      FileBottomBar,
     },
 
     data() {
@@ -131,6 +138,9 @@
       openModal(add) {
         this.$refs.addRemoveCharacterModal.openDialog(add);
       },
+      openBottomBar(block) {
+        this.$refs.fileBottomBar.open(block);
+      },
     },
 
   };
@@ -150,10 +160,24 @@
     color: #000 !important;
   }
 
+
+  .print-container{
+    flex: 1;
+    display: flex;
+    flex-flow: column nowrap;
+    overflow: hidden;
+  }
+
+  .print-scroll{
+    flex: 1;
+    will-change: transform;
+    overflow: auto;
+    padding: 0 10px;
+  }
+
   .print{
     margin: 10px 2px;
     position: relative;
-    will-change: transform;
   }
 
   @media print{
@@ -319,7 +343,7 @@
     text-decoration: none;
   }
 
-  .print .character span:hover {
+  .print .character:hover {
     cursor: pointer;
     opacity: 0.5;
   }

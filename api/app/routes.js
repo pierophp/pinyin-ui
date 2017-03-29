@@ -8,4 +8,5 @@ module.exports = function routes(app) {
   app.use('/jw', require('./controllers/JWController'));
   app.use('/unihan', require('./controllers/UnihanController'));
   app.use('/my-cjk', require('./controllers/MyCjkController'));
+  app.use('/chinese-tools', require('./controllers/ChineseToolsController'));
 };

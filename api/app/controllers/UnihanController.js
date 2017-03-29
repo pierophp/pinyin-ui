@@ -44,4 +44,21 @@ router.post('/to_pinyin', (req, res) => {
   });
 });
 
+router.post('/to_pinyin_all', (req, res) => {
+  const ideograms = req.body.ideograms;
+  UnihanSearch.toPinyin(ideograms, { pinyinAll: true }).then((result) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(result));
+  });
+});
+
+router.post('/dictionary', (req, res) => {
+  const ideograms = req.body.ideograms;
+  UnihanSearch.searchToDictionary(ideograms).then((result) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(result));
+  });
+});
+
+
 module.exports = router;

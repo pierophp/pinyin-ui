@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="file-container">
   <loadable-content :loading="loading">
     <h2>{{filename}}</h2>
     <div class="larger-print">
@@ -134,7 +134,11 @@
 </script>
 
 <style>
-
+    .file-container{
+      flex: 1;
+      padding: 0 10px;
+      overflow: auto;
+    }
     .md-list-item .md-list-item-holder>.md-icon:first-child {
       margin-right: 14px;
     }

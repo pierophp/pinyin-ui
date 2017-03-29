@@ -11,8 +11,8 @@
       </span>
     </div>
 
-    <div class="character" :class="classBold" v-if="!block.small">
-      <span v-for="data in printData" :class="[data.toneClass, data.ideogramClass]" @click.prevent="openModal(data.character)">
+    <div class="character" :class="classBold" v-if="!block.small" @click.prevent="openBottomBar()">
+      <span v-for="data in printData" :class="[data.toneClass, data.ideogramClass]">
         {{data.character}}
       </span>
     </div>
@@ -27,12 +27,10 @@
   import LocalStorage from 'src/helpers/local-storage';
 
   import {
-    mapMutations,
     mapGetters,
   } from 'vuex';
 
   import {
-  FILE_MUTATION_SET_MY_CJK_TEMP,
   FILE_GETTER_MY_CJK,
   } from 'src/data/file/types';
 
@@ -86,10 +84,6 @@
       this.updateRender();
     },
     methods: {
-      ...mapMutations({
-        setMyCjkTemp: FILE_MUTATION_SET_MY_CJK_TEMP,
-      }),
-
       blockClick() {
         if (!this.highlight) {
           return;
@@ -167,14 +161,13 @@
 
         this.printData = printData;
       },
-      openModal(character) {
-        let add = true;
-        if (this.myCjk.indexOf(character) > -1) {
-          add = false;
-        }
-
-        this.setMyCjkTemp(character);
-        this.$emit('open-modal', add);
+      openBottomBar() {
+        this.$emit('open-bottom-bar', {
+          pinyin: this.pinyin,
+          character: this.character,
+          lineIndex: this.lineIndex,
+          blockIndex: this.blockIndex,
+        });
       },
     },
   };

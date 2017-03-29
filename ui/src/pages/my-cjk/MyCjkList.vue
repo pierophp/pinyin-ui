@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ideograms-container">
     <h3>{{ $t('my_total') }}: {{total}}</h3>
 
     <md-tabs>
@@ -11,6 +11,7 @@
               <md-table-head>{{ $t('total') }}</md-table-head>
               <md-table-head>{{ $t('my_ideograms') }}</md-table-head>
               <md-table-head>{{ $t('percent') }}</md-table-head>
+              <md-table-head></md-table-head>
             </md-table-row>
           </md-table-header>
           <md-table-body>
@@ -19,6 +20,11 @@
               <md-table-cell>{{row.total}}</md-table-cell>
               <md-table-cell>{{row.total_my}}</md-table-cell>
               <md-table-cell>{{row.percent}}%</md-table-cell>
+              <md-table-cell>
+                <md-button class="md-icon-button">
+                  <md-icon>edit</md-icon>
+                </md-button>
+              </md-table-cell>
             </md-table-row>
           </md-table-body>
         </md-table>
@@ -45,14 +51,6 @@
     </md-tabs>
   </div>
 </template>
-
-<style>
-.md-table .md-table-head-text,
-.md-table .md-table-cell .md-table-cell-container {
-  padding-left: 10px !important;
-  padding-right: 10px !important;
-}
-</style>
 
 <script>
   import http from 'src/helpers/http';
@@ -89,6 +87,18 @@
 </script>
 
 <style>
+
+  .md-table .md-table-head-text,
+  .md-table .md-table-cell .md-table-cell-container {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  .ideograms-container{
+    flex: 1;
+    padding: 0 10px;
+    overflow: auto;
+  }
+
   #summary .md-table{
     max-width: 650px;
   }

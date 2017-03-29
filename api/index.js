@@ -18,8 +18,10 @@ app.use(jwt({ secret: env.jwt_key }).unless({ path: [
   '/auth/google',
   '/auth/google/callback',
   '/unihan/to_pinyin',
+  '/unihan/dictionary',
   '/segmentation/segment',
   '/jw/download',
+  '/chinese-tools',
 ] }));
 app.use((req, res, next) => {
   res.setHeader('Content-Type', 'application/json');

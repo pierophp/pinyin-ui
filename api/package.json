@@ -38,6 +38,7 @@
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
     "passport-oauth2": "^1.3.0",
+    "querystring": "^0.2.0",
     "replaceall": "^0.1.6",
     "unicode-mandarin-readings": "^1.0.0",
     "utf8": "^2.1.1",

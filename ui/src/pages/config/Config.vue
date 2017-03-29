@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="config-container">
     <h3>{{ $t('settings') }}</h3>
     <md-tabs>
       <md-tab id="visualization" :md-label="$t('visualization_mode')">
@@ -79,4 +79,9 @@ export default{
 </script>
 
 <style>
+.config-container{
+  flex: 1;
+  padding: 0 10px;
+  overflow: auto;
+}
 </style>

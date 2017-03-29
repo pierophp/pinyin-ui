@@ -1,6 +1,7 @@
 const Promise = require('bluebird');
 const knex = require('./knex');
 const separatePinyinInSyllables = require('../helpers/separate-pinyin-in-syllables');
+const ChineseToolsDownloader = require('../services/ChineseToolsDownloader');
 
 module.exports = class UnihanSearch {
   static getChangeToneRules() {
@@ -15,6 +16,39 @@ module.exports = class UnihanSearch {
         4: 'yí',
       },
     };
+  }
+
+  static async searchToDictionary(ideograms) {
+    const cjkList = await knex('cjk')
+      .where({
+        ideogram: UnihanSearch.convertIdeogramsToUtf16(ideograms),
+      })
+      .orderBy('frequency', 'ASC')
+      .orderBy('usage', 'DESC')
+      .select('id', 'definition_unihan', 'definition_pt', 'definition_cedict');
+
+    const response = {};
+    response.unihan = null;
+    response.pt = null;
+    response.cedict = null;
+    const chineseToolsPt = await ChineseToolsDownloader.download(ideograms, 'pt');
+    response.chinese_tools_pt = chineseToolsPt.split('\n');
+
+    const chineseToolsEs = await ChineseToolsDownloader.download(ideograms, 'es');
+    response.chinese_tools_es = chineseToolsEs.split('\n');
+    cjkList.forEach((cjk) => {
+      if (cjk.definition_unihan) {
+        response.unihan = [cjk.definition_unihan];
+      }
+
+      response.pt = cjk.definition_pt;
+
+      if (cjk.definition_cedict) {
+        response.cedict = JSON.parse(cjk.definition_cedict);
+      }
+    });
+
+    return response;
   }
 
   static searchByIdeograms(ideograms) {
@@ -104,7 +138,7 @@ module.exports = class UnihanSearch {
     return 0;
   }
 
-  static parseResultByIdeograms(ideogramsList, ideograms) {
+  static parseResultByIdeograms(ideogramsList, ideograms, nextWord, options) {
     const specialsChars = {
       '。': ' ',
       '？': ' ',
@@ -222,6 +256,12 @@ module.exports = class UnihanSearch {
         }
       } else {
         result.pinyin += ideogram[0].pronunciation;
+        if (options.pinyinAll) {
+          result.pinyinAll = [];
+          ideogram.forEach((word) => {
+            result.pinyinAll.push(word.pronunciation);
+          });
+        }
       }
 
       i += 1;
@@ -230,7 +270,7 @@ module.exports = class UnihanSearch {
     return result;
   }
 
-  static toPinyin(ideograms) {
+  static toPinyin(ideograms, options = {}) {
     const pinyinPromisses = [];
 
     ideograms.forEach((ideogram, ideogramIndex) => {
@@ -240,6 +280,13 @@ module.exports = class UnihanSearch {
           if (words.length > 0) {
             result.ideogram = ideogram;
             result.pinyin = words[0].pronunciation;
+            if (options.pinyinAll) {
+              result.pinyinAll = [];
+              words.forEach((word) => {
+                result.pinyinAll.push(word.pronunciation);
+              });
+            }
+
             resolvePinyin(result);
           } else {
             let nextWord = '';
@@ -248,7 +295,7 @@ module.exports = class UnihanSearch {
             }
 
             UnihanSearch.searchByIdeograms(ideogram).then((ideogramsList) => {
-              resolvePinyin(UnihanSearch.parseResultByIdeograms(ideogramsList, ideogram, nextWord));
+              resolvePinyin(UnihanSearch.parseResultByIdeograms(ideogramsList, ideogram, nextWord, options));
             });
           }
         });

@@ -9,7 +9,7 @@
       :highlight="block.h"
       :line-index="lineIndex"
       :block-index="index"
-      @open-modal="openModal"
+      @open-bottom-bar="openBottomBar"
       >
     </file-block-print>
 
@@ -46,8 +46,8 @@
       }
     },
     methods: {
-      openModal(add) {
-        this.$emit('open-modal', add);
+      openBottomBar(block) {
+        this.$emit('open-bottom-bar', block);
       },
     },
   };

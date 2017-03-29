@@ -26,8 +26,8 @@ html, body {
 }
 
 .content {
-  padding: 0 10px;
-  overflow: auto;
+  overflow: hidden;
+  display: flex;
 }
 
 .line{

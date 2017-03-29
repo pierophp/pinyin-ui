@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="files-wrapper">
     <div class="files-container">
       <md-list class="md-double-line">
         <md-list-item v-for="(file, fileId) in files" @click.native="openOptions(fileId, $event)" >
@@ -122,6 +122,11 @@
 </script>
 
 <style>
+.files-wrapper{
+  flex: 1;
+  overflow: auto;
+}
+
 .files-container{
   padding-bottom: 60px;
   will-change: transform;
