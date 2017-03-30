@@ -31,11 +31,18 @@ module.exports = class UnihanSearch {
     response.unihan = null;
     response.pt = null;
     response.cedict = null;
+    response.chinese_tools_pt = null;
     const chineseToolsPt = await ChineseToolsDownloader.download(ideograms, 'pt');
-    response.chinese_tools_pt = chineseToolsPt.split('\n');
+    if (chineseToolsPt) {
+      response.chinese_tools_pt = chineseToolsPt.split('\n');
+    }
 
+    response.chinese_tools_es = null;
     const chineseToolsEs = await ChineseToolsDownloader.download(ideograms, 'es');
-    response.chinese_tools_es = chineseToolsEs.split('\n');
+    if (chineseToolsEs){
+      response.chinese_tools_es = chineseToolsEs.split('\n');
+    }
+
     cjkList.forEach((cjk) => {
       if (cjk.definition_unihan) {
         response.unihan = [cjk.definition_unihan];
