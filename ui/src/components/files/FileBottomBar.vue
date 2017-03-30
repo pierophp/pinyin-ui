@@ -24,6 +24,13 @@
 
       <md-dialog-content>
 
+        <div v-if="dictionary.pt">
+          <div class="dict-title">PT</div>
+          <div class="dict-block">
+            <div v-for="pt in dictionary.pt">{{ pt }}</div>
+          </div>
+        </div>
+
         <div v-if="dictionary.chinese_tools_pt">
           <div class="dict-title">Chinese Tools - PT</div>
           <div class="dict-block">

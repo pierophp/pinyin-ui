@@ -41,7 +41,9 @@ module.exports = class UnihanSearch {
         response.unihan = [cjk.definition_unihan];
       }
 
-      response.pt = cjk.definition_pt;
+      if (cjk.definition_pt) {
+        response.pt = JSON.parse(cjk.definition_pt);
+      }
 
       if (cjk.definition_cedict) {
         response.cedict = JSON.parse(cjk.definition_cedict);
