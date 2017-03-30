@@ -14,6 +14,10 @@ module.exports = class ChineseToolsDownloader {
       .then((response) => {
         const $ = cheerio.load(response.data);
         const element = $('.ctdico_entry .ctdico_def');
+        if (element.length === 0) {
+          return '';
+        }
+
         let text = $(element).html();
         text = replaceall('</a>', '</a> ', text);
         text = $('<textarea />').html(text).text();
