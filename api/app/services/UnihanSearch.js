@@ -39,8 +39,14 @@ module.exports = class UnihanSearch {
 
     response.chinese_tools_es = null;
     const chineseToolsEs = await ChineseToolsDownloader.download(ideograms, 'es');
-    if (chineseToolsEs){
+    if (chineseToolsEs) {
       response.chinese_tools_es = chineseToolsEs.split('\n');
+    }
+
+    response.chinese_tools_en = null;
+    const chineseToolsEn = await ChineseToolsDownloader.download(ideograms, 'en');
+    if (chineseToolsEn) {
+      response.chinese_tools_en = chineseToolsEn.split('\n');
     }
 
     cjkList.forEach((cjk) => {

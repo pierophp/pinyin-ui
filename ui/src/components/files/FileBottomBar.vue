@@ -59,6 +59,13 @@
           </div>
         </div>
 
+        <div v-if="dictionary.chinese_tools_en">
+          <div class="dict-title">Chinese Tools - EN</div>
+          <div class="dict-block">
+            <div v-for="chinese_tools_en in dictionary.chinese_tools_en">{{ chinese_tools_en }}</div>
+          </div>
+        </div>
+
       </md-dialog-content>
 
       <md-dialog-actions>
@@ -99,6 +106,7 @@
           cedict: null,
           chinese_tools_pt: null,
           chinese_tools_es: null,
+          chinese_tools_en: null,
         },
       };
     },
