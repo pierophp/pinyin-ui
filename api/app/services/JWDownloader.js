@@ -68,17 +68,32 @@ module.exports = class JwDownloader {
         });
       }
 
-      $(element).find('.boxContent').children().each((i, subChildren) => {
-        if ($(subChildren).get(0).tagName === 'ul') {
-          $(subChildren).children().each((j, subChildrenLi) => {
-            $(subChildrenLi).children().each((k, subChildrenLiContent) => {
-              this.parseContent($, subChildrenLiContent, 'box');
+      if ($(element).find('.boxContent').length > 0) {
+        $(element).find('.boxContent').children().each((i, subChildren) => {
+          if ($(subChildren).get(0).tagName === 'ul') {
+            $(subChildren).children().each((j, subChildrenLi) => {
+              $(subChildrenLi).children().each((k, subChildrenLiContent) => {
+                this.parseContent($, subChildrenLiContent, 'box');
+              });
             });
+          } else {
+            this.parseContent($, subChildren, 'box');
+          }
+        });
+      } else {
+        const subBoxH2 = $(element).find('table caption');
+        if (subBoxH2 && $(subBoxH2).text()) {
+          this.text.push({
+            text: this.getText($, subBoxH2),
+            type: 'box',
           });
-        } else {
-          this.parseContent($, subChildren, 'box');
         }
-      });
+
+        $(element).find('table tr').each((j, subChildrenTr) => {
+          this.parseContent($, subChildrenTr, 'box');
+        });
+
+      }
     } else if ($(element).attr('class') && $(element).attr('class').indexOf('groupFootnote') !== -1) {
       $(element).children().each((l, subChildren) => {
         this.parseContent($, subChildren, 'foot');
