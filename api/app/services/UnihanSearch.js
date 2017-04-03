@@ -31,20 +31,28 @@ module.exports = class UnihanSearch {
     response.unihan = null;
     response.pt = null;
     response.cedict = null;
+
+    let chineseToolsPt = null;
+    let chineseToolsEs = null;
+    let chineseToolsEn = null;
+
+    [chineseToolsPt, chineseToolsEs, chineseToolsEn] = await Promise.all([
+      ChineseToolsDownloader.download(ideograms, 'pt'),
+      ChineseToolsDownloader.download(ideograms, 'es'),
+      ChineseToolsDownloader.download(ideograms, 'en'),
+    ]);
+
     response.chinese_tools_pt = null;
-    const chineseToolsPt = await ChineseToolsDownloader.download(ideograms, 'pt');
     if (chineseToolsPt) {
       response.chinese_tools_pt = chineseToolsPt.split('\n');
     }
 
     response.chinese_tools_es = null;
-    const chineseToolsEs = await ChineseToolsDownloader.download(ideograms, 'es');
     if (chineseToolsEs) {
       response.chinese_tools_es = chineseToolsEs.split('\n');
     }
 
     response.chinese_tools_en = null;
-    const chineseToolsEn = await ChineseToolsDownloader.download(ideograms, 'en');
     if (chineseToolsEn) {
       response.chinese_tools_en = chineseToolsEn.split('\n');
     }

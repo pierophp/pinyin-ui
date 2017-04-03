@@ -92,7 +92,6 @@ module.exports = class JwDownloader {
         $(element).find('table tr').each((j, subChildrenTr) => {
           this.parseContent($, subChildrenTr, 'box');
         });
-
       }
     } else if ($(element).attr('class') && $(element).attr('class').indexOf('groupFootnote') !== -1) {
       $(element).children().each((l, subChildren) => {
