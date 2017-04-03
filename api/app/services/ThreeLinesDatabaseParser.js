@@ -4,10 +4,12 @@ const Promise = require('bluebird');
 const UnihanSearch = require('../services/UnihanSearch');
 const readline = require('readline');
 const fs = require('fs');
+const replaceall = require('replaceall');
 
 module.exports = class ThreeLinesDatabaseParser {
 
   static saveWord(pinyin, ideograms) {
+    pinyin = replaceall('_', '', pinyin);
     let ideogramsConverted = '';
 
     for (let i = 0; i < ideograms.length; i += 1) {
