@@ -29,7 +29,7 @@ module.exports = class UnihanSearch {
       })
       .orderBy('frequency', 'ASC')
       .orderBy('usage', 'DESC')
-      .select('id', 'definition_unihan', 'definition_pt', 'definition_cedict', 'definition_ct_pt', 'definition_ct_es', 'definition_ct_en');
+      .select('id', 'pronunciation', 'definition_unihan', 'definition_pt', 'definition_cedict', 'definition_ct_pt', 'definition_ct_es', 'definition_ct_en');
 
     const response = {};
     response.unihan = null;
@@ -38,12 +38,14 @@ module.exports = class UnihanSearch {
     response.chinese_tools_pt = null;
     response.chinese_tools_es = null;
     response.chinese_tools_en = null;
+    response.pronunciation = null;
 
     let chineseToolsPt = null;
     let chineseToolsEs = null;
     let chineseToolsEn = null;
 
     await Promise.map(cjkList, async (cjk) => {
+      response.pronunciation = cjk.pronunciation;
       if (cjk.definition_unihan) {
         response.unihan = [cjk.definition_unihan];
       }
@@ -53,7 +55,13 @@ module.exports = class UnihanSearch {
       }
 
       if (cjk.definition_cedict) {
-        response.cedict = JSON.parse(cjk.definition_cedict);
+        if (!response.cedict) {
+          response.cedict = JSON.parse(cjk.definition_cedict);
+        } else {
+          JSON.parse(cjk.definition_cedict).forEach((item) => {
+            response.cedict.push(item);
+          });
+        }
       }
 
       if (cjk.definition_ct_pt) {
@@ -376,7 +384,8 @@ module.exports = class UnihanSearch {
       }));
     });
 
-    const result = await Promise.map(pinyinPromisses, promiseImport => promiseImport, { concurrency: 10 });
+    const result = await Promise.map(
+      pinyinPromisses, promiseImport => promiseImport, { concurrency: 10 });
     const changeToneRules = UnihanSearch.getChangeToneRules();
     result.forEach((item, itemIndex) => {
       const pinyins = separatePinyinInSyllables(item.pinyin).split(' ');
