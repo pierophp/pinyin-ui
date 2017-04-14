@@ -9,8 +9,21 @@
   </form>
 
   <loadable-content :loading="loading">
+    <h2 v-if="dictionary.pronunciation">
+    {{ dictionary.pronunciation }} <md-icon class="md-warn sound" @click.native="openSound">volume_up</md-icon>
+    </h2>
     <dictionary-list :dictionary="dictionary"/>
   </loadable-content>
+
+  <md-dialog ref="dialogForvo">
+    <md-dialog-content>
+      <iframe :src="forvoUrl" id="forvo"/>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+      <md-button class="md-primary" @click.native="closeDialog('dialogForvo')">OK</md-button>
+    </md-dialog-actions>
+  </md-dialog>
 </div>
 </template>
 
@@ -27,6 +40,7 @@
     },
     data() {
       return {
+        forvoUrl: null,
         dictionary: {},
         loading: false,
       };
@@ -39,9 +53,19 @@
           ideograms: value,
         })
         .then((response) => {
+          this.forvoUrl = `https://pt.forvo.com/word/${value}/#zh`;
           this.dictionary = response.data;
           this.loading = false;
         });
+      },
+      openSound() {
+        this.openDialog('dialogForvo');
+      },
+      openDialog(ref) {
+        this.$refs[ref].open();
+      },
+      closeDialog(ref) {
+        this.$refs[ref].close();
       },
     },
   };
@@ -51,5 +75,14 @@
 .dictionary-container {
   width: 100%;
   padding: 0 10px;
+}
+.sound{
+  cursor: pointer;
+}
+
+#forvo {
+  width:  100%;
+  height: 500px;
+  border: 0;
 }
 </style>
