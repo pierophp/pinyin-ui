@@ -3,10 +3,14 @@ const knex = require('./knex');
 const separatePinyinInSyllables = require('../helpers/separate-pinyin-in-syllables');
 const ChineseToolsDownloader = require('../services/ChineseToolsDownloader');
 const redis = require('redis');
+const env = require('../../env');
 
 Promise.promisifyAll(redis.RedisClient.prototype);
 
-const redisClient = redis.createClient();
+const redisClient = redis.createClient({
+  host: env.redis_host,
+});
+
 module.exports = class UnihanSearch {
   static getChangeToneRules() {
     return {
