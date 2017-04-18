@@ -23,6 +23,12 @@
       </md-list-item>
 
       <md-list-item>
+        <router-link :to="{ name: 'dictionary' }">
+          <md-icon>pageview</md-icon> <span>{{ $t("menu.dictionary") }}</span>
+        </router-link>
+      </md-list-item>
+
+      <md-list-item>
         <router-link :to="{ name: 'my-cjk' }">
           <md-icon>translate</md-icon> <span>{{ $t("menu.my_ideograms") }}</span>
         </router-link>

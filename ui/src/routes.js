@@ -3,6 +3,7 @@ import FilesList from 'src/pages/files/FilesList';
 import FileDetails from 'src/pages/files/FileDetails';
 import FilePrint from 'src/pages/files/FilePrint';
 import MyCjkList from 'src/pages/my-cjk/MyCjkList';
+import DictionarySearch from 'src/pages/dictionary/Search';
 import Config from 'src/pages/config/Config';
 import FileDetailsTopBar from 'src/components/files/top-bar/file-details';
 import FilePrintTopBar from 'src/components/files/top-bar/file-print';
@@ -41,6 +42,11 @@ export default [
     path: '/my-cjk',
     name: 'my-cjk',
     component: MyCjkList,
+  },
+  {
+    path: '/dictionary',
+    name: 'dictionary',
+    component: DictionarySearch,
   },
   {
     path: '/config',

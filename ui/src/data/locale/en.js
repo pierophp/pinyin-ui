@@ -1,6 +1,7 @@
 export default {
   menu: {
     my_files: 'My Files',
+    dictionary: 'Dictionary',
     my_ideograms: 'My Ideograms',
     settings: 'Settings',
     logout: 'Logout',
@@ -53,4 +54,5 @@ export default {
   yes: 'Yes',
   no: 'No',
   ideograms_spaced: 'Spaced ideograms',
+  search: 'Search',
 };

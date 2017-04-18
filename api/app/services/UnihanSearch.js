@@ -3,10 +3,14 @@ const knex = require('./knex');
 const separatePinyinInSyllables = require('../helpers/separate-pinyin-in-syllables');
 const ChineseToolsDownloader = require('../services/ChineseToolsDownloader');
 const redis = require('redis');
+const env = require('../../env');
 
 Promise.promisifyAll(redis.RedisClient.prototype);
 
-const redisClient = redis.createClient();
+const redisClient = redis.createClient({
+  host: env.redis_host,
+});
+
 module.exports = class UnihanSearch {
   static getChangeToneRules() {
     return {
@@ -29,39 +33,23 @@ module.exports = class UnihanSearch {
       })
       .orderBy('frequency', 'ASC')
       .orderBy('usage', 'DESC')
-      .select('id', 'definition_unihan', 'definition_pt', 'definition_cedict');
+      .select('id', 'pronunciation', 'definition_unihan', 'definition_pt', 'definition_cedict', 'definition_ct_pt', 'definition_ct_es', 'definition_ct_en');
 
     const response = {};
     response.unihan = null;
     response.pt = null;
     response.cedict = null;
+    response.chinese_tools_pt = null;
+    response.chinese_tools_es = null;
+    response.chinese_tools_en = null;
+    response.pronunciation = null;
 
     let chineseToolsPt = null;
     let chineseToolsEs = null;
     let chineseToolsEn = null;
 
-    [chineseToolsPt, chineseToolsEs, chineseToolsEn] = await Promise.all([
-      ChineseToolsDownloader.download(ideograms, 'pt'),
-      ChineseToolsDownloader.download(ideograms, 'es'),
-      ChineseToolsDownloader.download(ideograms, 'en'),
-    ]);
-
-    response.chinese_tools_pt = null;
-    if (chineseToolsPt) {
-      response.chinese_tools_pt = chineseToolsPt.split('\n');
-    }
-
-    response.chinese_tools_es = null;
-    if (chineseToolsEs) {
-      response.chinese_tools_es = chineseToolsEs.split('\n');
-    }
-
-    response.chinese_tools_en = null;
-    if (chineseToolsEn) {
-      response.chinese_tools_en = chineseToolsEn.split('\n');
-    }
-
-    cjkList.forEach((cjk) => {
+    await Promise.map(cjkList, async (cjk) => {
+      response.pronunciation = cjk.pronunciation;
       if (cjk.definition_unihan) {
         response.unihan = [cjk.definition_unihan];
       }
@@ -71,7 +59,53 @@ module.exports = class UnihanSearch {
       }
 
       if (cjk.definition_cedict) {
-        response.cedict = JSON.parse(cjk.definition_cedict);
+        if (!response.cedict) {
+          response.cedict = JSON.parse(cjk.definition_cedict);
+        } else {
+          JSON.parse(cjk.definition_cedict).forEach((item) => {
+            response.cedict.push(item);
+          });
+        }
+      }
+
+      if (cjk.definition_ct_pt) {
+        response.chinese_tools_pt = JSON.parse(cjk.definition_ct_pt);
+      }
+
+      if (cjk.definition_ct_es) {
+        response.chinese_tools_es = JSON.parse(cjk.definition_ct_es);
+      }
+
+      if (cjk.definition_ct_en) {
+        response.chinese_tools_en = JSON.parse(cjk.definition_ct_en);
+      }
+
+      if (!cjk.definition_ct_pt && !cjk.definition_ct_es && !cjk.definition_ct_en) {
+        [chineseToolsPt, chineseToolsEs, chineseToolsEn] = await Promise.all([
+          ChineseToolsDownloader.download(ideograms, 'pt'),
+          ChineseToolsDownloader.download(ideograms, 'es'),
+          ChineseToolsDownloader.download(ideograms, 'en'),
+        ]);
+
+        if (chineseToolsPt) {
+          response.chinese_tools_pt = chineseToolsPt.split('\n');
+        }
+
+        if (chineseToolsEs) {
+          response.chinese_tools_es = chineseToolsEs.split('\n');
+        }
+
+        if (chineseToolsEn) {
+          response.chinese_tools_en = chineseToolsEn.split('\n');
+        }
+
+        await knex('cjk')
+        .where('id', '=', cjk.id)
+        .update({
+          definition_ct_pt: JSON.stringify(response.chinese_tools_pt),
+          definition_ct_es: JSON.stringify(response.chinese_tools_es),
+          definition_ct_en: JSON.stringify(response.chinese_tools_en),
+        });
       }
     });
 
@@ -354,7 +388,8 @@ module.exports = class UnihanSearch {
       }));
     });
 
-    const result = await Promise.map(pinyinPromisses, promiseImport => promiseImport, { concurrency: 20 });
+    const result = await Promise.map(
+      pinyinPromisses, promiseImport => promiseImport, { concurrency: 20 });
     const changeToneRules = UnihanSearch.getChangeToneRules();
     result.forEach((item, itemIndex) => {
       const pinyins = separatePinyinInSyllables(item.pinyin).split(' ');
