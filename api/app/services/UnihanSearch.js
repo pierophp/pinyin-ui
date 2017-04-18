@@ -354,7 +354,7 @@ module.exports = class UnihanSearch {
       }));
     });
 
-    const result = await Promise.map(pinyinPromisses, promiseImport => promiseImport, { concurrency: 10 });
+    const result = await Promise.map(pinyinPromisses, promiseImport => promiseImport, { concurrency: 20 });
     const changeToneRules = UnihanSearch.getChangeToneRules();
     result.forEach((item, itemIndex) => {
       const pinyins = separatePinyinInSyllables(item.pinyin).split(' ');
