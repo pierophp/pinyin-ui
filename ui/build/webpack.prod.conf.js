@@ -90,8 +90,7 @@ var webpackConfig = merge(baseWebpackConfig, {
         'https://fonts.googleapis.com/icon?family=Material+Icons',
         'https://fonts.googleapis.com/earlyaccess/notosanssc.css',
       ],
-    },
-  ],
+    }),
   ]
 })
 
