@@ -46,7 +46,7 @@
 
 <script>
   export default {
-    name: 'dictionary-list',
+    name: 'dictionary-details',
     props: {
       dictionary: {
 

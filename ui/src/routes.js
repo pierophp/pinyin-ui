@@ -4,6 +4,7 @@ import FileDetails from 'src/pages/files/FileDetails';
 import FilePrint from 'src/pages/files/FilePrint';
 import MyCjkList from 'src/pages/my-cjk/MyCjkList';
 import DictionarySearch from 'src/pages/dictionary/Search';
+import DictionaryDetails from 'src/pages/dictionary/Details';
 import Config from 'src/pages/config/Config';
 import FileDetailsTopBar from 'src/components/files/top-bar/file-details';
 import FilePrintTopBar from 'src/components/files/top-bar/file-print';
@@ -47,6 +48,11 @@ export default [
     path: '/dictionary',
     name: 'dictionary',
     component: DictionarySearch,
+  },
+  {
+    path: '/dictionary-details/:id',
+    name: 'dictionary-details',
+    component: DictionaryDetails,
   },
   {
     path: '/config',

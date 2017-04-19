@@ -31,6 +31,7 @@
     "jsonwebtoken": "^7.1.9",
     "knex": "^0.11.5",
     "line-reader": "^0.4.0",
+    "lodash": "^4.17.4",
     "mysql": "^2.10.2",
     "newrelic": "^1.28.1",
     "nodejieba": "^2.2.3",

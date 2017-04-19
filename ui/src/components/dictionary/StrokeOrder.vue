@@ -85,6 +85,9 @@
       },
       update() {
         this.items = [];
+        if (!this.ideograms) {
+          return;
+        }
         for (let i = 0; i < this.ideograms.length; i += 1) {
           if (i === 0) {
             this.writer.setCharacter(this.ideograms[i]);

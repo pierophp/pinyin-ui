@@ -19,6 +19,7 @@ app.use(jwt({ secret: env.jwt_key }).unless({ path: [
   '/auth/google/callback',
   '/unihan/to_pinyin',
   '/unihan/dictionary',
+  '/unihan/dictionary_search',
   '/segmentation/segment',
   '/jw/download',
   '/chinese-tools',

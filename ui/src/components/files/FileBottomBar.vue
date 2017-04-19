@@ -23,7 +23,7 @@
       <md-dialog-title>{{ block.character }} - {{ block.pinyin }}</md-dialog-title>
 
       <md-dialog-content>
-        <dictionary-list :dictionary="dictionary"/>
+        <dictionary-details :dictionary="dictionary"/>
       </md-dialog-content>
 
       <md-dialog-actions>
@@ -40,7 +40,7 @@
 
 <script>
   import http from 'src/helpers/http';
-  import DictionaryList from 'src/components/dictionary/List';
+  import DictionaryDetails from 'src/components/dictionary/Details';
 
   import {
     mapMutations,
@@ -70,7 +70,7 @@
       };
     },
     components: {
-      DictionaryList,
+      DictionaryDetails,
     },
     computed: {
       ...mapGetters({

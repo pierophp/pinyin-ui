@@ -61,8 +61,16 @@ router.get('/dictionary_search', (req, res) => {
 });
 
 router.get('/dictionary', (req, res) => {
-  const ideograms = req.query.ideograms;
-  UnihanSearch.searchToDictionary(ideograms).then((result) => {
+  const search = {};
+  if (req.query.ideograms !== undefined) {
+    search.ideograms = req.query.ideograms;
+  }
+
+  if (req.query.id !== undefined) {
+    search.id = req.query.id;
+  }
+
+  UnihanSearch.searchToDictionary(search).then((result) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(result));
   });
