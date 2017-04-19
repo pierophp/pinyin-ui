@@ -25,6 +25,7 @@
     data() {
       return {
         items: [],
+        hanziWriterCache: {},
       };
     },
     mounted() {
@@ -34,17 +35,22 @@
             return;
           }
 
-          http
-          .get('hanzi-writer', {
-            params: {
-              ideogram: char,
-            },
-          })
-          .then((response) => {
-            if (response.data.response) {
-              onComplete(response.data.response);
-            }
-          });
+          if (!this.hanziWriterCache[char]) {
+            http
+            .get('hanzi-writer', {
+              params: {
+                ideogram: char,
+              },
+            })
+            .then((response) => {
+              if (response.data.response) {
+                onComplete(response.data.response);
+                this.hanziWriterCache[char] = response.data.response;
+              }
+            });
+          } else {
+            onComplete(this.hanziWriterCache[char]);
+          }
         },
         showOutline: true,
         showCharacter: true,
