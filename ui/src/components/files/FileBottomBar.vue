@@ -129,6 +129,7 @@
           ideograms: [this.block.character],
         })
         .then((response) => {
+          // eslint-disable-next-line
           console.log(response.data);
         });
       },
@@ -140,10 +141,12 @@
         this.$refs[ref].close();
       },
       onOpen() {
+        // eslint-disable-next-line
         console.log('Opened');
       },
 
       onClose(type) {
+        // eslint-disable-next-line
         console.log('Closed', type);
       },
     },

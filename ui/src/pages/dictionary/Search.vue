@@ -8,9 +8,13 @@
     </md-input-container>
   </form>
   <div>
-    <div v-for="entry in entries" @click="details(entry.id)" class="entry-container">
-      <span class="ideogram">{{ entry.ideogram }}</span><span class="pinyin"> - {{ entry.pronunciation }}</span>
-    </div>
+  <md-list>
+    <md-list-item v-for="entry in entries" @click.native="details(entry.id)">
+      <span>
+        <span class="ideogram">{{ entry.ideogram }}</span><span class="pinyin"> - {{ entry.pronunciation }}</span>
+      </span>
+    </md-list-item>
+  </md-list>
   </div>
 </div>
 </template>
@@ -32,24 +36,42 @@
       };
     },
     mounted() {
-      if (this.searchValue) {
-        this.search(this.searchValue);
-      }
+      this.$nextTick(() => {
+        this.searchValue = this.$route.query.search;
+        if (this.searchValue) {
+          this.search(this.searchValue);
+        }
+      });
     },
     methods: {
       search(value) {
-        this.loading = true;
-        http
-        .get('unihan/dictionary_search', {
-          params: {
+        const that = this;
+        (function search() {
+          const searchValue = value;
+          setTimeout(() => {
+            if (searchValue === that.searchValue) {
+              that.loading = true;
+              http
+              .get('unihan/dictionary_search', {
+                params: {
+                  search: value,
+                },
+              })
+              .then((response) => {
+                if (value === response.data.search) {
+                  that.entries = response.data.entries;
+                  that.loading = false;
+                }
+              });
+            }
+          }, 200);
+        }());
+
+        this.$router.push({
+          path: this.$route.path,
+          query: {
             search: value,
           },
-        })
-        .then((response) => {
-          if (value === response.data.search) {
-            this.entries = response.data.entries;
-            this.loading = false;
-          }
         });
       },
       details(id) {
@@ -69,14 +91,14 @@
   overflow: auto;
 }
 
+.dictionary-container .md-list{
+  padding: 0;
+}
+
 .dictionary-container .md-input-container {
   margin-bottom: 15px;
 }
 
-.dictionary-container .entry-container {
-  margin-bottom: 5px;
-  cursor: pointer;
-}
 
 .dictionary-container .ideogram {
   font-size:20px;

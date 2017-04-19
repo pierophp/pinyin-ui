@@ -139,6 +139,7 @@ export default {
   },
 
   [types.FILE_MUTATION_FAILURE](state, data) {
+    // eslint-disable-next-line
     console.log(data);
   },
 

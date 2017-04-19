@@ -2,7 +2,7 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
-const OfflinePlugin = require('offline-plugin');
+
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -19,20 +19,6 @@ module.exports = {
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
-  plugins: [
-    new OfflinePlugin({
-      responseStrategy: 'network-first',
-      ServiceWorker: {
-        events: true,
-        navigateFallbackURL: 'index.html',
-      },
-      externals: [
-        'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic',
-        'https://fonts.googleapis.com/icon?family=Material+Icons',
-        'https://fonts.googleapis.com/earlyaccess/notosanssc.css',
-      ],
-    }),
-  ],
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     modules: [

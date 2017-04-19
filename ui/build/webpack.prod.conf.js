@@ -6,6 +6,7 @@ var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
+const OfflinePlugin = require('offline-plugin');
 var env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
   : config.build.env
@@ -76,7 +77,21 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
       chunks: ['vendor']
-    })
+    }),
+
+    new OfflinePlugin({
+      responseStrategy: 'network-first',
+      ServiceWorker: {
+        events: true,
+        navigateFallbackURL: 'index.html',
+      },
+      externals: [
+        'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic',
+        'https://fonts.googleapis.com/icon?family=Material+Icons',
+        'https://fonts.googleapis.com/earlyaccess/notosanssc.css',
+      ],
+    },
+  ],
   ]
 })
 

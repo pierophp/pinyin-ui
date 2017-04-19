@@ -31,16 +31,18 @@ Vue.locale('pt', localePt);
 Vue.config.lang = navigator.language.split('-')[0];
 Vue.config.fallbackLang = 'en';
 
-offlinePlugin.install({
-  onUpdateReady: () => {
-    // Tells to new SW to take control immediately
-    offlinePlugin.applyUpdate();
-  },
-  onUpdated: () => {
-    // Reload the webpage to load into the new version
-    window.location.reload();
-  },
-});
+if (process.env === 'production') {
+  offlinePlugin.install({
+    onUpdateReady: () => {
+      // Tells to new SW to take control immediately
+      offlinePlugin.applyUpdate();
+    },
+    onUpdated: () => {
+      // Reload the webpage to load into the new version
+      window.location.reload();
+    },
+  });
+}
 
 // Vue.use(require('src/components/directives/drag-and-drop'));
 
