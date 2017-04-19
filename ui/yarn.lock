@@ -2695,6 +2695,10 @@ handlebars@^4.0.1:
   optionalDependencies:
     uglify-js "^2.6"
 
+hanzi-writer@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/hanzi-writer/-/hanzi-writer-0.2.0.tgz#a107730bd9187f70d4d4fd9197706ca54d4311c8"
+
 har-validator@~2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/har-validator/-/har-validator-2.0.6.tgz#cdcbc08188265ad119b6a5a7c8ab70eecfb5d27d"
