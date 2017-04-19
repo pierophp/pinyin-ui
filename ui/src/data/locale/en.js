@@ -55,4 +55,12 @@ export default {
   no: 'No',
   ideograms_spaced: 'Spaced ideograms',
   search: 'Search',
+  tone_1_color: 'Tone Color 1',
+  tone_2_color: 'Tone Color 2',
+  tone_3_color: 'Tone Color 3',
+  tone_4_color: 'Tone Color 4',
+  tone_0_color: 'Neutral Tone Color',
+  restore_default: 'Restore Default',
+  definition: 'Definition',
+  stroke: 'Stroke',
 };

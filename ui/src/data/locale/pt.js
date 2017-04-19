@@ -55,4 +55,12 @@ export default {
   no: 'Não',
   ideograms_spaced: 'Ideogramas espaçados',
   search: 'Buscar',
+  tone_1_color: 'Cor Tom 1',
+  tone_2_color: 'Cor Tom 2',
+  tone_3_color: 'Cor Tom 3',
+  tone_4_color: 'Cor Tom 4',
+  tone_0_color: 'Cor Tom Neutro',
+  restore_default: 'Restaurar Padrão',
+  definition: 'Definição',
+  stroke: 'Traços',
 };

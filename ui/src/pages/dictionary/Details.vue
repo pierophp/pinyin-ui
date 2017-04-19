@@ -7,11 +7,11 @@
     </h2>
 
     <md-tabs>
-      <md-tab id="dict" md-label="Dict">
+      <md-tab id="dict" :md-label="$t('definition')">
         <dictionary-details :dictionary="dictionary"/>
       </md-tab>
 
-      <md-tab id="stroke" md-label="Stroke">
+      <md-tab id="stroke" :md-label="$t('stroke')">
         <dictionary-stroke-order :ideograms="dictionary.ideograms"/>
       </md-tab>
     </md-tabs>

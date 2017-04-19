@@ -10,6 +10,7 @@
   import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
   import extractPinyinTone from 'src/helpers/extract-pinyin-tone';
   import specialIdeograms from 'src/helpers/special-ideograms-chars';
+  import LocalStorage from 'src/helpers/local-storage';
 
   export default {
     name: 'ideograms-show',
@@ -48,6 +49,32 @@
           3: '#00a000',
           4: '#ff0000',
         };
+
+        let options = LocalStorage.get('options');
+        if (options === null) {
+          options = {};
+        }
+
+        if (options.color1) {
+          colors[1] = options.color1;
+        }
+
+        if (options.color2) {
+          colors[2] = options.color2;
+        }
+
+        if (options.color3) {
+          colors[3] = options.color3;
+        }
+
+        if (options.color4) {
+          colors[4] = options.color4;
+        }
+
+        if (options.color0) {
+          colors[0] = options.color0;
+        }
+
         let pinyin = '';
         if (this.pinyin) {
           pinyin = separatePinyinInSyllables(this.pinyin).split(' ');
