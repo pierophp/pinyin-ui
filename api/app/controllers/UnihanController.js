@@ -52,8 +52,16 @@ router.post('/to_pinyin_all', (req, res) => {
   });
 });
 
-router.post('/dictionary', (req, res) => {
-  const ideograms = req.body.ideograms;
+router.get('/dictionary_search', (req, res) => {
+  const ideograms = req.query.search;
+  UnihanSearch.searchToDictionaryList(ideograms).then((result) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(result));
+  });
+});
+
+router.get('/dictionary', (req, res) => {
+  const ideograms = req.query.ideograms;
   UnihanSearch.searchToDictionary(ideograms).then((result) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(result));

@@ -12,6 +12,7 @@
 </template>
 
 <script>
+  import http from 'src/helpers/http';
   import HanziWriter from 'hanzi-writer';
 
   export default {
@@ -27,7 +28,22 @@
       };
     },
     mounted() {
-      this.writer = new HanziWriter('hanzi-writer', '我', {
+      this.writer = new HanziWriter('hanzi-writer', '', {
+        charDataLoader: (char, onComplete) => {
+          if (!char) {
+            return;
+          }
+
+          http
+          .get('hanzi-writer', {
+            params: {
+              ideogram: char,
+            },
+          })
+          .then((response) => {
+            onComplete(response.data.response);
+          });
+        },
         showOutline: true,
         showCharacter: true,
         width: 250,

@@ -22,6 +22,7 @@ app.use(jwt({ secret: env.jwt_key }).unless({ path: [
   '/segmentation/segment',
   '/jw/download',
   '/chinese-tools',
+  '/hanzi-writer',
 ] }));
 app.use((req, res, next) => {
   res.setHeader('Content-Type', 'application/json');

@@ -112,8 +112,10 @@
 
       loadDictionary() {
         http
-        .post('unihan/dictionary', {
-          ideograms: this.block.character,
+        .get('unihan/dictionary', {
+          params: {
+            ideograms: this.block.character,
+          },
         })
         .then((response) => {
           this.dictionary = response.data;

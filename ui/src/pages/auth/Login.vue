@@ -1,4 +1,5 @@
 <template>
+  <div class="login-container">
   <loadable-content :loading="loading">
       <br/>
       <a class="btn btn-social btn-lg btn-google" :href="authGoogleUrl">
@@ -6,6 +7,7 @@
         {{ $t("sign_in_google") }}
       </a>
   </loadable-content>
+  </div>
 </template>
 
 <script>
@@ -49,5 +51,10 @@
 <style>
 .btn-google{
   color: #fff !important;
+}
+.login-container{
+  flex: 1;
+  padding: 0 10px;
+  overflow: auto;
 }
 </style>

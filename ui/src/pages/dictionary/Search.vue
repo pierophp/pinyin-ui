@@ -51,7 +51,7 @@
     },
     data() {
       return {
-        searchValue: '耶和华',
+        searchValue: '',
         forvoUrl: null,
         dictionary: {},
         loading: false,
@@ -66,8 +66,10 @@
       search(value) {
         this.loading = true;
         http
-        .post('unihan/dictionary', {
-          ideograms: value,
+        .get('unihan/dictionary', {
+          params: {
+            ideograms: value,
+          },
         })
         .then((response) => {
           this.forvoUrl = `https://pt.forvo.com/word/${value}/#zh`;

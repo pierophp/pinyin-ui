@@ -9,4 +9,5 @@ module.exports = function routes(app) {
   app.use('/unihan', require('./controllers/UnihanController'));
   app.use('/my-cjk', require('./controllers/MyCjkController'));
   app.use('/chinese-tools', require('./controllers/ChineseToolsController'));
+  app.use('/hanzi-writer', require('./controllers/HanziWriterController'));
 };

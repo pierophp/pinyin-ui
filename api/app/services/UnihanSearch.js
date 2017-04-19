@@ -25,6 +25,17 @@ module.exports = class UnihanSearch {
       },
     };
   }
+  static async searchToDictionaryList(search) {
+    const cjkList = await knex('cjk')
+      .where({
+        ideogram: UnihanSearch.convertIdeogramsToUtf16(search),
+      })
+      .orderBy('frequency', 'ASC')
+      .orderBy('usage', 'DESC')
+      .select('id', 'pronunciation', 'ideogram');
+
+    return cjkList;
+  }
 
   static async searchToDictionary(ideograms) {
     const cjkList = await knex('cjk')
