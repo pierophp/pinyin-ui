@@ -2,7 +2,8 @@
 <div class="dictionary-container">
   <loadable-content :loading="loading">
     <h2>
-    {{ dictionary.ideograms }} - {{ dictionary.pronunciation }} <md-icon class="md-warn sound" @click.native="openSound">volume_up</md-icon>
+      <ideograms-show :pinyin="dictionary.pronunciation" :character="dictionary.ideograms"/>
+      - {{ dictionary.pronunciation }} <md-icon class="md-warn sound" @click.native="openSound">volume_up</md-icon>
     </h2>
 
     <md-tabs>
@@ -33,6 +34,7 @@
   import LoadableContent from 'src/components/common/loading/LoadableContent';
   import DictionaryDetails from 'src/components/dictionary/Details';
   import DictionaryStrokeOrder from 'src/components/dictionary/StrokeOrder';
+  import IdeogramsShow from 'src/components/ideograms/Show';
 
   export default {
     name: 'dicionary-search',
@@ -40,6 +42,7 @@
       LoadableContent,
       DictionaryDetails,
       DictionaryStrokeOrder,
+      IdeogramsShow,
     },
     data() {
       return {
@@ -93,6 +96,11 @@
 .dictionary-container .md-tabs .md-tab {
   padding: 10px;
 }
+.dictionary-container h2 .ideogram-show span {
+  display: inline-block;
+  width: 30px;
+}
+
 .sound{
   cursor: pointer;
 }

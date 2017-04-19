@@ -12,9 +12,10 @@
     </div>
 
     <div class="character" :class="classBold" v-if="!block.small" @click.prevent="openBottomBar()">
-      <span v-for="data in printData" :class="[data.toneClass, data.ideogramClass]">
+      <ideograms-show :pinyin="pinyin" :character="character"/>
+      <!-- span v-for="data in printData" :class="[data.toneClass, data.ideogramClass]">
         {{data.character}}
-      </span>
+      </span -->
     </div>
   </div>
   </div>
@@ -25,6 +26,7 @@
   import extractPinyinTone from 'src/helpers/extract-pinyin-tone';
   import specialIdeograms from 'src/helpers/special-ideograms-chars';
   import LocalStorage from 'src/helpers/local-storage';
+  import IdeogramsShow from 'src/components/ideograms/Show';
 
   import {
     mapGetters,
@@ -36,6 +38,9 @@
 
   export default {
     name: 'file-block-print',
+    components: {
+      IdeogramsShow,
+    },
     data() {
       return {
         classHighlight: '',
@@ -171,8 +176,8 @@
       },
     },
   };
-</script
->
+</script>
+
 <style>
 
 </style>

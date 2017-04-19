@@ -353,22 +353,6 @@
     padding-bottom: 15px;
   }
 
-  .ideogram-colored .tone-1 {
-    color: #0000ff!important;
-  }
-
-  .ideogram-colored .tone-2 {
-    color: #d16f00!important;
-  }
-
-  .ideogram-colored .tone-3 {
-    color: #00a000!important;
-  }
-
-  .ideogram-colored .tone-4 {
-    color: #ff0000!important;
-  }
-
   .ideogram-spaced .block {
     margin-right: 4px;
   }

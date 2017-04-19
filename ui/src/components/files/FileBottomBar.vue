@@ -20,7 +20,9 @@
     </md-button>
 
     <md-dialog ref="dialogDictionary">
-      <md-dialog-title>{{ block.character }} - {{ block.pinyin }}</md-dialog-title>
+      <md-dialog-title>
+        <ideograms-show :pinyin="block.pinyin" :character="block.character"/>
+        - {{ block.pinyin }}</md-dialog-title>
 
       <md-dialog-content>
         <dictionary-details :dictionary="dictionary"/>
@@ -41,6 +43,7 @@
 <script>
   import http from 'src/helpers/http';
   import DictionaryDetails from 'src/components/dictionary/Details';
+  import IdeogramsShow from 'src/components/ideograms/Show';
 
   import {
     mapMutations,
@@ -71,6 +74,7 @@
     },
     components: {
       DictionaryDetails,
+      IdeogramsShow,
     },
     computed: {
       ...mapGetters({

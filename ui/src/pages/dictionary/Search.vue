@@ -11,7 +11,10 @@
   <md-list>
     <md-list-item v-for="entry in entries" @click.native="details(entry.id)">
       <span>
-        <span class="ideogram">{{ entry.ideogram }}</span><span class="pinyin"> - {{ entry.pronunciation }}</span>
+        <span class="ideogram">
+           <ideograms-show :pinyin="entry.pronunciation" :character="entry.ideogram"/>
+        </span
+        ><span class="pinyin"> - {{ entry.pronunciation }}</span>
       </span>
     </md-list-item>
   </md-list>
@@ -22,11 +25,13 @@
 <script>
   import http from 'src/helpers/http';
   import LoadableContent from 'src/components/common/loading/LoadableContent';
+  import IdeogramsShow from 'src/components/ideograms/Show';
 
   export default {
     name: 'dicionary-search',
     components: {
       LoadableContent,
+      IdeogramsShow,
     },
     data() {
       return {
@@ -91,7 +96,7 @@
   overflow: auto;
 }
 
-.dictionary-container .md-list{
+.dictionary-container .md-list {
   padding: 0;
 }
 
@@ -99,9 +104,13 @@
   margin-bottom: 15px;
 }
 
-
 .dictionary-container .ideogram {
   font-size:20px;
+}
+
+.dictionary-container .md-list .ideogram-show span {
+  display: inline-block;
+  width: 20px;
 }
 
 .dictionary-container .pinyin {
