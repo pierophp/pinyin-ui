@@ -41,7 +41,9 @@
             },
           })
           .then((response) => {
-            onComplete(response.data.response);
+            if (response.data.response) {
+              onComplete(response.data.response);
+            }
           });
         },
         showOutline: true,
@@ -117,12 +119,12 @@
 }
 
 #hanzi-controls span{
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 100%;
   background: #007aff;
   display: block;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
   background: #000;
   opacity: .2;
   cursor: pointer;
