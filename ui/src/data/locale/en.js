@@ -63,4 +63,5 @@ export default {
   restore_default: 'Restore Default',
   definition: 'Definition',
   stroke: 'Stroke',
+  unknown: 'Unknown',
 };

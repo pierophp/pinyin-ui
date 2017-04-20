@@ -194,6 +194,7 @@
 
   .print .pinyin,
   .print .pinyin span {
+    user-select:none;
     background: none !important;
     font-size: var(--normal-pinyin-font-size);
     height: var(--normal-pinyin-font-size);

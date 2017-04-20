@@ -63,4 +63,5 @@ export default {
   restore_default: 'Restaurar Padrão',
   definition: 'Definição',
   stroke: 'Traços',
+  unknown: 'Desconhecidos',
 };

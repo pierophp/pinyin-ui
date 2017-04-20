@@ -6,11 +6,11 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   knex('my_cjk')
+    .select('my_cjk.id', 'cjk.ideogram', 'cjk.frequency', 'cjk.pronunciation')
+    .join('cjk', 'cjk.id', '=', 'my_cjk.cjk_id')
     .where({
       user_id: req.user.id,
     })
-    .join('cjk', 'cjk.id', '=', 'my_cjk.cjk_id')
-    .select('my_cjk.id', 'cjk.ideogram', 'cjk.frequency', 'cjk.pronunciation')
     .orderBy('frequency', 'ASC')
     .orderBy('usage', 'DESC')
     .then((result) => {
@@ -35,6 +35,24 @@ router.get('/report', (req, res) => {
         total += item.total_my;
       });
       res.send({ total, report });
+    });
+});
+
+router.get('/report_unknown', (req, res) => {
+  knex('cjk')
+    .select('my_cjk.id', 'cjk.ideogram', 'cjk.frequency', 'cjk.pronunciation')
+    .leftJoin('my_cjk', function leftJoin() {
+      this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
+    })
+    .where({
+      type: 'C',
+      simplified: 1,
+      frequency: req.query.frequency,
+    })
+    .whereNull('my_cjk.id')
+    .limit(2000)
+    .then((result) => {
+      res.send({ ideograms: result });
     });
 });
 

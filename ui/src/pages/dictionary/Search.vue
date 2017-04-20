@@ -56,7 +56,7 @@
         (function search() {
           const searchValue = value;
           setTimeout(() => {
-            if (searchValue === that.searchValue) {
+            if (searchValue === that.searchValue && searchValue) {
               that.loading = true;
               http
               .get('unihan/dictionary_search', {
@@ -71,7 +71,11 @@
                 }
               });
             }
-          }, 200);
+
+            if (!searchValue) {
+              that.entries = [];
+            }
+          }, 400);
         }());
 
         this.$router.push({
