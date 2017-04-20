@@ -6,19 +6,15 @@
         <md-table>
           <md-table-header>
             <md-table-row>
-              <md-table-head>{{ $t('frequency') }}</md-table-head>
-              <md-table-head>{{ $t('total') }}</md-table-head>
+              <md-table-head></md-table-head>
               <md-table-head>{{ $t('my_ideograms') }}</md-table-head>
-              <md-table-head>{{ $t('percent') }}</md-table-head>
               <md-table-head></md-table-head>
             </md-table-row>
           </md-table-header>
           <md-table-body>
             <md-table-row v-for="row in report">
               <md-table-cell>{{row.frequency}}</md-table-cell>
-              <md-table-cell>{{row.total}}</md-table-cell>
-              <md-table-cell>{{row.total_my}}</md-table-cell>
-              <md-table-cell>{{row.percent}}%</md-table-cell>
+              <md-table-cell>{{row.total_my}} / {{row.total}} ({{row.percent}}%)</md-table-cell>
               <md-table-cell>
                 <md-button class="md-warn" @click.native="unknown(row.frequency)">
                   {{ $t('unknown') }}
@@ -52,14 +48,13 @@
     </md-tabs>
 
     <md-dialog ref="dialogUnknown">
-      <md-dialog-title>{{ $t('unknown') }}</md-dialog-title>
+      <md-dialog-title>{{ $t('unknown') }} - {{ $t('frequency') }} {{frequency}}</md-dialog-title>
       <md-dialog-content>
         <md-table>
           <md-table-header>
             <md-table-row>
               <md-table-head>{{ $t('ideogram') }}</md-table-head>
               <md-table-head>{{ $t('pronunciation') }}</md-table-head>
-              <md-table-head>{{ $t('frequency') }}</md-table-head>
             </md-table-row>
           </md-table-header>
           <md-table-body>
@@ -68,7 +63,6 @@
                 <ideograms-show :pinyin="ideogram.pronunciation" :character="ideogram.ideogram"/>
               </md-table-cell>
               <md-table-cell>{{ideogram.pronunciation}}</md-table-cell>
-              <md-table-cell>{{ideogram.frequency}}</md-table-cell>
             </md-table-row>
           </md-table-body>
         </md-table>
@@ -91,6 +85,7 @@
     data() {
       return {
         total: 0,
+        frequency: 0,
         report: [],
         reportUnkown: [],
         ideograms: [],
@@ -101,6 +96,7 @@
     },
     methods: {
       unknown(frequency) {
+        this.frequency = frequency;
         http
         .get('my-cjk/report_unknown', {
           params: {
