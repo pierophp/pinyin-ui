@@ -26,6 +26,7 @@
   import http from 'src/helpers/http';
   import LoadableContent from 'src/components/common/loading/LoadableContent';
   import IdeogramsShow from 'src/components/ideograms/Show';
+  import replaceall from 'replaceall';
 
   export default {
     name: 'dicionary-search',
@@ -50,6 +51,7 @@
     },
     methods: {
       search(value) {
+        value = replaceall(' ', '', value);
         const that = this;
         (function search() {
           const searchValue = value;
