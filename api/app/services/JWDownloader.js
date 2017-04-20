@@ -3,6 +3,13 @@ const axios = require('axios');
 const replaceall = require('replaceall');
 
 module.exports = class JwDownloader {
+  static track(url) {
+    return axios.get(this.encodeUrl(url))
+      .then((response) => {
+        return response.data;
+      });
+  }
+
   static download(url) {
     return axios.get(this.encodeUrl(url))
       .then((response) => {

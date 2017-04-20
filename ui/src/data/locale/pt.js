@@ -4,6 +4,7 @@ export default {
     dictionary: 'Dicionário',
     my_ideograms: 'Meus ideogramas',
     settings: 'Configurações',
+    video: 'Vídeo',
     logout: 'Sair',
   },
   visualization_mode: 'Modo visualização',

@@ -8,6 +8,7 @@ import DictionaryDetails from 'src/pages/dictionary/Details';
 import Config from 'src/pages/config/Config';
 import FileDetailsTopBar from 'src/components/files/top-bar/file-details';
 import FilePrintTopBar from 'src/components/files/top-bar/file-print';
+import VideoShow from 'src/pages/video/Show';
 
 export default [
   {
@@ -58,5 +59,10 @@ export default [
     path: '/config',
     name: 'config',
     component: Config,
+  },
+  {
+    path: '/video',
+    name: 'video',
+    component: VideoShow,
   },
 ];

@@ -35,6 +35,12 @@
       </md-list-item>
 
       <md-list-item>
+        <router-link :to="{ name: 'video' }">
+          <md-icon>play_circle_outline</md-icon> <span>{{ $t("menu.video") }}</span>
+        </router-link>
+      </md-list-item>
+
+      <md-list-item>
         <router-link :to="{ name: 'config' }">
           <md-icon>settings</md-icon> <span>{{ $t("menu.settings") }}</span>
         </router-link>
