@@ -40,7 +40,9 @@
           </md-table-header>
           <md-table-body>
             <md-table-row v-for="ideogram in ideograms">
-              <md-table-cell class="ideogram">{{ideogram.ideogram}}</md-table-cell>
+              <md-table-cell class="ideogram">
+                <ideograms-show :pinyin="ideogram.pronunciation" :character="ideogram.ideogram"/>
+              </md-table-cell>
               <md-table-cell>{{ideogram.pronunciation}}</md-table-cell>
               <md-table-cell>{{ideogram.frequency}}</md-table-cell>
             </md-table-row>
@@ -62,7 +64,9 @@
           </md-table-header>
           <md-table-body>
             <md-table-row v-for="ideogram in reportUnkown">
-              <md-table-cell class="ideogram">{{ideogram.ideogram}}</md-table-cell>
+              <md-table-cell class="ideogram">
+                <ideograms-show :pinyin="ideogram.pronunciation" :character="ideogram.ideogram"/>
+              </md-table-cell>
               <md-table-cell>{{ideogram.pronunciation}}</md-table-cell>
               <md-table-cell>{{ideogram.frequency}}</md-table-cell>
             </md-table-row>
@@ -80,6 +84,7 @@
 <script>
   import http from 'src/helpers/http';
   import codeToIdeogram from 'src/helpers/code-to-ideogram';
+  import IdeogramsShow from 'src/components/ideograms/Show';
 
   export default {
     name: 'my-cjk-list',
@@ -90,6 +95,9 @@
         reportUnkown: [],
         ideograms: [],
       };
+    },
+    components: {
+      IdeogramsShow,
     },
     methods: {
       unknown(frequency) {
