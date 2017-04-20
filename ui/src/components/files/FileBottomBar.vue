@@ -33,7 +33,6 @@
       </md-dialog-actions>
     </md-dialog>
 
-
     <md-button class="md-icon-button md-primary" @click.native="close()">
       <md-icon>clear</md-icon>
     </md-button>

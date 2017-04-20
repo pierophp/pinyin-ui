@@ -1,7 +1,6 @@
 <template>
   <div class="ideograms-container">
     <h3>{{ $t('my_total') }}: {{total}}</h3>
-
     <md-tabs>
       <md-tab id="summary" :md-label="$t('summary')">
         <md-table>
@@ -21,8 +20,8 @@
               <md-table-cell>{{row.total_my}}</md-table-cell>
               <md-table-cell>{{row.percent}}%</md-table-cell>
               <md-table-cell>
-                <md-button class="md-icon-button">
-                  <md-icon>edit</md-icon>
+                <md-button class="md-warn" @click.native="unknown(row.frequency)">
+                  {{ $t('unknown') }}
                 </md-button>
               </md-table-cell>
             </md-table-row>
@@ -49,6 +48,32 @@
         </md-table>
       </md-tab>
     </md-tabs>
+
+    <md-dialog ref="dialogUnknown">
+      <md-dialog-title>{{ $t('unknown') }}</md-dialog-title>
+      <md-dialog-content>
+        <md-table>
+          <md-table-header>
+            <md-table-row>
+              <md-table-head>{{ $t('ideogram') }}</md-table-head>
+              <md-table-head>{{ $t('pronunciation') }}</md-table-head>
+              <md-table-head>{{ $t('frequency') }}</md-table-head>
+            </md-table-row>
+          </md-table-header>
+          <md-table-body>
+            <md-table-row v-for="ideogram in reportUnkown">
+              <md-table-cell class="ideogram">{{ideogram.ideogram}}</md-table-cell>
+              <md-table-cell>{{ideogram.pronunciation}}</md-table-cell>
+              <md-table-cell>{{ideogram.frequency}}</md-table-cell>
+            </md-table-row>
+          </md-table-body>
+        </md-table>
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click.native="closeDialog('dialogUnknown')">OK</md-button>
+      </md-dialog-actions>
+    </md-dialog>
   </div>
 </template>
 
@@ -62,8 +87,33 @@
       return {
         total: 0,
         report: [],
+        reportUnkown: [],
         ideograms: [],
       };
+    },
+    methods: {
+      unknown(frequency) {
+        http
+        .get('my-cjk/report_unknown', {
+          params: {
+            frequency,
+          },
+        })
+        .then((result) => {
+          this.reportUnkown = [];
+          result.data.ideograms.forEach((ideogram) => {
+            ideogram.ideogram = codeToIdeogram(ideogram.ideogram);
+            this.reportUnkown.push(ideogram);
+          });
+          this.openDialog('dialogUnknown');
+        });
+      },
+      openDialog(ref) {
+        this.$refs[ref].open();
+      },
+      closeDialog(ref) {
+        this.$refs[ref].close();
+      },
     },
     created() {
       http
@@ -88,12 +138,12 @@
 
 <style>
 
-  .md-table .md-table-head-text,
-  .md-table .md-table-cell .md-table-cell-container {
+  .ideograms-container .md-table .md-table-head-text,
+  .ideograms-container .md-table .md-table-cell .md-table-cell-container {
     padding-left: 10px !important;
     padding-right: 10px !important;
   }
-  .ideograms-container{
+  .ideograms-container {
     flex: 1;
     padding: 0 10px;
     overflow: auto;
@@ -123,8 +173,11 @@
     font-weight: 300 !important;
   }
 
-  .md-table .md-table-head-text{
+  .ideograms-container .md-table .md-table-head-text{
     padding-right:0 !important;
+  }
+  .ideograms-container .md-table .md-table-cell .md-button {
+    width: auto;
   }
 </style>
 
