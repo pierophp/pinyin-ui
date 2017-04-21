@@ -65,4 +65,6 @@ export default {
   definition: 'Definição',
   stroke: 'Traços',
   unknown: 'Desconhecidos',
+  url: 'URL',
+  message_no_track: 'Não há legendas separadas pra esse vídeo',
 };

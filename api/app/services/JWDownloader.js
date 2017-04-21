@@ -1,12 +1,63 @@
 const Promise = require('bluebird');
 const cheerio = require('cheerio');
 const axios = require('axios');
+const knex = require('./knex');
 const replaceall = require('replaceall');
 const UnihanSearch = require('../services/UnihanSearch');
 
 module.exports = class JwDownloader {
+  static async loadTracks() {
+    const response = await axios.get('https://mediator.jw.org/v1/categories/CHS/VideoOnDemand?detailed=1');
+    const categories = response.data.category.subcategories;
+    await Promise.map(categories, async (category) => {
+      const res = await axios.get(`https://mediator.jw.org/v1/categories/CHS/${category.key}?detailed=1`);
+      const subcategories = res.data.category.subcategories;
+
+      await Promise.map(subcategories, async (subcategory) => {
+        if (subcategory.key.substr(-8) === 'Featured') {
+          return;
+        }
+        const url = `https://mediator.jw.org/v1/categories/CHS/${subcategory.key}?detailed=0`;
+        try {
+          const subRes = await axios.get(url);
+
+          await Promise.map(subRes.data.category.media, async (media) => {
+            if (media.files[0].subtitles !== undefined) {
+              const urlParts = media.files[0].progressiveDownloadURL.split('/');
+              const video = urlParts[urlParts.length - 1].replace(/_r(.*)P/g, '').replace('.mp4', '');
+              const videoTrack = await knex('video_track').where({ video });
+              if (videoTrack.length === 0) {
+                await knex('video_track').insert({
+                  video,
+                  track_url: media.files[0].subtitles.url,
+                  description: media.title,
+                  created_at: new Date(),
+                });
+
+                console.log(video);
+                console.log(media.title);
+                console.log(media.files[0].subtitles.url);
+              }
+            }
+          });
+        } catch (e) {
+          console.log(url);
+          console.log(e);
+          return;
+        }
+      });
+    });
+  }
   static async track(url) {
-    const response = await axios.get(this.encodeUrl(url));
+    const urlParts = url.split('/');
+    const filename = urlParts[urlParts.length - 1].replace(/_r(.*)P/g, '').replace('.mp4', '');
+    const videoTrack = await knex('video_track').where({ video: filename });
+
+    if (videoTrack.length === 0) {
+      return '';
+    }
+
+    const response = await axios.get(this.encodeUrl(videoTrack[0].track_url));
     const lines = response.data.split('\n');
     let i = 0;
     const trackList = await Promise.map(lines, async (line) => {
@@ -26,7 +77,7 @@ module.exports = class JwDownloader {
             newLine += `${pinyin.ideogram}`;
             newLine += ` <rt>${pinyin.pinyin}</rt> `;
           });
-          newLine += '<ruby>';
+          newLine += '</ruby>';
 
 
           return newLine;

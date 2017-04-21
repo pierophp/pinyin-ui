@@ -17,4 +17,8 @@ program
   .version('0.0.1')
   .command('3lines-load', '3 Lines load');
 
+program
+  .version('0.0.1')
+  .command('jw-track', 'JW Track');
+
 program.parse(process.argv);

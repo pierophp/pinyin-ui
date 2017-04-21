@@ -65,4 +65,6 @@ export default {
   definition: 'Definition',
   stroke: 'Stroke',
   unknown: 'Unknown',
+  url: 'URL',
+  message_no_track: 'No tracks to this video',
 };
