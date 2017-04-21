@@ -65,7 +65,7 @@
         })
         .then((response) => {
           this.dictionary = response.data;
-          this.forvoUrl = `https://pt.forvo.com/word/${this.dictionary}/#zh`;
+          this.forvoUrl = `https://pt.forvo.com/word/${this.dictionary.ideograms}/#zh`;
           this.loading = false;
         });
       },
