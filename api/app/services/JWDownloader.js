@@ -1,13 +1,44 @@
+const Promise = require('bluebird');
 const cheerio = require('cheerio');
 const axios = require('axios');
 const replaceall = require('replaceall');
+const UnihanSearch = require('../services/UnihanSearch');
 
 module.exports = class JwDownloader {
-  static track(url) {
-    return axios.get(this.encodeUrl(url))
-      .then((response) => {
-        return response.data;
-      });
+  static async track(url) {
+    const response = await axios.get(this.encodeUrl(url));
+    const lines = response.data.split('\n');
+    let i = 0;
+    const trackList = await Promise.map(lines, async (line) => {
+      const lineSplit = line.split('-->');
+      if (lineSplit.length > 1) {
+        i += 1;
+        return line;
+      }
+
+      if (i > 0) {
+        if (line.trim()) {
+          const ideograms = UnihanSearch.segment(line);
+          const pinyinList = await UnihanSearch.toPinyin(ideograms);
+          let newLine = '<ruby>';
+          pinyinList.forEach((pinyin) => {
+            // newLine += pinyin.ideogram;
+            newLine += `${pinyin.ideogram}`;
+            newLine += ` <rt>${pinyin.pinyin}</rt> `;
+          });
+          newLine += '<ruby>';
+
+
+          return newLine;
+        }
+
+        return line;
+      }
+
+      return line;
+    });
+
+    return trackList.join('\n');
   }
 
   static download(url) {

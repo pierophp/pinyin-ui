@@ -1,5 +1,6 @@
 const Promise = require('bluebird');
 const _ = require('lodash');
+const nodejieba = require('nodejieba');
 const knex = require('./knex');
 const separatePinyinInSyllables = require('../helpers/separate-pinyin-in-syllables');
 const isChinese = require('../helpers/is-chinese');
@@ -279,6 +280,9 @@ module.exports = class UnihanSearch {
     }
 
     return 0;
+  }
+  static segment(text) {
+    return nodejieba.cut(text);
   }
 
   static parseResultByIdeograms(ideogramsList, ideograms, nextWord, options) {

@@ -19,7 +19,7 @@ router.get('/track', (req, res) => {
   JWDownloader.track(req.query.url)
   .then((track) => {
     res.setHeader('Content-Type', 'text/vtt; charset=utf-8');
-    //res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(track);
   })
   .catch((e) => {
