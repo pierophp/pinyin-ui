@@ -73,9 +73,8 @@ module.exports = class JwDownloader {
           const pinyinList = await UnihanSearch.toPinyin(ideograms);
           let newLine = '<ruby>';
           pinyinList.forEach((pinyin) => {
-            // newLine += pinyin.ideogram;
             newLine += `${pinyin.ideogram}`;
-            newLine += ` <rt>${pinyin.pinyin}</rt> `;
+            newLine += ` <rt>${pinyin.pinyin.trim()}</rt> `;
           });
           newLine += '</ruby>';
 

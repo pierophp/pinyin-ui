@@ -8,6 +8,9 @@
       </md-input-container>
       <video :src="videoUrl" controls preload ref="video" v-show="videoUrl">
       </video>
+
+      <br/><br/>
+      <a :href="downloadLink" v-if="downloadLink" :download="downloadFilename">{{ $t("download_track") }}</a>
     </loadable-content>
     <md-snackbar md-position="bottom center" ref="snackbar" md-duration="3000">
       <span>{{ $t("message_no_track") }}</span>
@@ -25,6 +28,13 @@
       LoadableContent,
     },
     methods: {
+      formatTime(str) {
+        if (str.split(':').length === 2) {
+          return `00:${str}`.replace('.', ',');
+        }
+
+        return str.replace('.', ',');
+      },
       hmsToSecondsOnly(str) {
         const p = str.split(':');
         let s = 0;
@@ -51,6 +61,11 @@
         const track = video.addTextTrack('subtitles');
         this.track = track;
         track.mode = 'showing';
+        this.downloadLink = '';
+
+
+        const urlParts = videoUrl.split('/');
+        this.downloadFilename = urlParts[urlParts.length - 1].replace('.mp4', '.srt');
 
         http
           .get('jw/track', {
@@ -66,6 +81,7 @@
               video.play();
               return;
             }
+
             let i = 0;
             const tracks = [];
             lines.forEach((line) => {
@@ -86,10 +102,22 @@
               }
             });
 
+            let trackContent = '';
+            i = 0;
             tracks.forEach((trackItem) => {
-              const trackCue = new VTTCue(this.hmsToSecondsOnly(trackItem.startTime), this.hmsToSecondsOnly(trackItem.endTime), trackItem.message.join('\n'));
+              i += 1;
+              const message = trackItem.message.join('\n');
+              trackContent += `${i}\n`;
+              trackContent += `${this.formatTime(trackItem.startTime)} --> `;
+              trackContent += `${this.formatTime(trackItem.endTime)}\n`;
+              trackContent += `${message}\n\n`;
+              const startTime = this.hmsToSecondsOnly(trackItem.startTime);
+              const endTime = this.hmsToSecondsOnly(trackItem.endTime);
+              const trackCue = new VTTCue(startTime, endTime, message);
               track.addCue(trackCue);
             });
+            const blob = new Blob([trackContent], { type: 'text/plain' });
+            this.downloadLink = window.URL.createObjectURL(blob);
             this.loading = false;
             video.play();
           });
@@ -97,6 +125,8 @@
     },
     data() {
       return {
+        downloadLink: '',
+        downloadFilename: '',
         videoUrl: '',
         track: '',
         loading: false,
@@ -113,7 +143,7 @@
   }
 
   ::cue(rt) {
-    float: left;
     color: #ccc;
+    background:#000;
   }
 </style>

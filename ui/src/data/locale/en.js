@@ -66,5 +66,6 @@ export default {
   stroke: 'Stroke',
   unknown: 'Unknown',
   url: 'URL',
-  message_no_track: 'No tracks to this video',
+  message_no_track: 'No subtitles to this video',
+  download_track: 'Download Subtitle',
 };
