@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 const program = require('commander');
 
+process.setMaxListeners(0);
+
 program
   .version('0.0.1')
   .command('ideogram', 'Create a ideogram to pinyin database');
@@ -20,5 +22,9 @@ program
 program
   .version('0.0.1')
   .command('jw-track', 'JW Track');
+
+program
+  .version('0.0.1')
+  .command('hsk-import', 'HSK Import');
 
 program.parse(process.argv);

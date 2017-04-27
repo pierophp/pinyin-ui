@@ -8,7 +8,7 @@ const UnihanSearch = require('../services/UnihanSearch');
 
 module.exports = class UnihanDatabaseParser {
 
-  static saveWord(pinyin, ideograms) {
+  static saveWord(pinyin, ideograms, definition = '') {
     const ideogramsConverted = UnihanSearch.convertIdeogramsToUtf16(ideograms);
 
     return new Promise((resolve) => {
@@ -17,6 +17,7 @@ module.exports = class UnihanDatabaseParser {
         pronunciation: pinyin,
         pronunciation_unaccented: removeDiacritics(pinyin),
         definition_unihan: '',
+        definition_pt: JSON.stringify([definition]),
         frequency: 1,
         language_id: 1,
         type: 'W',
