@@ -5,7 +5,7 @@ if (LocalStorage.has('files')) {
   files = LocalStorage.get('files');
 }
 
-let myCjk = [];
+let myCjk = {};
 if (LocalStorage.has('my-cjk')) {
   myCjk = LocalStorage.get('my-cjk');
 }

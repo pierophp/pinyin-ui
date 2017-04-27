@@ -252,10 +252,11 @@ export default {
       http
       .get('my-cjk')
       .then((response) => {
-        const myCjkIdeograms = [];
+        const myCjkIdeograms = {};
         response.data.ideograms.forEach((item) => {
-          myCjkIdeograms.push(codeToIdeogram(item.ideogram));
+          myCjkIdeograms[codeToIdeogram(item.ideogram)] = true;
         });
+
         LocalStorage.save('my-cjk', myCjkIdeograms);
         commit(types.FILE_MUTATION_SET_MY_CJK, myCjkIdeograms);
       })

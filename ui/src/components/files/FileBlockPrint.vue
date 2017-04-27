@@ -13,9 +13,6 @@
 
     <div class="character" :class="classBold" v-if="!block.small" @click.prevent="openBottomBar()">
       <ideograms-show :pinyin="pinyin" :character="character"/>
-      <!-- span v-for="data in printData" :class="[data.toneClass, data.ideogramClass]">
-        {{data.character}}
-      </span -->
     </div>
   </div>
   </div>
@@ -23,8 +20,6 @@
 
 <script>
   import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
-  import extractPinyinTone from 'src/helpers/extract-pinyin-tone';
-  import specialIdeograms from 'src/helpers/special-ideograms-chars';
   import LocalStorage from 'src/helpers/local-storage';
   import IdeogramsShow from 'src/components/ideograms/Show';
 
@@ -118,14 +113,11 @@
         const pinyin = separatePinyinInSyllables(this.pinyin).split(' ');
         const chars = this.character.toString();
         let withoutPinyn = true;
-        const numberRegex = new RegExp('^[0-9]+$');
         for (let i = 0; i < chars.length; i += 1) {
           let newPinyin = '';
           let pinyinClass = '';
-          let ideogramClass = '';
 
-          const tone = extractPinyinTone(pinyin[i]);
-          if (options.type !== '3' && (this.myCjk.indexOf(chars[i]) > -1 || pinyin[i] === undefined || pinyin[i] === '')) {
+          if (options.type !== '3' && (this.myCjk[chars[i]] !== undefined || pinyin[i] === undefined || pinyin[i] === '')) {
             pinyinClass = 'hide-pinyin';
             newPinyin = '&nbsp;';
           } else if (pinyin[i]) {
@@ -136,14 +128,8 @@
             newPinyin = ' ';
           }
 
-          if (specialIdeograms.indexOf(chars[i]) > -1 || numberRegex.test(chars[i])) {
-            ideogramClass = 'special-ideogram';
-          }
-
           printData.push({
-            ideogramClass,
             pinyinClass,
-            toneClass: `tone-${tone}`,
             character: chars[i],
             pinyin: newPinyin,
           });
@@ -152,13 +138,13 @@
         if (withoutPinyn) {
           printData.forEach((item, i) => {
             printData[i].pinyinClass = '';
+            printData[i].pinyin = '';
           });
         }
 
         if (chars.length === 0) {
           printData.push({
             pinyinClass: '',
-            toneClass: '',
             character: '',
             pinyin: `${this.pinyin}&nbsp;`,
           });

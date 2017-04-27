@@ -105,7 +105,7 @@
 
       openModal(character) {
         let add = true;
-        if (this.myCjk.indexOf(character) > -1) {
+        if (this.myCjk[character] !== undefined) {
           add = false;
         }
 

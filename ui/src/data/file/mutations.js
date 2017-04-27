@@ -229,11 +229,11 @@ export default {
   },
 
   [types.FILE_MUTATION_ADD_MY_CJK](state, myCjk) {
-    state.myCjk.push(myCjk);
+    Vue.set(state.myCjk, myCjk, true);
   },
 
   [types.FILE_MUTATION_REMOVE_MY_CJK](state, myCjk) {
-    state.myCjk.splice(state.myCjk.indexOf(myCjk), 1);
+    Vue.delete(state.myCjk, myCjk);
   },
 
   [types.FILE_MUTATION_SET_FILE_LOADING](state, fileLoading) {
