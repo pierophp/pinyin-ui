@@ -321,6 +321,7 @@ module.exports = class UnihanSearch {
       '─': ' ',
       '.': ' ',
       '!': ' ',
+      '/': ' ',
       1: ' ',
       2: ' ',
       3: ' ',

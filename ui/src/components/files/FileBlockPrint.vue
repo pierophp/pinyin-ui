@@ -20,15 +20,15 @@
 
 <script>
   import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
-  import LocalStorage from 'src/helpers/local-storage';
   import IdeogramsShow from 'src/components/ideograms/Show';
+  import OptionsManager from 'src/domain/options-manager';
 
   import {
     mapGetters,
   } from 'vuex';
 
   import {
-  FILE_GETTER_MY_CJK,
+    FILE_GETTER_MY_CJK,
   } from 'src/data/file/types';
 
   export default {
@@ -98,26 +98,29 @@
       },
 
       updateRender() {
-        let options = LocalStorage.get('options');
-        if (options === null) {
-          options = {
-            type: 1,
-          };
-        }
+        const options = OptionsManager.getOptions();
         this.classHighlight = `highlight-${this.highlight}`;
         this.classBold = '';
         if (this.isBold === 1) {
           this.classBold = 'bold';
         }
+
         const printData = [];
-        const pinyin = separatePinyinInSyllables(this.pinyin).split(' ');
         const chars = this.character.toString();
+
         let withoutPinyn = true;
+        const pinyin = separatePinyinInSyllables(this.pinyin).split(' ');
         for (let i = 0; i < chars.length; i += 1) {
           let newPinyin = '';
           let pinyinClass = '';
+          let hidePinyin = false;
+          if (options.pinyinHide === '1') {
+            hidePinyin = (this.myCjk[chars[i]] !== undefined || pinyin[i] === undefined || pinyin[i] === '');
+          } else if (options.pinyinHide === '2') {
+            hidePinyin = (this.myCjk[chars] !== undefined || pinyin[i] === undefined || pinyin[i] === '');
+          }
 
-          if (options.type !== '3' && (this.myCjk[chars[i]] !== undefined || pinyin[i] === undefined || pinyin[i] === '')) {
+          if (options.type !== '3' && hidePinyin) {
             pinyinClass = 'hide-pinyin';
             newPinyin = '&nbsp;';
           } else if (pinyin[i]) {

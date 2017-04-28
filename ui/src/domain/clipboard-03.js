@@ -117,8 +117,8 @@ export default function (content) {
             line.text = replaceall(item, ` ${item}${specialWord} `, line.text);
           });
 
-          line.text = replaceall('<b>', '<b> ', line.text);
-          line.text = replaceall('</b>', '</b> ', line.text);
+          line.text = replaceall('<b>', ' <b> ', line.text);
+          line.text = replaceall('</b>', ' </b> ', line.text);
 
           // remove double spaces
           if (line.text) {

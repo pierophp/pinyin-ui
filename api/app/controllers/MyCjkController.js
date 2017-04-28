@@ -1,21 +1,27 @@
 const express = require('express');
 const knex = require('../services/knex');
+const UnihanSearch = require('../services/UnihanSearch');
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  knex('my_cjk')
+router.get('/',async (req, res) => {
+  const result = await knex('my_cjk')
     .select('my_cjk.id', 'cjk.ideogram', 'cjk.frequency', 'cjk.pronunciation')
     .join('cjk', 'cjk.id', '=', 'my_cjk.cjk_id')
     .where({
       user_id: req.user.id,
     })
     .orderBy('frequency', 'ASC')
-    .orderBy('usage', 'DESC')
-    .then((result) => {
-      res.send({ ideograms: result });
-    });
+    .orderBy('usage', 'DESC');
+
+  const ideograms = [];
+  result.forEach((item) => {
+    item.ideogram = UnihanSearch.convertUtf16ToIdeograms(item.ideogram);
+    ideograms.push(item);
+  });
+
+  res.send({ ideograms });
 });
 
 router.get('/report', (req, res) => {
@@ -56,61 +62,82 @@ router.get('/report_unknown', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
-  const ideogramConverted = req.body.ideogram.charCodeAt(0).toString(16);
+router.post('/', async (req, res) => {
+  try {
+    const ideogramConverted = UnihanSearch.convertIdeogramsToUtf16(req.body.ideogram);
 
-  knex('cjk')
-    .where({
-      ideogram: ideogramConverted,
-      type: 'C',
-    })
-    .orderBy('frequency', 'ASC')
-    .orderBy('usage', 'DESC')
-    .select('id')
-    .then(result =>
-      knex('my_cjk')
+    let result = await knex('cjk')
+      .where({
+        ideogram: ideogramConverted,
+        type: 'C',
+      })
+      .orderBy('frequency', 'ASC')
+      .orderBy('usage', 'DESC')
+      .select('id');
+
+    if (result.length === 0) {
+      result = await knex('cjk')
+      .where({
+        ideogram: ideogramConverted,
+      })
+      .orderBy('frequency', 'ASC')
+      .orderBy('usage', 'DESC')
+      .select('id');
+    }
+
+    await knex('my_cjk')
       .insert({
         cjk_id: result[0].id,
         user_id: req.user.id,
-      })
-    )
-    .then(() => {
-      res.send({ status: 'SUCCESS' });
-    })
-    .catch((e) => {
-      res.status(500);
-      res.send({
-        status: 'ERROR',
-        message: e.message,
       });
+
+    res.send({ status: 'SUCCESS' });
+  } catch (e) {
+    res.status(500);
+    res.send({
+      status: 'ERROR',
+      message: e.message,
     });
+  }
 });
 
-router.delete('/', (req, res) => {
-  const ideogramConverted = req.body.ideogram.charCodeAt(0).toString(16);
+router.delete('/', async (req, res) => {
+  try {
+    const ideogramConverted = UnihanSearch.convertIdeogramsToUtf16(req.body.ideogram);
+    let result = await knex('cjk')
+      .where({
+        ideogram: ideogramConverted,
+        type: 'C',
+      })
+      .orderBy('frequency', 'ASC')
+      .orderBy('usage', 'DESC')
+      .select('id');
 
-  knex('cjk')
-    .where({
-      ideogram: ideogramConverted,
-      type: 'C',
-    })
-    .orderBy('frequency', 'ASC')
-    .orderBy('usage', 'DESC')
-    .select('id')
-    .then(result =>
-      knex('my_cjk')
+    if (result.length === 0) {
+      result = await knex('cjk')
+      .where({
+        ideogram: ideogramConverted,
+      })
+      .orderBy('frequency', 'ASC')
+      .orderBy('usage', 'DESC')
+      .select('id');
+    }
+
+    await knex('my_cjk')
       .where({
         cjk_id: result[0].id,
         user_id: req.user.id,
       })
-      .del()
-    )
-    .then(() => {
-      res.send({ status: 'SUCCESS' });
-    })
-    .catch(() => {
-      res.send({ status: 'ERROR' });
+      .del();
+
+    res.send({ status: 'SUCCESS' });
+  } catch (e) {
+    res.status(500);
+    res.send({
+      status: 'ERROR',
+      message: e.message,
     });
+  }
 });
 
 module.exports = router;

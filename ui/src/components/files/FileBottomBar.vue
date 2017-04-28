@@ -1,6 +1,6 @@
 <template>
   <div class="bottom-bar" v-if="show">
-    <span class="ideogram-link" v-for="data in printData" @click.prevent="openModal(data.character)">{{data.character}}</span>
+    <span class="ideogram-link" v-for="data in printData" @click.prevent="openModal(data.characterLink)">{{data.character}}</span>
     <!-- span @click.prevent="openPinyinList()">{{ block.pinyin }}</span -->
 
     <md-menu md-size="2"  md-direction="top left" md-offset-y="-52">
@@ -43,6 +43,7 @@
   import http from 'src/helpers/http';
   import DictionaryDetails from 'src/components/dictionary/Details';
   import IdeogramsShow from 'src/components/ideograms/Show';
+  import OptionsManager from 'src/domain/options-manager';
 
   import {
     mapMutations,
@@ -95,9 +96,16 @@
         this.block = block;
         const chars = block.character.toString();
         const printData = [];
+        const options = OptionsManager.getOptions();
         for (let i = 0; i < chars.length; i += 1) {
+          let characterLink = chars[i];
+          if (options.pinyinHide === '2') {
+            characterLink = chars;
+          }
+
           printData.push({
             character: chars[i],
+            characterLink,
           });
         }
         this.printData = printData;

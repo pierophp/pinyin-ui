@@ -67,5 +67,7 @@ export default {
   unknown: 'Desconhecidos',
   url: 'URL',
   message_no_track: 'Não há legendas separadas pra esse vídeo',
-  download_track: 'Download Legenda',
+  download_track: 'Baixar Legenda',
+  hide_pinyin_by: 'Esconder Pinyin Por',
+  word: 'Palavra',
 };

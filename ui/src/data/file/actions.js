@@ -5,7 +5,6 @@ import clipboard02 from 'src/domain/clipboard-02';
 import clipboard03 from 'src/domain/clipboard-03';
 import clipboard04 from 'src/domain/clipboard-04';
 import LocalStorage from 'src/helpers/local-storage';
-import codeToIdeogram from 'src/helpers/code-to-ideogram';
 
 import * as types from './types';
 
@@ -254,7 +253,7 @@ export default {
       .then((response) => {
         const myCjkIdeograms = {};
         response.data.ideograms.forEach((item) => {
-          myCjkIdeograms[codeToIdeogram(item.ideogram)] = true;
+          myCjkIdeograms[item.ideogram] = true;
         });
 
         LocalStorage.save('my-cjk', myCjkIdeograms);
