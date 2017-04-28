@@ -1,7 +1,7 @@
 <template>
   <div class="print-container">
     <div class="print-scroll">
-      <div class="print" :class="[sizeClass, typeClass, ideogramColoredClass, ideogramSpacedClass]">
+      <div class="print" :class="[sizeClass, typeClass, ideogramSpacedClass]">
         <h2>{{filename}}</h2>
         <file-row-print v-for="(line, lineIndex) in lines"
             :line="line"
@@ -24,7 +24,7 @@
   import FileBottomBar from 'src/components/files/FileBottomBar';
   import AddRemoveCharacterModal from 'src/components/modals/AddRemoveCharacter';
   import HighlightModal from 'src/components/modals/Highlight';
-  import LocalStorage from 'src/helpers/local-storage';
+  import OptionsManager from 'src/domain/options-manager';
 
   import {
     mapActions,
@@ -55,7 +55,6 @@
         filename: '',
         sizeClass: '',
         typeClass: '',
-        ideogramColoredClass: '',
         ideogramSpacedClass: '',
       };
     },
@@ -109,24 +108,13 @@
       },
 
       updateCss() {
-        let options = LocalStorage.get('options');
-        if (options === null) {
-          options = {
-            size: 'normal',
-            type: 1,
-          };
-        }
+        const options = OptionsManager.getOptions();
 
         this.sizeClass = options.size;
 
         this.typeClass = '';
         if (options.type === '2') {
           this.typeClass = 'character-only';
-        }
-
-        this.ideogramColoredClass = 'ideogram-colored';
-        if (options.ideogramColored === '0') {
-          this.ideogramColoredClass = '';
         }
 
         this.ideogramSpacedClass = 'ideogram-spaced';

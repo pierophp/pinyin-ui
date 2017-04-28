@@ -22,6 +22,7 @@ module.exports = class UnihanDatabaseParser {
         language_id: 1,
         type: 'W',
         usage: 0,
+        hsk: 999,
         created_at: new Date(),
       }).then(() => {
         resolve();

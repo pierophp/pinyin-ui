@@ -33,15 +33,19 @@ module.exports = class JwDownloader {
                   description: media.title,
                   created_at: new Date(),
                 });
-
+                // eslint-disable-next-line
                 console.log(video);
+                // eslint-disable-next-line
                 console.log(media.title);
+                // eslint-disable-next-line
                 console.log(media.files[0].subtitles.url);
               }
             }
           });
         } catch (e) {
+          // eslint-disable-next-line
           console.log(url);
+          // eslint-disable-next-line
           console.log(e);
           return;
         }

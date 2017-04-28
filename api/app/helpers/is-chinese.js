@@ -16,7 +16,7 @@ const chineseRange = [
   [65306, 65306], // ：
 ];
 
-module.exports = function (str) {
+module.exports = function isChinese(str) {
   let charCode;
   let flag = false;
   let range;

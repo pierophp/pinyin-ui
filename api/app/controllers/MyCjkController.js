@@ -5,7 +5,7 @@ const UnihanSearch = require('../services/UnihanSearch');
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
-router.get('/',async (req, res) => {
+router.get('/', async (req, res) => {
   const result = await knex('my_cjk')
     .select('my_cjk.id', 'cjk.ideogram', 'cjk.frequency', 'cjk.pronunciation')
     .join('cjk', 'cjk.id', '=', 'my_cjk.cjk_id')

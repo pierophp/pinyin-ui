@@ -55,6 +55,14 @@
           pinyin = separatePinyinInSyllables(this.pinyin).split(' ');
         }
 
+        if (options.ideogramColored === '0') {
+          colors[1] = '#000000';
+          colors[2] = '#000000';
+          colors[3] = '#000000';
+          colors[4] = '#000000';
+          colors[0] = '#000000';
+        }
+
         const chars = this.character.toString();
         const numberRegex = new RegExp('^[0-9]+$');
         for (let i = 0; i < chars.length; i += 1) {

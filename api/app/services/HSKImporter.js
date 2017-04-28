@@ -8,6 +8,7 @@ const UnihanSearch = require('../services/UnihanSearch');
 module.exports = class HSKImporter {
   static async import() {
     for (let i = 1; i <= 6; i += 1) {
+      // eslint-disable-next-line
       console.log(i);
       const response = await axios.get(`http://www.hsk.academy/en/hsk_${i}`);
       const $ = cheerio.load(response.data);
@@ -30,7 +31,9 @@ module.exports = class HSKImporter {
               });
 
         if (items.length === 0) {
+          // eslint-disable-next-line
           console.log('Not Found');
+          // eslint-disable-next-line
           console.log(word);
         }
 
