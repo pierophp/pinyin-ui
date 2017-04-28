@@ -186,6 +186,10 @@
     max-width: 650px;
   }
 
+  #summary .md-table th:first-child{
+    width: 20px;
+  }
+
   #ideograms .md-table{
     max-width: 650px;
   }
