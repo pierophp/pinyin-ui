@@ -70,4 +70,5 @@ export default {
   download_track: 'Baixar Legenda',
   hide_pinyin_by: 'Esconder Pinyin Por',
   word: 'Palavra',
+  'freq.': 'Freq.',
 };

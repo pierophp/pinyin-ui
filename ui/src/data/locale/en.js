@@ -70,4 +70,5 @@ export default {
   download_track: 'Download Subtitle',
   hide_pinyin_by: 'Hide Pinyin By',
   word: 'Word',
+  'freq.': 'Freq.',
 };

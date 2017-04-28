@@ -38,7 +38,7 @@ module.exports = class HSKImporter {
         }
 
         await Promise.map(items, async (item) => {
-          if (item.hsk) {
+          if (item.hsk && item.hsk <= i) {
             return;
           }
 

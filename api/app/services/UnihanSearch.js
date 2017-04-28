@@ -40,6 +40,7 @@ module.exports = class UnihanSearch {
       .where({
         ideogram: UnihanSearch.convertIdeogramsToUtf16(search),
       })
+      .orderBy('main', 'DESC')
       .orderBy('frequency', 'ASC')
       .orderBy('hsk', 'ASC')
       .orderBy('usage', 'DESC')
@@ -47,6 +48,7 @@ module.exports = class UnihanSearch {
 
       const cjkListLike = await knex('cjk')
       .where('ideogram', 'LIKE', `${UnihanSearch.convertIdeogramsToUtf16(search)}%`)
+      .orderBy('main', 'DESC')
       .orderBy('frequency', 'ASC')
       .orderBy('hsk', 'ASC')
       .orderBy('usage', 'DESC')
@@ -60,6 +62,7 @@ module.exports = class UnihanSearch {
       .where({
         pronunciation_unaccented: search,
       })
+      .orderBy('main', 'DESC')
       .orderBy('frequency', 'ASC')
       .orderBy('hsk', 'ASC')
       .orderBy('usage', 'DESC')
@@ -67,6 +70,7 @@ module.exports = class UnihanSearch {
 
       const cjkListLike = await knex('cjk')
       .where('pronunciation_unaccented', 'LIKE', `${search}%`)
+      .orderBy('main', 'DESC')
       .orderBy('frequency', 'ASC')
       .orderBy('hsk', 'ASC')
       .orderBy('usage', 'DESC')

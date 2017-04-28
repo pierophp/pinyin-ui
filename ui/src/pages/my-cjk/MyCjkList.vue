@@ -6,19 +6,42 @@
         <md-table>
           <md-table-header>
             <md-table-row>
-              <md-table-head></md-table-head>
+              <md-table-head>{{ $t('freq.') }}</md-table-head>
               <md-table-head>{{ $t('my_ideograms') }}</md-table-head>
               <md-table-head></md-table-head>
             </md-table-row>
           </md-table-header>
           <md-table-body>
             <md-table-row v-for="row in report">
-              <md-table-cell>{{row.frequency}}</md-table-cell>
-              <md-table-cell>{{row.total_my}} / {{row.total}} ({{row.percent}}%)</md-table-cell>
+              <md-table-cell>{{ (row.frequency === 999) ? '-' : row.frequency }}</md-table-cell>
+              <md-table-cell>
+                {{row.total_my}}
+                / {{row.total}}
+                ({{row.percent}}%)</md-table-cell>
               <md-table-cell>
                 <md-button class="md-warn" @click.native="unknown(row.frequency)">
                   {{ $t('unknown') }}
                 </md-button>
+              </md-table-cell>
+            </md-table-row>
+          </md-table-body>
+        </md-table>
+
+        <md-table>
+          <md-table-header>
+            <md-table-row>
+              <md-table-head>HSK</md-table-head>
+              <md-table-head>{{ $t('word') }}</md-table-head>
+              <md-table-head></md-table-head>
+            </md-table-row>
+          </md-table-header>
+          <md-table-body>
+            <md-table-row v-for="row in reportWords">
+              <md-table-cell>{{ (row.hsk === 999) ? '-' : row.hsk }}</md-table-cell>
+              <md-table-cell>{{row.total_my}}
+                {{ (row.hsk === 999) ? '' : ('/ ' + row.total + ' (' + row.percent + '%)') }}
+              </md-table-cell>
+              <md-table-cell>
               </md-table-cell>
             </md-table-row>
           </md-table-body>
@@ -39,8 +62,9 @@
               <md-table-cell class="ideogram">
                 <ideograms-show :pinyin="ideogram.pronunciation" :character="ideogram.ideogram"/>
               </md-table-cell>
+
               <md-table-cell>{{ideogram.pronunciation}}</md-table-cell>
-              <md-table-cell>{{ideogram.frequency}}</md-table-cell>
+              <md-table-cell>{{ (ideogram.frequency === 999) ? '-' : ideogram.frequency }}</md-table-cell>
             </md-table-row>
           </md-table-body>
         </md-table>
@@ -85,8 +109,10 @@
     data() {
       return {
         total: 0,
+        totalWords: 0,
         frequency: 0,
         report: [],
+        reportWords: [],
         reportUnkown: [],
         ideograms: [],
       };
@@ -128,13 +154,16 @@
       });
 
       http
+      .get('my-cjk/report_words')
+      .then((result) => {
+        this.totalWords = result.data.total;
+        this.reportWords = result.data.report;
+      });
+
+      http
       .get('my-cjk')
       .then((result) => {
-        this.ideograms = [];
-        result.data.ideograms.forEach((ideogram) => {
-          ideogram.ideogram = codeToIdeogram(ideogram.ideogram);
-          this.ideograms.push(ideogram);
-        });
+        this.ideograms = result.data.ideograms;
       });
     },
   };

@@ -26,12 +26,13 @@ router.get('/', async (req, res) => {
 
 router.get('/report', (req, res) => {
   knex('cjk')
-    .select(knex.raw('cjk.frequency, count(*) as total, COUNT(my_cjk.id) total_my, round(COUNT(my_cjk.id) / count(*) * 100) percent'))
+    .select(knex.raw('cjk.frequency, COUNT(*) as total, COUNT(my_cjk.id) total_my, round(COUNT(my_cjk.id) / COUNT(*) * 100) percent'))
     .leftJoin('my_cjk', function leftJoin() {
       this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
     })
     .where({
       type: 'C',
+      main: 1,
       simplified: 1,
     })
     .groupBy('cjk.frequency')
@@ -42,6 +43,26 @@ router.get('/report', (req, res) => {
       });
       res.send({ total, report });
     });
+});
+
+router.get('/report_words', async (req, res) => {
+  const report = await knex('cjk')
+    .select(knex.raw('cjk.hsk, COUNT(cjk.id) as total, COUNT(my_cjk.id) total_my, round(COUNT(my_cjk.id) / COUNT(*) * 100) percent'))
+    .leftJoin('my_cjk', function leftJoin() {
+      this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
+    })
+    .where({
+      main: 1,
+      simplified: 1,
+    })
+    .groupBy('cjk.hsk');
+
+  let total = 0;
+  report.forEach((item) => {
+    total += item.total_my;
+  });
+
+  res.send({ total, report });
 });
 
 router.get('/report_unknown', (req, res) => {
@@ -68,6 +89,7 @@ router.post('/', async (req, res) => {
 
     let result = await knex('cjk')
       .where({
+        main: 1,
         ideogram: ideogramConverted,
         type: 'C',
       })
@@ -104,28 +126,23 @@ router.post('/', async (req, res) => {
 router.delete('/', async (req, res) => {
   try {
     const ideogramConverted = UnihanSearch.convertIdeogramsToUtf16(req.body.ideogram);
-    let result = await knex('cjk')
-      .where({
-        ideogram: ideogramConverted,
-        type: 'C',
-      })
-      .orderBy('frequency', 'ASC')
-      .orderBy('usage', 'DESC')
-      .select('id');
+    const result = await knex('cjk')
+    .where({
+      ideogram: ideogramConverted,
+    })
+    .orderBy('frequency', 'ASC')
+    .orderBy('usage', 'DESC')
+    .select('id');
 
-    if (result.length === 0) {
-      result = await knex('cjk')
-      .where({
-        ideogram: ideogramConverted,
-      })
-      .orderBy('frequency', 'ASC')
-      .orderBy('usage', 'DESC')
-      .select('id');
-    }
+
+    const ids = [];
+    result.forEach((item) => {
+      ids.push(item.id);
+    });
 
     await knex('my_cjk')
+      .whereIn('cjk_id', ids)
       .where({
-        cjk_id: result[0].id,
         user_id: req.user.id,
       })
       .del();

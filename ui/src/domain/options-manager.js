@@ -1,6 +1,8 @@
 import LocalStorage from 'src/helpers/local-storage';
 
 class OptionsManager {
+  static options;
+
   static getDefaultOptions() {
     return {
       size: 'normal', // normal, larger
@@ -17,9 +19,14 @@ class OptionsManager {
   }
 
   static getOptions() {
+    if (this.options) {
+      return this.options;
+    }
+
     const options = LocalStorage.get('options');
     if (!options) {
-      return this.getDefaultOptions();
+      this.options = this.getDefaultOptions();
+      return this.options;
     }
 
     const returnOptions = this.getDefaultOptions();
@@ -30,7 +37,8 @@ class OptionsManager {
       }
     }
 
-    return returnOptions;
+    this.options = returnOptions;
+    return this.options;
   }
 }
 
