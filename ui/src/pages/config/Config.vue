@@ -46,27 +46,27 @@
 
         <md-input-container>
           <label for="color1">{{ $t('tone_1_color') }}</label>
-          <md-input name="color1" type="color" v-model="color1">
+          <md-input name="color1" type="color" v-model="color1"/>
         </md-input-container>
 
         <md-input-container>
           <label for="color2">{{ $t('tone_2_color') }}</label>
-          <md-input name="color2" type="color" v-model="color2">
+          <md-input name="color2" type="color" v-model="color2"/>
         </md-input-container>
 
         <md-input-container>
           <label for="color3">{{ $t('tone_3_color') }}</label>
-          <md-input name="color3" type="color" v-model="color3">
+          <md-input name="color3" type="color" v-model="color3" />
         </md-input-container>
 
         <md-input-container>
           <label for="color4">{{ $t('tone_4_color') }}</label>
-          <md-input name="color4" type="color" v-model="color4">
+          <md-input name="color4" type="color" v-model="color4" />
         </md-input-container>
 
         <md-input-container>
           <label for="color0">{{ $t('tone_0_color') }}</label>
-          <md-input name="color0" type="color" v-model="color0">
+          <md-input name="color0" type="color" v-model="color0"/>
         </md-input-container>
       </md-tab>
     </md-tabs>

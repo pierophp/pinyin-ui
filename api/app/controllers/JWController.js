@@ -5,14 +5,13 @@ const JWDownloader = require('../services/JWDownloader');
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
-router.get('/download', (req, res) => {
-  JWDownloader.download(req.query.url)
-  .then((text) => {
-    res.send({ status: 200, text });
-  })
-  .catch((e) => {
+router.get('/download', async (req, res) => {
+  try {
+    const response = await JWDownloader.download(req.query.url);
+    res.send({ status: 200, audio: response.audio, text: response.text });
+  } catch (e) {
     res.send({ status: 500, error: e.message });
-  });
+  }
 });
 
 router.get('/track', (req, res) => {

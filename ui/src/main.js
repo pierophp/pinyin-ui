@@ -22,8 +22,8 @@ import store from 'src/data/store';
 import localeEn from 'src/data/locale/en';
 import localePt from 'src/data/locale/pt';
 
-Vue.use(VueMaterial);
 Vue.use(VueI18n);
+Vue.use(VueMaterial);
 
 Vue.locale('en', localeEn);
 Vue.locale('pt', localePt);

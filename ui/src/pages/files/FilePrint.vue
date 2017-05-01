@@ -3,11 +3,15 @@
     <div class="print-scroll">
       <div class="print" :class="[sizeClass, typeClass, ideogramSpacedClass]">
         <h2>{{filename}}</h2>
-        <file-row-print v-for="(line, lineIndex) in lines"
-            :line="line"
-            :lineIndex="lineIndex"
-            @open-bottom-bar="openBottomBar"/>
-
+        <div v-for="(line, lineIndex) in lines">
+          <div v-if="lineIndex === 0 && line[0].line !== undefined">
+            <audio :src="line[0].line.audio" controls/>
+          </div>
+          <file-row-print
+              :line="line"
+              :lineIndex="lineIndex"
+              @open-bottom-bar="openBottomBar"/>
+        </div>
         <div class="loading-container">
           <md-spinner md-indeterminate v-if="fileLoading"></md-spinner>
         </div>
@@ -394,6 +398,12 @@
 
   .bold span {
     font-weight: 500 !important;
+  }
+
+  audio {
+    margin-top: 30px;
+    margin-Bottom: 5px;
+    width: 100%;
   }
 
 </style>

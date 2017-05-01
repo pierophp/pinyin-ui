@@ -95,59 +95,65 @@ module.exports = class JwDownloader {
     return trackList.join('\n');
   }
 
-  static download(url) {
-    return axios.get(this.encodeUrl(url))
-      .then((response) => {
-        const $ = cheerio.load(response.data);
-        this.text = [];
-        this.figcaptionsText = [];
+  static async download(url) {
+    const response = await axios.get(this.encodeUrl(url));
+    const downloadResponse = {};
+    const $ = cheerio.load(response.data);
+    this.text = [];
+    this.figcaptionsText = [];
 
-        const mainImage = $('.lsrBannerImage');
-        if (mainImage.length) {
-          this.text.push({
-            large: $(mainImage).find('span').attr('data-zoom'),
-            small: $(mainImage).find('span').attr('data-img-size-lg'),
-            type: 'img',
-          });
-        }
+    downloadResponse.audio = null;
+    const media = $('.jsAudioPlayer a');
+    if (media.length > 0) {
+      downloadResponse.audio = media.attr('href');
+    }
 
-        this.text.push({
-          text: this.getText($, $('article header h1')),
-          type: 'h1',
-        });
-
-        $('article .docSubContent').children().each((i, children) => {
-          if ($(children).hasClass('blockTeach')) {
-            const boxH2 = $(children).find('aside h2');
-            if (boxH2 && $(boxH2).text()) {
-              this.text.push({
-                text: this.getText($, boxH2),
-                type: 'h2',
-              });
-
-              this.parseBlock($, $(children).find('.boxContent'));
-            }
-          } else if ($(children).hasClass('bodyTxt')) {
-            $(children).children().each((j, subChildren) => {
-              const boxH2 = $(subChildren).children('h2');
-              if (boxH2 && $(boxH2).text()) {
-                this.text.push({
-                  text: this.getText($, boxH2),
-                  type: 'h2',
-                });
-              }
-
-              $(subChildren).children('div').children().each((k, subChildren02) => {
-                this.parseBlock($, subChildren02);
-              });
-            });
-          } else {
-            this.parseBlock($, children);
-          }
-        });
-
-        return this.text;
+    const mainImage = $('.lsrBannerImage');
+    if (mainImage.length) {
+      this.text.push({
+        large: $(mainImage).find('span').attr('data-zoom'),
+        small: $(mainImage).find('span').attr('data-img-size-lg'),
+        type: 'img',
       });
+    }
+
+    this.text.push({
+      text: this.getText($, $('article header h1')),
+      type: 'h1',
+    });
+
+    $('article .docSubContent').children().each((i, children) => {
+      if ($(children).hasClass('blockTeach')) {
+        const boxH2 = $(children).find('aside h2');
+        if (boxH2 && $(boxH2).text()) {
+          this.text.push({
+            text: this.getText($, boxH2),
+            type: 'h2',
+          });
+
+          this.parseBlock($, $(children).find('.boxContent'));
+        }
+      } else if ($(children).hasClass('bodyTxt')) {
+        $(children).children().each((j, subChildren) => {
+          const boxH2 = $(subChildren).children('h2');
+          if (boxH2 && $(boxH2).text()) {
+            this.text.push({
+              text: this.getText($, boxH2),
+              type: 'h2',
+            });
+          }
+
+          $(subChildren).children('div').children().each((k, subChildren02) => {
+            this.parseBlock($, subChildren02);
+          });
+        });
+      } else {
+        this.parseBlock($, children);
+      }
+    });
+
+    downloadResponse.text = this.text;
+    return downloadResponse;
   }
 
   static parseBlock($, element) {
