@@ -65,10 +65,13 @@ export default {
   definition: 'Definição',
   stroke: 'Traços',
   unknown: 'Desconhecidos',
+  known: 'Conhecidos',
   url: 'URL',
   message_no_track: 'Não há legendas separadas pra esse vídeo',
   download_track: 'Baixar Legenda',
   hide_pinyin_by: 'Esconder Pinyin Por',
   word: 'Palavra',
   'freq.': 'Freq.',
+  ideograms: 'Ideogramas',
+  words: 'Palavras',
 };

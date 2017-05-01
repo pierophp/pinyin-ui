@@ -65,10 +65,13 @@ export default {
   definition: 'Definition',
   stroke: 'Stroke',
   unknown: 'Unknown',
+  known: 'Known',
   url: 'URL',
   message_no_track: 'No subtitles to this video',
   download_track: 'Download Subtitle',
   hide_pinyin_by: 'Hide Pinyin By',
   word: 'Word',
   'freq.': 'Freq.',
+  ideograms: 'Ideograms',
+  words: 'Words',
 };

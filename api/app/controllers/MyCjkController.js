@@ -65,8 +65,8 @@ router.get('/report_words', async (req, res) => {
   res.send({ total, report });
 });
 
-router.get('/report_unknown', (req, res) => {
-  knex('cjk')
+router.get('/report_unknown', async (req, res) => {
+  const result = await knex('cjk')
     .select('my_cjk.id', 'cjk.ideogram', 'cjk.frequency', 'cjk.pronunciation')
     .leftJoin('my_cjk', function leftJoin() {
       this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
@@ -74,13 +74,87 @@ router.get('/report_unknown', (req, res) => {
     .where({
       type: 'C',
       simplified: 1,
+      main: 1,
       frequency: req.query.frequency,
     })
     .whereNull('my_cjk.id')
-    .limit(2000)
-    .then((result) => {
-      res.send({ ideograms: result });
-    });
+    .limit(2500);
+
+  const ideograms = [];
+  result.forEach((item) => {
+    item.ideogram = UnihanSearch.convertUtf16ToIdeograms(item.ideogram);
+    ideograms.push(item);
+  });
+
+  res.send({ ideograms });
+});
+
+router.get('/report_known', async (req, res) => {
+  const result = await knex('cjk')
+    .select('my_cjk.id', 'cjk.ideogram', 'cjk.frequency', 'cjk.pronunciation')
+    .join('my_cjk', function leftJoin() {
+      this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
+    })
+    .where({
+      type: 'C',
+      simplified: 1,
+      main: 1,
+      frequency: req.query.frequency,
+    })
+    .limit(2500);
+
+  const ideograms = [];
+  result.forEach((item) => {
+    item.ideogram = UnihanSearch.convertUtf16ToIdeograms(item.ideogram);
+    ideograms.push(item);
+  });
+
+  res.send({ ideograms });
+});
+
+router.get('/report_unknown_words', async (req, res) => {
+  const result = await knex('cjk')
+    .select('my_cjk.id', 'cjk.ideogram', 'cjk.hsk', 'cjk.pronunciation')
+    .leftJoin('my_cjk', function leftJoin() {
+      this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
+    })
+    .where({
+      simplified: 1,
+      main: 1,
+      hsk: req.query.hsk,
+    })
+    .whereNull('my_cjk.id')
+    .limit(2500);
+
+  const ideograms = [];
+  result.forEach((item) => {
+    item.ideogram = UnihanSearch.convertUtf16ToIdeograms(item.ideogram);
+    ideograms.push(item);
+  });
+
+  res.send({ ideograms });
+});
+
+router.get('/report_known_words', async (req, res) => {
+  const result = await knex('cjk')
+    .select('my_cjk.id', 'cjk.ideogram', 'cjk.hsk', 'cjk.pronunciation')
+    .join('my_cjk', function leftJoin() {
+      this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
+    })
+    .where({
+      simplified: 1,
+      main: 1,
+      hsk: req.query.hsk,
+    })
+    .limit(2500);
+
+  const ideograms = [];
+  result.forEach((item) => {
+    item.ideogram = UnihanSearch.convertUtf16ToIdeograms(item.ideogram);
+    ideograms.push(item);
+  });
+
+  res.send({ ideograms });
 });
 
 router.post('/', async (req, res) => {
