@@ -12,7 +12,7 @@ module.exports = class ChineseToolsDownloader {
     };
 
     const response = await axios.post(urls[language], querystring.stringify({ dico: word }),
-      { timeout: 1000 });
+      { timeout: 2500 });
 
     const $ = cheerio.load(response.data);
     const element = $('.ctdico_entry .ctdico_def');
