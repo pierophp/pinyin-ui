@@ -32,6 +32,7 @@ module.exports = class UnihanSearch {
       },
     };
   }
+
   static async searchToDictionaryList(search) {
     let cjkList = [];
 

@@ -22,7 +22,8 @@
     <md-dialog ref="dialogDictionary">
       <md-dialog-title>
         <ideograms-show :pinyin="block.pinyin" :character="block.character"/>
-        - {{ block.pinyin }}</md-dialog-title>
+        - {{ block.pinyin }}
+      </md-dialog-title>
 
       <md-dialog-content>
         <dictionary-details :dictionary="dictionary"/>

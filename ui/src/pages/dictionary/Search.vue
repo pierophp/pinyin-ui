@@ -8,16 +8,18 @@
     </md-input-container>
   </form>
   <div>
-  <md-list>
-    <md-list-item v-for="entry in entries" @click.native="details(entry.id)">
-      <span>
-        <span class="ideogram">
-           <ideograms-show :pinyin="entry.pronunciation" :character="entry.ideogram"/>
-        </span
-        ><span class="pinyin"> - {{ entry.pronunciation }}</span>
-      </span>
-    </md-list-item>
-  </md-list>
+  <loadable-content :loading="loading">
+    <md-list>
+      <md-list-item v-for="entry in entries" @click.native="details(entry.id)">
+        <span>
+          <span class="ideogram">
+            <ideograms-show :pinyin="entry.pronunciation" :character="entry.ideogram"/>
+          </span
+          ><span class="pinyin"> - {{ entry.pronunciation }}</span>
+        </span>
+      </md-list-item>
+    </md-list>
+  </loadable-content>
   </div>
 </div>
 </template>

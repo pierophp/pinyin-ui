@@ -74,4 +74,5 @@ export default {
   'freq.': 'Freq.',
   ideograms: 'Ideogramas',
   words: 'Palavras',
+  edit: 'Editar',
 };

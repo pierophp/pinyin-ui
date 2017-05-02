@@ -76,5 +76,28 @@ router.get('/dictionary', (req, res) => {
   });
 });
 
+router.post('/save', async (req, res) => {
+  console.log(req.user);
+  const ideogram = UnihanSearch.convertIdeogramsToUtf16(req.body.ideograms);
+  const response = await knex('cjk')
+        .where({
+          ideogram,
+          main: 1,
+        })
+        .select('id');
+
+  if (response.length) {
+    const id = response[0].id;
+    await knex('cjk')
+        .where('id', '=', id)
+        .update({
+          definition_pt: JSON.stringify(req.body.dictionary),
+        });
+  }
+
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify({}));
+});
+
 
 module.exports = router;
