@@ -1,6 +1,5 @@
 // JW ORG (spaced)
 import http from 'src/helpers/http';
-import replaceIdeogramsToSpace from 'src/helpers/special-ideograms-chars';
 import replaceall from 'replaceall';
 import Promise from 'bluebird';
 
@@ -41,7 +40,6 @@ export default async function (content) {
     lines = await parseContent(content);
   }
 
-  const numberRegex = new RegExp('^[0-9]+$');
   const rows = await Promise.map(lines, async (line) => {
     if (typeof line === 'string') {
       line = { text: line };
@@ -60,82 +58,11 @@ export default async function (content) {
       return row;
     }
 
-    // Convert NO-BREAK SPACE to SPACE
-    line.text = replaceall(String.fromCharCode(160), ' ', line.text);
-
-    if (line.text.split(' ').length === 1) {
-      const response = await http.post('segmentation/segment', {
-        ideograms: line.text,
-      });
-
-      response.data.ideograms.forEach((char) => {
-        row.push({
-          p: '',
-          c: char,
-        });
-      });
-
-      if (line.type !== undefined) {
-        row[0].line = {};
-        row[0].line.type = line.type;
-      }
-
-      return row;
-    }
-
-    const specialWord = 'JOIN_SPECIAL';
-
-    // separate by numbers
-    line.text = line.text
-        .split(/(\d+)/)
-        .map((item) => {
-          if (numberRegex.test(item)) {
-            item = ` ${item}${specialWord} `;
-          }
-          return item;
-        })
-        .join('');
-
-    replaceIdeogramsToSpace.forEach((item) => {
-      line.text = replaceall(item, ` ${item}${specialWord} `, line.text);
-    });
-
-    line.text = replaceall('<b>', ' <b> ', line.text);
-    line.text = replaceall('</b>', ' </b> ', line.text);
-
-    // remove double spaces
-    if (line.text) {
-      line.text = line.text.replace(/\s{2,}/g, ' ').trim();
-    }
-
     const ideograms = line.text.split(' ');
-    const ideogramsFiltered = [];
-
-    let joinSpecial = '';
-
-    ideograms.forEach((ideogram) => {
-      if (ideogram === specialWord) {
-        return;
-      }
-
-      if (ideogram.substring(ideogram.length - specialWord.length) === specialWord) {
-        joinSpecial += ideogram.replace(specialWord, '');
-        return;
-      } else if (joinSpecial) {
-        ideogramsFiltered.push(joinSpecial);
-        joinSpecial = '';
-      }
-
-      ideogramsFiltered.push(ideogram);
-    });
-
-    if (joinSpecial) {
-      ideogramsFiltered.push(joinSpecial);
-    }
 
     let isBold = 0;
 
-    ideogramsFiltered.forEach((char) => {
+    ideograms.forEach((char) => {
       if (char === '<b>') {
         isBold = 1;
         return;

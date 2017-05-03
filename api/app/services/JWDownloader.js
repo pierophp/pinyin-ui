@@ -3,6 +3,7 @@ const cheerio = require('cheerio');
 const axios = require('axios');
 const knex = require('./knex');
 const replaceall = require('replaceall');
+const replaceIdeogramsToSpace = require('../helpers/special-ideograms-chars');
 const UnihanSearch = require('../services/UnihanSearch');
 
 module.exports = class JwDownloader {
@@ -280,13 +281,80 @@ module.exports = class JwDownloader {
       return '';
     }
 
+    const numberRegex = new RegExp('^[0-9]+$');
+
     text = replaceall('<strong>', '//STRONG-OPEN//', text);
     text = replaceall('</strong>', '//STRONG-CLOSE//', text);
     text = replaceall('<wbr>', ' ', text);
     text = $('<textarea />').html(text).text();
     text = text.replace(/[\u200B-\u200D\uFEFF]/g, ' '); // replace zero width space to space
+    text = replaceall(String.fromCharCode(160), ' ', text); // Convert NO-BREAK SPACE to SPACE
+
+    if (text.split(' ').length === 1) {
+      text = UnihanSearch.segment(text).join(' ');
+    }
+
     text = replaceall('//STRONG-OPEN//', '<b>', text);
     text = replaceall('//STRONG-CLOSE//', '</b>', text);
+    text = replaceall('<b>', ' <b> ', text);
+    text = replaceall('</b>', ' </b> ', text);
+
+    const specialWord = 'JOIN_SPECIAL';
+
+    // separate by numbers
+    text = text
+        .split(/(\d+)/)
+        .map((item) => {
+          if (numberRegex.test(item)) {
+            item = ` ${item}${specialWord} `;
+          }
+          return item;
+        })
+        .join('');
+
+    replaceIdeogramsToSpace.forEach((item) => {
+      text = replaceall(item, ` ${item}${specialWord} `, text);
+    });
+    // remove double spaces
+    if (text) {
+      text = text.replace(/\s{2,}/g, ' ').trim();
+    }
+
+    const ideograms = text.split(' ');
+    const ideogramsFiltered = [];
+
+    let joinSpecial = '';
+
+    ideograms.forEach((ideogram) => {
+      if (ideogram === specialWord) {
+        return;
+      }
+
+      if (ideogram.substring(ideogram.length - specialWord.length) === specialWord) {
+        joinSpecial += ideogram.replace(specialWord, '');
+        return;
+      } else if (joinSpecial) {
+        ideogramsFiltered.push(joinSpecial);
+        joinSpecial = '';
+      }
+
+      ideogramsFiltered.push(ideogram);
+    });
+
+    if (joinSpecial) {
+      ideogramsFiltered.push(joinSpecial);
+    }
+
+    text = ` ${ideogramsFiltered.join(' ')} `;
+    const wordsToReplace = [
+      '各地',
+      '可见',
+    ];
+    wordsToReplace.forEach((word) => {
+      const replaceWord = ` ${word.split('').join(' ')} `;
+      text = replaceall(replaceWord, ` ${word} `, text);
+    });
+
     text = this.trim(text);
     return text;
   }
