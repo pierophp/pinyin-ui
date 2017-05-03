@@ -34,7 +34,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 router.get('/google/callback',
     passport.authenticate('google'),
     (req, res) => {
-      const token = jwt.sign({ id: req.user.id }, env.jwt_key);
+      const token = jwt.sign({ id: req.user.id, admin: req.user.admin }, env.jwt_key);
       res.send({
         token,
         user: {

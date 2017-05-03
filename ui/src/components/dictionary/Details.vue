@@ -98,10 +98,8 @@
       save() {
         http
         .post('unihan/save', {
-          params: {
-            ideograms: this.dictionary.ideograms,
-            dictionary: this.dictionaryEntry.split('\n'),
-          },
+          ideograms: this.dictionary.ideograms,
+          dictionary: this.dictionaryEntry.split('\n'),
         });
       },
     },

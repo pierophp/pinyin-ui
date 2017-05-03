@@ -77,7 +77,11 @@ router.get('/dictionary', (req, res) => {
 });
 
 router.post('/save', async (req, res) => {
-  console.log(req.user);
+  if (!req.user.admin) {
+    res.status(403);
+    return;
+  }
+
   const ideogram = UnihanSearch.convertIdeogramsToUtf16(req.body.ideograms);
   const response = await knex('cjk')
         .where({
