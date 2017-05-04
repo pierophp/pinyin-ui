@@ -4,7 +4,7 @@
       <div class="print" :class="[sizeClass, typeClass, ideogramSpacedClass]">
         <h2>{{filename}}</h2>
         <div v-for="(line, lineIndex) in lines">
-          <div v-if="lineIndex === 0 && line[0] !== undefined && line[0].line.audio !== undefined">
+          <div v-if="lineIndex === 0 && line[0].line !== undefined && line[0].line.audio !== undefined">
             <audio :src="line[0].line.audio" controls/>
           </div>
           <file-row-print
