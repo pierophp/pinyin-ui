@@ -43,7 +43,6 @@ html, body {
   padding: 10px 5px;
   min-width: var(--block-width);
   text-align: center;
-  position: relative;
 }
 
 .block:hover {

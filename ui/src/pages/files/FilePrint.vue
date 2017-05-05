@@ -10,7 +10,7 @@
           <file-row-print
               :line="line"
               :lineIndex="lineIndex"
-              @open-bottom-bar="openBottomBar"/>
+              @click.native="openBottomBarClick"/>
         </div>
         <div class="loading-container">
           <md-spinner md-indeterminate v-if="fileLoading"></md-spinner>
@@ -98,7 +98,6 @@
       clearInterval(this.timer);
       this.clear();
     },
-
     methods: {
       ...mapActions({
         fetch: FILE_ACTION_FETCH,
@@ -106,6 +105,27 @@
         fetchMyCjk: FILE_ACTION_FETCH_MY_CJK,
         save: FILE_ACTION_SAVE,
       }),
+
+      openBottomBarClick(e) {
+        const element = e.target.parentNode.parentNode;
+        if (!element.classList.contains('character')) {
+          return;
+        }
+
+        if (element.getAttribute('data-line') === null && element.getAttribute('data-block') === null) {
+          return;
+        }
+
+        const lineIndex = element.getAttribute('data-line');
+        const blockIndex = element.getAttribute('data-block');
+
+        this.openBottomBar({
+          pinyin: this.lines[lineIndex][blockIndex].p,
+          character: this.lines[lineIndex][blockIndex].c,
+          lineIndex,
+          blockIndex,
+        });
+      },
 
       getFile(filename) {
         this.fetch(filename);

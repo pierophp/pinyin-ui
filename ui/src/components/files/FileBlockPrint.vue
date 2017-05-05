@@ -1,6 +1,6 @@
 <template>
-  <div class="block" :data-line="lineIndex" :data-block="blockIndex" :class="classHighlight" @click="blockClick()" ref="block">
-
+  <div class="block" :data-line="lineIndex" :data-block="blockIndex" :class="classHighlight" ref="block">
+    <!-- TODO REMOVE THIS @click="blockClick()"  -->
     <div class="image" v-if="block.small">
       <img :src="block.small" referrerpolicy="no-referrer"/>
     </div>
@@ -11,7 +11,7 @@
       </span>
     </div>
 
-    <div class="character" :class="classBold" v-if="!block.small && !block.footnote" @click.prevent="openBottomBar()">
+    <div class="character" :data-highlight="highlight" :data-line="lineIndex" :data-block="blockIndex" :class="classBold" v-if="!block.small && !block.footnote">
       <ideograms-show :pinyin="pinyin" :character="character"/>
     </div>
 
@@ -91,6 +91,7 @@
       openFootnote(footnote) {
         console.log(footnote);
       },
+      /* TODO REMOVE THIS
       blockClick() {
         if (!this.highlight) {
           return;
@@ -103,7 +104,7 @@
         sel.removeAllRanges();
         sel.addRange(range);
       },
-
+      */
       updateRender() {
         const options = OptionsManager.getOptions();
         this.classHighlight = `highlight-${this.highlight}`;
@@ -161,14 +162,6 @@
         }
 
         this.printData = printData;
-      },
-      openBottomBar() {
-        this.$emit('open-bottom-bar', {
-          pinyin: this.pinyin,
-          character: this.character,
-          lineIndex: this.lineIndex,
-          blockIndex: this.blockIndex,
-        });
       },
     },
   };

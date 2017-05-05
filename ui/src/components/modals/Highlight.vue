@@ -92,7 +92,7 @@
     that.endLine = endLine;
     that.startBlock = startBlock;
     that.endBlock = endBlock;
-    that.top = startNode.offsetTop - 50;
+    that.top = startNode.offsetTop - 70;
 
     const leftAdd = (Math.max(startBounds.right, endBounds.right) - startBounds.left) / 2;
     const minLeft = 5;

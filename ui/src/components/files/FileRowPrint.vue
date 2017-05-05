@@ -9,7 +9,6 @@
       :highlight="block.h"
       :line-index="lineIndex"
       :block-index="index"
-      @open-bottom-bar="openBottomBar"
       :key="index"
       >
     </file-block-print>
