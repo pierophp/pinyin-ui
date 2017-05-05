@@ -11,8 +11,12 @@
       </span>
     </div>
 
-    <div class="character" :class="classBold" v-if="!block.small" @click.prevent="openBottomBar()">
+    <div class="character" :class="classBold" v-if="!block.small && !block.footnote" @click.prevent="openBottomBar()">
       <ideograms-show :pinyin="pinyin" :character="character"/>
+    </div>
+
+    <div class="character footnote" v-if="block.footnote" @click.prevent="openFootnote(block.footnote)">
+        {{ character }}
     </div>
   </div>
   </div>
@@ -84,6 +88,9 @@
       this.updateRender();
     },
     methods: {
+      openFootnote(footnote) {
+        console.log(footnote);
+      },
       blockClick() {
         if (!this.highlight) {
           return;

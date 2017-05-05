@@ -73,6 +73,15 @@ export default async function (content) {
         return;
       }
 
+      let footnote = null;
+      const footNoteVerify = '#FOOTNOTE-';
+      const isFootnote = char.substr(0, footNoteVerify.length) === footNoteVerify;
+      if (isFootnote) {
+        const footNoteSplit = char.split('-');
+        footnote = footNoteSplit[1];
+        char = footNoteSplit[2];
+      }
+
       const item = {
         p: '',
         c: char,
@@ -80,6 +89,10 @@ export default async function (content) {
 
       if (isBold === 1) {
         item.isBold = isBold;
+      }
+
+      if (footnote) {
+        item.footnote = footnote;
       }
 
       row.push(item);

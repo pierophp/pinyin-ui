@@ -159,6 +159,16 @@ module.exports = class JwDownloader {
 
   static parseBlock($, element) {
     if ($(element).attr('class') && $(element).attr('class').indexOf('boxSupplement') !== -1) {
+      //
+      const boxFigure = $(element).find('.fullBleed figure');
+      if (boxFigure.length) {
+        this.text.push({
+          type: 'box-img',
+          large: $(boxFigure).find('span').attr('data-zoom'),
+          small: $(boxFigure).find('span').attr('data-img-size-lg'),
+        });
+      }
+
       const boxH2 = $(element).find('h2');
       if (boxH2 && $(boxH2).text()) {
         this.text.push({
@@ -206,6 +216,14 @@ module.exports = class JwDownloader {
       type = 'qu';
     }
 
+    if ($(element).hasClass('stdPullQuote')) {
+      type = 'box';
+    }
+
+    let footnote = null;
+    if (type === 'foot') {
+      footnote = replaceall('footnote', '', $(element).attr('id'));
+    }
     const figure = $(element).find('figure');
 
     if (figure.length && $(element).get(0).tagName === 'aside') {
@@ -271,6 +289,10 @@ module.exports = class JwDownloader {
         item.type = type;
       }
 
+      if (footnote) {
+        item.footnote = footnote;
+      }
+
       this.text.push(item);
     });
   }
@@ -279,6 +301,16 @@ module.exports = class JwDownloader {
     let text = $(element).html();
     if (text === null) {
       return '';
+    }
+
+    // asterisk
+    const footNotes = $(element).find('.footnoteLink');
+    let footNoteId = null;
+    if (footNotes.length > 0) {
+      footNotes.each((i, footNote) => {
+        footNoteId = replaceall('#footnote', '', $(footNote).attr('data-anchor')).trim();
+        text = replaceall($.html(footNote), `#FOOTNOTE-${$(footNote).html()}`, text);
+      });
     }
 
     const numberRegex = new RegExp('^[0-9]+$');
@@ -296,6 +328,7 @@ module.exports = class JwDownloader {
 
     text = replaceall('//STRONG-OPEN//', '<b>', text);
     text = replaceall('//STRONG-CLOSE//', '</b>', text);
+
     text = replaceall('<b>', ' <b> ', text);
     text = replaceall('</b>', ' </b> ', text);
 
@@ -354,6 +387,10 @@ module.exports = class JwDownloader {
       const replaceWord = ` ${word.split('').join(' ')} `;
       text = replaceall(replaceWord, ` ${word} `, text);
     });
+
+    if (footNoteId) {
+      text = replaceall('#FOOTNOTE-', `#FOOTNOTE-${footNoteId}-`, text);
+    }
 
     text = this.trim(text);
     return text;

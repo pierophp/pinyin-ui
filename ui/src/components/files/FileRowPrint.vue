@@ -1,5 +1,5 @@
 <template>
-  <div class="line" :class=[type]>
+  <div class="line" :class=[type] v-show="rowVisible">
     <file-block-print
       v-for="(block,index) in line"
       :block="block"
@@ -10,6 +10,7 @@
       :line-index="lineIndex"
       :block-index="index"
       @open-bottom-bar="openBottomBar"
+      :key="index"
       >
     </file-block-print>
 
@@ -28,6 +29,7 @@
     data() {
       return {
         type: '',
+        rowVisible: true,
       };
     },
     props: {
@@ -43,6 +45,9 @@
       if (this.line[0] !== undefined && this.line[0].line !== undefined) {
         const type = this.line[0].line.type;
         this.type = `type-${type}`;
+        if (type === 'foot') {
+          this.rowVisible = true;
+        }
       }
     },
     methods: {

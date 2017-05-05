@@ -10,6 +10,8 @@ router.get('/download', async (req, res) => {
     const response = await JWDownloader.download(req.query.url);
     res.send({ status: 200, audio: response.audio, text: response.text });
   } catch (e) {
+    // eslint-disable-next-line
+    console.log(e.message);
     res.send({ status: 500, error: e.message });
   }
 });
@@ -22,6 +24,8 @@ router.get('/track', (req, res) => {
     res.send(track);
   })
   .catch((e) => {
+    // eslint-disable-next-line
+    console.log(e.message);
     res.send({ status: 500, error: e.message });
   });
 });
