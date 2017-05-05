@@ -100,6 +100,10 @@
         .post('unihan/save', {
           ideograms: this.dictionary.ideograms,
           dictionary: this.dictionaryEntry.split('\n'),
+        })
+        .then(() => {
+          this.dictionary.pt = this.dictionaryEntry.split('\n');
+          this.editing = false;
         });
       },
     },
