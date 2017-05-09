@@ -238,10 +238,21 @@ module.exports = class JwDownloader {
         imgType = 'img';
       }
 
+      let large = $(figure).find('span').attr('data-zoom');
+      let small = $(figure).find('span').attr('data-img-size-lg');
+
+      if (!large) {
+        large = $(figure).find('img').attr('src');
+      }
+
+      if (!small) {
+        small = $(figure).find('img').attr('src');
+      }
+
       this.text.push({
         type: imgType,
-        large: $(figure).find('span').attr('data-zoom'),
-        small: $(figure).find('span').attr('data-img-size-lg'),
+        large,
+        small,
       });
 
       const figcaption = $(figure).find('figcaption');
@@ -261,8 +272,6 @@ module.exports = class JwDownloader {
           text,
         });
       }
-
-      return;
     }
 
     let text = this.trim($(element).text());
