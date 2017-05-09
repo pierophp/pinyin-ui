@@ -1,5 +1,6 @@
 <template>
   <div class="print-container">
+    <image-zoom :src="imageZoom" ref="imageZoom"/>
     <div class="print-scroll">
       <div class="print" :class="[sizeClass, typeClass, ideogramSpacedClass]">
         <h2>{{filename}}</h2>
@@ -10,7 +11,9 @@
           <file-row-print
               :line="line"
               :lineIndex="lineIndex"
-              @click.native="openBottomBarClick"/>
+              @click.native="openBottomBarClick"
+              @open-image="openImage"
+              @open-footnote="openFootnote"/>
         </div>
         <div class="loading-container">
           <md-spinner md-indeterminate v-if="fileLoading"></md-spinner>
@@ -29,6 +32,7 @@
   import AddRemoveCharacterModal from 'src/components/modals/AddRemoveCharacter';
   import HighlightModal from 'src/components/modals/Highlight';
   import OptionsManager from 'src/domain/options-manager';
+  import ImageZoom from 'src/components/common/ImageZoom';
 
   import {
     mapActions,
@@ -52,10 +56,12 @@
       AddRemoveCharacterModal,
       HighlightModal,
       FileBottomBar,
+      ImageZoom,
     },
 
     data() {
       return {
+        imageZoom: '',
         filename: '',
         sizeClass: '',
         typeClass: '',
@@ -105,6 +111,15 @@
         fetchMyCjk: FILE_ACTION_FETCH_MY_CJK,
         save: FILE_ACTION_SAVE,
       }),
+
+      openImage(image) {
+        this.imageZoom = image.src;
+        this.$refs.imageZoom.openDialog();
+      },
+
+      openFootnote(footnote) {
+        console.log(footnote);
+      },
 
       openBottomBarClick(e) {
         const element = e.target.parentNode.parentNode;

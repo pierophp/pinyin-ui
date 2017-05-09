@@ -176,7 +176,17 @@
   width: 100%;
   flex-shrink: 0;
 }
-.ideogram-link {
+
+.bottom-bar .md-menu .md-button{
+  margin: 6px 0;
+  padding: 0 6px;
+}
+
+.bottom-bar .md-button i{
+
+}
+
+.bottom-bar .ideogram-link {
   cursor: pointer;
 }
 

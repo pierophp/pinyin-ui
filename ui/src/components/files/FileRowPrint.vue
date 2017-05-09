@@ -10,6 +10,8 @@
       :line-index="lineIndex"
       :block-index="index"
       :key="index"
+      @open-image="openImage"
+      @open-footnote="openFootnote"
       >
     </file-block-print>
 
@@ -50,8 +52,11 @@
       }
     },
     methods: {
-      openBottomBar(block) {
-        this.$emit('open-bottom-bar', block);
+      openImage(image) {
+        this.$emit('open-image', image);
+      },
+      openFootnote(footnote) {
+        this.$emit('open-footnote', footnote);
       },
     },
   };

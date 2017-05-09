@@ -104,9 +104,36 @@ module.exports = class JwDownloader {
     this.figcaptionsText = [];
 
     downloadResponse.audio = null;
-    const media = $('.jsAudioPlayer a');
+    let media = $('.jsAudioPlayer a');
     if (media.length > 0) {
       downloadResponse.audio = media.attr('href');
+    } else {
+      media = $('.jsAudioFormat a');
+      if (media.length > 0) {
+        try {
+          let titleWithoutSpaces = replaceall(' ', '', this.getText($, $('article header h1')));
+          replaceIdeogramsToSpace.forEach((item) => {
+            titleWithoutSpaces = replaceall(item, '', titleWithoutSpaces);
+          });
+          const responseAudio = await axios.get(this.encodeUrl(media.attr('data-jsonurl')));
+          responseAudio.data.files.CHS.MP3.some((file) => {
+            let audioTitleWithoutSpaces = replaceall(' ', '', file.title);
+            replaceIdeogramsToSpace.forEach((item) => {
+              audioTitleWithoutSpaces = replaceall(item, '', audioTitleWithoutSpaces);
+            });
+
+            if (titleWithoutSpaces === audioTitleWithoutSpaces) {
+              downloadResponse.audio = file.file.url;
+              return true;
+            }
+
+            return false;
+          });
+        } catch (e) {
+          // eslint-disable-next-line
+          console.log(e.message);
+        }
+      }
     }
 
     const mainImage = $('.lsrBannerImage');
@@ -147,6 +174,27 @@ module.exports = class JwDownloader {
           $(subChildren).children('div').children().each((k, subChildren02) => {
             this.parseBlock($, subChildren02);
           });
+        });
+      } else if ($(children).hasClass('article')) {
+        $(children).children().each((j, subChildren) => {
+          if ($(subChildren).hasClass('questions')) {
+            $(subChildren).children().each((k, subChildren02) => {
+              if ($(subChildren02).get(0).tagName === 'h2') {
+                this.text.push({
+                  text: this.getText($, subChildren02),
+                  type: 'box-h2',
+                });
+              } else if ($(subChildren02).get(0).tagName === 'ul') {
+                $(subChildren02).children().each((l, subChildren03) => {
+                  this.parseContent($, subChildren03, 'box');
+                });
+              } else {
+                this.parseContent($, subChildren02, 'box');
+              }
+            });
+          } else {
+            this.parseBlock($, subChildren);
+          }
         });
       } else {
         this.parseBlock($, children);
@@ -327,16 +375,32 @@ module.exports = class JwDownloader {
     text = replaceall('<strong>', '//STRONG-OPEN//', text);
     text = replaceall('</strong>', '//STRONG-CLOSE//', text);
     text = replaceall('<wbr>', ' ', text);
+    text = replaceall('<p>', '\r\n<p>', text);
     text = $('<textarea />').html(text).text();
     text = text.replace(/[\u200B-\u200D\uFEFF]/g, ' '); // replace zero width space to space
     text = replaceall(String.fromCharCode(160), ' ', text); // Convert NO-BREAK SPACE to SPACE
 
-    if (text.split(' ').length === 1) {
-      text = UnihanSearch.segment(text).join(' ');
-    }
-
     text = replaceall('//STRONG-OPEN//', '<b>', text);
     text = replaceall('//STRONG-CLOSE//', '</b>', text);
+    const lines = text.trim().split('\r\n');
+    let newText = '';
+    lines.forEach((line) => {
+      let verifyText = line;
+      replaceIdeogramsToSpace.forEach((item) => {
+        verifyText = replaceall(`${item} `, item, verifyText);
+      });
+
+      if (verifyText.trim().split(' ').length === 1) {
+        let segementedText = UnihanSearch.segment(line).join(' ');
+        segementedText = replaceall('< b >', '<b>', segementedText);
+        segementedText = replaceall('< / b >', '</b>', segementedText);
+        newText += `${segementedText}\r\n`;
+      } else {
+        newText += `${line}\r\n`;
+      }
+    });
+
+    text = newText;
 
     text = replaceall('<b>', ' <b> ', text);
     text = replaceall('</b>', ' </b> ', text);

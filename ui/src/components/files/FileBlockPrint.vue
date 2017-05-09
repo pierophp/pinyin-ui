@@ -2,7 +2,9 @@
   <div class="block" :data-line="lineIndex" :data-block="blockIndex" :class="classHighlight" ref="block">
     <!-- TODO REMOVE THIS @click="blockClick()"  -->
     <div class="image" v-if="block.small">
-      <img :src="block.small" referrerpolicy="no-referrer"/>
+      <a href="javascript:void(0)" @click="openImage(block.large)">
+        <img :src="block.small" referrerpolicy="no-referrer"/>
+      </a>
     </div>
 
     <div class="pinyin" v-if="!block.small">
@@ -89,7 +91,9 @@
     },
     methods: {
       openFootnote(footnote) {
-        console.log(footnote);
+        this.$emit('open-footnote', {
+          footnote,
+        });
       },
       /* TODO REMOVE THIS
       blockClick() {
@@ -105,6 +109,11 @@
         sel.addRange(range);
       },
       */
+      openImage(src) {
+        this.$emit('open-image', {
+          src,
+        });
+      },
       updateRender() {
         const options = OptionsManager.getOptions();
         this.classHighlight = `highlight-${this.highlight}`;
