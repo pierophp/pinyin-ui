@@ -45,6 +45,8 @@ function loadFile(file, lineIndex, state, commit, storage, filename) {
         // state.fileLoading = true;
         const fileKey = `file_${filename}`;
         LocalStorage.save(fileKey, response.data.lines);
+        commit(types.FILE_MUTATION_SET_FULL_FILE, response.data.lines);
+        commit(types.FILE_MUTATION_SET_FILE_LOADING, response.data.lines);
         loadFile(LocalStorage.get(fileKey), 0, state, commit, false, filename);
       })
       .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
@@ -85,6 +87,8 @@ export default {
       lines = LocalStorage.get(fileKey);
     }
 
+    commit(types.FILE_MUTATION_SET_FULL_FILE, lines);
+    commit(types.FILE_MUTATION_SET_FOOTNOTES, lines);
     commit(types.FILE_MUTATION_SET_FILE_LOADING, true);
 
     requestAnimationFrame(() => {

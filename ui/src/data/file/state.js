@@ -13,6 +13,8 @@ if (LocalStorage.has('my-cjk')) {
 export default {
   files,
   file: [],
+  fullFile: [],
+  footnotes: [],
   fileLoading: false,
   fileParsing: false,
   fileChangeTimestamp: null,

@@ -19,4 +19,10 @@ export default {
   [types.FILE_GETTER_MY_CJK_TEMP]({ myCjkTemp }) {
     return myCjkTemp;
   },
+  [types.FILE_GETTER_FOOTNOTES]({ footnotes }) {
+    return footnotes;
+  },
+  [types.FILE_GETTER_FULL_FILE]({ fullFile }) {
+    return fullFile;
+  },
 };

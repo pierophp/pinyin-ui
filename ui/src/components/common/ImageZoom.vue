@@ -24,9 +24,6 @@
     props: {
       src: '',
     },
-    mounted() {
-      // this.openDialog();
-    },
     methods: {
       confirm() {
         this.closeDialog('imageZoomModal');

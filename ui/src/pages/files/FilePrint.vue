@@ -1,5 +1,6 @@
 <template>
   <div class="print-container">
+    <footnote-modal :line="footnoteLine" :lineIndex="footnoteLineIndex" ref="footnote"/>
     <image-zoom :src="imageZoom" ref="imageZoom"/>
     <div class="print-scroll">
       <div class="print" :class="[sizeClass, typeClass, ideogramSpacedClass]">
@@ -13,7 +14,8 @@
               :lineIndex="lineIndex"
               @click.native="openBottomBarClick"
               @open-image="openImage"
-              @open-footnote="openFootnote"/>
+              @open-footnote="openFootnote"
+              ref="fileRowPrint"/>
         </div>
         <div class="loading-container">
           <md-spinner md-indeterminate v-if="fileLoading"></md-spinner>
@@ -30,6 +32,7 @@
   import FileRowPrint from 'src/components/files/FileRowPrint';
   import FileBottomBar from 'src/components/files/FileBottomBar';
   import AddRemoveCharacterModal from 'src/components/modals/AddRemoveCharacter';
+  import FootnoteModal from 'src/components/modals/Footnote';
   import HighlightModal from 'src/components/modals/Highlight';
   import OptionsManager from 'src/domain/options-manager';
   import ImageZoom from 'src/components/common/ImageZoom';
@@ -46,6 +49,8 @@
     FILE_ACTION_SAVE,
     FILE_GETTER,
     FILE_GETTER_LOADING,
+    FILE_GETTER_FOOTNOTES,
+    FILE_GETTER_FULL_FILE,
   } from 'src/data/file/types';
 
   export default {
@@ -56,6 +61,7 @@
       AddRemoveCharacterModal,
       HighlightModal,
       FileBottomBar,
+      FootnoteModal,
       ImageZoom,
     },
 
@@ -66,6 +72,8 @@
         sizeClass: '',
         typeClass: '',
         ideogramSpacedClass: '',
+        footnoteLine: null,
+        footnoteLineIndex: null,
       };
     },
 
@@ -82,7 +90,9 @@
     computed: {
       ...mapGetters({
         lines: FILE_GETTER,
+        fullLines: FILE_GETTER_FULL_FILE,
         fileLoading: FILE_GETTER_LOADING,
+        footnotes: FILE_GETTER_FOOTNOTES,
       }),
     },
     created() {
@@ -116,9 +126,15 @@
         this.imageZoom = image.src;
         this.$refs.imageZoom.openDialog();
       },
-
       openFootnote(footnote) {
-        console.log(footnote);
+        const footnoteIndex = parseInt(footnote.footnote, 10) - 1;
+        if (this.footnotes[footnoteIndex] === undefined) {
+          return;
+        }
+        const lineIndex = this.footnotes[footnoteIndex];
+        this.footnoteLine = this.fullLines[lineIndex];
+        this.footnoteLineIndex = lineIndex;
+        this.$refs.footnote.openDialog();
       },
 
       openBottomBarClick(e) {
@@ -439,6 +455,11 @@
     margin-top: 30px;
     margin-Bottom: 5px;
     width: 100%;
+  }
+
+  .print .block .footnote {
+    font-size: 40px;
+    color: #4286f4;
   }
 
 </style>

@@ -395,10 +395,10 @@ module.exports = class JwDownloader {
     // asterisk
     const footNotes = $(element).find('.footnoteLink');
     let footNoteId = null;
-    if (footNotes.length > 0) {
+    if (footNotes.length > 0 && this.isChinese) {
       footNotes.each((i, footNote) => {
         footNoteId = replaceall('#footnote', '', $(footNote).attr('data-anchor')).trim();
-        text = replaceall($.html(footNote), `#FOOTNOTE-${$(footNote).html()}`, text);
+        text = replaceall($.html(footNote), `#FOOTNOTE${$(footNote).html()}`, text);
       });
     }
 
@@ -499,15 +499,14 @@ module.exports = class JwDownloader {
         lineText = replaceall(replaceWord, ` ${word} `, lineText);
       });
 
+      if (footNoteId) {
+        lineText = replaceall('#FOOTNOTE', `#FOOTNOTE-${footNoteId}-`, lineText);
+      }
+
       newText += `${lineText}\r\n`;
     });
 
     text = newText;
-
-    if (footNoteId) {
-      text = replaceall('#FOOTNOTE-', `#FOOTNOTE-${footNoteId}-`, text);
-    }
-
     text = this.trim(text);
     return text;
   }

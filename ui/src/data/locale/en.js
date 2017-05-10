@@ -81,4 +81,5 @@ export default {
   portuguese: 'Portuguese',
   english: 'English',
   spanish: 'Spanish',
+  close: 'Close',
 };
