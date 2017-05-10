@@ -99,7 +99,7 @@ module.exports = class JwDownloader {
   static async download(url, language) {
     let response = await axios.get(this.encodeUrl(url));
     let $ = cheerio.load(response.data);
-    const parsedDownload = await this.parseDownload($);
+    const parsedDownload = await this.parseDownload($, true);
 
     if (language) {
       const translateLink = $(`link[hreflang="${language}"]`);
@@ -107,9 +107,13 @@ module.exports = class JwDownloader {
         const link = `https://www.jw.org${translateLink.attr('href')}`;
         response = await axios.get(link);
         $ = cheerio.load(response.data);
-        const parsedDownloadLanguage = await this.parseDownload($);
+        const parsedDownloadLanguage = await this.parseDownload($, false);
         parsedDownloadLanguage.text.forEach((item, i) => {
           if (item.type === 'img') {
+            return;
+          }
+
+          if (item.type === 'box-img') {
             return;
           }
 
@@ -125,16 +129,17 @@ module.exports = class JwDownloader {
     return parsedDownload;
   }
 
-  static async parseDownload($) {
+  static async parseDownload($, isChinese) {
     const downloadResponse = {};
     this.text = [];
+    this.isChinese = isChinese;
     this.figcaptionsText = [];
 
     downloadResponse.audio = null;
     let media = $('.jsAudioPlayer a');
-    if (media.length > 0) {
+    if (isChinese && media.length > 0) {
       downloadResponse.audio = media.attr('href');
-    } else {
+    } else if (isChinese) {
       media = $('.jsAudioFormat a');
       if (media.length > 0) {
         try {
@@ -403,15 +408,23 @@ module.exports = class JwDownloader {
     text = replaceall('</strong>', '//STRONG-CLOSE//', text);
     text = replaceall('<wbr>', ' ', text);
     text = replaceall('<p>', '\r\n<p>', text);
+    text = replaceall('<li>', '\r\n<li>', text);
     text = $('<textarea />').html(text).text();
     text = text.replace(/[\u200B-\u200D\uFEFF]/g, ' '); // replace zero width space to space
     text = replaceall(String.fromCharCode(160), ' ', text); // Convert NO-BREAK SPACE to SPACE
 
     text = replaceall('//STRONG-OPEN//', '<b>', text);
     text = replaceall('//STRONG-CLOSE//', '</b>', text);
+
+    if (!this.isChinese) {
+      return this.trim(text);
+    }
+
     const lines = text.trim().split('\r\n');
+
     let newText = '';
     lines.forEach((line) => {
+      let lineText = '';
       let verifyText = line;
       replaceIdeogramsToSpace.forEach((item) => {
         verifyText = replaceall(`${item} `, item, verifyText);
@@ -421,72 +434,75 @@ module.exports = class JwDownloader {
         let segementedText = UnihanSearch.segment(line).join(' ');
         segementedText = replaceall('< b >', '<b>', segementedText);
         segementedText = replaceall('< / b >', '</b>', segementedText);
-        newText += `${segementedText}\r\n`;
+        lineText = segementedText;
       } else {
-        newText += `${line}\r\n`;
+        lineText = line;
       }
+
+      lineText = replaceall('<b>', ' <b> ', lineText);
+      lineText = replaceall('</b>', ' </b> ', lineText);
+
+      const specialWord = 'JOIN_SPECIAL';
+
+      // separate by numbers
+      lineText = lineText
+          .split(/(\d+)/)
+          .map((item) => {
+            if (numberRegex.test(item)) {
+              item = ` ${item}${specialWord} `;
+            }
+            return item;
+          })
+          .join('');
+
+      replaceIdeogramsToSpace.forEach((item) => {
+        lineText = replaceall(item, ` ${item}${specialWord} `, lineText);
+      });
+      // remove double spaces
+      if (lineText) {
+        lineText = lineText.replace(/\s{2,}/g, ' ').trim();
+      }
+
+      const ideograms = lineText.split(' ');
+      const ideogramsFiltered = [];
+
+      let joinSpecial = '';
+
+      ideograms.forEach((ideogram) => {
+        if (ideogram === specialWord) {
+          return;
+        }
+
+        if (ideogram.substring(ideogram.length - specialWord.length) === specialWord) {
+          joinSpecial += ideogram.replace(specialWord, '');
+          return;
+        } else if (joinSpecial) {
+          ideogramsFiltered.push(joinSpecial);
+          joinSpecial = '';
+        }
+
+        ideogramsFiltered.push(ideogram);
+      });
+
+      if (joinSpecial) {
+        ideogramsFiltered.push(joinSpecial);
+      }
+
+      lineText = ` ${ideogramsFiltered.join(' ')} `;
+
+      const wordsToReplace = [
+        '各地',
+        '可见',
+      ];
+      wordsToReplace.forEach((word) => {
+        const replaceWord = ` ${word.split('').join(' ')} `;
+        lineText = replaceall(replaceWord, ` ${word} `, lineText);
+      });
+
+      newText += `${lineText}\r\n`;
     });
 
     text = newText;
-
-    text = replaceall('<b>', ' <b> ', text);
-    text = replaceall('</b>', ' </b> ', text);
-
-    const specialWord = 'JOIN_SPECIAL';
-
-    // separate by numbers
-    text = text
-        .split(/(\d+)/)
-        .map((item) => {
-          if (numberRegex.test(item)) {
-            item = ` ${item}${specialWord} `;
-          }
-          return item;
-        })
-        .join('');
-
-    replaceIdeogramsToSpace.forEach((item) => {
-      text = replaceall(item, ` ${item}${specialWord} `, text);
-    });
-    // remove double spaces
-    if (text) {
-      text = text.replace(/\s{2,}/g, ' ').trim();
-    }
-
-    const ideograms = text.split(' ');
-    const ideogramsFiltered = [];
-
-    let joinSpecial = '';
-
-    ideograms.forEach((ideogram) => {
-      if (ideogram === specialWord) {
-        return;
-      }
-
-      if (ideogram.substring(ideogram.length - specialWord.length) === specialWord) {
-        joinSpecial += ideogram.replace(specialWord, '');
-        return;
-      } else if (joinSpecial) {
-        ideogramsFiltered.push(joinSpecial);
-        joinSpecial = '';
-      }
-
-      ideogramsFiltered.push(ideogram);
-    });
-
-    if (joinSpecial) {
-      ideogramsFiltered.push(joinSpecial);
-    }
-
-    text = ` ${ideogramsFiltered.join(' ')} `;
-    const wordsToReplace = [
-      '各地',
-      '可见',
-    ];
-    wordsToReplace.forEach((word) => {
-      const replaceWord = ` ${word.split('').join(' ')} `;
-      text = replaceall(replaceWord, ` ${word} `, text);
-    });
 
     if (footNoteId) {
       text = replaceall('#FOOTNOTE-', `#FOOTNOTE-${footNoteId}-`, text);

@@ -116,5 +116,9 @@ export default async function (content) {
     rows[0][0].line.audio = audio;
   }
 
+  if (isJwOrg) {
+    rows[0][0].line.url = content;
+  }
+
   return rows;
 }
