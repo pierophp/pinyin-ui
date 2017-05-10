@@ -41,7 +41,8 @@
 </script>
 
 <style>
-.translation a{
-  font-size:10px;
+.translation a {
+  color: #a8a4a4 !important;
+  font-size: 9px;
 }
 </style>
