@@ -96,10 +96,37 @@ module.exports = class JwDownloader {
     return trackList.join('\n');
   }
 
-  static async download(url) {
-    const response = await axios.get(this.encodeUrl(url));
+  static async download(url, language) {
+    let response = await axios.get(this.encodeUrl(url));
+    let $ = cheerio.load(response.data);
+    const parsedDownload = await this.parseDownload($);
+
+    if (language) {
+      const translateLink = $(`link[hreflang="${language}"]`);
+      if (translateLink.length > 0) {
+        const link = `https://www.jw.org${translateLink.attr('href')}`;
+        response = await axios.get(link);
+        $ = cheerio.load(response.data);
+        const parsedDownloadLanguage = await this.parseDownload($);
+        parsedDownloadLanguage.text.forEach((item, i) => {
+          if (item.type === 'img') {
+            return;
+          }
+
+          if (!parsedDownload.text[i]) {
+            parsedDownload.text[i] = {};
+          }
+
+          parsedDownload.text[i].trans = item.text;
+        });
+      }
+    }
+
+    return parsedDownload;
+  }
+
+  static async parseDownload($) {
     const downloadResponse = {};
-    const $ = cheerio.load(response.data);
     this.text = [];
     this.figcaptionsText = [];
 

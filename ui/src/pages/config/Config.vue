@@ -20,13 +20,6 @@
           </md-select>
         </md-input-container>
 
-        <md-input-container>
-          <label for="ideogramColored">{{ $t('ideograms_colored') }}</label>
-          <md-select name="ideogramColored" id="ideogramColored" v-model="ideogramColored">
-            <md-option value="1">{{ $t('yes') }}</md-option>
-            <md-option value="0">{{ $t('no') }}</md-option>
-          </md-select>
-        </md-input-container>
 
         <md-input-container>
           <label for="ideogramSpaced">{{ $t('ideograms_spaced') }}</label>
@@ -45,26 +38,44 @@
         </md-input-container>
 
         <md-input-container>
+          <label for="translationLanguage">{{ $t('translation_language') }}</label>
+          <md-select name="translationLanguage" id="translationLanguage" v-model="translationLanguage">
+            <md-option value="">{{ $t('no_translation') }}</md-option>
+            <md-option value="pt">{{ $t('portuguese') }}</md-option>
+            <md-option value="en">{{ $t('english') }}</md-option>
+            <md-option value="es">{{ $t('spanish') }}</md-option>
+          </md-select>
+        </md-input-container>
+
+        <md-input-container>
+          <label for="ideogramColored">{{ $t('ideograms_colored') }}</label>
+          <md-select name="ideogramColored" id="ideogramColored" v-model="ideogramColored">
+            <md-option value="1">{{ $t('yes') }}</md-option>
+            <md-option value="0">{{ $t('no') }}</md-option>
+          </md-select>
+        </md-input-container>
+
+        <md-input-container v-show="ideogramColored == 1">
           <label for="color1">{{ $t('tone_1_color') }}</label>
           <md-input name="color1" type="color" v-model="color1"/>
         </md-input-container>
 
-        <md-input-container>
+        <md-input-container v-show="ideogramColored == 1">
           <label for="color2">{{ $t('tone_2_color') }}</label>
           <md-input name="color2" type="color" v-model="color2"/>
         </md-input-container>
 
-        <md-input-container>
+        <md-input-container v-show="ideogramColored == 1">
           <label for="color3">{{ $t('tone_3_color') }}</label>
           <md-input name="color3" type="color" v-model="color3" />
         </md-input-container>
 
-        <md-input-container>
+        <md-input-container v-show="ideogramColored == 1">
           <label for="color4">{{ $t('tone_4_color') }}</label>
           <md-input name="color4" type="color" v-model="color4" />
         </md-input-container>
 
-        <md-input-container>
+        <md-input-container v-show="ideogramColored == 1">
           <label for="color0">{{ $t('tone_0_color') }}</label>
           <md-input name="color0" type="color" v-model="color0"/>
         </md-input-container>

@@ -75,4 +75,10 @@ export default {
   ideograms: 'Ideograms',
   words: 'Words',
   edit: 'Edit',
+  translation: 'Translation',
+  translation_language: 'Translation Language',
+  no_translation: 'No Translation',
+  portuguese: 'Portuguese',
+  english: 'English',
+  spanish: 'Spanish',
 };

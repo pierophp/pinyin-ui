@@ -15,6 +15,7 @@ class OptionsManager {
       color2: '#d16f00',
       color3: '#00a000',
       color4: '#ff0000',
+      translationLanguage: 'pt',
     };
   }
 

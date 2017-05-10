@@ -1,5 +1,6 @@
 <template>
   <div class="line" :class=[type] v-show="rowVisible">
+    <file-row-translation :line="line" />
     <file-block-print
       v-for="(block,index) in line"
       :block="block"
@@ -21,11 +22,13 @@
 
 <script>
   import FileBlockPrint from 'src/components/files/FileBlockPrint';
+  import FileRowTranslation from 'src/components/files/FileRowTranslation';
 
   export default {
     name: 'file-row',
     components: {
       FileBlockPrint,
+      FileRowTranslation,
     },
     data() {
       return {

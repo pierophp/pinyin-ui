@@ -2,9 +2,11 @@
 import http from 'src/helpers/http';
 import replaceall from 'replaceall';
 import Promise from 'bluebird';
+import OptionsManager from 'src/domain/options-manager';
 
 async function parseJW(link) {
-  const response = await http.get(`jw/download?url=${link}`);
+  const options = OptionsManager.getOptions();
+  const response = await http.get(`jw/download?url=${link}&language=${options.translationLanguage}`);
   return response.data;
 }
 
@@ -101,6 +103,10 @@ export default async function (content) {
     if (line.type !== undefined) {
       row[0].line = {};
       row[0].line.type = line.type;
+    }
+
+    if (line.trans !== undefined) {
+      row[0].trans = line.trans;
     }
 
     return row;
