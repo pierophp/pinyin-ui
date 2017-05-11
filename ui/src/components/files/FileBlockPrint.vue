@@ -1,6 +1,6 @@
 <template>
+  <!-- @click is on FilePrint cause performance  -->
   <div class="block" :data-line="lineIndex" :data-block="blockIndex" :class="classHighlight" ref="block">
-    <!-- TODO REMOVE THIS @click="blockClick()"  -->
     <div class="image" v-if="block.small">
       <a href="javascript:void(0)" @click="openImage(block.large)">
         <img :src="block.small" referrerpolicy="no-referrer"/>
@@ -89,25 +89,13 @@
           footnote,
         });
       },
-      /* TODO REMOVE THIS
-      blockClick() {
-        if (!this.highlight) {
-          return;
-        }
 
-        const range = document.createRange();
-        const sel = window.getSelection();
-        range.setStart(this.$refs.block.childNodes[0], 0);
-        range.setEnd(this.$refs.block.childNodes[1], 0);
-        sel.removeAllRanges();
-        sel.addRange(range);
-      },
-      */
       openImage(src) {
         this.$emit('open-image', {
           src,
         });
       },
+
       async updateRender() {
         const options = OptionsManager.getOptions();
         this.classHighlight = `highlight-${this.highlight}`;

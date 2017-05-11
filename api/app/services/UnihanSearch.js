@@ -18,6 +18,8 @@ const redisClient = redis.createClient({
   host: env.redis_host,
 });
 
+const pinyinCache = {};
+
 module.exports = class UnihanSearch {
   static getChangeToneRules() {
     return {
@@ -233,6 +235,10 @@ module.exports = class UnihanSearch {
   static async searchByWord(ideograms) {
     const ideogramConverted = UnihanSearch.convertIdeogramsToUtf16(ideograms);
     const cackeKey = `PINYIN_${ideogramConverted}`;
+    if (pinyinCache[cackeKey] !== undefined) {
+      return pinyinCache[cackeKey];
+    }
+
     let response = await redisClient.getAsync(cackeKey);
 
     if (response && response !== true) {
@@ -267,7 +273,7 @@ module.exports = class UnihanSearch {
         cacheResponse = response[0].pronunciation;
       }
     }
-
+    pinyinCache[cackeKey] = cacheResponse;
     await redisClient.set(cackeKey, cacheResponse);
     await redisClient.expire(cackeKey, 60 * 60 * 12); // 1 day
 
@@ -467,8 +473,11 @@ module.exports = class UnihanSearch {
             }
 
             UnihanSearch.searchByIdeograms(ideogram).then((ideogramsList) => {
-              resolvePinyin(UnihanSearch
-                        .parseResultByIdeograms(ideogramsList, ideogram, nextWord, options));
+              const resultIdeograms = UnihanSearch.parseResultByIdeograms(ideogramsList, ideogram, nextWord, options);
+              const ideogramConverted = UnihanSearch.convertIdeogramsToUtf16(resultIdeograms.ideogram);
+              const cackeKey = `PINYIN_${ideogramConverted}`;
+              pinyinCache[cackeKey] = resultIdeograms.pinyin;
+              resolvePinyin(resultIdeograms);
             });
           }
         });
