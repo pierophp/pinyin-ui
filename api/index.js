@@ -11,11 +11,11 @@ const cors = require('cors');
 const jwt = require('express-jwt');
 
 const app = express();
-let AWSXRay = null;
+// let AWSXRay = null;
 if (process.env.NODE_ENV === 'production') {
   // eslint-disable-next-line global-require
-  AWSXRay = require('aws-xray-sdk');
-  app.use(AWSXRay.express.openSegment());
+  // AWSXRay = require('aws-xray-sdk');
+  // app.use(AWSXRay.express.openSegment());
 }
 
 app.use(cors());
@@ -46,7 +46,7 @@ require('./app/routes')(app, passport);
 require('./app/config/passport')(passport);
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(AWSXRay.express.closeSegment());
+  // app.use(AWSXRay.express.closeSegment());
 }
 
 module.exports = app;
