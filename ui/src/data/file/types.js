@@ -11,6 +11,7 @@ export const FILE_ACTION_NEW_FILE = 'file/action/newFile';
 export const FILE_ACTION_DELETE_FILE = 'file/action/deleteFile';
 export const FILE_ACTION_ADD_MY_CJK = 'file/action/ADD_MY_CJK';
 export const FILE_ACTION_REMOVE_MY_CJK = 'file/action/REMOVE_MY_CJK';
+export const FILE_ACTION_CAN_HIDE_PINYIN = 'file/action/CAN_HIDE_PINYIN';
 
 // getters
 export const FILES_GETTER = 'file/getter/files';

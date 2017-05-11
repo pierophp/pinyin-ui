@@ -41,6 +41,16 @@ class OptionsManager {
     this.options = returnOptions;
     return this.options;
   }
+
+  static save(newOptions) {
+    for (const prop in this.getDefaultOptions()) {
+      if (Object.prototype.hasOwnProperty.call(newOptions, prop)) {
+        this.options[prop] = newOptions[prop];
+      }
+    }
+
+    LocalStorage.save('options', this.options);
+  }
 }
 
 export default OptionsManager;

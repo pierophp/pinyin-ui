@@ -46,10 +46,16 @@
         if (this.add) {
           this.addMyCjk({
             myCjk: this.myCjkTemp,
+          })
+          .then(() => {
+            this.$emit('add-character', this.myCjkTemp);
           });
         } else {
           this.removeMyCjk({
             myCjk: this.myCjkTemp,
+          })
+          .then(() => {
+            this.$emit('remove-character', this.myCjkTemp);
           });
         }
       },

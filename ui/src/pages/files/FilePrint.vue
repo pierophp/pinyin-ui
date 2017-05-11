@@ -10,18 +10,21 @@
             <audio :src="line[0].line.audio" controls/>
           </div>
           <file-row-print
-              :line="line"
-              :lineIndex="lineIndex"
-              @click.native="openBottomBarClick"
-              @open-image="openImage"
-              @open-footnote="openFootnote"
-              ref="fileRowPrint"/>
+            :line="line"
+            :lineIndex="lineIndex"
+            @click.native="openBottomBarClick"
+            @open-image="openImage"
+            @open-footnote="openFootnote"
+            ref="fileRowPrint"/>
         </div>
         <div class="loading-container">
           <md-spinner md-indeterminate v-if="fileLoading"></md-spinner>
         </div>
 
-        <add-remove-character-modal ref="addRemoveCharacterModal"/>
+        <add-remove-character-modal
+          @add-character="addCharacter"
+          @remove-character="removeCharacter"
+          ref="addRemoveCharacterModal"/>
         <highlight-modal/>
       </div>
     </div>
@@ -52,6 +55,9 @@
     FILE_GETTER_FOOTNOTES,
     FILE_GETTER_FULL_FILE,
   } from 'src/data/file/types';
+
+  // eslint-disable-next-line
+  const PinyinWorker = require('worker-loader!src/workers/pinyin.js');
 
   export default {
     name: 'file-print',
@@ -96,6 +102,15 @@
       }),
     },
     created() {
+      this.options = OptionsManager.getOptions();
+      this.worker = new PinyinWorker();
+
+      this.worker.addEventListener('message', (e) => {
+        if (e.data.type === 'changeCharacter') {
+          this.$refs.fileRowPrint[e.data.lineIndex].updateBlockRender(e.data.blockIndex);
+        }
+      });
+
       this.updateCss();
     },
     mounted() {
@@ -126,6 +141,7 @@
         this.imageZoom = image.src;
         this.$refs.imageZoom.openDialog();
       },
+
       openFootnote(footnote) {
         const footnoteIndex = parseInt(footnote.footnote, 10) - 1;
         if (this.footnotes[footnoteIndex] === undefined) {
@@ -163,17 +179,15 @@
       },
 
       updateCss() {
-        const options = OptionsManager.getOptions();
-
-        this.sizeClass = options.size;
+        this.sizeClass = this.options.size;
 
         this.typeClass = '';
-        if (options.type === '2') {
+        if (this.options.type === '2') {
           this.typeClass = 'character-only';
         }
 
         this.ideogramSpacedClass = 'ideogram-spaced';
-        if (options.ideogramSpaced === '0') {
+        if (this.options.ideogramSpaced === '0') {
           this.ideogramSpacedClass = '';
         }
       },
@@ -183,6 +197,24 @@
       },
       openBottomBar(block) {
         this.$refs.fileBottomBar.open(block);
+      },
+
+      addCharacter(character) {
+        this.worker.postMessage({
+          type: 'addCharacter',
+          character,
+          lines: this.lines,
+          options: this.options,
+        });
+      },
+
+      removeCharacter(character) {
+        this.worker.postMessage({
+          type: 'removeCharacter',
+          character,
+          lines: this.lines,
+          options: this.options,
+        });
       },
     },
 

@@ -13,6 +13,7 @@
       :key="index"
       @open-image="openImage"
       @open-footnote="openFootnote"
+      ref="fileBlockPrint"
       >
     </file-block-print>
 
@@ -56,6 +57,9 @@
       },
       openFootnote(footnote) {
         this.$emit('open-footnote', footnote);
+      },
+      updateBlockRender(blockIndex) {
+        this.$refs.fileBlockPrint[blockIndex].updateRender();
       },
     },
   };

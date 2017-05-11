@@ -30,11 +30,11 @@
   import OptionsManager from 'src/domain/options-manager';
 
   import {
-    mapGetters,
+    mapActions,
   } from 'vuex';
 
   import {
-    FILE_GETTER_MY_CJK,
+    FILE_ACTION_CAN_HIDE_PINYIN,
   } from 'src/data/file/types';
 
   export default {
@@ -76,20 +76,14 @@
       highlight() {
         this.updateRender();
       },
-
-      myCjk() {
-        this.updateRender();
-      },
-    },
-    computed: {
-      ...mapGetters({
-        myCjk: FILE_GETTER_MY_CJK,
-      }),
     },
     created() {
       this.updateRender();
     },
     methods: {
+      ...mapActions({
+        canHidePinyin: FILE_ACTION_CAN_HIDE_PINYIN,
+      }),
       openFootnote(footnote) {
         this.$emit('open-footnote', {
           footnote,
@@ -114,7 +108,7 @@
           src,
         });
       },
-      updateRender() {
+      async updateRender() {
         const options = OptionsManager.getOptions();
         this.classHighlight = `highlight-${this.highlight}`;
         this.classBold = '';
@@ -132,9 +126,11 @@
           let pinyinClass = '';
           let hidePinyin = false;
           if (options.pinyinHide === '1') {
-            hidePinyin = (this.myCjk[chars[i]] !== undefined || pinyin[i] === undefined || pinyin[i] === '');
+            // eslint-disable-next-line
+            hidePinyin = (await this.canHidePinyin(chars[i]) || pinyin[i] === undefined || pinyin[i] === '');
           } else if (options.pinyinHide === '2') {
-            hidePinyin = (this.myCjk[chars] !== undefined || pinyin[i] === undefined || pinyin[i] === '');
+            // eslint-disable-next-line
+            hidePinyin = (await this.canHidePinyin(chars) || pinyin[i] === undefined || pinyin[i] === '');
           }
 
           if (options.type !== '3' && hidePinyin) {

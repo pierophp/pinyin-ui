@@ -269,7 +269,7 @@ export default {
 
 
   [types.FILE_ACTION_ADD_MY_CJK]({ commit }, data) {
-    http
+    return http
     .post('my-cjk', {
       ideogram: data.myCjk,
     })
@@ -280,7 +280,7 @@ export default {
   },
 
   [types.FILE_ACTION_REMOVE_MY_CJK]({ commit }, data) {
-    http
+    return http
     .delete('my-cjk', {
       data: {
         ideogram: data.myCjk,
@@ -290,6 +290,10 @@ export default {
       commit(types.FILE_MUTATION_REMOVE_MY_CJK, data.myCjk);
     })
     .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
+  },
+
+  [types.FILE_ACTION_CAN_HIDE_PINYIN]({ state }, ideograms) {
+    return state.myCjk[ideograms] !== undefined;
   },
 
 };

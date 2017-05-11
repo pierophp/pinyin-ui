@@ -120,14 +120,7 @@ export default{
   },
   methods: {
     save() {
-      const options = {};
-      for (const prop in this.dataDefault) {
-        if (Object.prototype.hasOwnProperty.call(this, prop)) {
-          options[prop] = this[prop];
-        }
-      }
-
-      LocalStorage.save('options', options);
+      OptionsManager.save(this);
     },
     restoreDefault() {
       for (const prop in this.dataDefault) {
