@@ -5,7 +5,7 @@
       </md-dialog-title>
 
       <md-dialog-content>
-        <div class="">
+        <div class="print">
           <file-row-print
                 :line="line"
                 :lineIndex="lineIndex"
