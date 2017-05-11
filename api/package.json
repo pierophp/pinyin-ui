@@ -19,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "adm-zip": "^0.4.7",
+    "aws-xray-sdk": "^1.1.0",
     "axios": "^0.15.3",
     "bluebird": "^3.4.0",
     "body-parser": "^1.15.1",
