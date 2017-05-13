@@ -82,4 +82,6 @@ export default {
   english: 'English',
   spanish: 'Spanish',
   close: 'Close',
+  import_site: 'Import Site',
+  import: 'Import',
 };

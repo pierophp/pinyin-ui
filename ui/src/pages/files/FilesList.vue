@@ -1,48 +1,57 @@
 <template>
   <div class="files-wrapper">
-    <div class="files-container">
-      <md-list class="md-double-line">
-        <md-list-item v-for="(file, fileId) in files" @click.native="openOptions(fileId, $event)" >
-          <md-button class="md-icon-button list-icon">
-            <md-icon class="md-primary">
-              {{ file.type == 'file' ? 'collections' : 'folder' }}
-            </md-icon>
-          </md-button>
-
-          <div class="md-list-text-container">
-            {{ file.path }}
-          </div>
-
-          <md-menu md-size="4" :md-offset-x="menuX" ref="menu">
-            <md-button md-menu-trigger class="md-icon-button md-list-action">
-              <md-icon>more_vert</md-icon>
+    <loadable-content :loading="loading">
+      <div class="files-container">
+        <md-list class="md-double-line">
+          <md-list-item v-for="(file, fileId) in files" @click.native="openOptions(fileId, $event)" >
+            <md-button class="md-icon-button list-icon">
+              <md-icon class="md-primary">
+                {{ file.type == 'file' ? 'collections' : 'folder' }}
+              </md-icon>
             </md-button>
-            <md-menu-content>
-              <md-menu-item @click.native="goToFile(file.path)" v-if="file.type == 'file'">
-                <md-icon>edit</md-icon>
-                <span>{{ $t("edition_mode") }}</span>
-              </md-menu-item>
-              <md-menu-item @click.native="visualizationMode(file.path)" v-if="file.type == 'file'">
-                <md-icon>visibility</md-icon>
-                <span>{{ $t("visualization_mode") }}</span>
-              </md-menu-item>
-              <md-menu-item @click.native="openDeleteDialog(file.path)">
-                <md-icon>delete</md-icon>
-                <span>{{ $t("delete") }}</span>
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
-        </md-list-item>
-      </md-list>
-    </div>
-    <new-file-modal></new-file-modal>
-    <delete-file-modal :filename="deleteFilename" ref="deleteModal"></delete-file-modal>
+
+            <div class="md-list-text-container">
+              {{ file.path }}
+            </div>
+
+            <md-menu md-size="4" :md-offset-x="menuX" ref="menu">
+              <md-button md-menu-trigger class="md-icon-button md-list-action">
+                <md-icon>more_vert</md-icon>
+              </md-button>
+              <md-menu-content>
+                <md-menu-item @click.native="openImportDialog(file.path)" v-if="file.type == 'file'">
+                  <md-icon>cloud_upload</md-icon>
+                  <span>{{ $t("import_site") }}</span>
+                </md-menu-item>
+                <md-menu-item @click.native="visualizationMode(file.path)" v-if="file.type == 'file'">
+                  <md-icon>visibility</md-icon>
+                  <span>{{ $t("visualization_mode") }}</span>
+                </md-menu-item>
+                <md-menu-item @click.native="goToFile(file.path)" v-if="file.type == 'file'">
+                  <md-icon>edit</md-icon>
+                  <span>{{ $t("edition_mode") }}</span>
+                </md-menu-item>
+                <md-menu-item @click.native="openDeleteDialog(file.path)">
+                  <md-icon>delete</md-icon>
+                  <span>{{ $t("delete") }}</span>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </md-list-item>
+        </md-list>
+      </div>
+      <new-file-modal></new-file-modal>
+      <delete-file-modal :filename="deleteFilename" ref="deleteModal"></delete-file-modal>
+      <import-site-modal :filename="importFilename" ref="importModal"></import-site-modal>
+    </loadable-content>
   </div>
 </template>
 
 <script>
   import NewFileModal from 'src/components/modals/NewFile';
   import DeleteFileModal from 'src/components/modals/DeleteFile';
+  import ImportSiteModal from 'src/components/modals/ImportSite';
+  import LoadableContent from 'src/components/common/loading/LoadableContent';
 
   import {
     mapActions,
@@ -52,6 +61,7 @@
   import {
   FILES_ACTION_FETCH,
   FILES_GETTER,
+  FILE_GETTER_IMPORTING,
   } from 'src/data/file/types';
 
   export default {
@@ -60,11 +70,14 @@
     components: {
       NewFileModal,
       DeleteFileModal,
+      ImportSiteModal,
+      LoadableContent,
     },
 
     computed: {
       ...mapGetters({
         files: FILES_GETTER,
+        loading: FILE_GETTER_IMPORTING,
       }),
     },
 
@@ -72,6 +85,7 @@
       return {
         redirect: true,
         deleteFilename: '',
+        importFilename: '',
         menuX: 0,
       };
     },
@@ -110,6 +124,10 @@
       openDeleteDialog(file) {
         this.deleteFilename = file;
         this.$refs.deleteModal.openDialog();
+      },
+      openImportDialog(file) {
+        this.importFilename = file;
+        this.$refs.importModal.openDialog();
       },
       visualizationMode(filename) {
         this.$router.push({

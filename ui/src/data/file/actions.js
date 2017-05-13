@@ -105,6 +105,11 @@ export default {
   },
 
   [types.FILES_ACTION_FETCH]({ commit }) {
+    if (LocalStorage.has('files')) {
+      const files = LocalStorage.get('files');
+      commit(types.FILES_MUTATION_SET, files);
+    }
+
     http
     .get('files')
     .then((response) => {
@@ -185,7 +190,6 @@ export default {
     }
 
     if (data.action === '3') {
-      convertToPinyin = true;
       clipboardPromise = clipboard03(data.content);
     }
 
@@ -223,6 +227,17 @@ export default {
         commit(types.FILE_MUTATION_SET_FILE_PARSING, false);
       }
     });
+  },
+
+  async [types.FILE_ACTION_IMPORT_FILE]({ commit, state, dispatch }, data) {
+    commit(types.FILE_MUTATION_SET_FILE_IMPORTING, true);
+    const fileContent = await clipboard03(data.content);
+    state.fileChangeTimestamp = Date.now();
+    await dispatch(types.FILE_ACTION_SAVE, {
+      filename: data.filename,
+      content: fileContent,
+    });
+    commit(types.FILE_MUTATION_SET_FILE_IMPORTING, false);
   },
 
   [types.FILE_ACTION_NEW_FILE]({ commit, state }, data) {

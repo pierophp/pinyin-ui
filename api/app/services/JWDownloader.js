@@ -1,6 +1,7 @@
 const Promise = require('bluebird');
 const cheerio = require('cheerio');
 const axios = require('axios');
+const profiler = require('../helpers/profiler');
 const knex = require('./knex');
 const replaceall = require('replaceall');
 const replaceIdeogramsToSpace = require('../helpers/special-ideograms-chars');
@@ -97,7 +98,9 @@ module.exports = class JwDownloader {
   }
 
   static async download(url, language) {
+    profiler('Download JW Start');
     let response = await axios.get(this.encodeUrl(url));
+    profiler('Parse JW Start');
     let $ = cheerio.load(response.data);
     const parsedDownload = await this.parseDownload($, true);
 
@@ -105,7 +108,9 @@ module.exports = class JwDownloader {
       const translateLink = $(`link[hreflang="${language}"]`);
       if (translateLink.length > 0) {
         const link = `https://www.jw.org${translateLink.attr('href')}`;
+        profiler('Download JW (Language) Start');
         response = await axios.get(link);
+        profiler('Parse JW (Language) Start');
         $ = cheerio.load(response.data);
         const parsedDownloadLanguage = await this.parseDownload($, false);
         parsedDownloadLanguage.text.forEach((item, i) => {
@@ -125,6 +130,27 @@ module.exports = class JwDownloader {
         });
       }
     }
+    profiler('Pinyin Start');
+    await Promise.map(parsedDownload.text, async (item, i) => {
+      if (item.type === 'img') {
+        return;
+      }
+
+      if (item.type === 'box-img') {
+        return;
+      }
+
+      const ideograms = item.text.split(' ');
+      const pinyin = await UnihanSearch.toPinyin(ideograms);
+      const pinynReturn = [];
+      pinyin.forEach((pinyinItem) => {
+        pinynReturn.push(pinyinItem.pinyin);
+      });
+
+      parsedDownload.text[i].pinyin = pinynReturn;
+    }, { concurrency: 4 });
+
+    profiler('End');
 
     return parsedDownload;
   }

@@ -64,7 +64,7 @@ export default async function (content) {
 
     let isBold = 0;
 
-    ideograms.forEach((char) => {
+    ideograms.forEach((char, i) => {
       if (char === '<b>') {
         isBold = 1;
         return;
@@ -85,7 +85,7 @@ export default async function (content) {
       }
 
       const item = {
-        p: '',
+        p: line.pinyin[i],
         c: char,
       };
 

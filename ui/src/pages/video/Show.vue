@@ -142,6 +142,11 @@
     overflow: auto;
   }
 
+  /* TODO Review This Value on Full Screen*/
+  /*::cue(ruby) {
+    font-size:170%;
+  } */
+
   ::cue(rt) {
     color: #ccc;
     background:#000;

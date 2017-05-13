@@ -1,14 +1,17 @@
 <template>
   <md-dialog ref="modal">
-    <md-dialog-title>{{ $t('delete_file') }}</md-dialog-title>
+    <md-dialog-title>{{ $t('import_site') }}</md-dialog-title>
 
     <md-dialog-content>
-      {{ $t('sure_delete_file') }}
+      <md-input-container>
+          <label>{{ $t("url") }}</label>
+          <md-input type="text" ref="inputUrl" v-model="siteUrl"></md-input>
+      </md-input-container>
     </md-dialog-content>
 
     <md-dialog-actions>
       <md-button class="md-primary" @click.native="closeDialog()">{{ $t('cancel') }}</md-button>
-      <md-button class="md-primary" @click.native.prevent="confirm">{{ $t('delete') }}</md-button>
+      <md-button class="md-primary" @click.native.prevent="confirm">{{ $t('import') }}</md-button>
     </md-dialog-actions>
   </md-dialog>
 </template>
@@ -19,29 +22,42 @@
     } from 'vuex';
 
   import {
-    FILE_ACTION_DELETE_FILE,
+    FILE_ACTION_IMPORT_FILE,
   } from 'src/data/file/types';
 
   export default {
     name: 'modal-delete-file',
+    data() {
+      return {
+        siteUrl: '',
+      };
+    },
     props: {
       filename: '',
     },
     methods: {
       confirm() {
         this.closeDialog();
-        this.deleteFile({
+        this.importFile({
+          content: this.siteUrl,
           filename: this.filename,
         });
+        this.siteUrl = '';
+      },
+      onOpen() {
+        setTimeout(() => {
+          this.$refs.inputUrl.$el.focus();
+        }, 500);
       },
       openDialog() {
         this.$refs.modal.open();
+        this.onOpen();
       },
       closeDialog() {
         this.$refs.modal.close();
       },
       ...mapActions({
-        deleteFile: FILE_ACTION_DELETE_FILE,
+        importFile: FILE_ACTION_IMPORT_FILE,
       }),
     },
   };

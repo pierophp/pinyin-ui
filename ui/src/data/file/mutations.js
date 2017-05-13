@@ -244,6 +244,10 @@ export default {
     state.fileParsing = fileParsing;
   },
 
+  [types.FILE_MUTATION_SET_FILE_IMPORTING](state, fileImporting) {
+    state.fileImporting = fileImporting;
+  },
+
   [types.FILE_MUTATION_SET_FULL_FILE](state, fullFile) {
     state.fullFile = fullFile;
   },

@@ -43,6 +43,11 @@
         loading: false,
       };
     },
+    created() {
+      setTimeout(() => {
+        this.$refs.inputSearch.$el.focus();
+      }, 500);
+    },
     mounted() {
       this.$nextTick(() => {
         this.searchValue = this.$route.query.search;

@@ -15,7 +15,10 @@ module.exports = class Pleco {
       const pinyin = separatePinyinInSyllables(entry.pronunciation);
       let pinyinTones = '';
       pinyin.split(' ').forEach((syllable) => {
-        const tone = extractPinyinTone(syllable);
+        let tone = extractPinyinTone(syllable);
+        if (tone === 0) {
+          tone = 5;
+        }
         pinyinTones += `${removeDiacritics(syllable)}${tone}`;
       });
       const ideograms = UnihanSearch.convertUtf16ToIdeograms(entry.ideogram);
