@@ -4,7 +4,7 @@
       <md-input-container>
           <md-icon>play_circle_outline</md-icon>
           <label>{{ $t("url") }}</label>
-          <md-input @change="loadVideo" type="text" ref="inputSearch" autofocus v-model="videoUrl"></md-input>
+          <md-input @change="loadVideo" type="text" ref="inputSearch" v-model="videoUrl"></md-input>
       </md-input-container>
       <video :src="videoUrl" controls preload ref="video" v-show="videoUrl">
       </video>
@@ -26,6 +26,11 @@
     name: 'video-show',
     components: {
       LoadableContent,
+    },
+    created() {
+      setTimeout(() => {
+        this.$refs.inputSearch.$el.focus();
+      }, 500);
     },
     methods: {
       formatTime(str) {
