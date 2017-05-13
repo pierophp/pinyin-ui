@@ -4,7 +4,6 @@ A simple pinyin editor made in node.js
 
 ## Install
 Run:
-
 ```
 npm install
 npm install -g bower
