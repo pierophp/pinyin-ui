@@ -104,6 +104,7 @@ module.exports = class JwDownloader {
       'https://www.jw.org/cmn-hant',
     ];
     let isChinese = false;
+    let newLanguage = null;
     chineseSites.forEach((chineseSite) => {
       if (url.substring(0, chineseSite.length) === chineseSite) {
         isChinese = true;
@@ -113,6 +114,7 @@ module.exports = class JwDownloader {
     let response = await axios.get(this.encodeUrl(url));
     let $ = cheerio.load(response.data);
     if (!isChinese) {
+      newLanguage = url.replace('https://www.jw.org/', '').split('/')[0];
       const chineseLink = $('link[hreflang="cmn-hans"]');
       if (chineseLink.length > 0) {
         const link = `https://www.jw.org${chineseLink.attr('href')}`;
@@ -126,6 +128,9 @@ module.exports = class JwDownloader {
     const parsedDownload = await this.parseDownload($, true);
 
     if (language) {
+      if (newLanguage) {
+        language = newLanguage;
+      }
       const translateLink = $(`link[hreflang="${language}"]`);
       if (translateLink.length > 0) {
         const link = `https://www.jw.org${translateLink.attr('href')}`;
