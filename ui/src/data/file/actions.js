@@ -5,6 +5,7 @@ import clipboard02 from 'src/domain/clipboard-02';
 import clipboard03 from 'src/domain/clipboard-03';
 import clipboard04 from 'src/domain/clipboard-04';
 import LocalStorage from 'src/helpers/local-storage';
+import replaceall from 'replaceall';
 
 import * as types from './types';
 
@@ -241,12 +242,13 @@ export default {
   },
 
   [types.FILE_ACTION_NEW_FILE]({ commit, state }, data) {
+    const filename = replaceall('/', '-', data.filename);
     http
-    .post(`files/save?filename=${data.filename}.json`, {
+    .post(`files/save?filename=${filename}.json`, {
       content: JSON.stringify({ lines: [] }),
     })
     .then(() => {
-      state.files.push({ path: data.filename, type: 'file' });
+      state.files.push({ path: filename, type: 'file' });
       sortFiles(state.files);
       LocalStorage.save('files', state.files);
     })

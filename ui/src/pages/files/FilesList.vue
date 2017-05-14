@@ -1,7 +1,7 @@
 <template>
   <div class="files-wrapper">
-    <loadable-content :loading="loading">
-      <div class="files-container">
+    <div class="files-container">
+      <loadable-content :loading="loading">
         <md-list class="md-double-line">
           <md-list-item v-for="(file, fileId) in files" @click.native="openOptions(fileId, $event)" >
             <md-button class="md-icon-button list-icon">
@@ -39,11 +39,11 @@
             </md-menu>
           </md-list-item>
         </md-list>
-      </div>
-      <new-file-modal></new-file-modal>
-      <delete-file-modal :filename="deleteFilename" ref="deleteModal"></delete-file-modal>
-      <import-site-modal :filename="importFilename" ref="importModal"></import-site-modal>
-    </loadable-content>
+      </loadable-content>
+    </div>
+    <new-file-modal></new-file-modal>
+    <delete-file-modal :filename="deleteFilename" ref="deleteModal"></delete-file-modal>
+    <import-site-modal :filename="importFilename" ref="importModal"></import-site-modal>
   </div>
 </template>
 
