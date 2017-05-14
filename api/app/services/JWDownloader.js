@@ -99,9 +99,30 @@ module.exports = class JwDownloader {
 
   static async download(url, language) {
     profiler('Download JW Start');
+    const chineseSites = [
+      'https://www.jw.org/cmn-hans',
+      'https://www.jw.org/cmn-hant',
+    ];
+    let isChinese = false;
+    chineseSites.forEach((chineseSite) => {
+      if (url.substring(0, chineseSite.length) === chineseSite) {
+        isChinese = true;
+      }
+    });
+
     let response = await axios.get(this.encodeUrl(url));
-    profiler('Parse JW Start');
     let $ = cheerio.load(response.data);
+    if (!isChinese) {
+      const chineseLink = $('link[hreflang="cmn-hans"]');
+      if (chineseLink.length > 0) {
+        const link = `https://www.jw.org${chineseLink.attr('href')}`;
+        response = await axios.get(this.encodeUrl(link));
+        $ = cheerio.load(response.data);
+      }
+    }
+
+    profiler('Parse JW Start');
+
     const parsedDownload = await this.parseDownload($, true);
 
     if (language) {
