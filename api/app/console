@@ -25,6 +25,10 @@ program
 
 program
   .version('0.0.1')
+  .command('jw-bible', 'JW Bible');
+
+program
+  .version('0.0.1')
   .command('hsk-import', 'HSK Import');
 
 program

@@ -6,8 +6,83 @@ const knex = require('./knex');
 const replaceall = require('replaceall');
 const replaceIdeogramsToSpace = require('../helpers/special-ideograms-chars');
 const UnihanSearch = require('../services/UnihanSearch');
+const fs = Promise.promisifyAll(require('fs'));
 
 module.exports = class JwDownloader {
+
+  static async getBibleNames() {
+    const dirname = `${__dirname}/../../storage/`;
+    const urlBible = 'https://www.jw.org/cmn-hans/出版物/圣经/bi12/圣经经卷';
+    let response = await axios.get(this.encodeUrl(urlBible));
+    let $ = cheerio.load(response.data);
+    const bibles = [];
+    $('.bibleBook .fullName').each(async (i, bibleChildren) => {
+      bibles.push($(bibleChildren).text().trim());
+    });
+
+    const words = {};
+    const wordsVerses = [];
+
+    await Promise.map(bibles, async (bible) => {
+      const urlChapter = `https://www.jw.org/cmn-hans/出版物/圣经/bi12/圣经经卷/${bible}/`;
+      response = await axios.get(this.encodeUrl(urlChapter));
+      $ = cheerio.load(response.data);
+      const chapters = [];
+      $('.chapters .chapter').each((j, bibleChapterChildren) => {
+        chapters.push($(bibleChapterChildren).text().trim());
+      });
+      console.log(bible);
+      await Promise.map(chapters, async (chapter) => {
+        console.log(chapter);
+        const url = `https://www.jw.org/cmn-hans/出版物/圣经/bi12/圣经经卷/${bible}/${chapter}/`;
+        response = await axios.get(this.encodeUrl(url));
+        $ = cheerio.load(response.data);
+
+        $('#bibleText .verse').each((i, children) => {
+          let verse = $(children).find('.verseNum').text().trim();
+          if (!verse) {
+            verse = 1;
+          }
+
+          $(children).find('u').each((j, subChildren) => {
+            const word = $(subChildren).text().trim();
+
+            if (words[word] === undefined) {
+              words[word] = 0;
+            }
+            wordsVerses.push({
+              bible,
+              chapter,
+              verse,
+              word,
+            });
+
+            words[word] += 1;
+          });
+        });
+      });
+    });
+
+    let csvBible = 'bible;chapter;verse;word\n';
+    wordsVerses.forEach((wordVerse) => {
+      csvBible += `${wordVerse.bible};${wordVerse.chapter};${wordVerse.verse};${wordVerse.word}\n`;
+    });
+
+    const filenameBible = `${dirname}bible_words.csv`;
+    await fs.writeFileAsync(filenameBible, csvBible);
+
+    let csvBibleTotal = 'word;total\n';
+    Object.keys(words).forEach((key) => {
+      csvBibleTotal += `${key};${words[key]}\n`;
+    });
+
+    const filenameBibleTotal = `${dirname}bible_total.csv`;
+    await fs.writeFileAsync(filenameBibleTotal, csvBibleTotal);
+
+    console.log(wordsVerses);
+    console.log(words);
+  }
+
   static async loadTracks() {
     const response = await axios.get('https://mediator.jw.org/v1/categories/CHS/VideoOnDemand?detailed=1');
     const categories = response.data.category.subcategories;
