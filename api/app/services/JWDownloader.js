@@ -23,7 +23,7 @@ module.exports = class JwDownloader {
     const words = {};
     const wordsVerses = [];
 
-    await Promise.map(bibles, async (bible) => {
+    await Promise.mapSeries(bibles, async (bible) => {
       const urlChapter = `https://www.jw.org/cmn-hans/出版物/圣经/bi12/圣经经卷/${bible}/`;
       response = await axios.get(this.encodeUrl(urlChapter));
       $ = cheerio.load(response.data);
@@ -32,10 +32,16 @@ module.exports = class JwDownloader {
         chapters.push($(bibleChapterChildren).text().trim());
       });
       console.log(bible);
-      await Promise.map(chapters, async (chapter) => {
+      await Promise.mapSeries(chapters, async (chapter) => {
         console.log(chapter);
         const url = `https://www.jw.org/cmn-hans/出版物/圣经/bi12/圣经经卷/${bible}/${chapter}/`;
-        response = await axios.get(this.encodeUrl(url));
+        try {
+          response = await axios.get(this.encodeUrl(url));
+        } catch (e) {
+          console.log(e);
+          console.log(url);
+          throw e;
+        }
         $ = cheerio.load(response.data);
 
         $('#bibleText .verse').each((i, children) => {
