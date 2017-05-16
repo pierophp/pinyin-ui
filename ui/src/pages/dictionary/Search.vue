@@ -19,6 +19,7 @@
         </span>
       </md-list-item>
     </md-list>
+    <div v-if="noResults">{{ $t("no_results") }}</div>
   </loadable-content>
   </div>
 </div>
@@ -41,6 +42,7 @@
         searchValue: '',
         entries: [],
         loading: false,
+        noResults: false,
       };
     },
     created() {
@@ -58,12 +60,12 @@
     },
     methods: {
       search(value) {
-        value = replaceall(' ', '', value);
         const that = this;
         (function search() {
           const searchValue = value;
           setTimeout(() => {
             if (searchValue === that.searchValue && searchValue) {
+              that.noResults = false;
               that.loading = true;
               http
               .get('unihan/dictionary_search', {
@@ -72,15 +74,19 @@
                 },
               })
               .then((response) => {
-                if (value === response.data.search) {
+                if (replaceall(' ', '', value) === response.data.search) {
                   that.entries = response.data.entries;
                   that.loading = false;
+                  if (that.entries.length === 0) {
+                    that.noResults = true;
+                  }
                 }
               });
             }
 
             if (!searchValue) {
               that.entries = [];
+              that.noResults = false;
             }
           }, 400);
         }());

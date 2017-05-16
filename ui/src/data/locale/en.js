@@ -84,4 +84,5 @@ export default {
   close: 'Close',
   import_site: 'Import Site',
   import: 'Import',
+  no_results: 'No Results',
 };

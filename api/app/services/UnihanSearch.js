@@ -1,6 +1,7 @@
 const Promise = require('bluebird');
 const _ = require('lodash');
 const nodejieba = require('nodejieba');
+const replaceall = require('replaceall');
 const knex = require('./knex');
 const separatePinyinInSyllables = require('../helpers/separate-pinyin-in-syllables');
 const isChinese = require('../helpers/is-chinese');
@@ -36,6 +37,7 @@ module.exports = class UnihanSearch {
   }
 
   static async searchToDictionaryList(search) {
+    search = replaceall(' ', '', search);
     let cjkList = [];
 
     if (isChinese(search)) {
@@ -473,8 +475,10 @@ module.exports = class UnihanSearch {
             }
 
             UnihanSearch.searchByIdeograms(ideogram).then((ideogramsList) => {
-              const resultIdeograms = UnihanSearch.parseResultByIdeograms(ideogramsList, ideogram, nextWord, options);
-              const ideogramConverted = UnihanSearch.convertIdeogramsToUtf16(resultIdeograms.ideogram);
+              const resultIdeograms = UnihanSearch
+                      .parseResultByIdeograms(ideogramsList, ideogram, nextWord, options);
+              const ideogramConverted = UnihanSearch
+                      .convertIdeogramsToUtf16(resultIdeograms.ideogram);
               const cackeKey = `PINYIN_${ideogramConverted}`;
               pinyinCache[cackeKey] = resultIdeograms.pinyin;
               resolvePinyin(resultIdeograms);
@@ -575,5 +579,13 @@ module.exports = class UnihanSearch {
     }
 
     return text;
+  }
+
+  static async exportPinyin() {
+    const result = await knex('cjk')
+        .where({
+          type: 'W',
+        })
+        .limit(10);
   }
 };

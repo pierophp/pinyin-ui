@@ -29,10 +29,18 @@ program
 
 program
   .version('0.0.1')
+  .command('jw-insight', 'JW Insight');
+
+program
+  .version('0.0.1')
   .command('hsk-import', 'HSK Import');
 
 program
   .version('0.0.1')
   .command('export-pleco', 'Export Pleco');
+
+program
+  .version('0.0.1')
+  .command('export-pinyin', 'Export Pinyin');
 
 program.parse(process.argv);

@@ -84,4 +84,5 @@ export default {
   close: 'Fechar',
   import_site: 'Importar Site',
   import: 'Importar',
+  no_results: 'Não há resultados',
 };

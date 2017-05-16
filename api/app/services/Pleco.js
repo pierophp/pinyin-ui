@@ -24,7 +24,7 @@ module.exports = class Pleco {
       const ideograms = UnihanSearch.convertUtf16ToIdeograms(entry.ideogram);
       resultFile += `${ideograms}\t${pinyinTones}\t${definition}\n`;
     });
-
+    // eslint-disable-next-line
     console.log(resultFile);
   }
 };

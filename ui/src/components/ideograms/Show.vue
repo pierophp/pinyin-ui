@@ -9,8 +9,8 @@
 <script>
   import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
   import extractPinyinTone from 'src/helpers/extract-pinyin-tone';
-  import specialIdeograms from 'src/helpers/special-ideograms-chars';
   import OptionsManager from 'src/domain/options-manager';
+  import specialIdeograms from '../../../../shared/helpers/special-ideograms-chars';
 
   export default {
     name: 'ideograms-show',

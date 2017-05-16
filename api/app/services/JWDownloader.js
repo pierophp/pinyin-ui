@@ -9,6 +9,59 @@ const UnihanSearch = require('../services/UnihanSearch');
 const fs = Promise.promisifyAll(require('fs'));
 
 module.exports = class JwDownloader {
+  static async getInsight() {
+    const dirname = `${__dirname}/../../storage/`;
+    const url = 'https://wol.jw.org/cmn-Hans/wol/lv/r23/lp-chs/0/2';
+    let response = await axios.get(this.encodeUrl(url));
+    let $ = cheerio.load(response.data);
+    const links = [];
+    $('.directory li a').each((i, letterLink) => {
+      links.push(`https://wol.jw.org${$(letterLink).attr('href')}`);
+    });
+
+    const words = [];
+
+    await Promise.mapSeries(links, async (letterurl) => {
+      response = await axios.get(this.encodeUrl(letterurl));
+      $ = cheerio.load(response.data);
+      $('.directory li a').each((i, wordLink) => {
+        const href = $(wordLink).attr('href').split('/');
+        const id = href[href.length - 1];
+        const title = $(wordLink).find('.title').text().trim();
+        words.push({
+          id,
+          title,
+        });
+      });
+    });
+
+    await Promise.mapSeries(words, async (word, i) => {
+      // pt
+      // const wordUrl = `https://wol.jw.org/pt/wol/d/r5/lp-t/${word.id}`;
+      // cmn-hant
+      const wordUrl = `https://wol.jw.org/cmn-Hant/wol/d/r24/lp-ch/${word.id}`;
+      try {
+        response = await axios.get(this.encodeUrl(wordUrl));
+      } catch (e) {
+        // eslint-disable-next-line
+        console.log(wordUrl);
+        // eslint-disable-next-line
+        console.log(e.message);
+        return;
+      }
+
+      $ = cheerio.load(response.data);
+      words[i].translation = $('article #p1 strong').text().trim();
+    });
+
+    let csvBible = 'character;id;translation\n';
+    words.forEach((word) => {
+      csvBible += `${word.title};${word.id};${word.translation}\n`;
+    });
+
+    const filenameBible = `${dirname}insight.csv`;
+    await fs.writeFileAsync(filenameBible, csvBible);
+  }
 
   static async getBibleNames() {
     const dirname = `${__dirname}/../../storage/`;
@@ -16,7 +69,7 @@ module.exports = class JwDownloader {
     let response = await axios.get(this.encodeUrl(urlBible));
     let $ = cheerio.load(response.data);
     const bibles = [];
-    $('.bibleBook .fullName').each(async (i, bibleChildren) => {
+    $('.bibleBook .fullName').each((i, bibleChildren) => {
       bibles.push($(bibleChildren).text().trim());
     });
 
@@ -31,14 +84,18 @@ module.exports = class JwDownloader {
       $('.chapters .chapter').each((j, bibleChapterChildren) => {
         chapters.push($(bibleChapterChildren).text().trim());
       });
+      // eslint-disable-next-line
       console.log(bible);
       await Promise.mapSeries(chapters, async (chapter) => {
+        // eslint-disable-next-line
         console.log(chapter);
         const url = `https://www.jw.org/cmn-hans/出版物/圣经/bi12/圣经经卷/${bible}/${chapter}/`;
         try {
           response = await axios.get(this.encodeUrl(url));
         } catch (e) {
+          // eslint-disable-next-line
           console.log(e);
+          // eslint-disable-next-line
           console.log(url);
           throw e;
         }
@@ -84,9 +141,6 @@ module.exports = class JwDownloader {
 
     const filenameBibleTotal = `${dirname}bible_total.csv`;
     await fs.writeFileAsync(filenameBibleTotal, csvBibleTotal);
-
-    console.log(wordsVerses);
-    console.log(words);
   }
 
   static async loadTracks() {
