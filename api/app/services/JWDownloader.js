@@ -212,7 +212,7 @@ module.exports = class JwDownloader {
       });
     });
   }
-  static async track(url) {
+  static async track(url, type) {
     const urlParts = url.split('/');
     const filename = urlParts[urlParts.length - 1].replace(/_r(.*)P/g, '').replace('.mp4', '');
     const videoTrack = await knex('video_track').where({ video: filename });
@@ -221,7 +221,18 @@ module.exports = class JwDownloader {
       return '';
     }
 
+    let showPinyin = true;
+    let showIdeograms = true;
+    if (type === 'p') {
+      showIdeograms = false;
+    }
+
+    if (type === 'c') {
+      showPinyin = false;
+    }
+
     const response = await axios.get(this.encodeUrl(videoTrack[0].track_url));
+
     const lines = response.data.split('\n');
     let i = 0;
     const trackList = await Promise.map(lines, async (line) => {
@@ -237,8 +248,14 @@ module.exports = class JwDownloader {
           const pinyinList = await UnihanSearch.toPinyin(ideograms);
           let newLine = '<ruby>';
           pinyinList.forEach((pinyin) => {
-            newLine += `${pinyin.ideogram}`;
-            newLine += ` <rt>${pinyin.pinyin.trim()}</rt> `;
+            if (showIdeograms) {
+              newLine += `${pinyin.ideogram}`;
+            }
+            if (showPinyin) {
+              newLine += ` <rt>${pinyin.pinyin.trim()}</rt> `;
+            } else {
+              newLine += ' <rt> </rt> ';
+            }
           });
           newLine += '</ruby>';
 

@@ -17,7 +17,7 @@ router.get('/download', async (req, res) => {
 });
 
 router.get('/track', (req, res) => {
-  JWDownloader.track(req.query.url)
+  JWDownloader.track(req.query.url, req.query.type)
   .then((track) => {
     res.setHeader('Content-Type', 'text/vtt; charset=utf-8');
     res.setHeader('Access-Control-Allow-Origin', '*');

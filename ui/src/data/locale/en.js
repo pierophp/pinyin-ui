@@ -50,6 +50,7 @@ export default {
   pinyin_ideograms_without_knew: 'Pinyin (without knew) + Ideograms',
   pinyin_ideograms: 'Pinyin + Ideograms',
   ideograms_only: 'Ideograms only',
+  pinyin_only: 'Pinyin only',
   save: 'Save',
   ideograms_colored: 'Colored ideograms',
   yes: 'Yes',
@@ -85,4 +86,5 @@ export default {
   import_site: 'Import Site',
   import: 'Import',
   no_results: 'No Results',
+  show: 'Show',
 };

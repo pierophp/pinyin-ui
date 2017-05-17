@@ -2,6 +2,15 @@
   <div class="video-container">
     <loadable-content :loading="loading">
       <md-input-container>
+        <label for="size">{{ $t('show') }}</label>
+        <md-select @change="refreshVideo" name="size" id="size" v-model="type">
+          <md-option value="a">{{ $t('pinyin_ideograms') }}</md-option>
+          <md-option value="p">{{ $t('pinyin_only') }}</md-option>
+          <md-option value="c">{{ $t('ideograms_only') }}</md-option>
+        </md-select>
+      </md-input-container>
+
+      <md-input-container>
           <md-icon>play_circle_outline</md-icon>
           <label>{{ $t("url") }}</label>
           <md-input @change="loadVideo" type="text" ref="inputSearch" v-model="videoUrl"></md-input>
@@ -52,6 +61,9 @@
 
         return s;
       },
+      refreshVideo() {
+        this.loadVideo(this.videoUrl);
+      },
       loadVideo(videoUrl) {
         this.videoUrl = videoUrl;
         if (!videoUrl) {
@@ -68,7 +80,6 @@
         track.mode = 'showing';
         this.downloadLink = '';
 
-
         const urlParts = videoUrl.split('/');
         this.downloadFilename = urlParts[urlParts.length - 1].replace('.mp4', '.srt');
 
@@ -76,6 +87,7 @@
           .get('jw/track', {
             params: {
               url: videoUrl,
+              type: this.type,
             },
           })
           .then((response) => {
@@ -134,6 +146,7 @@
         downloadFilename: '',
         videoUrl: '',
         track: '',
+        type: 'a',
         loading: false,
       };
     },
@@ -145,6 +158,10 @@
     flex: 1;
     padding: 0 10px;
     overflow: auto;
+  }
+
+  .video-container .md-input-container{
+    margin: 0;
   }
 
   /* TODO Review This Value on Full Screen*/

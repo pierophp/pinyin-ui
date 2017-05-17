@@ -49,7 +49,8 @@ export default {
   type: 'Tipo',
   pinyin_ideograms_without_knew: 'Pinyin (sem conhecidos) + Ideogramas',
   pinyin_ideograms: 'Pinyin + Ideogramas',
-  ideograms_only: 'Somente ideogramas',
+  ideograms_only: 'Somente Ideogramas',
+  pinyin_only: 'Somente Pinyin',
   save: 'Salvar',
   ideograms_colored: 'Ideogramas coloridos',
   yes: 'Sim',
@@ -84,5 +85,6 @@ export default {
   close: 'Fechar',
   import_site: 'Importar Site',
   import: 'Importar',
-  no_results: 'Não há resultados',
+  no_results: 'Não foram encontrados resultados',
+  show: 'Mostrar',
 };
