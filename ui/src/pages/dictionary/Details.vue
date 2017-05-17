@@ -26,6 +26,10 @@
       <md-button class="md-primary" @click.native="closeDialog('dialogForvo')">OK</md-button>
     </md-dialog-actions>
   </md-dialog>
+
+  <md-button @click.native="back" class="md-fab md-fab-bottom-left md-warn">
+    <md-icon>arrow_back</md-icon>
+  </md-button>
 </div>
 </template>
 
@@ -67,6 +71,14 @@
           this.dictionary = response.data;
           this.forvoUrl = `https://pt.forvo.com/word/${this.dictionary.ideograms}/#zh`;
           this.loading = false;
+        });
+      },
+      back() {
+        this.$router.push({
+          name: 'dictionary',
+          query: {
+            search: this.$route.query.search,
+          },
         });
       },
       openSound() {

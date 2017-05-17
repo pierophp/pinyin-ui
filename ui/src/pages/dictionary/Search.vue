@@ -48,6 +48,7 @@
     created() {
       setTimeout(() => {
         this.$refs.inputSearch.$el.focus();
+        this.$refs.inputSearch.$el.setSelectionRange(0, 1000);
       }, 500);
     },
     mounted() {
@@ -101,7 +102,12 @@
       details(id) {
         this.$router.push({
           name: 'dictionary-details',
-          params: { id },
+          query: {
+            search: this.searchValue,
+          },
+          params: {
+            id,
+          },
         });
       },
     },
