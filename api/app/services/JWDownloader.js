@@ -369,7 +369,12 @@ module.exports = class JwDownloader {
       type: 'h1',
     });
 
-    $('article .docSubContent').children().each((i, children) => {
+    let mainElement = $('article .docSubContent');
+    if (!mainElement.length) {
+      mainElement = $('article #bibleText');
+    }
+
+    mainElement.children().each((i, children) => {
       if ($(children).hasClass('blockTeach')) {
         const boxH2 = $(children).find('aside h2');
         if (boxH2 && $(boxH2).text()) {
@@ -591,6 +596,7 @@ module.exports = class JwDownloader {
 
     const numberRegex = new RegExp('^[0-9]+$');
 
+    text = replaceall('+', '', text);
     text = replaceall('<strong>', '//STRONG-OPEN//', text);
     text = replaceall('</strong>', '//STRONG-CLOSE//', text);
     text = replaceall('<wbr>', ' ', text);
@@ -616,6 +622,10 @@ module.exports = class JwDownloader {
       replaceIdeogramsToSpace.forEach((item) => {
         verifyText = replaceall(`${item} `, item, verifyText);
       });
+
+      verifyText = verifyText.replace(/(\d+)/, '');
+
+      console.log(verifyText);
 
       if (verifyText.trim().split(' ').length === 1) {
         let segementedText = UnihanSearch.segment(line).join(' ');

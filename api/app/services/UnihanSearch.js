@@ -12,7 +12,7 @@ const env = require('../../env');
 Promise.promisifyAll(redis.RedisClient.prototype);
 
 nodejieba.load({
-  userDict: `${__dirname}/../data/userdict.utf8`,
+  userDict: `${__dirname}/../data/compiled.utf8`,
 });
 
 const redisClient = redis.createClient({
