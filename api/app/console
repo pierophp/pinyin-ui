@@ -29,6 +29,10 @@ program
 
 program
   .version('0.0.1')
+  .command('jw-bible-pinyin', 'JW Bible Pinyin');
+
+program
+  .version('0.0.1')
   .command('jw-insight', 'JW Insight');
 
 program

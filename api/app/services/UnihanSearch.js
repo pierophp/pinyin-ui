@@ -8,6 +8,7 @@ const isChinese = require('../helpers/is-chinese');
 const ChineseToolsDownloader = require('../services/ChineseToolsDownloader');
 const redis = require('redis');
 const env = require('../../env');
+const fs = Promise.promisifyAll(require('fs'));
 
 Promise.promisifyAll(redis.RedisClient.prototype);
 
@@ -582,10 +583,18 @@ module.exports = class UnihanSearch {
   }
 
   static async exportPinyin() {
+    const dirname = `${__dirname}/../../storage/`;
+
     const result = await knex('cjk')
         .where({
           type: 'W',
-        })
-        .limit(10);
+        });
+    let csvPinyin = 'ideogram;pinyin\n';
+    result.forEach((cjk) => {
+      csvPinyin += `${this.convertUtf16ToIdeograms(cjk.ideogram)};${cjk.pronunciation}\n`;
+    });
+
+    const filenamePinyin = `${dirname}pinyin.csv`;
+    await fs.writeFileAsync(filenamePinyin, csvPinyin);
   }
 };

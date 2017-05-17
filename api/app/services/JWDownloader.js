@@ -63,6 +63,29 @@ module.exports = class JwDownloader {
     await fs.writeFileAsync(filenameBible, csvBible);
   }
 
+  static async getBiblePinyin() {
+    const dirname = `${__dirname}/../../storage/`;
+    const filenameBibleTotal = `${dirname}bible_total.csv`;
+    const content = await fs.readFileAsync(filenameBibleTotal);
+    const lines = content.toString().split('\n');
+    let csvPinyin = 'word;total;type\n';
+    await Promise.mapSeries(lines, async (line) => {
+      const values = line.split(';');
+      let pinyin = await UnihanSearch.searchByWord(values[0]);
+      let type = 'database';
+      if (!pinyin) {
+        pinyin = UnihanSearch.parseResultByIdeograms(await UnihanSearch.searchByIdeograms(values[0]), values[0], null, {}).pinyin;
+        type = 'generated';
+      }
+      if (pinyin) {
+        csvPinyin += `${values[0]};${pinyin};${type}\n`;
+      }
+    });
+
+    const filenamePinyin = `${dirname}pinyin_bible.csv`;
+    await fs.writeFileAsync(filenamePinyin, csvPinyin);
+  }
+
   static async getBibleNames() {
     const dirname = `${__dirname}/../../storage/`;
     const urlBible = 'https://www.jw.org/cmn-hans/出版物/圣经/bi12/圣经经卷';

@@ -1,5 +1,5 @@
 const program = require('commander');
-const UnihanSearch = require('./services/UnihanSeach');
+const UnihanSearch = require('./services/UnihanSearch');
 
 program.parse(process.argv);
 
