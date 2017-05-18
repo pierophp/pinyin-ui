@@ -30,9 +30,9 @@ Vue.locale('en', localeEn);
 Vue.locale('pt', localePt);
 
 Vue.config.lang = navigator.language.split('-')[0];
-Vue.config.fallbackLang = 'en';
+Vue.config.fallbackLang = 'en';;
 
-if (process.env === 'production') {
+if (process.env.NODE_ENV === 'production') {
   offlinePlugin.install({
     onUpdateReady: () => {
       // Tells to new SW to take control immediately
