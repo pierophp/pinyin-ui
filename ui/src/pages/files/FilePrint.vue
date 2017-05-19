@@ -171,6 +171,7 @@
           character: this.lines[lineIndex][blockIndex].c,
           lineIndex,
           blockIndex,
+          openDictionary: e.ctrlKey,
         });
       },
 

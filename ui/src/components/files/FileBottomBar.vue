@@ -45,7 +45,7 @@
   import DictionaryDetails from 'src/components/dictionary/Details';
   import IdeogramsShow from 'src/components/ideograms/Show';
   import OptionsManager from 'src/domain/options-manager';
-
+  import MobileDetect from 'mobile-detect';
   import {
     mapMutations,
     mapGetters,
@@ -55,6 +55,8 @@
     FILE_MUTATION_SET_MY_CJK_TEMP,
     FILE_GETTER_MY_CJK,
   } from 'src/data/file/types';
+
+  const md = new MobileDetect(window.navigator.userAgent);
 
   export default {
     name: 'file-bottom-bar',
@@ -93,6 +95,14 @@
       },
 
       open(block) {
+        if (md.mobile() && this.block.character === block.character) {
+          this.loadDictionary();
+        }
+
+        if (block.openDictionary) {
+          this.loadDictionary();
+        }
+
         this.show = true;
         this.block = block;
         const chars = block.character.toString();
@@ -130,6 +140,9 @@
           },
         })
         .then((response) => {
+          if (response.data.ideograms !== this.block.character) {
+            return;
+          }
           this.dictionary = response.data;
           this.openDialog('dialogDictionary');
         });
