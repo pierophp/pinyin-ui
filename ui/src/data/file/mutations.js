@@ -212,7 +212,13 @@ export default {
   },
 
   [types.FILE_MUTATION_REMOVE_BLOCK](state, data) {
-    state.file[data.lineIndex].remove(data.blockIndex);
+    const lineIndex = parseInt(data.lineIndex, 10);
+    const blockIndex = parseInt(data.blockIndex, 10);
+    const line = state.file[data.lineIndex].filter(
+      (block, index) => index !== blockIndex);
+
+    Vue.set(state.file, lineIndex, line);
+
     state.fileChangeTimestamp = Date.now();
   },
 

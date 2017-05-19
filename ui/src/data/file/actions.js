@@ -138,7 +138,7 @@ export default {
       LocalStorage.save(fileKey, data.content);
       http
       .post(`files/save?filename=${data.filename}.json`, {
-        content: JSON.stringify({ lines: data.content }),
+        content: JSON.stringify({ lines: data.content, hasSeparator: 0 }),
       })
       .then(() => {
         if (state.fileChangeTimestamp === fileChangeTimestamp) {
@@ -282,6 +282,35 @@ export default {
       })
       .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
     }, 5000);
+  },
+
+  [types.FILE_ACTION_JOIN_LEFT]({ commit, state, dispatch }, data) {
+    const lineIndex = parseInt(data.lineIndex, 10);
+    const blockIndex = parseInt(data.blockIndex, 10);
+    const previousBlockIndex = blockIndex - 1;
+
+    if (previousBlockIndex < 0) {
+      return;
+    }
+
+    const character = `${state.file[lineIndex][previousBlockIndex].c}${state.file[lineIndex][blockIndex].c}`;
+    const pinyin = `${state.file[lineIndex][previousBlockIndex].p}${state.file[lineIndex][blockIndex].p}`;
+
+    commit(types.FILE_MUTATION_REMOVE_BLOCK, data);
+
+    commit(types.FILE_MUTATION_UPDATE_CHARACTER, {
+      lineIndex,
+      blockIndex: previousBlockIndex,
+      character,
+    });
+
+    commit(types.FILE_MUTATION_UPDATE_PINYIN, {
+      lineIndex,
+      blockIndex: previousBlockIndex,
+      pinyin,
+    });
+
+    dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex });
   },
 
 

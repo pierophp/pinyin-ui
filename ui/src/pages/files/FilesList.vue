@@ -146,7 +146,7 @@
 }
 
 .files-container{
-  padding-bottom: 60px;
+  padding-bottom: 65px;
   will-change: transform;
 }
 

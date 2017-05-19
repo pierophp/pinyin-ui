@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-button class="md-fab md-fab-bottom-left" @click.native="openDialog()">
+    <md-button class="md-fab md-fab-bottom-right" @click.native="openDialog()">
       <md-icon>add</md-icon>
     </md-button>
 

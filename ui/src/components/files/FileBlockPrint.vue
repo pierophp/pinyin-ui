@@ -53,9 +53,11 @@
       pinyin: '',
       character: '',
       lineIndex: {
+        type: Number,
         default: 0,
       },
       blockIndex: {
+        type: Number,
         default: 0,
       },
       isBold: {

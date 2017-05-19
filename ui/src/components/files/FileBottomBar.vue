@@ -3,7 +3,7 @@
     <span class="ideogram-link" v-for="data in printData" @click.prevent="openModal(data.characterLink)">{{data.character}}</span>
     <!-- span @click.prevent="openPinyinList()">{{ block.pinyin }}</span -->
 
-    <md-menu md-size="2"  md-direction="top left" md-offset-y="-52">
+    <md-menu md-size="2"  md-direction="top left" md-offset-y="-52" id="menu-pinyin">
       <md-button md-menu-trigger class="md-2">
         {{ block.pinyin }}
       </md-button>
@@ -34,9 +34,22 @@
       </md-dialog-actions>
     </md-dialog>
 
-    <md-button class="md-icon-button md-primary" @click.native="close()">
-      <md-icon>clear</md-icon>
-    </md-button>
+    <md-menu md-size="4"  md-direction="top left" md-offset-y="-52">
+      <md-button class="md-icon-button md-primary md-2" md-menu-trigger>
+        <md-icon>more_vert</md-icon>
+      </md-button>
+
+      <md-menu-content>
+        <md-menu-item @click.native="joinLeft(block)">
+          <md-icon>arrow_back</md-icon>
+          <span>{{ $t('join_left') }}</span>
+        </md-menu-item>
+        <md-menu-item @click.native="close()">
+          <md-icon>clear</md-icon>
+          <span>{{ $t('close') }}</span>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
   </div>
 </template>
 
@@ -47,11 +60,13 @@
   import OptionsManager from 'src/domain/options-manager';
   import MobileDetect from 'mobile-detect';
   import {
+    mapActions,
     mapMutations,
     mapGetters,
   } from 'vuex';
 
   import {
+    FILE_ACTION_JOIN_LEFT,
     FILE_MUTATION_SET_MY_CJK_TEMP,
     FILE_GETTER_MY_CJK,
   } from 'src/data/file/types';
@@ -63,6 +78,7 @@
     data() {
       return {
         show: false,
+        tempDictCharacter: null,
         block: {},
         printData: {},
         dictionary: {
@@ -86,6 +102,9 @@
     },
 
     methods: {
+      ...mapActions({
+        joinLeft: FILE_ACTION_JOIN_LEFT,
+      }),
       ...mapMutations({
         setMyCjkTemp: FILE_MUTATION_SET_MY_CJK_TEMP,
       }),
@@ -95,16 +114,16 @@
       },
 
       open(block) {
-        if (md.mobile() && this.block.character === block.character) {
-          this.loadDictionary();
-        }
-
-        if (block.openDictionary) {
-          this.loadDictionary();
-        }
-
         this.show = true;
+        if (md.mobile() && this.tempDictCharacter === block.character) {
+          block.openDictionary = true;
+        }
+
         this.block = block;
+        this.tempDictCharacter = block.character;
+        setTimeout(() => {
+          this.tempDictCharacter = null;
+        }, 2000);
         const chars = block.character.toString();
         const printData = [];
         const options = OptionsManager.getOptions();
@@ -119,7 +138,12 @@
             characterLink,
           });
         }
+
         this.printData = printData;
+
+        if (block.openDictionary) {
+          this.loadDictionary();
+        }
       },
 
       openModal(character) {
@@ -190,13 +214,9 @@
   flex-shrink: 0;
 }
 
-.bottom-bar .md-menu .md-button{
+.bottom-bar #menu-pinyin .md-menu .md-button{
   margin: 6px 0;
   padding: 0 6px;
-}
-
-.bottom-bar .md-button i{
-
 }
 
 .bottom-bar .ideogram-link {

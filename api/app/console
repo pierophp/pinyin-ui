@@ -47,4 +47,8 @@ program
   .version('0.0.1')
   .command('export-pinyin', 'Export Pinyin');
 
+program
+  .version('0.0.1')
+  .command('test', 'Test');
+
 program.parse(process.argv);

@@ -27,7 +27,7 @@
     </md-dialog-actions>
   </md-dialog>
 
-  <md-button @click.native="back" class="md-fab md-fab-bottom-left md-warn">
+  <md-button @click.native="back" class="md-fab md-fab-bottom-right md-warn">
     <md-icon>arrow_back</md-icon>
   </md-button>
 </div>
@@ -97,7 +97,7 @@
 <style>
 .dictionary-container {
   flex: 1;
-  padding: 0 10px;
+  padding: 0 10px 65px;
   overflow: auto;
 }
 

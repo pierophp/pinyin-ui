@@ -87,4 +87,5 @@ export default {
   import: 'Import',
   no_results: 'No Results',
   show: 'Show',
+  join_left: 'Join left',
 };
