@@ -2,6 +2,7 @@ import offlinePlugin from 'offline-plugin/runtime';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import VueI18n from 'vue-i18n';
+import VueAnalytics from 'vue-analytics';
 
 // @todo Implement autocomplete
 // @todo melhorar ordenação
@@ -29,9 +30,9 @@ Vue.locale('en', localeEn);
 Vue.locale('pt', localePt);
 
 Vue.config.lang = navigator.language.split('-')[0];
-Vue.config.fallbackLang = 'en';
+Vue.config.fallbackLang = 'en';;
 
-if (process.env === 'production') {
+if (process.env.NODE_ENV === 'production') {
   offlinePlugin.install({
     onUpdateReady: () => {
       // Tells to new SW to take control immediately
@@ -42,7 +43,13 @@ if (process.env === 'production') {
       window.location.reload();
     },
   });
+
+  Vue.use(VueAnalytics, {
+    id: 'UA-4081205-4',
+    router,
+  });
 }
+
 
 // Vue.use(require('src/components/directives/drag-and-drop'));
 
