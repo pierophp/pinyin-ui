@@ -341,6 +341,11 @@ module.exports = class JwDownloader {
         return;
       }
 
+      if (!item.text) {
+        item.text = '';
+        console.log(item);
+      }
+
       const ideograms = item.text.split(' ');
       const pinyin = await UnihanSearch.toPinyin(ideograms);
       const pinynReturn = [];
@@ -664,10 +669,12 @@ module.exports = class JwDownloader {
       });
 
       verifyText = verifyText.replace(/(\d+)/, '');
+      verifyText = verifyText.trim();
+      if (!verifyText) {
+        verifyText = '';
+      }
 
-      console.log(verifyText);
-
-      if (verifyText.trim().split(' ').length === 1) {
+      if (verifyText.split(' ').length === 1) {
         let segementedText = UnihanSearch.segment(line).join(' ');
         segementedText = replaceall('< b >', '<b>', segementedText);
         segementedText = replaceall('< / b >', '</b>', segementedText);

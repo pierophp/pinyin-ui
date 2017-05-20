@@ -29,7 +29,6 @@ app.use(jwt({ secret: env.jwt_key }).unless({ path: [
   '/segmentation/segment',
   '/jw/download',
   '/jw/track',
-  '/jw/test',
   '/chinese-tools',
   '/hanzi-writer',
 ] }));
