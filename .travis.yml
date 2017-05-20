@@ -38,13 +38,13 @@ before_install:
 before_script:
 - export CHROME_BIN=chromium-browser
 - export DISPLAY=:99.0
-- sh -e /etc/init.d/xvfb start
+#- sh -e /etc/init.d/xvfb start
 - mysql -u root -e "CREATE DATABASE pinyin CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
 - export NODE_ENV=staging
 - cd ../api/
 - mkdir storage
 script:
-- echo "Test"
+- echo "Run Script"
 after_success:
 - export SSH_KEY="/home/travis/.ssh/id_rsa"
 - export CMD="scp -o StrictHostKeyChecking=no /home/travis/pinyin.dist.zip ${SSH_USER}@${SSH_HOST}:~"
