@@ -88,4 +88,5 @@ export default {
   no_results: 'Não foram encontrados resultados',
   show: 'Mostrar',
   join_left: 'Juntar à esquerda',
+  download_pleco_dictionary: 'Baixar para Pleco',
 };

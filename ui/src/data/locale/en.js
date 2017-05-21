@@ -88,4 +88,5 @@ export default {
   no_results: 'No Results',
   show: 'Show',
   join_left: 'Join left',
+  download_pleco_dictionary: 'Download to Pleco',
 };
