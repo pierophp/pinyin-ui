@@ -6,10 +6,14 @@ const extractPinyinTone = require('../helpers/extract-pinyin-tone');
 const removeDiacritics = require('diacritics').remove;
 const exec = require('child_process').exec;
 const fs = Promise.promisifyAll(require('fs'));
+const env = require('../../env');
 
 module.exports = class Pleco {
   static async export() {
-    const dirname = `${__dirname}/../../storage/`;
+    let dirname = `${__dirname}/../../storage/`;
+    if (env.storage_path) {
+      dirname = `${env.storage_path}/`;
+    }
     const result = await knex('cjk').whereRaw('definition_pt IS NOT NULL');
     let resultFile = '';
     result.forEach((entry) => {
