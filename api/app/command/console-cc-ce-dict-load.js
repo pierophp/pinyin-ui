@@ -1,8 +1,9 @@
 const program = require('commander');
+const CcCeDictDatabaseParser = require('../services/CcCeDictDatabaseParser');
 const fs = require('fs');
 const wget = require('wget');
-const ThreeLinesDatabaseParser = require('./services/ThreeLinesDatabaseParser');
-const env = require('../env');
+const AdmZip = require('adm-zip');
+const env = require('../../env');
 
 program.parse(process.argv);
 
@@ -11,10 +12,11 @@ if (env.storage_path) {
   storagePath = env.storage_path;
 }
 
-const filename = `${storagePath}DicPortugues.txt`;
+const filename = `${storagePath}cedict_ts.u8`;
+const filenameZip = `${storagePath}cedict_1_0_ts_utf-8_mdbg.zip`;
 
 const importFile = function importFile() {
-  ThreeLinesDatabaseParser.loadFile(filename)
+  CcCeDictDatabaseParser.loadFile(filename)
     .then(() => {
       // eslint-disable-next-line
       console.log('Successfully imported!');
@@ -27,10 +29,16 @@ const importFile = function importFile() {
     });
 };
 
-const downloadFile = function downloadFile() {
-  const src = 'http://1914:144000@www.3lines.org/languages/portuguese/DicPortugues.txt';
+const unzipFile = function unzipFile() {
+  const zip = new AdmZip(filenameZip);
+  zip.extractAllTo(storagePath, true);
+  importFile();
+};
 
-  const download = wget.download(src, filename);
+const downloadFile = function downloadFile() {
+  const src = 'http://www.mdbg.net/chindict/export/cedict/cedict_1_0_ts_utf-8_mdbg.zip';
+
+  const download = wget.download(src, filenameZip);
 
   download.on('error', (err) => {
     // eslint-disable-next-line
@@ -38,7 +46,7 @@ const downloadFile = function downloadFile() {
   });
 
   download.on('end', () => {
-    importFile();
+    unzipFile();
   });
 };
 

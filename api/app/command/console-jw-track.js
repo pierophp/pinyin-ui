@@ -1,5 +1,5 @@
 const program = require('commander');
-const JWDownloader = require('./services/JWDownloader');
+const JWDownloader = require('../services/JWDownloader');
 
 program.parse(process.argv);
 

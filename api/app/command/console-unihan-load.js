@@ -1,8 +1,8 @@
-const UnihanDatabaseParser = require('./services/UnihanDatabaseParser');
+const UnihanDatabaseParser = require('../services/UnihanDatabaseParser');
 const program = require('commander');
 const wget = require('wget');
 const AdmZip = require('adm-zip');
-const env = require('../env');
+const env = require('../../env');
 const fs = require('fs');
 
 program.parse(process.argv);

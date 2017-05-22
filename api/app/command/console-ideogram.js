@@ -1,5 +1,5 @@
 const program = require('commander');
-const UnihanDatabaseParser = require('./services/UnihanDatabaseParser');
+const UnihanDatabaseParser = require('../services/UnihanDatabaseParser');
 
 program.option('-p, --pinyin [type]', 'Pinyin');
 program.option('-i, --ideogram [type]', 'Ideogram');
