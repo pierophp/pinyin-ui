@@ -1,6 +1,6 @@
 import _ from 'lodash';
-
-import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
+// eslint-disable-next-line
+import separatePinyinInSyllables from 'shared/helpers/separate-pinyin-in-syllables';
 
 export default function (content) {
   const rows = [];

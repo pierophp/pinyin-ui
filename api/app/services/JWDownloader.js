@@ -4,7 +4,7 @@ const axios = require('axios');
 const profiler = require('../helpers/profiler');
 const knex = require('./knex');
 const replaceall = require('replaceall');
-const replaceIdeogramsToSpace = require('../helpers/special-ideograms-chars');
+const replaceIdeogramsToSpace = require('../../../shared/helpers/special-ideograms-chars');
 const UnihanSearch = require('../services/UnihanSearch');
 const fs = Promise.promisifyAll(require('fs'));
 
