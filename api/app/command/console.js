@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 const program = require('commander');
 
+console.log('Running on ENV');
+console.log(process.env.NODE_ENV);
+
 require('events').EventEmitter.defaultMaxListeners = Infinity;
 
 program
