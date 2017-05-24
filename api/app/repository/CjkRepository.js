@@ -9,4 +9,8 @@ module.exports = class CjkRepository extends BaseRepository {
   static async save(cjk) {
     return DatabaseCjkRepository.save(cjk);
   }
+
+  static async referencePhrases() {
+    return DatabaseCjkRepository.referencePhrases();
+  }
 };

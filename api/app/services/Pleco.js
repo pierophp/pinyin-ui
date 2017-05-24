@@ -18,7 +18,6 @@ module.exports = class Pleco {
     let resultFile = '';
     result.forEach((entry) => {
       let definition = JSON.parse(entry.definition_pt);
-      // definition = definition.join(String.fromCharCode(60081));
       definition = definition.join(String.fromCharCode(60081));
       const pinyin = separatePinyinInSyllables(entry.pronunciation);
       let pinyinTones = '';

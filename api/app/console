@@ -1,5 +1,5 @@
 #!/bin/bash
 CURRENT=`pwd`
 BASEDIR=$(dirname "$0")
-echo `${CURRENT}/${BASEDIR}/command/console.js $1 $2 $3 $4`
-
+export CMD="${CURRENT}/${BASEDIR}/command/console.js $1 $2 $3 $4"
+$CMD

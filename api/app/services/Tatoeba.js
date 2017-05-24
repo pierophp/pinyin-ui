@@ -6,6 +6,7 @@ const LanguageRepository = require('../repository/LanguageRepository');
 const PhraseRepository = require('../repository/PhraseRepository');
 const UnihanSearch = require('../services/UnihanSearch');
 const opencc = require('node-opencc');
+const separatePinyinInSyllables = require('../../../shared/helpers/separate-pinyin-in-syllables');
 
 module.exports = class Tatoeba {
   static async import() {
@@ -37,7 +38,7 @@ module.exports = class Tatoeba {
         let phrase = data[2];
         let dateCreatedAt = data[4];
         let dateUpdatedAt = data[5];
-        console.log('test');
+
         if (dateUpdatedAt === '\\N') {
           dateUpdatedAt = new Date();
         }
@@ -59,40 +60,44 @@ module.exports = class Tatoeba {
             next(null);
             return;
           }
+          let pronunciation = '';
 
           if (languageCode === 'cmn') {
             phrase = await opencc.traditionalToSimplified(phrase);
-          }
-
-          const ideograms = UnihanSearch.segment(phrase);
-          const ideogramsList = [];
-          let ideogramsTemp = '';
-          ideograms.forEach((ideogram) => {
-            if (isChinese(ideogram)) {
-              if (ideogramsTemp) {
-                ideogramsList.push(ideogramsTemp);
-                ideogramsTemp = '';
+            const ideograms = UnihanSearch.segment(phrase);
+            const ideogramsList = [];
+            let ideogramsTemp = '';
+            ideograms.forEach((ideogram) => {
+              if (isChinese(ideogram)) {
+                if (ideogramsTemp) {
+                  ideogramsList.push(ideogramsTemp);
+                  ideogramsTemp = '';
+                }
+                ideogramsList.push(ideogram);
+              } else {
+                ideogramsTemp += ideogram;
               }
-              ideogramsList.push(ideogram);
-            } else {
-              ideogramsTemp += ideogram;
-            }
-          });
+            });
 
-          if (ideogramsTemp) {
-            ideogramsList.push(ideogramsTemp);
+            if (ideogramsTemp) {
+              ideogramsList.push(ideogramsTemp);
+            }
+
+            const pinyin = await UnihanSearch.toPinyin(ideogramsList);
+            const pinyinList = [];
+            pinyin.forEach((item) => {
+              const pinyinConverted = separatePinyinInSyllables(item.pinyin).split(' ').join(String.fromCharCode(160));
+              pinyinList.push(pinyinConverted);
+            });
+
+            pronunciation = pinyinList.join('|');
           }
 
-          const pinyin = await UnihanSearch.toPinyin(ideogramsList);
-          const pinyinList = [];
-          pinyin.forEach((item) => {
-            pinyinList.push(item.pinyin);
-          });
 
           const language = await LanguageRepository.findOneByCode(languages[languageCode]);
           const phraseData = {
             phrase,
-            pronunciation: pinyinList.join('|'),
+            pronunciation,
             language_id: language.id,
             provider_created_at: dateCreatedAt,
             provider_updated_at: dateUpdatedAt,
@@ -102,6 +107,45 @@ module.exports = class Tatoeba {
           };
 
           await PhraseRepository.save(phraseData, skipUpdate);
+
+          next(null);
+        });
+      })
+      .on('data', () => {
+      })
+      .on('end', () => {
+        resolve();
+      });
+    });
+  }
+
+  static async references() {
+    let storagePath = `${__dirname}/../../storage/`;
+    if (env.storage_path) {
+      storagePath = env.storage_path;
+    }
+
+    return new Promise(async (resolve) => {
+      const fileStream = fs.createReadStream(`${storagePath}links.csv`);
+      fastCsv
+      .fromStream(fileStream, {
+        delimiter: '\t',
+        ignoreEmpty: true,
+        quote: '',
+        escape: '',
+      })
+      .transform((data, next) => {
+        const fromId = data[0];
+        const toId = data[1];
+
+        return new Promise(async () => {
+          const phraseReference = {
+            fromId,
+            toId,
+            provider: 'tatoeba',
+          };
+
+          await PhraseRepository.saveReference(phraseReference);
 
           next(null);
         });

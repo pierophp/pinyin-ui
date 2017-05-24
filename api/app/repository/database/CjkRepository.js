@@ -1,4 +1,8 @@
+const Promise = require('bluebird');
+const replaceall = require('replaceall');
 const BaseRepository = require('./BaseRepository');
+const LanguageRepository = require('../LanguageRepository');
+const PhraseRepository = require('../PhraseRepository');
 const knex = require('../../services/knex');
 const UnihanSearch = require('../../services/UnihanSearch');
 
@@ -50,5 +54,44 @@ module.exports = class CjkRepository extends BaseRepository {
     }
 
     console.log(action);
+  }
+
+  static async referencePhrases() {
+    const words = await knex('cjk')
+      .where({
+        type: 'W',
+      })
+      .select('id', 'ideogram')
+      .limit(100);
+
+    const characters = await knex('cjk')
+      .whereRaw('type = "C" AND frequency < 999')
+      .select('id', 'ideogram')
+      .limit(100);
+
+    const items = words.concat(characters);
+
+    const language = await LanguageRepository.findOneByCode('cmn-hans');
+
+    await Promise.mapSeries(items, async (item) => {
+      let ideograms = UnihanSearch.convertUtf16ToIdeograms(item.ideogram);
+      ideograms = replaceall('%', '', ideograms);
+      if (!ideograms) {
+        return;
+      }
+
+      const phrases = await PhraseRepository.findByLanguageAndRlike(language, ideograms);
+      if (phrases.length === 0) {
+        return;
+      }
+
+      await Promise.mapSeries(phrases, async (phrase) => {
+        await knex('cjk_has_phrase')
+          .insert({
+            cjk_id: item.id,
+            phrase_id: phrase.id,
+          });
+      });
+    });
   }
 };

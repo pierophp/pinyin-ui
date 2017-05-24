@@ -17,6 +17,14 @@ program
 
 program
   .version('0.0.1')
+  .command('tatoeba-references', 'Tatoeba references');
+
+program
+  .version('0.0.1')
+  .command('phrases', 'Phrases');
+
+program
+  .version('0.0.1')
   .command('cc-ce-dict-load', 'CC CE Dict load');
 
 program
