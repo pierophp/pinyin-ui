@@ -15,6 +15,9 @@ exports.up = function (knex, Promise) {
 
         knex('language').insert(
             { code: 'en', name: 'Inglês', created_at: new Date() }
+        ),
+         knex('language').insert(
+            { code: 'es', name: 'Espanhol', created_at: new Date() }
         )
     );
 };

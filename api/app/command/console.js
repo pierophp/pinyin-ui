@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const program = require('commander');
 
-process.setMaxListeners(0);
+require('events').EventEmitter.defaultMaxListeners = Infinity;
 
 program
   .version('0.0.1')
@@ -10,6 +10,10 @@ program
 program
   .version('0.0.1')
   .command('unihan-load', 'Unihan load');
+
+program
+  .version('0.0.1')
+  .command('tatoeba-load', 'Tatoeba load');
 
 program
   .version('0.0.1')

@@ -36,4 +36,19 @@ module.exports = class CjkRepository extends BaseRepository {
 
     return null;
   }
+
+  static async save(cjk) {
+    let action = 'insert';
+    if (cjk.id) {
+      action = 'update';
+      await knex('cjk')
+        .where('id', '=', cjk.id)
+        .update(cjk);
+    } else {
+      await knex('cjk')
+        .insert(cjk);
+    }
+
+    console.log(action);
+  }
 };

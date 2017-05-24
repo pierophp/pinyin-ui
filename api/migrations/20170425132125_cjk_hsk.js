@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
   return knex.schema.table('cjk', function (table) {
-        table.integer('hsk');
+    table.integer('hsk');
   });
 };
 

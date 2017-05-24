@@ -4,7 +4,6 @@ const cheerio = require('cheerio');
 const knex = require('./knex');
 const UnihanSearch = require('../services/UnihanSearch');
 
-
 module.exports = class HSKImporter {
   static async import() {
     for (let i = 1; i <= 6; i += 1) {
