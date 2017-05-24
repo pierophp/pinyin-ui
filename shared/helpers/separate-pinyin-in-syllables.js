@@ -27,7 +27,7 @@ module.exports = function separatePinyinInSyllables(pinyin) {
       totalTones = pregMatch.length;
     }
 
-    if (p.length > 6 || totalTones > 1) {
+    if (p.length > 4 || totalTones > 1) {
       separate(p).split(' ').forEach((newP) => {
         newPinyin.push(newP);
       });
