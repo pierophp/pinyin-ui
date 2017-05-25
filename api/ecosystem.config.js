@@ -14,14 +14,11 @@ const postDeployCommands = [
 
 const postDeploy = postDeployCommands.join(' && ');
 
-console.log(postDeploy);
-
 module.exports = {
  /**
    * Deployment section
    * http://pm2.keymetrics.io/docs/usage/deployment/
    */
-
   deploy: {
     production: {
       user: process.env.SSH_USER,

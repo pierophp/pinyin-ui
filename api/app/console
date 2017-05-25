@@ -3,5 +3,6 @@ BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE
 find="console"
 replace=""
 BASEDIR=${BASEDIR//$find/$replace}
-export CMD="${BASEDIR}command/console.js $1 $2 $3 $4"
+NODE_PATH="/usr/local/bin/node"
+export CMD="${NODE_PATH} --expose-gc ${BASEDIR}command/console.js $1 $2 $3 $4"
 $CMD

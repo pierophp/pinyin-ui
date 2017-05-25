@@ -5,8 +5,8 @@ const env = require('../../env');
 const isChinese = require('../../../shared/helpers/is-chinese');
 const LanguageRepository = require('../repository/LanguageRepository');
 const PhraseRepository = require('../repository/PhraseRepository');
-const RepositoryManager = require('../repository/RepositoryManager');
 const UnihanSearch = require('../services/UnihanSearch');
+const profiler = require('../helpers/profiler');
 const opencc = require('node-opencc');
 const separatePinyinInSyllables = require('../../../shared/helpers/separate-pinyin-in-syllables');
 
@@ -61,12 +61,13 @@ module.exports = class Tatoeba {
         }
 
         if (languages[languageCode] === undefined) {
+          data = null;
           parser.resume();
           return;
         }
 
         i += 1;
-        console.log(`Start ${i}`);
+        profiler(`Start ${i} `, true);
 
         let pronunciation = '';
 
@@ -102,7 +103,7 @@ module.exports = class Tatoeba {
         }
 
         const language = await LanguageRepository.findOneByCode(languages[languageCode]);
-        const phraseData = {
+        let phraseData = {
           phrase,
           pronunciation,
           language_id: language.id,
@@ -115,7 +116,12 @@ module.exports = class Tatoeba {
 
         await PhraseRepository.save(phraseData, skipUpdate);
 
-        console.log(`End ${i}`);
+        profiler(`End ${i}`, true);
+        if (i % 100 === 1) {
+          console.log('Clean GC');
+          global.gc();
+        }
+
         parser.resume();
       })
       .on('end', async () => {

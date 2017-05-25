@@ -34,7 +34,7 @@ module.exports = class PhraseRepository extends BaseRepository {
   }
 
   static async save(data, skipUpdate) {
-    const phrase = await this.findOneByProviderAndProviderIdLanguageId(
+    let phrase = await this.findOneByProviderAndProviderIdLanguageId(
       data.provider, data.provider_id, data.language_id
     );
 
@@ -48,6 +48,8 @@ module.exports = class PhraseRepository extends BaseRepository {
         .where('id', '=', phrase.id)
         .update(data);
     }
+
+    phrase = null;
   }
 
   static async saveReference(phraseReference) {
