@@ -1,9 +1,11 @@
+const Promise = require('bluebird');
 const fs = require('fs');
 const fastCsv = require('fast-csv');
 const env = require('../../env');
 const isChinese = require('../../../shared/helpers/is-chinese');
 const LanguageRepository = require('../repository/LanguageRepository');
 const PhraseRepository = require('../repository/PhraseRepository');
+const RepositoryManager = require('../repository/RepositoryManager');
 const UnihanSearch = require('../services/UnihanSearch');
 const opencc = require('node-opencc');
 const separatePinyinInSyllables = require('../../../shared/helpers/separate-pinyin-in-syllables');
@@ -22,10 +24,12 @@ module.exports = class Tatoeba {
       cmn: 'cmn-hans',
     };
 
+    let i = 0;
+
     return new Promise(async (resolve) => {
       const skipUpdate = true;
       const fileStream = fs.createReadStream(`${storagePath}sentences_detailed.csv`);
-      fastCsv
+      const parser = fastCsv
       .fromStream(fileStream, {
         delimiter: '\t',
         ignoreEmpty: true,
@@ -33,6 +37,7 @@ module.exports = class Tatoeba {
         escape: '',
       })
       .transform((data, next) => {
+        parser.pause();
         const id = data[0];
         const languageCode = data[1];
         let phrase = data[2];
@@ -60,6 +65,10 @@ module.exports = class Tatoeba {
             next(null);
             return;
           }
+
+          i += 1;
+          console.log(`Start ${i}`);
+
           let pronunciation = '';
 
           if (languageCode === 'cmn') {
@@ -93,7 +102,6 @@ module.exports = class Tatoeba {
             pronunciation = pinyinList.join('|');
           }
 
-
           const language = await LanguageRepository.findOneByCode(languages[languageCode]);
           const phraseData = {
             phrase,
@@ -107,13 +115,20 @@ module.exports = class Tatoeba {
           };
 
           await PhraseRepository.save(phraseData, skipUpdate);
+          // if (i % 100 === 0) {
+          // await RepositoryManager.commit();
+          // }
 
+          console.log(`End ${i}`);
+          parser.resume();
           next(null);
         });
       })
-      .on('data', () => {
+      .on('data', async () => {
+
       })
-      .on('end', () => {
+      .on('end', async () => {
+        await RepositoryManager.commit();
         resolve();
       });
     });

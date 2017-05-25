@@ -3,7 +3,9 @@ const knex = require('../../services/knex');
 
 module.exports = class PhraseRepository extends BaseRepository {
   static async findOneByProviderAndProviderIdLanguageId(provider, providerId, languageId) {
-    const response = await knex('phrase').where({
+    const response = await knex('phrase')
+   // .transacting(await this.getTransaction())
+    .where({
       provider,
       provider_id: providerId,
       language_id: languageId,
@@ -17,7 +19,9 @@ module.exports = class PhraseRepository extends BaseRepository {
   }
 
   static async findOneByProviderAndProviderId(provider, providerId) {
-    const response = await knex('phrase').where({
+    const response = await knex('phrase')
+   // .transacting(await this.getTransaction())
+    .where({
       provider,
       provider_id: providerId,
     });
@@ -36,9 +40,11 @@ module.exports = class PhraseRepository extends BaseRepository {
 
     if (!phrase) {
       await knex('phrase')
+//        .transacting(await this.getTransaction())
         .insert(data);
     } else if (!skipUpdate) {
       await knex('phrase')
+//        .transacting(await this.getTransaction())
         .where('id', '=', phrase.id)
         .update(data);
     }
@@ -60,6 +66,7 @@ module.exports = class PhraseRepository extends BaseRepository {
     }
 
     await knex('phrase_reference')
+ //       .transacting(await this.getTransaction())
         .insert({
           from_phrase_id: fromPhrase.id,
           to_phrase_id: toPhrase.id,
@@ -68,6 +75,7 @@ module.exports = class PhraseRepository extends BaseRepository {
 
   static async findByLanguageAndRlike(language, rlike) {
     return await knex('phrase')
+  //    .transacting(await this.getTransaction())
       .whereRaw(`phrase LIKE "%${rlike}%" AND language_id = ${language.id}`)
       .limit(200)
       .select('id');
