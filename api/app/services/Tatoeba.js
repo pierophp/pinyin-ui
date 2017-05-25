@@ -36,7 +36,7 @@ module.exports = class Tatoeba {
         quote: '',
         escape: '',
       })
-      .transform((data, next) => {
+      .on('data', async (data) => {
         parser.pause();
         const id = data[0];
         const languageCode = data[1];
@@ -60,75 +60,65 @@ module.exports = class Tatoeba {
           dateCreatedAt = new Date();
         }
 
-        return new Promise(async () => {
-          if (languages[languageCode] === undefined) {
-            next(null);
-            return;
-          }
-
-          i += 1;
-          console.log(`Start ${i}`);
-
-          let pronunciation = '';
-
-          if (languageCode === 'cmn') {
-            phrase = await opencc.traditionalToSimplified(phrase);
-            const ideograms = UnihanSearch.segment(phrase);
-            const ideogramsList = [];
-            let ideogramsTemp = '';
-            ideograms.forEach((ideogram) => {
-              if (isChinese(ideogram)) {
-                if (ideogramsTemp) {
-                  ideogramsList.push(ideogramsTemp);
-                  ideogramsTemp = '';
-                }
-                ideogramsList.push(ideogram);
-              } else {
-                ideogramsTemp += ideogram;
-              }
-            });
-
-            if (ideogramsTemp) {
-              ideogramsList.push(ideogramsTemp);
-            }
-
-            const pinyin = await UnihanSearch.toPinyin(ideogramsList);
-            const pinyinList = [];
-            pinyin.forEach((item) => {
-              const pinyinConverted = separatePinyinInSyllables(item.pinyin).split(' ').join(String.fromCharCode(160));
-              pinyinList.push(pinyinConverted);
-            });
-
-            pronunciation = pinyinList.join('|');
-          }
-
-          const language = await LanguageRepository.findOneByCode(languages[languageCode]);
-          const phraseData = {
-            phrase,
-            pronunciation,
-            language_id: language.id,
-            provider_created_at: dateCreatedAt,
-            provider_updated_at: dateUpdatedAt,
-            provider_id: id,
-            provider: 'tatoeba',
-            created_at: new Date(),
-          };
-
-          await PhraseRepository.save(phraseData, skipUpdate);
-          // if (i % 100 === 0) {
-          // await RepositoryManager.commit();
-          // }
-
-          console.log(`End ${i}`);
+        if (languages[languageCode] === undefined) {
           parser.resume();
-          next(null);
-        });
-      })
-      .on('data', async () => {
+          return;
+        }
 
+        i += 1;
+        console.log(`Start ${i}`);
+
+        let pronunciation = '';
+
+        if (languageCode === 'cmn') {
+          phrase = await opencc.traditionalToSimplified(phrase);
+          const ideograms = UnihanSearch.segment(phrase);
+          const ideogramsList = [];
+          let ideogramsTemp = '';
+          ideograms.forEach((ideogram) => {
+            if (isChinese(ideogram)) {
+              if (ideogramsTemp) {
+                ideogramsList.push(ideogramsTemp);
+                ideogramsTemp = '';
+              }
+              ideogramsList.push(ideogram);
+            } else {
+              ideogramsTemp += ideogram;
+            }
+          });
+
+          if (ideogramsTemp) {
+            ideogramsList.push(ideogramsTemp);
+          }
+
+          const pinyin = await UnihanSearch.toPinyin(ideogramsList);
+          const pinyinList = [];
+          pinyin.forEach((item) => {
+            const pinyinConverted = separatePinyinInSyllables(item.pinyin).split(' ').join(String.fromCharCode(160));
+            pinyinList.push(pinyinConverted);
+          });
+
+          pronunciation = pinyinList.join('|');
+        }
+
+        const language = await LanguageRepository.findOneByCode(languages[languageCode]);
+        const phraseData = {
+          phrase,
+          pronunciation,
+          language_id: language.id,
+          provider_created_at: dateCreatedAt,
+          provider_updated_at: dateUpdatedAt,
+          provider_id: id,
+          provider: 'tatoeba',
+          created_at: new Date(),
+        };
+
+        await PhraseRepository.save(phraseData, skipUpdate);
+
+        console.log(`End ${i}`);
+        parser.resume();
       })
       .on('end', async () => {
-        await RepositoryManager.commit();
         resolve();
       });
     });
