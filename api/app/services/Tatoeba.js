@@ -1,5 +1,6 @@
 const Promise = require('bluebird');
 const fs = require('fs');
+const moment = require('moment');
 const fastCsv = require('fast-csv');
 const env = require('../../env');
 const isChinese = require('../../../shared/helpers/is-chinese');
@@ -29,6 +30,14 @@ module.exports = class Tatoeba {
     return new Promise(async (resolve) => {
       const skipUpdate = true;
       const fileStream = fs.createReadStream(`${storagePath}sentences_detailed.csv`);
+      /*
+      const writableStream = fs.createWriteStream(`${storagePath}sentences_import.csv`);
+      const fileWriteStream = fastCsv.createWriteStream({
+        headers: false,
+        delimiter: ';',
+      });
+      fileWriteStream.pipe(writableStream);
+      */
       const parser = fastCsv
       .fromStream(fileStream, {
         delimiter: '\t',
@@ -45,19 +54,19 @@ module.exports = class Tatoeba {
         let dateUpdatedAt = data[5];
 
         if (dateUpdatedAt === '\\N') {
-          dateUpdatedAt = new Date();
+          dateUpdatedAt = moment().format('Y-MM-DD HH:mm:ss');
         }
 
         if (dateUpdatedAt === '0000-00-00 00:00:00') {
-          dateUpdatedAt = new Date();
+          dateUpdatedAt = moment().format('Y-MM-DD HH:mm:ss');
         }
 
         if (dateCreatedAt === '\\N') {
-          dateCreatedAt = new Date();
+          dateCreatedAt = moment().format('Y-MM-DD HH:mm:ss');
         }
 
         if (dateCreatedAt === '0000-00-00 00:00:00') {
-          dateCreatedAt = new Date();
+          dateCreatedAt = moment().format('Y-MM-DD HH:mm:ss');
         }
 
         if (languages[languageCode] === undefined) {
@@ -67,8 +76,9 @@ module.exports = class Tatoeba {
         }
 
         i += 1;
-        profiler(`Start ${i} `, true);
-
+        if (i % 100 === 1) {
+          profiler(`Start ${i} `, true);
+        }
         let pronunciation = '';
 
         if (languageCode === 'cmn') {
@@ -110,21 +120,42 @@ module.exports = class Tatoeba {
           provider_created_at: dateCreatedAt,
           provider_updated_at: dateUpdatedAt,
           provider_id: id,
-          provider: 'tatoeba',
-          created_at: new Date(),
+          // provider: 'tatoeba',
+          // created_at: new Date(),
         };
 
-        await PhraseRepository.save(phraseData, skipUpdate);
+        // fileWriteStream.write(phraseData);
 
-        profiler(`End ${i}`, true);
+        // await PhraseRepository.save(phraseData, skipUpdate);
         if (i % 100 === 1) {
+          profiler(`End ${i}`, true);
+        }
+
+        data = null;
+        phraseData = null;
+
+
+        if (i % 10000 === 1) {
+          console.log('Clean Pinyin Cache');
+          await UnihanSearch.cleanPinyinCache();
+        }
+
+        if (i % 1000 === 1) {
           console.log('Clean GC');
           global.gc();
         }
 
+
+       //if (i === 100 || i === 200) {
+       //   heapdump.writeSnapshot('/home/pgiusti/heapdump/' + Date.now() + '.heapsnapshot');
+      //    process.kill(process.pid, 'SIGUSR2');
+       // }
+
+
         parser.resume();
       })
       .on('end', async () => {
+        fileWriteStream.end();
         resolve();
       });
     });

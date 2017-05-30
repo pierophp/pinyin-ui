@@ -4,5 +4,5 @@ find="console"
 replace=""
 BASEDIR=${BASEDIR//$find/$replace}
 NODE_PATH="/usr/local/bin/node"
-export CMD="${NODE_PATH} --expose-gc ${BASEDIR}command/console.js $1 $2 $3 $4"
+export CMD="${NODE_PATH} --expose-gc --max_old_space_size=4096 ${BASEDIR}command/console.js $1 $2 $3 $4"
 $CMD

@@ -3,16 +3,17 @@ const knex = require('../../services/knex');
 
 module.exports = class PhraseRepository extends BaseRepository {
   static async findOneByProviderAndProviderIdLanguageId(provider, providerId, languageId) {
-    const response = await knex('phrase')
-   // .transacting(await this.getTransaction())
-    .where({
+    const connection = await this.getMysqlConnection();
+    const [rows, fields] = await connection.execute('SELECT * FROM phrase WHERE provider = ? AND provider_id = ? AND language_id = ?',
+    [
       provider,
-      provider_id: providerId,
-      language_id: languageId,
-    });
+      providerId,
+      languageId,
+    ]);
 
-    if (response.length > 0) {
-      return response[0];
+
+    if (rows.length > 0) {
+      return rows[0];
     }
 
     return null;
@@ -34,10 +35,11 @@ module.exports = class PhraseRepository extends BaseRepository {
   }
 
   static async save(data, skipUpdate) {
+
     let phrase = await this.findOneByProviderAndProviderIdLanguageId(
       data.provider, data.provider_id, data.language_id
     );
-
+  /*
     if (!phrase) {
       await knex('phrase')
 //        .transacting(await this.getTransaction())
@@ -50,6 +52,7 @@ module.exports = class PhraseRepository extends BaseRepository {
     }
 
     phrase = null;
+    */
   }
 
   static async saveReference(phraseReference) {

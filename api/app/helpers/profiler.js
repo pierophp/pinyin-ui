@@ -5,7 +5,9 @@ module.exports = function profiler(str, forceOnProduction) {
     return;
   }
 
-  const memory = parseFloat(process.memoryUsage().heapUsed / 8 / 1024 / 1024).toFixed(2);
+  const memoryUsage = parseFloat(process.memoryUsage().heapUsed  / 1024 / 1024).toFixed(2);
+  const memoryTotal = parseFloat(process.memoryUsage().heapTotal / 1024 / 1024).toFixed(2);
+  const memoryRSS = parseFloat(process.memoryUsage().rss / 1024 / 1024).toFixed(2);
   // eslint-disable-next-line
-  console.log(`${moment().format()} - Memory ${memory}MB ${str}`);
+  console.log(`${moment().format('HH:mm:ss')} - Mem RSS ${memoryUsage}MB - Mem Tot ${memoryTotal}MB - Mem Usag ${memoryUsage}MB ${str}`);
 };

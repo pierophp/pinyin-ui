@@ -1,3 +1,4 @@
+
 const program = require('commander');
 
 console.log(`Running on ENV: ${process.env.NODE_ENV}`);
