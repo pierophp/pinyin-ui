@@ -7,24 +7,39 @@ const PhraseRepository = require('../repository/PhraseRepository');
 const UnihanSearch = require('../services/UnihanSearch');
 const opencc = require('node-opencc');
 const separatePinyinInSyllables = require('../../../shared/helpers/separate-pinyin-in-syllables');
+const exec = require('child-process-promise').exec;
+
+const path = require('path');
+
+const languages = {
+  por: 'pt',
+  eng: 'en',
+  spa: 'es',
+  cmn: 'cmn-hans',
+};
+let storagePath = path.resolve(`${__dirname}/../../storage/`);
+storagePath += '/';
+
+if (env.storage_path) {
+  storagePath = env.storage_path;
+}
 
 module.exports = class Tatoeba {
+  static async filter() {
+    const languagesKeys = Object.keys(languages);
+    const filter = [];
+    languagesKeys.forEach((item) => {
+      filter.push(`$2 == "${item}"`);
+    });
+
+    const command = `awk '{ if (${filter.join(' || ')}) print }' ${storagePath}sentences_detailed.csv > ${storagePath}sentences_detailed.filtered.csv`;
+    await exec(command);
+  }
+
   static async import() {
-    let storagePath = `${__dirname}/../../storage/`;
-    if (env.storage_path) {
-      storagePath = env.storage_path;
-    }
-
-    const languages = {
-      por: 'pt',
-      eng: 'en',
-      spa: 'es',
-      cmn: 'cmn-hans',
-    };
-
     return new Promise(async (resolve) => {
       const skipUpdate = true;
-      const fileStream = fs.createReadStream(`${storagePath}sentences_detailed.csv`);
+      const fileStream = fs.createReadStream(`${storagePath}sentences_detailed.filtered.csv`);
       fastCsv
       .fromStream(fileStream, {
         delimiter: '\t',
