@@ -74,7 +74,9 @@ module.exports = class JwDownloader {
       let pinyin = await UnihanSearch.searchByWord(values[0]);
       let type = 'database';
       if (!pinyin) {
-        pinyin = UnihanSearch.parseResultByIdeograms(await UnihanSearch.searchByIdeograms(values[0]), values[0], null, {}).pinyin;
+        pinyin = UnihanSearch.parseResultByIdeograms(
+          await UnihanSearch.searchByIdeograms(values[0]), values[0], null, {}
+        ).pinyin;
         type = 'generated';
       }
       if (pinyin) {

@@ -32,11 +32,11 @@
     "express-jwt": "^5.1.0",
     "fast-csv": "^2.4.0",
     "jsonwebtoken": "^7.1.9",
-    "knex": "^0.11.5",
+    "knex": "^0.13.0",
     "line-reader": "^0.4.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
-    "mysql": "^2.10.2",
+    "mysql2": "^1.2.0",
     "newrelic": "^1.28.1",
     "node-opencc": "^1.0.0",
     "nodejieba": "^2.2.3",
@@ -68,11 +68,13 @@
     "gulp-nodemon": "^2.1.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.4",
+    "heapdump": "^0.3.9",
     "jasmine": "^2.4.1",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",
     "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",
+    "memwatch-next": "^0.3.0",
     "mocha": "^2.5.3"
   }
 }

@@ -1,3 +1,19 @@
+const postDeployCommands = [
+  'cd /home/ubuntu/',
+  'rm -Rf dist/',
+  'unzip pinyin.dist.zip',
+  'sudo rm -Rf /var/www/pinyin',
+  'mv /home/ubuntu/dist /var/www/pinyin',
+  'ln -s /var/local/pinyin/Dicionario_Pleco.txt /var/www/pinyin/Dicionario_Pleco.txt',
+  'cd /var/www/api.pinyin/current/api',
+  'cp ../../env/* .',
+  'yarn install --production',
+  'knex migrate:latest --env production',
+  'sudo pm2 startOrRestart ecosystem.json --env production',
+];
+
+const postDeploy = postDeployCommands.join(' && ');
+
 module.exports = {
  /**
    * Deployment section
@@ -15,18 +31,7 @@ module.exports = {
       repo: 'https://github.com/pierophp/pinyin.git',
       ssh_options: 'StrictHostKeyChecking=no',
       path: '/var/www/api.pinyin',
-      'post-deploy': `
-        cd /home/ubuntu/ &&
-        rm -Rf dist/ &&
-        unzip pinyin.dist.zip &&
-        sudo rm -Rf /var/www/pinyin &&
-        mv /home/ubuntu/dist /var/www/pinyin &&
-        ln -s /var/local/pinyin/Dicionario_Pleco.txt /var/www/pinyin/Dicionario_Pleco.txt &&
-        cd /var/www/api.pinyin/current/api &&
-        cp ../../env/* . &&
-        yarn install --production &&
-        knex migrate:latest --env production &&
-        sudo pm2 startOrRestart ecosystem.json --env production`,
+      'post-deploy': postDeploy,
     },
   },
 };

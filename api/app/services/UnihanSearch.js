@@ -451,6 +451,9 @@ module.exports = class UnihanSearch {
 
     return result;
   }
+  static async cleanPinyinCache() {
+    await ArrayCache.clear();
+  }
 
   static async toPinyin(ideograms, options = {}) {
     const result = await Promise.map(ideograms, async (ideogram, ideogramIndex) => {

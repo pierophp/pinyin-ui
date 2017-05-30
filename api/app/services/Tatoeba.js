@@ -1,10 +1,13 @@
+const Promise = require('bluebird');
 const fs = require('fs');
+const moment = require('moment');
 const fastCsv = require('fast-csv');
 const env = require('../../env');
 const isChinese = require('../../../shared/helpers/is-chinese');
 const LanguageRepository = require('../repository/LanguageRepository');
 const PhraseRepository = require('../repository/PhraseRepository');
 const UnihanSearch = require('../services/UnihanSearch');
+const profiler = require('../helpers/profiler');
 const opencc = require('node-opencc');
 const separatePinyinInSyllables = require('../../../shared/helpers/separate-pinyin-in-syllables');
 const exec = require('child-process-promise').exec;
@@ -37,17 +40,29 @@ module.exports = class Tatoeba {
   }
 
   static async import() {
+
+    let i = 0;
+
     return new Promise(async (resolve) => {
       const skipUpdate = true;
       const fileStream = fs.createReadStream(`${storagePath}sentences_detailed.filtered.csv`);
-      fastCsv
+      /*
+      const writableStream = fs.createWriteStream(`${storagePath}sentences_import.csv`);
+      const fileWriteStream = fastCsv.createWriteStream({
+        headers: false,
+        delimiter: ';',
+      });
+      fileWriteStream.pipe(writableStream);
+      */
+      const parser = fastCsv
       .fromStream(fileStream, {
         delimiter: '\t',
         ignoreEmpty: true,
         quote: '',
         escape: '',
       })
-      .transform((data, next) => {
+      .on('data', async (data) => {
+        parser.pause();
         const id = data[0];
         const languageCode = data[1];
         let phrase = data[2];
@@ -55,80 +70,108 @@ module.exports = class Tatoeba {
         let dateUpdatedAt = data[5];
 
         if (dateUpdatedAt === '\\N') {
-          dateUpdatedAt = new Date();
+          dateUpdatedAt = moment().format('Y-MM-DD HH:mm:ss');
         }
 
         if (dateUpdatedAt === '0000-00-00 00:00:00') {
-          dateUpdatedAt = new Date();
+          dateUpdatedAt = moment().format('Y-MM-DD HH:mm:ss');
         }
 
         if (dateCreatedAt === '\\N') {
-          dateCreatedAt = new Date();
+          dateCreatedAt = moment().format('Y-MM-DD HH:mm:ss');
         }
 
         if (dateCreatedAt === '0000-00-00 00:00:00') {
-          dateCreatedAt = new Date();
+          dateCreatedAt = moment().format('Y-MM-DD HH:mm:ss');
         }
 
-        return new Promise(async () => {
-          if (languages[languageCode] === undefined) {
-            next(null);
-            return;
-          }
-          let pronunciation = '';
+        if (languages[languageCode] === undefined) {
+          data = null;
+          parser.resume();
+          return;
+        }
 
-          if (languageCode === 'cmn') {
-            phrase = await opencc.traditionalToSimplified(phrase);
-            const ideograms = UnihanSearch.segment(phrase);
-            const ideogramsList = [];
-            let ideogramsTemp = '';
-            ideograms.forEach((ideogram) => {
-              if (isChinese(ideogram)) {
-                if (ideogramsTemp) {
-                  ideogramsList.push(ideogramsTemp);
-                  ideogramsTemp = '';
-                }
-                ideogramsList.push(ideogram);
-              } else {
-                ideogramsTemp += ideogram;
+        i += 1;
+        if (i % 100 === 1) {
+          profiler(`Start ${i} `, true);
+        }
+        let pronunciation = '';
+
+        if (languageCode === 'cmn') {
+          phrase = await opencc.traditionalToSimplified(phrase);
+          const ideograms = UnihanSearch.segment(phrase);
+          const ideogramsList = [];
+          let ideogramsTemp = '';
+          ideograms.forEach((ideogram) => {
+            if (isChinese(ideogram)) {
+              if (ideogramsTemp) {
+                ideogramsList.push(ideogramsTemp);
+                ideogramsTemp = '';
               }
-            });
-
-            if (ideogramsTemp) {
-              ideogramsList.push(ideogramsTemp);
+              ideogramsList.push(ideogram);
+            } else {
+              ideogramsTemp += ideogram;
             }
+          });
 
-            const pinyin = await UnihanSearch.toPinyin(ideogramsList);
-            const pinyinList = [];
-            pinyin.forEach((item) => {
-              const pinyinConverted = separatePinyinInSyllables(item.pinyin).split(' ').join(String.fromCharCode(160));
-              pinyinList.push(pinyinConverted);
-            });
-
-            pronunciation = pinyinList.join('|');
+          if (ideogramsTemp) {
+            ideogramsList.push(ideogramsTemp);
           }
 
+          const pinyin = await UnihanSearch.toPinyin(ideogramsList);
+          const pinyinList = [];
+          pinyin.forEach((item) => {
+            const pinyinConverted = separatePinyinInSyllables(item.pinyin).split(' ').join(String.fromCharCode(160));
+            pinyinList.push(pinyinConverted);
+          });
 
-          const language = await LanguageRepository.findOneByCode(languages[languageCode]);
-          const phraseData = {
-            phrase,
-            pronunciation,
-            language_id: language.id,
-            provider_created_at: dateCreatedAt,
-            provider_updated_at: dateUpdatedAt,
-            provider_id: id,
-            provider: 'tatoeba',
-            created_at: new Date(),
-          };
+          pronunciation = pinyinList.join('|');
+        }
 
-          await PhraseRepository.save(phraseData, skipUpdate);
+        const language = await LanguageRepository.findOneByCode(languages[languageCode]);
+        let phraseData = {
+          phrase,
+          pronunciation,
+          language_id: language.id,
+          provider_created_at: dateCreatedAt,
+          provider_updated_at: dateUpdatedAt,
+          provider_id: id,
+          // provider: 'tatoeba',
+          // created_at: new Date(),
+        };
 
-          next(null);
-        });
+        // fileWriteStream.write(phraseData);
+
+        // await PhraseRepository.save(phraseData, skipUpdate);
+        if (i % 100 === 1) {
+          profiler(`End ${i}`, true);
+        }
+
+        data = null;
+        phraseData = null;
+
+
+        if (i % 10000 === 1) {
+          console.log('Clean Pinyin Cache');
+          await UnihanSearch.cleanPinyinCache();
+        }
+
+        if (i % 1000 === 1) {
+          console.log('Clean GC');
+          global.gc();
+        }
+
+
+       // if (i === 100 || i === 200) {
+       //   heapdump.writeSnapshot('/home/pgiusti/heapdump/' + Date.now() + '.heapsnapshot');
+       //    process.kill(process.pid, 'SIGUSR2');
+       // }
+
+
+        parser.resume();
       })
-      .on('data', () => {
-      })
-      .on('end', () => {
+      .on('end', async () => {
+        fileWriteStream.end();
         resolve();
       });
     });

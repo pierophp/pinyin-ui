@@ -1,4 +1,4 @@
-const cache = {};
+let cache = {};
 
 module.exports = class ArrayCache {
   static async get(cacheKey) {
@@ -7,5 +7,9 @@ module.exports = class ArrayCache {
 
   static async set(cacheKey, cacheValue) {
     cache[cacheKey] = cacheValue;
+  }
+
+  static async clear() {
+    cache = {};
   }
 };
