@@ -249,6 +249,7 @@ module.exports = class UnihanSearch {
           ideogram: ideogramConverted,
           type: 'C',
         })
+        .orderBy('main', 'DESC')
         .orderBy('frequency', 'ASC')
         .orderBy('usage', 'DESC')
         .select('id', 'pronunciation');
@@ -262,6 +263,7 @@ module.exports = class UnihanSearch {
           ideogram: ideogramConverted,
           type: 'W',
         })
+        .orderBy('main', 'DESC')
         .orderBy('frequency', 'ASC')
         .orderBy('usage', 'DESC')
         .select('id', 'pronunciation');
