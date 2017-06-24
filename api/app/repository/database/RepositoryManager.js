@@ -1,12 +1,13 @@
 const mysql = require('mysql2/promise');
 const Promise = require('bluebird');
 const knex = require('../../services/knex');
+
 const env = process.env.NODE_ENV || 'development';
 const config = require('../../../knexfile')[env];
 
 let transaction;
-let i = 0;
 let mysqlConnection;
+
 module.exports = class RepositoryManager {
   static async getTransaction() {
     if (transaction) {
@@ -16,7 +17,7 @@ module.exports = class RepositoryManager {
     return await this.newTransaction();
   }
 
-  static async getMysqlConnection(){
+  static async getMysqlConnection() {
     if (mysqlConnection) {
       return mysqlConnection;
     }
@@ -34,8 +35,6 @@ module.exports = class RepositoryManager {
   static async newTransaction() {
     return new Promise((resolve) => {
       knex.transaction((t) => {
-        i += 1;
-        console.log(`New Tx ${i}`);
         transaction = t;
         resolve(t);
       });

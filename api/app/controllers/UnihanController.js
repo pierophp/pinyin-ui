@@ -2,6 +2,7 @@ const express = require('express');
 const UnihanSearch = require('../services/UnihanSearch');
 const knex = require('../services/knex');
 const Promise = require('bluebird');
+const removeDiacritics = require('diacritics').remove;
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
@@ -95,6 +96,23 @@ router.post('/save', async (req, res) => {
     await knex('cjk')
         .where('id', '=', id)
         .update({
+          definition_pt: JSON.stringify(req.body.dictionary),
+        });
+  } else {
+    const pronunciation = req.body.pinyin;
+    const pronunciationUnaccented = removeDiacritics(pronunciation);
+    await knex('cjk')
+        .insert({
+          ideogram,
+          main: 1,
+          pronunciation,
+          pronunciation_unaccented: pronunciationUnaccented,
+          language_id: 1,
+          simplified: 1,
+          hsk: 999,
+          type: 'W',
+          usage: 0,
+          created_at: new Date(),
           definition_pt: JSON.stringify(req.body.dictionary),
         });
   }

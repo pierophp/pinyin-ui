@@ -104,7 +104,7 @@ module.exports = class UnihanSearch {
       .select('id', 'ideogram', 'pronunciation', 'definition_unihan', 'definition_pt', 'definition_cedict', 'definition_ct_pt', 'definition_ct_es', 'definition_ct_en');
 
     const response = {};
-    response.ideograms = null;
+    response.ideograms = search.ideograms;
     response.pronunciation = null;
     response.unihan = null;
     response.pt = null;
@@ -479,7 +479,9 @@ module.exports = class UnihanSearch {
       }
 
       const ideogramsList = await UnihanSearch.searchByIdeograms(ideogram);
-      const resultIdeograms = UnihanSearch.parseResultByIdeograms(ideogramsList, ideogram, nextWord, options);
+      const resultIdeograms = UnihanSearch.parseResultByIdeograms(
+        ideogramsList, ideogram, nextWord, options
+      );
       const ideogramConverted = UnihanSearch.convertIdeogramsToUtf16(resultIdeograms.ideogram);
       const cacheKey = `PINYIN_${ideogramConverted}`;
 

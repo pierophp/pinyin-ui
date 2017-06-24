@@ -8,7 +8,7 @@
 
     <md-tabs>
       <md-tab id="dict" :md-label="$t('definition')">
-        <dictionary-details :dictionary="dictionary"/>
+        <dictionary-details :dictionary="dictionary" :pinyin="dictionary.pronunciation"/>
       </md-tab>
 
       <md-tab id="stroke" :md-label="$t('stroke')">

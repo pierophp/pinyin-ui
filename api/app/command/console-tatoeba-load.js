@@ -3,12 +3,10 @@ const Tatoeba = require('../services/Tatoeba');
 
 program.parse(process.argv);
 
-Tatoeba.filter().then(() => {
+async function run() {
+  await Tatoeba.filter();
+  await Tatoeba.import();
   process.exit();
-});
+}
 
-/*
-Tatoeba.import().then(() => {
-  process.exit();
-});
-*/
+run();

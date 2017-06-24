@@ -345,7 +345,6 @@ module.exports = class JwDownloader {
 
       if (!item.text) {
         item.text = '';
-        console.log(item);
       }
 
       const ideograms = item.text.split(' ');
@@ -740,6 +739,7 @@ module.exports = class JwDownloader {
         '各地',
         '可见',
       ];
+
       wordsToReplace.forEach((word) => {
         const replaceWord = ` ${word.split('').join(' ')} `;
         lineText = replaceall(replaceWord, ` ${word} `, lineText);
@@ -747,6 +747,7 @@ module.exports = class JwDownloader {
 
       if (footNoteId) {
         lineText = replaceall('#FOOTNOTE', `#FOOTNOTE-${footNoteId}-`, lineText);
+        lineText = replaceall('- *', '-*', lineText);
       }
 
       newText += `${lineText}\r\n`;
