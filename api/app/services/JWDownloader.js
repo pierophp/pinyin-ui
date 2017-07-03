@@ -428,9 +428,9 @@ module.exports = class JwDownloader {
             text: this.getText($, boxH2),
             type: 'h2',
           });
-
-          this.parseBlock($, $(children).find('.boxContent'));
         }
+
+        this.parseBlock($, $(children).find('.boxContent'));
       } else if ($(children).hasClass('bodyTxt')) {
         $(children).children().each((j, subChildren) => {
           const boxH2 = $(subChildren).children('h2');
