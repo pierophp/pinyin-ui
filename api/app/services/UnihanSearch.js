@@ -231,13 +231,16 @@ module.exports = class UnihanSearch {
     const ideogramConverted = UnihanSearch.convertIdeogramsToUtf16(ideograms);
     const cacheKey = `PINYIN_${ideogramConverted}`;
 
-    if (await ArrayCache.get(cacheKey) !== undefined) {
+    if (await ArrayCache.has(cacheKey)) {
       return await ArrayCache.get(cacheKey);
     }
 
     let response = await RedisCache.get(cacheKey);
 
+    await RedisCache.forget(cacheKey);
+
     if (response && response !== true) {
+      await ArrayCache.set(cacheKey, response);
       return response;
     }
 

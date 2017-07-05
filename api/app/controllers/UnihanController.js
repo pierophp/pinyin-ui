@@ -2,6 +2,8 @@ const express = require('express');
 const UnihanSearch = require('../services/UnihanSearch');
 const knex = require('../services/knex');
 const Promise = require('bluebird');
+const ArrayCache = require('../cache/ArrayCache');
+const RedisCache = require('../cache/RedisCache');
 const removeDiacritics = require('diacritics').remove;
 
 // eslint-disable-next-line new-cap
@@ -115,6 +117,11 @@ router.post('/save', async (req, res) => {
           created_at: new Date(),
           definition_pt: JSON.stringify(req.body.dictionary),
         });
+
+    const cacheKey = `PINYIN_${ideogram}`;
+
+    await ArrayCache.forget(cacheKey);
+    await RedisCache.forget(cacheKey);
   }
 
   res.setHeader('Content-Type', 'application/json');
