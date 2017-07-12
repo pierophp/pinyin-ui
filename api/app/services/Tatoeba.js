@@ -40,20 +40,18 @@ module.exports = class Tatoeba {
   }
 
   static async import() {
-
     let i = 0;
 
     return new Promise(async (resolve) => {
-      const skipUpdate = true;
       const fileStream = fs.createReadStream(`${storagePath}sentences_detailed.filtered.csv`);
-      /*
+
       const writableStream = fs.createWriteStream(`${storagePath}sentences_import.csv`);
       const fileWriteStream = fastCsv.createWriteStream({
         headers: false,
         delimiter: ';',
       });
       fileWriteStream.pipe(writableStream);
-      */
+
       const parser = fastCsv
       .fromStream(fileStream, {
         delimiter: '\t',
@@ -136,13 +134,10 @@ module.exports = class Tatoeba {
           provider_created_at: dateCreatedAt,
           provider_updated_at: dateUpdatedAt,
           provider_id: id,
-          // provider: 'tatoeba',
-          // created_at: new Date(),
         };
 
-        // fileWriteStream.write(phraseData);
+        fileWriteStream.write(phraseData);
 
-        // await PhraseRepository.save(phraseData, skipUpdate);
         if (i % 100 === 1) {
           profiler(`End ${i}`, true);
         }
@@ -152,21 +147,14 @@ module.exports = class Tatoeba {
 
 
         if (i % 10000 === 1) {
-          console.log('Clean Pinyin Cache');
+          profiler('Clean Pinyin Cache');
           await UnihanSearch.cleanPinyinCache();
         }
 
         if (i % 1000 === 1) {
-          console.log('Clean GC');
+          profiler('Clean GC');
           global.gc();
         }
-
-
-       // if (i === 100 || i === 200) {
-       //   heapdump.writeSnapshot('/home/pgiusti/heapdump/' + Date.now() + '.heapsnapshot');
-       //    process.kill(process.pid, 'SIGUSR2');
-       // }
-
 
         parser.resume();
       })
@@ -178,11 +166,6 @@ module.exports = class Tatoeba {
   }
 
   static async references() {
-    let storagePath = `${__dirname}/../../storage/`;
-    if (env.storage_path) {
-      storagePath = env.storage_path;
-    }
-
     return new Promise(async (resolve) => {
       const fileStream = fs.createReadStream(`${storagePath}links.csv`);
       fastCsv

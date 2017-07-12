@@ -26,7 +26,7 @@
       </md-dialog-title>
 
       <md-dialog-content>
-        <dictionary-details :dictionary="dictionary"/>
+        <dictionary-details :dictionary="dictionary" :pinyin="block.pinyin"/>
       </md-dialog-content>
 
       <md-dialog-actions>

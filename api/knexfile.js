@@ -1,11 +1,13 @@
+const env = require('./env.js');
+
 module.exports = {
   development: {
     client: 'mysql2',
     connection: {
-      host: '127.0.0.1',
-      database: 'pinyin',
-      user: 'root',
-      password: 'root',
+      host: env.database_host,
+      database: env.database_name,
+      user: env.database_user,
+      password: env.database_pass,
       charset: 'utf8mb4',
       port: 3306,
     },
@@ -39,10 +41,10 @@ module.exports = {
   production: {
     client: 'mysql2',
     connection: {
-      host: '127.0.0.1',
-      database: 'pinyin',
-      user: 'root',
-      password: 'root',
+      host: env.database_host,
+      database: env.database_name,
+      user: env.database_user,
+      password: env.database_pass,
       charset: 'utf8mb4',
     },
     pool: {
@@ -53,5 +55,4 @@ module.exports = {
       tableName: 'migrations',
     },
   },
-
 };

@@ -98,6 +98,7 @@
       save() {
         http
         .post('unihan/save', {
+          pinyin: this.pinyin,
           ideograms: this.dictionary.ideograms,
           dictionary: this.dictionaryEntry.split('\n'),
         })
@@ -108,6 +109,9 @@
       },
     },
     props: {
+      pinyin: {
+
+      },
       ideograms: {
 
       },

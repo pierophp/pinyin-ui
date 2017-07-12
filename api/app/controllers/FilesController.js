@@ -1,5 +1,7 @@
 const express = require('express');
 const Promise = require('bluebird');
+const fileSystem = require('../file/adapters/NativeAdapter');
+
 const fs = Promise.promisifyAll(require('fs'));
 const env = require('../../env');
 
@@ -14,9 +16,8 @@ router.get('/', (req, res) => {
   const filesPath = `${dirname + req.user.id}/`;
 
   const getFiles = function getFiles() {
-    return fs.readdirAsync(filesPath, 'utf8').then((files) => {
+    return fileSystem.listContents(filesPath).then((files) => {
       const filesList = [];
-
 
       files.forEach((file) => {
         const isFile = fs.lstatSync(`${filesPath}${file}`).isFile();

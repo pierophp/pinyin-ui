@@ -88,14 +88,20 @@
             <md-table-row>
               <md-table-head>{{ $t('ideogram') }}</md-table-head>
               <md-table-head>{{ $t('pronunciation') }}</md-table-head>
+              <md-table-head></md-table-head>
             </md-table-row>
           </md-table-header>
           <md-table-body>
-            <md-table-row v-for="ideogram in reportUnkown">
+            <md-table-row v-for="(ideogram, index) in reportUnkown">
               <md-table-cell class="ideogram">
                 <ideograms-show :pinyin="ideogram.pronunciation" :character="ideogram.ideogram"/>
               </md-table-cell>
               <md-table-cell>{{ideogram.pronunciation}}</md-table-cell>
+              <md-table-cell class="cell-button">
+                <md-button class="md-icon-button md-raised" @click.native="openModal(true, ideogram.ideogram, index)">
+                  <md-icon>add</md-icon>
+                </md-button>
+              </md-table-cell>
             </md-table-row>
           </md-table-body>
         </md-table>
@@ -115,14 +121,20 @@
             <md-table-row>
               <md-table-head>{{ $t('ideogram') }}</md-table-head>
               <md-table-head>{{ $t('pronunciation') }}</md-table-head>
+              <md-table-head></md-table-head>
             </md-table-row>
           </md-table-header>
           <md-table-body>
-            <md-table-row v-for="ideogram in reportUnkown">
+            <md-table-row v-for="(ideogram, index) in reportUnkown">
               <md-table-cell class="ideogram">
                 <ideograms-show :pinyin="ideogram.pronunciation" :character="ideogram.ideogram"/>
               </md-table-cell>
               <md-table-cell>{{ideogram.pronunciation}}</md-table-cell>
+              <md-table-cell class="cell-button">
+                <md-button class="md-icon-button md-raised" @click.native="openModal(false, ideogram.ideogram, index)">
+                  <md-icon>remove</md-icon>
+                </md-button>
+              </md-table-cell>
             </md-table-row>
           </md-table-body>
         </md-table>
@@ -141,14 +153,20 @@
             <md-table-row>
               <md-table-head>{{ $t('ideogram') }}</md-table-head>
               <md-table-head>{{ $t('pronunciation') }}</md-table-head>
+              <md-table-head></md-table-head>
             </md-table-row>
           </md-table-header>
           <md-table-body>
-            <md-table-row v-for="ideogram in reportUnkown">
+            <md-table-row v-for="(ideogram, index) in reportUnkown">
               <md-table-cell class="ideogram">
                 <ideograms-show :pinyin="ideogram.pronunciation" :character="ideogram.ideogram"/>
               </md-table-cell>
               <md-table-cell>{{ideogram.pronunciation}}</md-table-cell>
+              <md-table-cell class="cell-button">
+                <md-button class="md-icon-button md-raised" @click.native="openModal(true, ideogram.ideogram, index)">
+                  <md-icon>add</md-icon>
+                </md-button>
+              </md-table-cell>
             </md-table-row>
           </md-table-body>
         </md-table>
@@ -168,14 +186,20 @@
             <md-table-row>
               <md-table-head>{{ $t('ideogram') }}</md-table-head>
               <md-table-head>{{ $t('pronunciation') }}</md-table-head>
+              <md-table-head></md-table-head>
             </md-table-row>
           </md-table-header>
           <md-table-body>
-            <md-table-row v-for="ideogram in reportUnkown">
+            <md-table-row v-for="(ideogram, index) in reportUnkown">
               <md-table-cell class="ideogram">
                 <ideograms-show :pinyin="ideogram.pronunciation" :character="ideogram.ideogram"/>
               </md-table-cell>
               <md-table-cell>{{ideogram.pronunciation}}</md-table-cell>
+              <md-table-cell class="cell-button">
+                <md-button class="md-icon-button md-raised" @click.native="openModal(false, ideogram.ideogram, index)">
+                  <md-icon>remove</md-icon>
+                </md-button>
+              </md-table-cell>
             </md-table-row>
           </md-table-body>
         </md-table>
@@ -185,6 +209,11 @@
         <md-button class="md-primary" @click.native="closeDialog('dialogKnownWords')">OK</md-button>
       </md-dialog-actions>
     </md-dialog>
+
+    <add-remove-character-modal
+          @add-character="addRemoveCharacter"
+          @remove-character="addRemoveCharacter"
+          ref="addRemoveCharacterModal"/>
   </div>
 </template>
 
@@ -192,6 +221,15 @@
   import http from 'src/helpers/http';
   import IdeogramsShow from 'src/components/ideograms/Show';
   import LoadableContent from 'src/components/common/loading/LoadableContent';
+  import AddRemoveCharacterModal from 'src/components/modals/AddRemoveCharacter';
+
+  import {
+    mapMutations,
+  } from 'vuex';
+
+  import {
+    FILE_MUTATION_SET_MY_CJK_TEMP,
+  } from 'src/data/file/types';
 
   export default {
     name: 'my-cjk-list',
@@ -204,13 +242,26 @@
         report: [],
         reportWords: [],
         reportUnkown: [],
+        selectedCharacter: null,
       };
     },
     components: {
       IdeogramsShow,
       LoadableContent,
+      AddRemoveCharacterModal,
     },
     methods: {
+      ...mapMutations({
+        setMyCjkTemp: FILE_MUTATION_SET_MY_CJK_TEMP,
+      }),
+      addRemoveCharacter() {
+        this.reportUnkown.remove(this.selectedCharacter);
+      },
+      openModal(add, cjk, selectedCharacter) {
+        this.selectedCharacter = selectedCharacter;
+        this.setMyCjkTemp(cjk);
+        this.$refs.addRemoveCharacterModal.openDialog(add);
+      },
       knownIdeograms(frequency) {
         this.frequency = frequency;
         this.loading = true;
@@ -297,6 +348,15 @@
 </script>
 
 <style>
+
+  .md-table .md-icon {
+    margin: auto !important;
+  }
+
+  .cell-button .md-table-cell-container{
+    padding: 6px 10px 6px 10px !important;
+  }
+
   .ideograms-container .md-table .md-table-head-text,
   .ideograms-container .md-table .md-table-cell .md-table-cell-container {
     padding-left: 10px !important;

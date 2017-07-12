@@ -5,6 +5,7 @@ const LanguageRepository = require('../LanguageRepository');
 const PhraseRepository = require('../PhraseRepository');
 const knex = require('../../services/knex');
 const UnihanSearch = require('../../services/UnihanSearch');
+const profiler = require('../../helpers/profiler');
 
 module.exports = class CjkRepository extends BaseRepository {
   static async searchPronunciationByWord(ideograms) {
@@ -42,9 +43,9 @@ module.exports = class CjkRepository extends BaseRepository {
   }
 
   static async save(cjk) {
-    let action = 'insert';
+    // let action = 'insert';
     if (cjk.id) {
-      action = 'update';
+      // action = 'update';
       await knex('cjk')
         .where('id', '=', cjk.id)
         .update(cjk);
@@ -52,26 +53,25 @@ module.exports = class CjkRepository extends BaseRepository {
       await knex('cjk')
         .insert(cjk);
     }
-
-    console.log(action);
   }
 
   static async referencePhrases() {
     const words = await knex('cjk')
       .where({
         type: 'W',
+        simplified: 1,
       })
-      .select('id', 'ideogram')
-      .limit(100);
+      .select('id', 'ideogram');
 
     const characters = await knex('cjk')
-      .whereRaw('type = "C" AND frequency < 999')
-      .select('id', 'ideogram')
-      .limit(100);
+      .whereRaw('type = "C" AND frequency < 999 AND simplified = 1')
+      .select('id', 'ideogram');
 
     const items = words.concat(characters);
 
     const language = await LanguageRepository.findOneByCode('cmn-hans');
+
+    let i = 0;
 
     await Promise.mapSeries(items, async (item) => {
       let ideograms = UnihanSearch.convertUtf16ToIdeograms(item.ideogram);
@@ -79,6 +79,10 @@ module.exports = class CjkRepository extends BaseRepository {
       if (!ideograms) {
         return;
       }
+
+      i += 1;
+
+      profiler(`${i} - ${ideograms}`);
 
       const phrases = await PhraseRepository.findByLanguageAndRlike(language, ideograms);
       if (phrases.length === 0) {

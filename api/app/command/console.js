@@ -1,6 +1,7 @@
 
 const program = require('commander');
 
+// eslint-disable-next-line
 console.log(`Running on ENV: ${process.env.NODE_ENV}`);
 
 require('events').EventEmitter.defaultMaxListeners = Infinity;
@@ -60,9 +61,5 @@ program
 program
   .version('0.0.1')
   .command('export-pinyin', 'Export Pinyin');
-
-program
-  .version('0.0.1')
-  .command('test', 'Test');
 
 program.parse(process.argv);

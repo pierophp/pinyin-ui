@@ -2,7 +2,7 @@ const program = require('commander');
 const fs = require('fs');
 const wget = require('wget');
 const ThreeLinesDatabaseParser = require('../services/ThreeLinesDatabaseParser');
-const env = require('../env');
+const env = require('../../env');
 
 program.parse(process.argv);
 

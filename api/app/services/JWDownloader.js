@@ -443,9 +443,9 @@ module.exports = class JwDownloader {
             text: this.getText($, boxH2),
             type: 'h2',
           });
-
-          this.parseBlock($, $(children).find('.boxContent'));
         }
+
+        this.parseBlock($, $(children).find('.boxContent'));
       } else if ($(children).hasClass('bodyTxt')) {
         $(children).children().each((j, subChildren) => {
           const boxH2 = $(subChildren).children('h2');
@@ -754,6 +754,7 @@ module.exports = class JwDownloader {
         '各地',
         '可见',
       ];
+
       wordsToReplace.forEach((word) => {
         const replaceWord = ` ${word.split('').join(' ')} `;
         lineText = replaceall(replaceWord, ` ${word} `, lineText);
@@ -761,6 +762,7 @@ module.exports = class JwDownloader {
 
       if (footNoteId) {
         lineText = replaceall('#FOOTNOTE', `#FOOTNOTE-${footNoteId}-`, lineText);
+        lineText = replaceall('- *', '-*', lineText);
       }
 
       newText += `${lineText}\r\n`;
