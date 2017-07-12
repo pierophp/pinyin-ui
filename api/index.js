@@ -19,7 +19,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use(cors());
-app.use(jwt({ secret: env.jwt_key }).unless({ path: [
+
+app.use(jwt({
+  secret: env.jwt_key,
+}).unless({ path: [
   '/',
   '/auth/google',
   '/auth/google/callback',

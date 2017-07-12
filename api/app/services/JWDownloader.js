@@ -169,40 +169,43 @@ module.exports = class JwDownloader {
   }
 
   static async loadTracks() {
-    const response = await axios.get('https://mediator.jw.org/v1/categories/CHS/VideoOnDemand?detailed=1');
+    const response = await axios.get('https://data.jw-api.org/mediator/v1/categories/CHS/VideoOnDemand?detailed=1');
     const categories = response.data.category.subcategories;
     await Promise.map(categories, async (category) => {
-      const res = await axios.get(`https://mediator.jw.org/v1/categories/CHS/${category.key}?detailed=1`);
+      const res = await axios.get(`https://data.jw-api.org/mediator/v1/categories/CHS/${category.key}?detailed=1`);
       const subcategories = res.data.category.subcategories;
 
       await Promise.map(subcategories, async (subcategory) => {
         if (subcategory.key.substr(-8) === 'Featured') {
           return;
         }
-        const url = `https://mediator.jw.org/v1/categories/CHS/${subcategory.key}?detailed=0`;
+        const url = `https://data.jw-api.org/mediator/v1/categories/CHS/${subcategory.key}?detailed=0`;
         try {
           const subRes = await axios.get(url);
 
           await Promise.map(subRes.data.category.media, async (media) => {
-            if (media.files[0].subtitles !== undefined) {
-              const urlParts = media.files[0].progressiveDownloadURL.split('/');
-              const video = urlParts[urlParts.length - 1].replace(/_r(.*)P/g, '').replace('.mp4', '');
-              const videoTrack = await knex('video_track').where({ video });
-              if (videoTrack.length === 0) {
-                await knex('video_track').insert({
-                  video,
-                  track_url: media.files[0].subtitles.url,
-                  description: media.title,
-                  created_at: new Date(),
-                });
-                // eslint-disable-next-line
-                console.log(video);
-                // eslint-disable-next-line
-                console.log(media.title);
-                // eslint-disable-next-line
-                console.log(media.files[0].subtitles.url);
+            await Promise.map(media.files, async (file) => {
+              if (file.subtitles !== undefined) {
+                const urlParts = media.files[0].progressiveDownloadURL.split('/');
+                const video = urlParts[urlParts.length - 1].replace(/_r(.*)P/g, '').replace('.mp4', '');
+                const videoTrack = await knex('video_track').where({ video });
+                if (videoTrack.length === 0) {
+                  await knex('video_track').insert({
+                    video,
+                    track_url: media.files[0].subtitles.url,
+                    description: media.title,
+                    created_at: new Date(),
+                  });
+                  // eslint-disable-next-line
+                  console.log(video);
+                  // eslint-disable-next-line
+                  console.log(media.title);
+                  // eslint-disable-next-line
+                  console.log(media.files[0].subtitles.url);
+                }
               }
-            }
+            });
+
           });
         } catch (e) {
           // eslint-disable-next-line
@@ -275,7 +278,7 @@ module.exports = class JwDownloader {
   }
 
   static async download(url, language) {
-    profiler('Download JW Start');
+    profiler(`Download JW Start - ${this.encodeUrl(url)}`);
     const chineseSites = [
       'https://www.jw.org/cmn-hans',
       'https://www.jw.org/cmn-hant',
@@ -289,13 +292,25 @@ module.exports = class JwDownloader {
     });
 
     let response = await axios.get(this.encodeUrl(url));
+    profiler('Download JW End');
     let $ = cheerio.load(response.data);
     if (!isChinese) {
       newLanguage = url.replace('https://www.jw.org/', '').split('/')[0];
       const chineseLink = $('link[hreflang="cmn-hans"]');
       if (chineseLink.length > 0) {
         const link = `https://www.jw.org${chineseLink.attr('href')}`;
-        response = await axios.get(this.encodeUrl(link));
+        profiler(`Download JW Start - Chinese - ${this.encodeUrl(link)}`);
+        try {
+          response = await axios.get(this.encodeUrl(link));
+        } catch (e) {
+          if (e.response.status === 404) {
+            response = await axios.get(link);
+          } else {
+            throw e;
+          }
+        }
+
+        profiler('Download JW End - Chinese');
         $ = cheerio.load(response.data);
       }
     }
@@ -345,7 +360,6 @@ module.exports = class JwDownloader {
 
       if (!item.text) {
         item.text = '';
-        console.log(item);
       }
 
       const ideograms = item.text.split(' ');
