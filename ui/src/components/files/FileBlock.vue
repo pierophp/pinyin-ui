@@ -5,10 +5,10 @@
       <img :src="block.small" referrerpolicy="no-referrer"/>
     </div>
 
-
     <div class="pinyin" v-if="!block.small">
       <medium-editor :content="pinyin" @content="updatePinyin"></medium-editor>
     </div>
+
     <div class="character" v-if="!block.small">
       <medium-editor :content="character" @content="updateCharacter"></medium-editor>
     </div>

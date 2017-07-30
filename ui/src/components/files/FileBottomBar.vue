@@ -1,23 +1,43 @@
 <template>
-  <div class="bottom-bar" v-if="show">
-    <span class="ideogram-link" v-for="data in printData" @click.prevent="openModal(data.characterLink)">{{data.character}}</span>
-    <!-- span @click.prevent="openPinyinList()">{{ block.pinyin }}</span -->
+  <div>
+    <div class="bottom-bar" v-if="show">
+      <span class="ideogram-link" v-for="data in printData" @click.prevent="openModal(data.characterLink)">{{data.character}}</span>
+      <!-- span @click.prevent="openPinyinList()">{{ block.pinyin }}</span -->
 
-    <md-menu md-size="2"  md-direction="top left" md-offset-y="-52" id="menu-pinyin">
-      <md-button md-menu-trigger class="md-2">
-        {{ block.pinyin }}
+      <md-menu md-size="2"  md-direction="top left" md-offset-y="-52" id="menu-pinyin">
+        <md-button md-menu-trigger class="md-2">
+          {{ block.pinyin }}
+        </md-button>
+
+        <md-menu-content>
+          <md-menu-item>Item 1</md-menu-item>
+          <md-menu-item>Item 2</md-menu-item>
+          <md-menu-item>Item 3</md-menu-item>
+        </md-menu-content>
+      </md-menu>
+
+      <md-button class="md-icon-button md-primary" @click.native="loadDictionary()">
+        <md-icon>find_in_page</md-icon>
       </md-button>
 
-      <md-menu-content>
-        <md-menu-item>Item 1</md-menu-item>
-        <md-menu-item>Item 2</md-menu-item>
-        <md-menu-item>Item 3</md-menu-item>
-      </md-menu-content>
-    </md-menu>
+      <md-menu md-size="4"  md-direction="top left" md-offset-y="-52">
+        <md-button class="md-icon-button md-primary md-2" md-menu-trigger>
+          <md-icon>more_vert</md-icon>
+        </md-button>
 
-    <md-button class="md-icon-button md-primary" @click.native="loadDictionary()">
-      <md-icon>find_in_page</md-icon>
-    </md-button>
+        <md-menu-content>
+          <md-menu-item @click.native="joinLeft(block)">
+            <md-icon>arrow_back</md-icon>
+            <span>{{ $t('join_left') }}</span>
+          </md-menu-item>
+          <md-menu-item @click.native="close()">
+            <md-icon>clear</md-icon>
+            <span>{{ $t('close') }}</span>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </div>
+
 
     <md-dialog ref="dialogDictionary">
       <md-dialog-title>
@@ -26,7 +46,7 @@
       </md-dialog-title>
 
       <md-dialog-content>
-        <dictionary-details :dictionary="dictionary" :pinyin="block.pinyin"/>
+        <dictionary-details :dictionary="dictionary" :pinyin="block.pinyin" @change-show="changeShow" ref="dictionaryDetails"/>
       </md-dialog-content>
 
       <md-dialog-actions>
@@ -34,22 +54,6 @@
       </md-dialog-actions>
     </md-dialog>
 
-    <md-menu md-size="4"  md-direction="top left" md-offset-y="-52">
-      <md-button class="md-icon-button md-primary md-2" md-menu-trigger>
-        <md-icon>more_vert</md-icon>
-      </md-button>
-
-      <md-menu-content>
-        <md-menu-item @click.native="joinLeft(block)">
-          <md-icon>arrow_back</md-icon>
-          <span>{{ $t('join_left') }}</span>
-        </md-menu-item>
-        <md-menu-item @click.native="close()">
-          <md-icon>clear</md-icon>
-          <span>{{ $t('close') }}</span>
-        </md-menu-item>
-      </md-menu-content>
-    </md-menu>
   </div>
 </template>
 
@@ -108,6 +112,10 @@
       ...mapMutations({
         setMyCjkTemp: FILE_MUTATION_SET_MY_CJK_TEMP,
       }),
+
+      changeShow(show) {
+        this.show = !show;
+      },
 
       close() {
         this.show = false;
@@ -187,6 +195,8 @@
         this.$refs[ref].open();
       },
       closeDialog(ref) {
+        this.$refs.dictionaryDetails.cancelEdit();
+        this.show = true;
         this.$refs[ref].close();
       },
       onOpen() {

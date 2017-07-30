@@ -2,6 +2,7 @@
   <div class="line bs-callout bs-callout-primary">
     <file-block
       v-for="(block,index) in line"
+      v-bind:key="index"
       :pinyin="block.p"
       :character="block.c"
       :line-index="lineIndex"

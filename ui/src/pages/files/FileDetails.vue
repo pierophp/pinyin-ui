@@ -5,6 +5,7 @@
     <div class="larger-print">
       <file-row
         v-for="(line, index) in lines"
+        v-bind:key="index"
         :line="line"
         :line-index="index"
         :data-index="index"

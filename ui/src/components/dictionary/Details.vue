@@ -91,9 +91,11 @@
       },
       cancelEdit() {
         this.editing = false;
+        this.$emit('change-show', this.editing);
       },
       edit() {
         this.editing = true;
+        this.$emit('change-show', this.editing);
       },
       save() {
         http
@@ -105,6 +107,7 @@
         .then(() => {
           this.dictionary.pt = this.dictionaryEntry.split('\n');
           this.editing = false;
+          this.$emit('change-show', this.editing);
         });
       },
     },
