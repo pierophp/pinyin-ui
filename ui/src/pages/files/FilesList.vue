@@ -3,7 +3,7 @@
     <div class="files-container">
       <loadable-content :loading="loading">
         <md-list class="md-double-line">
-          <md-list-item v-for="(file, fileId) in files" @click.native="openOptions(fileId, $event)" >
+          <md-list-item v-for="(file, fileId) in files" @click="openOptions(fileId, $event)" v-bind:key="fileId">
             <md-button class="md-icon-button list-icon">
               <md-icon class="md-primary">
                 {{ file.type == 'file' ? 'collections' : 'folder' }}
@@ -19,19 +19,19 @@
                 <md-icon>more_vert</md-icon>
               </md-button>
               <md-menu-content>
-                <md-menu-item @click.native="openImportDialog(file.path)" v-if="file.type == 'file'">
+                <md-menu-item @click="openImportDialog(file.path)" v-if="file.type == 'file'">
                   <md-icon>cloud_upload</md-icon>
                   <span>{{ $t("import_site") }}</span>
                 </md-menu-item>
-                <md-menu-item @click.native="visualizationMode(file.path)" v-if="file.type == 'file'">
+                <md-menu-item @click="visualizationMode(file.path)" v-if="file.type == 'file'">
                   <md-icon>visibility</md-icon>
                   <span>{{ $t("visualization_mode") }}</span>
                 </md-menu-item>
-                <md-menu-item @click.native="goToFile(file.path)" v-if="file.type == 'file'">
+                <md-menu-item @click="goToFile(file.path)" v-if="file.type == 'file'">
                   <md-icon>edit</md-icon>
                   <span>{{ $t("edition_mode") }}</span>
                 </md-menu-item>
-                <md-menu-item @click.native="openDeleteDialog(file.path)">
+                <md-menu-item @click="openDeleteDialog(file.path)">
                   <md-icon>delete</md-icon>
                   <span>{{ $t("delete") }}</span>
                 </md-menu-item>

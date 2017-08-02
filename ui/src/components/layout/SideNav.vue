@@ -1,5 +1,5 @@
 <template>
-  <md-sidenav @click.native="$refs.sidenav.close()" md-theme="blue" class="md-left" ref="sidenav" md-swipeable :md-swipe-distance="60">
+  <md-sidenav @click="$refs.sidenav.close()" md-theme="blue" class="md-left" ref="sidenav" md-swipeable :md-swipe-distance="60">
     <md-toolbar class="md-account-header">
       <md-list class="md-transparent">
         <md-list-item>
@@ -16,37 +16,27 @@
     </md-toolbar>
 
     <md-list >
-      <md-list-item>
-        <router-link :to="{ name: 'files' }">
-          <md-icon>insert_drive_file</md-icon> <span>{{ $t("menu.my_files") }}</span>
-        </router-link>
+      <md-list-item @click="goTo('/files')">
+        <md-icon>insert_drive_file</md-icon> <span>{{ $t("menu.my_files") }}</span>
       </md-list-item>
 
-      <md-list-item>
-        <router-link :to="{ name: 'dictionary' }">
-          <md-icon>pageview</md-icon> <span>{{ $t("menu.dictionary") }}</span>
-        </router-link>
+      <md-list-item @click="goTo('/dictionary')">
+        <md-icon>pageview</md-icon> <span>{{ $t("menu.dictionary") }}</span>
       </md-list-item>
 
-      <md-list-item>
-        <router-link :to="{ name: 'my-cjk' }">
-          <md-icon>translate</md-icon> <span>{{ $t("menu.my_ideograms") }}</span>
-        </router-link>
+      <md-list-item @click="goTo('/my-cjk')">
+        <md-icon>translate</md-icon> <span>{{ $t("menu.my_ideograms") }}</span>
       </md-list-item>
 
-      <md-list-item>
-        <router-link :to="{ name: 'video' }">
-          <md-icon>play_circle_outline</md-icon> <span>{{ $t("menu.video") }}</span>
-        </router-link>
+      <md-list-item @click="goTo('/video')">
+        <md-icon>play_circle_outline</md-icon> <span>{{ $t("menu.video") }}</span>
       </md-list-item>
 
-      <md-list-item>
-        <router-link :to="{ name: 'config' }">
-          <md-icon>settings</md-icon> <span>{{ $t("menu.settings") }}</span>
-        </router-link>
+      <md-list-item @click="goTo('/config')">
+        <md-icon>settings</md-icon> <span>{{ $t("menu.settings") }}</span>
       </md-list-item>
 
-      <md-list-item @click.native="logout()">
+      <md-list-item @click="logout()">
         <md-icon>power_settings_new</md-icon> <span>{{ $t("menu.logout") }}</span>
       </md-list-item>
     </md-list>
@@ -64,6 +54,10 @@
       };
     },
     methods: {
+      goTo(link) {
+        this.$refs.sidenav.close();
+        this.$router.push(link);
+      },
       logout() {
         User.logout();
       },

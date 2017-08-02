@@ -238,6 +238,7 @@
         loading: false,
         total: 0,
         totalWords: 0,
+        hsk: 0,
         frequency: 0,
         report: [],
         reportWords: [],

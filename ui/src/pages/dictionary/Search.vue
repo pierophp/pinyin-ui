@@ -10,7 +10,7 @@
   <div>
   <loadable-content :loading="loading">
     <md-list>
-      <md-list-item v-for="entry in entries" @click.native="details(entry.id)">
+      <md-list-item v-for="entry in entries" @click="details(entry.id)" v-bind:key="entry.id">
         <span>
           <span class="ideogram">
             <ideograms-show :pinyin="entry.pronunciation" :character="entry.ideogram"/>
