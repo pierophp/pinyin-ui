@@ -14,6 +14,7 @@ export const FILE_ACTION_ADD_MY_CJK = 'file/action/ADD_MY_CJK';
 export const FILE_ACTION_REMOVE_MY_CJK = 'file/action/REMOVE_MY_CJK';
 export const FILE_ACTION_CAN_HIDE_PINYIN = 'file/action/CAN_HIDE_PINYIN';
 export const FILE_ACTION_JOIN_LEFT = 'file/action/JOIN_LEFT';
+export const FILE_ACTION_SEPARATE = 'file/action/SEPARATE';
 
 // getters
 export const FILES_GETTER = 'file/getter/files';

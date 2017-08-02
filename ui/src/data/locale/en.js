@@ -90,4 +90,5 @@ export default {
   show: 'Show',
   join_left: 'Join left',
   download_pleco_dictionary: 'Download to Pleco',
+  split: 'Split',
 };

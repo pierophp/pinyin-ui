@@ -30,6 +30,10 @@
             <md-icon>arrow_back</md-icon>
             <span>{{ $t('join_left') }}</span>
           </md-menu-item>
+          <md-menu-item @click.native="separate(block)">
+            <md-icon>swap_horiz</md-icon>
+            <span>{{ $t('split') }}</span>
+          </md-menu-item>
           <md-menu-item @click.native="close()">
             <md-icon>clear</md-icon>
             <span>{{ $t('close') }}</span>
@@ -54,6 +58,23 @@
       </md-dialog-actions>
     </md-dialog>
 
+    <md-dialog ref="dialogSeparate">
+      <md-dialog-title>
+        <ideograms-show :pinyin="block.pinyin" :character="block.character"/>
+        - {{ block.pinyin }}
+      </md-dialog-title>
+
+      <md-dialog-content>
+        <md-input-container md-inline>
+          <md-input v-model="separateCharacter"></md-input>
+        </md-input-container>
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click.native="confirmSeparate">OK</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+
   </div>
 </template>
 
@@ -71,6 +92,7 @@
 
   import {
     FILE_ACTION_JOIN_LEFT,
+    FILE_ACTION_SEPARATE,
     FILE_MUTATION_SET_MY_CJK_TEMP,
     FILE_GETTER_MY_CJK,
   } from 'src/data/file/types';
@@ -81,6 +103,7 @@
     name: 'file-bottom-bar',
     data() {
       return {
+        separateCharacter: '',
         show: false,
         tempDictCharacter: null,
         block: {},
@@ -108,6 +131,7 @@
     methods: {
       ...mapActions({
         joinLeft: FILE_ACTION_JOIN_LEFT,
+        separateAction: FILE_ACTION_SEPARATE,
       }),
       ...mapMutations({
         setMyCjkTemp: FILE_MUTATION_SET_MY_CJK_TEMP,
@@ -115,6 +139,16 @@
 
       changeShow(show) {
         this.show = !show;
+      },
+
+      separate() {
+        this.separateCharacter = this.block.character;
+        this.openDialog('dialogSeparate');
+      },
+
+      confirmSeparate() {
+        this.separateAction({ ...this.block, separateCharacter: this.separateCharacter });
+        this.closeDialog('dialogSeparate');
       },
 
       close() {

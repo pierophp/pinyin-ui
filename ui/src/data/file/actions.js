@@ -313,6 +313,30 @@ export default {
     dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex });
   },
 
+  [types.FILE_ACTION_SEPARATE]({ commit, state, dispatch }, data) {
+    const separatedBlocks = data.separateCharacter.split(' ').filter((character) => character)
+    .map((character) => ({
+      c: character,
+      p: '',
+    }));
+
+    const lineIndex = parseInt(data.lineIndex, 10);
+    const blockIndex = parseInt(data.blockIndex, 10);
+
+    let blocks = state.file[lineIndex];
+    const lastBlocks = blocks.splice(blockIndex, blocks.length - blockIndex);
+    lastBlocks.shift();
+    blocks = blocks.concat(separatedBlocks);
+    blocks = blocks.concat(lastBlocks);
+
+    commit(types.FILE_MUTATION_SET_LINE, {
+      line: blocks,
+      lineIndex,
+    });
+
+    dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex });
+  },
+
 
   [types.FILE_ACTION_ADD_MY_CJK]({ commit }, data) {
     return http
