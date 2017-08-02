@@ -18,6 +18,7 @@
 <script>
   import User from 'src/domain/user';
   import Config from 'src/helpers/config';
+  import QueryString from 'query-string';
   import LoadableContent from 'src/components/common/loading/LoadableContent';
 
   export default {
@@ -37,8 +38,12 @@
         window.location = '/#/files';
       }
 
-      const parsed = this.$route.query;
+      let parsed = this.$route.query;
+      if (!parsed.code) {
+        parsed = QueryString.parse(location.search);
+      }
       parsed.route = this.$route.name;
+
       if (parsed.code) {
         User.login(parsed)
           .then(() => {
