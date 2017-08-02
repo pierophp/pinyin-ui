@@ -23,6 +23,7 @@ export default {
   paste: 'Paste',
   remove_line: 'Remove line',
   sign_in_google: 'Sign in with Google',
+  sign_in_baidu: 'Sign in with Baidu',
   action: 'Action',
   paste_action: {
     multi_nwt: 'Multi NWT (pinyin + space + ideogram)',

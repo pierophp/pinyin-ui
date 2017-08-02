@@ -26,6 +26,8 @@ app.use(jwt({
   '/',
   '/auth/google',
   '/auth/google/callback',
+  '/auth/baidu',
+  '/auth/baidu/callback',
   '/unihan/to_pinyin',
   '/unihan/dictionary',
   '/unihan/dictionary_search',

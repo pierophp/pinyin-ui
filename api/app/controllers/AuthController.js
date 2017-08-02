@@ -46,4 +46,21 @@ router.get('/google/callback',
     }
 );
 
+router.get('/baidu', passport.authenticate('baidu'));
+
+router.get('/baidu/callback',
+    passport.authenticate('baidu'),
+    (req, res) => {
+      const token = jwt.sign({ id: req.user.id, admin: req.user.admin }, env.jwt_key);
+      res.send({
+        token,
+        user: {
+          name: req.user.name,
+          email: req.user.email,
+          admin: req.user.admin,
+        },
+      });
+    }
+);
+
 module.exports = router;

@@ -1,5 +1,6 @@
 const env = require('../../env');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const BaiduStrategy = require('passport-baidu').Strategy;
 const knex = require('../services/knex');
 
 module.exports = function passportConfig(passport) {
@@ -32,6 +33,7 @@ module.exports = function passportConfig(passport) {
       process.nextTick(() => {
         knex('user')
           .where({
+            provider: 'google',
             profile_id: profile.id,
           })
           .then((data) => {
@@ -41,6 +43,7 @@ module.exports = function passportConfig(passport) {
             }
 
             knex('user').insert({
+              provider: 'google',
               profile_id: profile.id,
               token,
               name: profile.displayName,
@@ -49,6 +52,52 @@ module.exports = function passportConfig(passport) {
             }).then(() => {
               knex('user')
                 .where({
+                  provider: 'google',
+                  profile_id: profile.id,
+                })
+                .then(user => done(null, user[0])
+                );
+            });
+          });
+      });
+    }));
+
+  const baiduOpts = {
+    clientID: env.baidu_client_id,
+    clientSecret: env.baidu_client_secret,
+    callbackURL: `${env.front_url}#/login/baidu`,
+  };
+
+  passport.use(new BaiduStrategy(baiduOpts,
+    (token, refreshToken, profile, done) => {
+      process.nextTick(() => {
+        knex('user')
+          .where({
+            provider: 'baidu',
+            profile_id: profile.id,
+          })
+          .then((data) => {
+            if (data.length > 0) {
+              done(null, data[0]);
+              return;
+            }
+
+            let name = profile.displayName;
+            if (!name) {
+              name = profile.username;
+            }
+
+            knex('user').insert({
+              provider: 'baidu',
+              profile_id: profile.id,
+              token,
+              name,
+              email: profile.username,
+              created_at: new Date(),
+            }).then(() => {
+              knex('user')
+                .where({
+                  provider: 'baidu',
                   profile_id: profile.id,
                 })
                 .then(user => done(null, user[0])

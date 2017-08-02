@@ -23,6 +23,7 @@ export default {
   paste: 'Colar',
   remove_line: 'Apagar linha',
   sign_in_google: 'Entrar com Google',
+  sign_in_baidu: 'Entrar com Baidu',
   action: 'Ação',
   paste_action: {
     multi_nwt: 'Multi NWT (pinyin + espaço + ideograma)',

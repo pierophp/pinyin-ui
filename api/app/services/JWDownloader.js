@@ -205,7 +205,6 @@ module.exports = class JwDownloader {
                 }
               }
             });
-
           });
         } catch (e) {
           // eslint-disable-next-line
@@ -217,6 +216,7 @@ module.exports = class JwDownloader {
       });
     });
   }
+
   static async track(url, type) {
     const urlParts = url.split('/');
     const filename = urlParts[urlParts.length - 1].replace(/_r(.*)P/g, '').replace('.mp4', '');

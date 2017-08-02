@@ -21,6 +21,14 @@ export default [
     },
   },
   {
+    path: '/login/baidu',
+    name: 'login-baidu',
+    component: Login,
+    meta: {
+      hideTopBar: true,
+    },
+  },
+  {
     path: '/files',
     name: 'files',
     component: FilesList,

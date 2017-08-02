@@ -5,24 +5,30 @@ import http from 'src/helpers/http';
 const apiUrl = Config.get('apiUrl');
 
 class User {
-  static login(code) {
-    return new Promise((resolve, reject) => {
-      http
+  static async login(parsed) {
+    let auth = 'google';
+    if (parsed.route === 'login-baidu') {
+      auth = 'baidu';
+    }
+
+    let response;
+
+    if (auth === 'google') {
+      response = await http
       .get(`${apiUrl}auth/google/callback`, {
-        params: { code },
-      })
-      .then((response) => {
-        LocalStorage.save('token', response.data.token);
-        LocalStorage.save('user', response.data.user);
-
-        return resolve(response.data.user);
-      })
-      .catch(({ body }) => {
-        const { errorCode } = body || {};
-
-        return reject(errorCode);
+        params: { code: parsed.code },
       });
-    });
+    } else if (auth === 'baidu') {
+      response = await http
+      .get(`${apiUrl}auth/baidu/callback`, {
+        params: { code: parsed.code },
+      });
+    }
+
+    LocalStorage.save('token', response.data.token);
+    LocalStorage.save('user', response.data.user);
+
+    return response.data.user;
   }
 
   static logout() {
