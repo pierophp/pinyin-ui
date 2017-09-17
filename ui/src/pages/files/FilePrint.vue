@@ -116,13 +116,15 @@
     mounted() {
       this.fetchMyCjk();
       this.filename = this.$route.params.filename;
-      this.getFile(this.filename);
-      this.timer = setInterval(() => {
-        this.save({
-          filename: this.filename,
-          content: this.lines,
-        });
-      }, 3000);
+      if (this.filename) {
+        this.getFile(this.filename);
+        this.timer = setInterval(() => {
+          this.save({
+            filename: this.filename,
+            content: this.lines,
+          });
+        }, 3000);
+      }
     },
 
     beforeDestroy() {
