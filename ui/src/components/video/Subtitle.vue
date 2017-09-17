@@ -29,8 +29,10 @@ export default {
     url: '',
   },
   watch: {
-    url: () => {
-      this.loadTrack();
+    url: {
+      handler: function handler() {
+        this.loadTrack();
+      },
     },
   },
   methods: {

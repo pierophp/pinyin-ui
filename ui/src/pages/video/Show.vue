@@ -31,11 +31,11 @@
       </md-snackbar>
     </div>
 
-    <div class="editor-container" v-if="showSubtitle">
+    <div class="editor-container" v-show="showSubtitle">
       <div>
         <md-button class="md-raised md-accent" @click.native="toggleSubtitle">{{ $t("hide_track") }}</md-button>
       </div>
-      <video-subtitle :url="videoUrl" v-if="showSubtitle"/>
+      <video-subtitle :url="videoUrl"/>
     </div>
   </div>
 </template>
