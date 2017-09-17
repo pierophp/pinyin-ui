@@ -91,4 +91,6 @@ export default {
   join_left: 'Join left',
   download_pleco_dictionary: 'Download to Pleco',
   split: 'Split',
+  show_track: 'Show Track',
+  hide_track: 'Hide Track',
 };

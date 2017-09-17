@@ -1,47 +1,67 @@
 <template>
-  <div class="video-container">
-    <loadable-content :loading="loading">
-      <md-input-container>
-        <label for="size">{{ $t('show') }}</label>
-        <md-select @change="refreshVideo" name="size" id="size" v-model="type">
-          <md-option value="a">{{ $t('pinyin_ideograms') }}</md-option>
-          <md-option value="p">{{ $t('pinyin_only') }}</md-option>
-          <md-option value="c">{{ $t('ideograms_only') }}</md-option>
-        </md-select>
-      </md-input-container>
+  <div class="video-parent-container" >
+    <div class="video-container" v-show="!showSubtitle">
+      <loadable-content :loading="loading">
+        <md-input-container>
+          <label for="size">{{ $t('show') }}</label>
+          <md-select @change="refreshVideo" name="size" id="size" v-model="type">
+            <md-option value="a">{{ $t('pinyin_ideograms') }}</md-option>
+            <md-option value="p">{{ $t('pinyin_only') }}</md-option>
+            <md-option value="c">{{ $t('ideograms_only') }}</md-option>
+          </md-select>
+        </md-input-container>
 
-      <md-input-container>
-          <md-icon>play_circle_outline</md-icon>
-          <label>{{ $t("url") }}</label>
-          <md-input @change="loadVideo" type="text" ref="inputSearch" v-model="videoUrl"></md-input>
-      </md-input-container>
-      <video :src="videoUrl" controls preload ref="video" v-show="videoUrl">
-      </video>
+        <md-input-container>
+            <md-icon>play_circle_outline</md-icon>
+            <label>{{ $t("url") }}</label>
+            <md-input @change="loadVideo" type="text" ref="inputSearch" v-model="videoUrl"></md-input>
+        </md-input-container>
+        <video :src="videoUrl" controls preload ref="video" v-show="videoUrl">
+        </video>
 
-      <br/><br/>
-      <a :href="downloadLink" v-if="downloadLink" :download="downloadFilename">{{ $t("download_track") }}</a>
-    </loadable-content>
-    <md-snackbar md-position="bottom center" ref="snackbar" md-duration="3000">
-      <span>{{ $t("message_no_track") }}</span>
-    </md-snackbar>
+        <br/><br/>
+        <a :href="downloadLink" v-if="downloadLink" :download="downloadFilename">
+          <md-button v-if="downloadLink" class="md-raised">{{ $t("download_track") }}</md-button>
+        </a>
+        <md-button v-if="downloadLink" class="md-raised md-primary" @click.native="toggleSubtitle">{{ $t("show_track") }}</md-button>
+      </loadable-content>
+
+      <md-snackbar md-position="bottom center" ref="snackbar" md-duration="3000">
+        <span>{{ $t("message_no_track") }}</span>
+      </md-snackbar>
+    </div>
+
+    <div class="editor-container" v-if="showSubtitle">
+      <div>
+        <md-button class="md-raised md-accent" @click.native="toggleSubtitle">{{ $t("hide_track") }}</md-button>
+      </div>
+      <video-subtitle :url="videoUrl" v-if="showSubtitle"/>
+    </div>
   </div>
 </template>
 
 <script>
   import http from 'src/helpers/http';
   import LoadableContent from 'src/components/common/loading/LoadableContent';
+  import webVTTParser from 'src/domain/webvtt-parser';
+  import VideoSubtitle from 'src/components/video/Subtitle';
 
   export default {
     name: 'video-show',
     components: {
       LoadableContent,
+      VideoSubtitle,
     },
-    created() {
+    moounted() {
       setTimeout(() => {
         this.$refs.inputSearch.$el.focus();
       }, 500);
     },
     methods: {
+      toggleSubtitle() {
+        this.showSubtitle = !this.showSubtitle;
+      },
+
       formatTime(str) {
         if (str.split(':').length === 2) {
           return `00:${str}`.replace('.', ',');
@@ -99,28 +119,9 @@
               return;
             }
 
-            let i = 0;
-            const tracks = [];
-            lines.forEach((line) => {
-              const lineSplit = line.split('-->');
-              if (lineSplit.length > 1) {
-                i += 1;
-                tracks[i] = {};
-                tracks[i].startTime = lineSplit[0].trim();
-                tracks[i].endTime = lineSplit[1].trim();
-                tracks[i].message = [];
-                return;
-              }
-
-              if (i > 0) {
-                if (line.trim()) {
-                  tracks[i].message.push(line.trim());
-                }
-              }
-            });
-
+            const tracks = webVTTParser(lines);
             let trackContent = '';
-            i = 0;
+            let i = 0;
             tracks.forEach((trackItem) => {
               i += 1;
               const message = trackItem.message.join('\n');
@@ -148,16 +149,36 @@
         track: '',
         type: 'a',
         loading: false,
+        showSubtitle: false,
       };
     },
   };
 </script>
 
 <style>
-  .video-container{
+  .video-parent-container{
+    display: flex;
     flex: 1;
+  }
+
+  .editor-container{
+    flex-flow: column nowrap;
+    display: flex;
+    flex: 1;
+  }
+  .video-container{
     padding: 0 10px;
+    flex: 1;
+    display: flex;
+    flex-flow: column nowrap;
+    overflow: hidden;
+  }
+
+  .video-scroll{
+    flex: 1;
+    will-change: transform;
     overflow: auto;
+    padding: 0 10px;
   }
 
   .video-container .md-input-container{

@@ -91,4 +91,6 @@ export default {
   join_left: 'Juntar à esquerda',
   download_pleco_dictionary: 'Baixar para Pleco',
   split: 'Separar',
+  show_track: 'Mostrar Legenda',
+  hide_track: 'Esconder Legenda',
 };

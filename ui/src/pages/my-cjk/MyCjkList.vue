@@ -13,7 +13,7 @@
               </md-table-row>
             </md-table-header>
             <md-table-body>
-              <md-table-row v-for="row in report">
+              <md-table-row v-for="row in report" :key="row.frequency">
                 <md-table-cell>{{ (row.frequency === 999) ? '-' : row.frequency }}</md-table-cell>
                 <md-table-cell>
                   {{row.total_my}}
@@ -52,7 +52,7 @@
               </md-table-row>
             </md-table-header>
             <md-table-body>
-              <md-table-row v-for="row in reportWords">
+              <md-table-row v-for="row in reportWords" :key="row.hsk">
                 <md-table-cell>{{ (row.hsk === 999) ? '-' : row.hsk }}</md-table-cell>
                 <md-table-cell>{{row.total_my}}
                   {{ (row.hsk === 999) ? '' : ('/ ' + row.total + ' (' + row.percent + '%)') }}
@@ -92,7 +92,7 @@
             </md-table-row>
           </md-table-header>
           <md-table-body>
-            <md-table-row v-for="(ideogram, index) in reportUnkown">
+            <md-table-row v-for="(ideogram, index) in reportUnkown" :key="index">
               <md-table-cell class="ideogram">
                 <ideograms-show :pinyin="ideogram.pronunciation" :character="ideogram.ideogram"/>
               </md-table-cell>
@@ -125,7 +125,7 @@
             </md-table-row>
           </md-table-header>
           <md-table-body>
-            <md-table-row v-for="(ideogram, index) in reportUnkown">
+            <md-table-row v-for="(ideogram, index) in reportUnkown" :key="index">
               <md-table-cell class="ideogram">
                 <ideograms-show :pinyin="ideogram.pronunciation" :character="ideogram.ideogram"/>
               </md-table-cell>
@@ -157,7 +157,7 @@
             </md-table-row>
           </md-table-header>
           <md-table-body>
-            <md-table-row v-for="(ideogram, index) in reportUnkown">
+            <md-table-row v-for="(ideogram, index) in reportUnkown" :key="index">
               <md-table-cell class="ideogram">
                 <ideograms-show :pinyin="ideogram.pronunciation" :character="ideogram.ideogram"/>
               </md-table-cell>
@@ -190,7 +190,7 @@
             </md-table-row>
           </md-table-header>
           <md-table-body>
-            <md-table-row v-for="(ideogram, index) in reportUnkown">
+            <md-table-row v-for="(ideogram, index) in reportUnkown" :key="index">
               <md-table-cell class="ideogram">
                 <ideograms-show :pinyin="ideogram.pronunciation" :character="ideogram.ideogram"/>
               </md-table-cell>
