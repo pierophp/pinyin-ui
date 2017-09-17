@@ -9,7 +9,7 @@ class OptionsManager {
       type: '1', // 1 = pinyin_ideograms_without_knew, 2 = ideograms_only, 4 = pinyin_ideograms
       ideogramColored: '1', // bool
       ideogramSpaced: '1',  // bool
-      pinyinHide: '1',  // 1 = ideograms, 2 = wprd
+      pinyinHide: '2',  // 1 = ideograms, 2 = word
       color0: '#000000',
       color1: '#0000ff',
       color2: '#d16f00',
