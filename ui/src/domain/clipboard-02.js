@@ -15,8 +15,7 @@ export default function (content) {
   let i = 0;
 
   pinyinWords.forEach((pinyinWord) => {
-    const syllables = separatePinyinInSyllables(pinyinWord);
-    const words = syllables.split(' ');
+    const words = separatePinyinInSyllables(pinyinWord);
     let pinyin = '';
     let char = '';
 

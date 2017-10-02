@@ -21,7 +21,7 @@ module.exports = class Pleco {
       definition = definition.join(String.fromCharCode(60081));
       const pinyin = separatePinyinInSyllables(entry.pronunciation);
       let pinyinTones = '';
-      pinyin.split(' ').forEach((syllable) => {
+      pinyin.forEach((syllable) => {
         let tone = extractPinyinTone(syllable);
         if (tone === 0) {
           tone = 5;

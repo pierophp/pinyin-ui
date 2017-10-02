@@ -33,7 +33,10 @@ function loadFile(file, lineIndex, state, commit, storage, filename) {
     if (state.file.length > file.length) {
       state.file.splice(file.length, state.file.length - file.length);
     }
+
     commit(types.FILE_MUTATION_SET_FILE_LOADING, false);
+    commit(types.FILE_MUTATION_SET_PINYIN_SPACED);
+
     if (storage) {
       http
       .get('files/file', {

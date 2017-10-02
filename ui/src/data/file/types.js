@@ -54,4 +54,4 @@ export const FILE_MUTATION_SET_FILE_PARSING = 'file/mutation/SET_FILE_PARSING';
 export const FILE_MUTATION_SET_FILE_IMPORTING = 'file/mutation/SET_FILE_IMPORTING';
 export const FILE_MUTATION_SET_FOOTNOTES = 'file/mutation/SET_FOOTNOTES';
 export const FILE_MUTATION_SET_FULL_FILE = 'file/mutation/SET_FULL_FILE';
-
+export const FILE_MUTATION_SET_PINYIN_SPACED = 'file/mutation/SET_PINYIN_SPACED';

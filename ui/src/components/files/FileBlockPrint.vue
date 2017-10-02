@@ -110,7 +110,7 @@
         const chars = this.character.toString();
 
         let withoutPinyn = true;
-        const pinyin = separatePinyinInSyllables(this.pinyin).split(' ');
+        const pinyin = separatePinyinInSyllables(this.pinyin, true);
         for (let i = 0; i < chars.length; i += 1) {
           let newPinyin = '';
           let pinyinClass = '';

@@ -1,20 +1,11 @@
 <template>
   <div>
     <div class="bottom-bar" v-if="show">
-      <span class="ideogram-link" v-for="data in printData" @click.prevent="openModal(data.characterLink)">{{data.character}}</span>
-      <!-- span @click.prevent="openPinyinList()">{{ block.pinyin }}</span -->
+      <span class="ideogram-link" v-for="(data,index) in printData" @click.prevent="openModal(data.characterLink)" :key="index">
+        <ideograms-show :pinyin="data.pinyin" :character="data.character"/>
+      </span>
 
-      <md-menu md-size="2"  md-direction="top left" md-offset-y="-52" id="menu-pinyin">
-        <md-button md-menu-trigger class="md-2">
-          {{ block.pinyin }}
-        </md-button>
-
-        <md-menu-content>
-          <md-menu-item>Item 1</md-menu-item>
-          <md-menu-item>Item 2</md-menu-item>
-          <md-menu-item>Item 3</md-menu-item>
-        </md-menu-content>
-      </md-menu>
+      <span class="pinyin">{{ block.pinyin }}</span>
 
       <md-button class="md-icon-button md-primary" @click.native="loadDictionary()">
         <md-icon>find_in_page</md-icon>
@@ -84,6 +75,9 @@
   import IdeogramsShow from 'src/components/ideograms/Show';
   import OptionsManager from 'src/domain/options-manager';
   import MobileDetect from 'mobile-detect';
+  import separatePinyinInSyllables from 'shared/helpers/separate-pinyin-in-syllables';
+  import replaceall from 'replaceall';
+
   import {
     mapActions,
     mapMutations,
@@ -162,7 +156,9 @@
         }
 
         this.block = block;
+        block.pinyin = replaceall(String.fromCharCode(160), '', block.pinyin);
         this.tempDictCharacter = block.character;
+        const pinyin = separatePinyinInSyllables(block.pinyin);
         setTimeout(() => {
           this.tempDictCharacter = null;
         }, 2000);
@@ -176,6 +172,7 @@
           }
 
           printData.push({
+            pinyin: pinyin[i].trim(),
             character: chars[i],
             characterLink,
           });
@@ -256,6 +253,12 @@
   height: 40px;
   width: 100%;
   flex-shrink: 0;
+}
+.md-menu {
+  margin-left: -20px;
+}
+.pinyin{
+  font-size: 15px;
 }
 
 .bottom-bar #menu-pinyin .md-menu .md-button{

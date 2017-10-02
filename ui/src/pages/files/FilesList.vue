@@ -3,7 +3,7 @@
     <div class="files-container">
       <loadable-content :loading="loading">
         <md-list class="md-double-line">
-          <md-list-item v-for="(file, fileId) in files" @click="openOptions(fileId, $event)" v-bind:key="fileId">
+          <md-list-item v-for="(file, fileId) in filesList" @click="openOptions(fileId, $event)" v-bind:key="fileId">
             <md-button class="md-icon-button list-icon">
               <md-icon class="md-primary">
                 {{ file.type == 'file' ? 'collections' : 'folder' }}
@@ -75,6 +75,14 @@
     },
 
     computed: {
+      filesList: function filesList() {
+        if (!this.enableFiles) {
+          return [];
+        }
+
+        return this.files;
+      },
+
       ...mapGetters({
         files: FILES_GETTER,
         loading: FILE_GETTER_IMPORTING,
@@ -83,6 +91,7 @@
 
     data() {
       return {
+        enableFiles: false,
         redirect: true,
         deleteFilename: '',
         importFilename: '',
@@ -92,6 +101,9 @@
 
     created() {
       this.fetch();
+      setTimeout(() => {
+        this.enableFiles = true;
+      }, 250);
     },
 
     methods: {

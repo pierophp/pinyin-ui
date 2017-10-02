@@ -17,7 +17,11 @@ function separate(pinyin) {
     //.replace(new RegExp('([^e\w\s])(r)'), '$1 $2'); // r an initial, except in er
 }
 
-module.exports = function separatePinyinInSyllables(pinyin) {
+module.exports = function separatePinyinInSyllables(pinyin, separateBySpaces) {
+  if (separateBySpaces) {
+    return pinyin.split(String.fromCharCode(160));
+  }
+
   const pinyinSeparated = separate(pinyin).split(' ');
   const newPinyin = [];
   pinyinSeparated.forEach((p) => {
@@ -29,12 +33,12 @@ module.exports = function separatePinyinInSyllables(pinyin) {
 
     if (p.length > 4 || totalTones > 1) {
       separate(p).split(' ').forEach((newP) => {
-        newPinyin.push(newP);
+        newPinyin.push(newP.trim());
       });
     } else {
-      newPinyin.push(p);
+      newPinyin.push(p.trim());
     }
   });
 
-  return newPinyin.join(' ');
+  return newPinyin;
 };

@@ -6,7 +6,7 @@
     </div>
 
     <div class="pinyin" v-if="!block.small">
-      <medium-editor :content="pinyin" @content="updatePinyin"></medium-editor>
+      <medium-editor :content="pinyin | removeSpace" @content="updatePinyin"></medium-editor>
     </div>
 
     <div class="character" v-if="!block.small">
@@ -18,6 +18,7 @@
 <script>
   // import autosizeInput from 'autosize-input';
   import MediumEditor from 'src/components/common/editor/MediumEditor';
+  import replaceall from 'replaceall';
   import {
     mapMutations,
   } from 'vuex';
@@ -32,6 +33,13 @@
     name: 'file-block',
     components: {
       MediumEditor,
+    },
+    filters: {
+      removeSpace: function removeSpace(value) {
+        if (!value) return '';
+        value = value.toString();
+        return replaceall(String.fromCharCode(160), '', value);
+      },
     },
     props: {
       pinyin: {

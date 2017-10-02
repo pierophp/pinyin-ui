@@ -119,7 +119,7 @@ module.exports = class Tatoeba {
           const pinyin = await UnihanSearch.toPinyin(ideogramsList);
           const pinyinList = [];
           pinyin.forEach((item) => {
-            const pinyinConverted = separatePinyinInSyllables(item.pinyin).split(' ').join(String.fromCharCode(160));
+            const pinyinConverted = separatePinyinInSyllables(item.pinyin).join(String.fromCharCode(160));
             pinyinList.push(pinyinConverted);
           });
 

@@ -497,7 +497,7 @@ module.exports = class UnihanSearch {
 
     const changeToneRules = UnihanSearch.getChangeToneRules();
     result.forEach((item, itemIndex) => {
-      const pinyins = separatePinyinInSyllables(item.pinyin).split(' ');
+      const pinyins = separatePinyinInSyllables(item.pinyin);
       item.ideogram.split('').forEach((ideogram, ideogramIndex) => {
         if (!changeToneRules[ideogram]) {
           return;
@@ -507,7 +507,7 @@ module.exports = class UnihanSearch {
         if (pinyins[ideogramIndex + 1] !== undefined) {
           nextPronunciation = pinyins[ideogramIndex + 1];
         } else if (result[itemIndex + 1] !== undefined) {
-          const nextLinePinyin = separatePinyinInSyllables(result[itemIndex + 1].pinyin).replace("'", '').split(' ');
+          const nextLinePinyin = separatePinyinInSyllables(result[itemIndex + 1].pinyin).join(' ').replace("'", '').split(' ');
           nextPronunciation = nextLinePinyin[0];
         }
 

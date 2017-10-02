@@ -52,7 +52,7 @@
 
         let pinyin = '';
         if (this.pinyin) {
-          pinyin = separatePinyinInSyllables(this.pinyin).split(' ');
+          pinyin = separatePinyinInSyllables(this.pinyin, false);
         }
 
         if (options.ideogramColored === '0') {
