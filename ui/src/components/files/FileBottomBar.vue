@@ -5,7 +5,7 @@
         <ideograms-show :pinyin="data.pinyin" :character="data.character"/>
       </span>
 
-      <span class="pinyin">{{ block.pinyin }}</span>
+      <span class="bottom-bar-pinyin">{{ block.pinyin }}</span>
 
       <md-button class="md-icon-button md-primary" @click.native="loadDictionary()">
         <md-icon>find_in_page</md-icon>
@@ -282,7 +282,7 @@
   };
 </script>
 
-<style scoped>
+<style>
 .bottom-bar {
   border-top: 2px #ccc solid;
   background: #fff;
@@ -296,7 +296,7 @@
 .md-menu {
   margin-left: -20px;
 }
-.pinyin{
+.bottom-bar-pinyin{
   font-size: 15px;
 }
 
