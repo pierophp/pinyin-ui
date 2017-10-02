@@ -25,6 +25,10 @@
             <md-icon>swap_horiz</md-icon>
             <span>{{ $t('split') }}</span>
           </md-menu-item>
+          <md-menu-item @click.native="edit(block)">
+            <md-icon>edit</md-icon>
+            <span>{{ $t('edit') }}</span>
+          </md-menu-item>
           <md-menu-item @click.native="close()">
             <md-icon>clear</md-icon>
             <span>{{ $t('close') }}</span>
@@ -66,6 +70,23 @@
       </md-dialog-actions>
     </md-dialog>
 
+    <md-dialog ref="dialogEdit">
+      <md-dialog-title>
+        <ideograms-show :pinyin="block.pinyin" :character="block.character"/>
+        - {{ block.pinyin }}
+      </md-dialog-title>
+
+      <md-dialog-content>
+        <md-input-container md-inline>
+          <md-input :value="editPinyin" @change="changeEditPinyin"></md-input>
+        </md-input-container>
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click.native="confirmEdit">OK</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+
   </div>
 </template>
 
@@ -77,6 +98,7 @@
   import MobileDetect from 'mobile-detect';
   import separatePinyinInSyllables from 'shared/helpers/separate-pinyin-in-syllables';
   import replaceall from 'replaceall';
+  import pinyinHelper from 'src/helpers/pinyin';
 
   import {
     mapActions,
@@ -88,6 +110,7 @@
     FILE_ACTION_JOIN_LEFT,
     FILE_ACTION_SEPARATE,
     FILE_MUTATION_SET_MY_CJK_TEMP,
+    FILE_MUTATION_UPDATE_PINYIN,
     FILE_GETTER_MY_CJK,
   } from 'src/data/file/types';
 
@@ -97,6 +120,7 @@
     name: 'file-bottom-bar',
     data() {
       return {
+        editPinyin: '',
         separateCharacter: '',
         show: false,
         tempDictCharacter: null,
@@ -129,6 +153,7 @@
       }),
       ...mapMutations({
         setMyCjkTemp: FILE_MUTATION_SET_MY_CJK_TEMP,
+        updatePinyin: FILE_MUTATION_UPDATE_PINYIN,
       }),
 
       changeShow(show) {
@@ -143,6 +168,20 @@
       confirmSeparate() {
         this.separateAction({ ...this.block, separateCharacter: this.separateCharacter });
         this.closeDialog('dialogSeparate');
+      },
+
+      edit() {
+        this.editPinyin = this.block.pinyin;
+        this.openDialog('dialogEdit');
+      },
+
+      confirmEdit() {
+        this.updatePinyin({ ...this.block, pinyin: this.editPinyin });
+        this.closeDialog('dialogEdit');
+      },
+
+      changeEditPinyin(pinyin) {
+        this.editPinyin = pinyinHelper(pinyin);
       },
 
       close() {
