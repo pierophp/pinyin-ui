@@ -130,6 +130,18 @@ export default {
   },
 
   [types.FILE_MUTATION_SET_PINYIN_SPACED](state) {
+    if (!state.fullFile) {
+      return;
+    }
+
+    if (!state.fullFile[0]) {
+      return;
+    }
+
+    if (!state.fullFile[0][0]) {
+      return;
+    }
+
     if (!state.fullFile[0][0].line) {
       return;
     }
