@@ -282,7 +282,7 @@
   };
 </script>
 
-<style>
+<style scoped>
 .bottom-bar {
   border-top: 2px #ccc solid;
   background: #fff;

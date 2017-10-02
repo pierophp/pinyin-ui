@@ -130,6 +130,10 @@ export default {
   },
 
   [types.FILE_MUTATION_SET_PINYIN_SPACED](state) {
+    if (!state.fullFile[0][0].line) {
+      return;
+    }
+
     state.fullFile[0][0].line.pinyinSpaced = 1;
     state.file[0][0].line.pinyinSpaced = 1;
     state.fileChangeTimestamp = Date.now();
