@@ -9,6 +9,12 @@
 @media print
 {
   .md-toolbar { display: none !important; }
+  audio, .translation { display: none !important; }
+  #container, .content, .print-container {
+    display: block !important;
+    overflow: initial !important;
+    will-change: initial !important;
+  }
 }
 
 html, body {

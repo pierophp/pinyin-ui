@@ -76,7 +76,7 @@
 
           printData.push({
             ideogramClass,
-            toneColor: colors[tone],
+            toneColor: `${colors[tone]} !important`,
             character: chars[i],
           });
         }
