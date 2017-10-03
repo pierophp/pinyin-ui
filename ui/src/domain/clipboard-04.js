@@ -1,33 +1,30 @@
 // Ideograms
 import http from 'src/helpers/http';
 import replaceall from 'replaceall';
+import Promise from 'bluebird';
 
-export default function (content) {
+export default async function (content) {
   content = replaceall('+', '', content);
 
-  // remove double spaces
-  content = content.replace(/\s{2,}/g, ' ');
+  const lines = content.split('\n').filter((item) => item);
 
-  return new Promise((resolve, reject) => {
-    http
-    .post('segmentation/segment', {
-      ideograms: content,
-    })
-    .then((response) => {
-      const rows = [];
-      const row = [];
-      response.data.ideograms.forEach((char) => {
-        row.push({
-          p: '',
-          c: char,
-        });
+  return Promise.map(lines, async (line) => {
+    // remove double spaces
+    line = line.replace(/\s{2,}/g, ' ');
+
+    const response = await http
+      .post('segmentation/segment', {
+        ideograms: line,
       });
 
-      rows.push(row);
-      resolve(rows);
-    })
-    .catch((error) => {
-      reject(error);
+    const row = [];
+    response.data.ideograms.forEach((char) => {
+      row.push({
+        p: '',
+        c: char,
+      });
     });
+
+    return row;
   });
-}
+};
