@@ -11,12 +11,18 @@
         <md-icon>find_in_page</md-icon>
       </md-button>
 
-      <md-menu md-size="4"  md-direction="top left" md-offset-y="-52">
+      <Links :character="block.character" ref="links"/>
+
+      <md-menu md-size="4" md-direction="top left" md-offset-y="-52">
         <md-button class="md-icon-button md-primary md-2" md-menu-trigger>
           <md-icon>more_vert</md-icon>
         </md-button>
 
         <md-menu-content>
+          <md-menu-item @click.native="close()">
+            <md-icon>clear</md-icon>
+            <span>{{ $t('close') }}</span>
+          </md-menu-item>
           <md-menu-item @click.native="joinLeft(block)">
             <md-icon>arrow_back</md-icon>
             <span>{{ $t('join_left') }}</span>
@@ -29,9 +35,9 @@
             <md-icon>edit</md-icon>
             <span>{{ $t('edit') }}</span>
           </md-menu-item>
-          <md-menu-item @click.native="close()">
-            <md-icon>clear</md-icon>
-            <span>{{ $t('close') }}</span>
+          <md-menu-item @click.native="openLinkMenu()">
+            <md-icon>open_in_browser</md-icon>
+            <span>Links</span>
           </md-menu-item>
         </md-menu-content>
       </md-menu>
@@ -94,6 +100,7 @@
   import http from 'src/helpers/http';
   import DictionaryDetails from 'src/components/dictionary/Details';
   import IdeogramsShow from 'src/components/ideograms/Show';
+  import Links from 'src/components/files/Links';
   import OptionsManager from 'src/domain/options-manager';
   import MobileDetect from 'mobile-detect';
   import separatePinyinInSyllables from 'shared/helpers/separate-pinyin-in-syllables';
@@ -139,6 +146,7 @@
     components: {
       DictionaryDetails,
       IdeogramsShow,
+      Links,
     },
     computed: {
       ...mapGetters({
@@ -155,6 +163,10 @@
         setMyCjkTemp: FILE_MUTATION_SET_MY_CJK_TEMP,
         updatePinyin: FILE_MUTATION_UPDATE_PINYIN,
       }),
+
+      openLinkMenu() {
+        this.$refs.links.$refs.menuLinks.open();
+      },
 
       changeShow(show) {
         this.show = !show;
@@ -294,7 +306,7 @@
   flex-shrink: 0;
 }
 .bottom-bar .md-menu {
-  margin-left: -20px;
+  margin-left: -18px;
 }
 .bottom-bar-pinyin{
   font-size: 15px;
