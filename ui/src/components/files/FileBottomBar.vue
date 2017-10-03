@@ -293,7 +293,7 @@
   width: 100%;
   flex-shrink: 0;
 }
-.md-menu {
+.bottom-bar .md-menu {
   margin-left: -20px;
 }
 .bottom-bar-pinyin{
