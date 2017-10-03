@@ -101,9 +101,14 @@
 
     created() {
       this.fetch();
-      setTimeout(() => {
-        this.enableFiles = true;
-      }, 300);
+    },
+
+    mounted() {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          this.enableFiles = true;
+        });
+      });
     },
 
     methods: {
