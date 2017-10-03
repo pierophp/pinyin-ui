@@ -103,7 +103,7 @@
       this.fetch();
       setTimeout(() => {
         this.enableFiles = true;
-      }, 250);
+      }, 300);
     },
 
     methods: {
