@@ -173,7 +173,7 @@
           character: this.lines[lineIndex][blockIndex].c,
           lineIndex,
           blockIndex,
-          openDictionary: e.ctrlKey,
+          openDictionary: (e.ctrlKey || e.metaKey),
         });
       },
 
