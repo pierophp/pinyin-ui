@@ -48,6 +48,13 @@
       <md-dialog-title>
         <ideograms-show :pinyin="block.pinyin" :character="block.character"/>
         - {{ block.pinyin }}
+        <md-button class="md-icon-button md-primary clipboard-btn" v-clipboard="block.character" @success="clipboardSuccess">
+          <md-icon>content_copy</md-icon>
+        </md-button>
+
+        <md-button class="md-icon-button md-warn sound-btn" @click.native="openSound">
+          <md-icon>volume_up</md-icon>
+        </md-button>
       </md-dialog-title>
 
       <md-dialog-content>
@@ -93,6 +100,12 @@
       </md-dialog-actions>
     </md-dialog>
 
+    <forvo-modal ref="dialogForvo" :character="block.character" />
+
+    <md-snackbar md-position="bottom center" ref="snackbarClipboard" md-duration="1300">
+      <span>{{ $t('copied_to_clipboard') }}</span>
+    </md-snackbar>
+
   </div>
 </template>
 
@@ -106,6 +119,7 @@
   import separatePinyinInSyllables from 'shared/helpers/separate-pinyin-in-syllables';
   import replaceall from 'replaceall';
   import pinyinHelper from 'src/helpers/pinyin';
+  import ForvoModal from 'src/components/modals/Forvo';
 
   import {
     mapActions,
@@ -147,6 +161,7 @@
       DictionaryDetails,
       IdeogramsShow,
       Links,
+      ForvoModal,
     },
     computed: {
       ...mapGetters({
@@ -273,6 +288,14 @@
         });
       },
 
+      clipboardSuccess() {
+        this.$refs.snackbarClipboard.open();
+      },
+
+      openSound() {
+        this.openDialog('dialogForvo');
+      },
+
       openDialog(ref) {
         this.$refs[ref].open();
       },
@@ -310,6 +333,25 @@
 }
 .bottom-bar-pinyin{
   font-size: 15px;
+}
+
+.sound-btn,
+.clipboard-btn {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 30px !important;
+  min-width: 30px !important;
+  height: 30px !important;
+  min-height: 30px !important;
+}
+
+.sound-btn i,
+.clipboard-btn i{
+  width: 20px !important;
+  min-width: 20px !important;
+  height: 20px !important;
+  min-height: 20px !important;
+  font-size: 20px !important;
 }
 
 .bottom-bar #menu-pinyin .md-menu .md-button{

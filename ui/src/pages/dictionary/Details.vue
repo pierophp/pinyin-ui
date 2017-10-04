@@ -17,15 +17,7 @@
     </md-tabs>
   </loadable-content>
 
-  <md-dialog ref="dialogForvo">
-    <md-dialog-content>
-      <iframe :src="forvoUrl" id="forvo"/>
-    </md-dialog-content>
-
-    <md-dialog-actions>
-      <md-button class="md-primary" @click.native="closeDialog('dialogForvo')">OK</md-button>
-    </md-dialog-actions>
-  </md-dialog>
+  <forvo-modal ref="dialogForvo" :character="dictionary.ideograms" />
 
   <md-button @click.native="back" class="md-fab md-fab-bottom-right md-warn">
     <md-icon>arrow_back</md-icon>
@@ -39,6 +31,7 @@
   import DictionaryDetails from 'src/components/dictionary/Details';
   import DictionaryStrokeOrder from 'src/components/dictionary/StrokeOrder';
   import IdeogramsShow from 'src/components/ideograms/Show';
+  import ForvoModal from 'src/components/modals/Forvo';
 
   export default {
     name: 'dicionary-search',
@@ -47,6 +40,7 @@
       DictionaryDetails,
       DictionaryStrokeOrder,
       IdeogramsShow,
+      ForvoModal,
     },
     data() {
       return {
@@ -69,7 +63,6 @@
         })
         .then((response) => {
           this.dictionary = response.data;
-          this.forvoUrl = `https://pt.forvo.com/word/${this.dictionary.ideograms}/#zh`;
           this.loading = false;
         });
       },

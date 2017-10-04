@@ -93,4 +93,5 @@ export default {
   split: 'Split',
   show_track: 'Show Track',
   hide_track: 'Hide Track',
+  copied_to_clipboard: 'Copied to clipboard',
 };

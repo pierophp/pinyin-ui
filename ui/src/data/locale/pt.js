@@ -93,4 +93,5 @@ export default {
   split: 'Separar',
   show_track: 'Mostrar Legenda',
   hide_track: 'Esconder Legenda',
+  copied_to_clipboard: 'Copiado para a área de transferência',
 };

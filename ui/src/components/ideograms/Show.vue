@@ -1,8 +1,9 @@
 <template>
     <div class="ideogram-show">
-      <span v-for="data in printData" :class="[data.ideogramClass]" :style="{ color: data.toneColor }">
-        {{data.character}}
-      </span>
+      <span v-for="(data, index) in printData"
+            :class="[data.ideogramClass]"
+            :style="{ color: data.toneColor }"
+            v-bind:key="index">{{data.character}}</span>
     </div>
 </template>
 
