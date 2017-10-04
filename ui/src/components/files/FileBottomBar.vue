@@ -11,7 +11,7 @@
         <md-icon>find_in_page</md-icon>
       </md-button>
 
-      <Links :character="block.character" ref="links"/>
+
 
       <md-menu md-size="4" md-direction="top left" md-offset-y="-52">
         <md-button class="md-icon-button md-primary md-2" md-menu-trigger>
@@ -41,6 +41,8 @@
           </md-menu-item>
         </md-menu-content>
       </md-menu>
+
+      <Links list=0 :character="block.character" ref="links"/>
     </div>
 
 
@@ -113,7 +115,7 @@
   import http from 'src/helpers/http';
   import DictionaryDetails from 'src/components/dictionary/Details';
   import IdeogramsShow from 'src/components/ideograms/Show';
-  import Links from 'src/components/files/Links';
+  import Links from 'src/components/ideograms/Links';
   import OptionsManager from 'src/domain/options-manager';
   import MobileDetect from 'mobile-detect';
   import separatePinyinInSyllables from 'shared/helpers/separate-pinyin-in-syllables';
@@ -329,7 +331,7 @@
   flex-shrink: 0;
 }
 .bottom-bar .md-menu {
-  margin-left: -18px;
+  margin-left: -30px;
 }
 .bottom-bar-pinyin{
   font-size: 15px;

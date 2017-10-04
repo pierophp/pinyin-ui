@@ -14,6 +14,10 @@
       <md-tab id="stroke" :md-label="$t('stroke')">
         <dictionary-stroke-order :ideograms="dictionary.ideograms"/>
       </md-tab>
+
+      <md-tab id="links" md-label="Links">
+          <Links list=1 :character="dictionary.ideograms"/>
+      </md-tab>
     </md-tabs>
   </loadable-content>
 
@@ -32,6 +36,7 @@
   import DictionaryStrokeOrder from 'src/components/dictionary/StrokeOrder';
   import IdeogramsShow from 'src/components/ideograms/Show';
   import ForvoModal from 'src/components/modals/Forvo';
+  import Links from 'src/components/ideograms/Links';
 
   export default {
     name: 'dicionary-search',
@@ -41,6 +46,7 @@
       DictionaryStrokeOrder,
       IdeogramsShow,
       ForvoModal,
+      Links,
     },
     data() {
       return {
