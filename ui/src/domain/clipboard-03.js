@@ -6,7 +6,7 @@ import OptionsManager from 'src/domain/options-manager';
 
 async function parseJW(link) {
   const options = OptionsManager.getOptions();
-  const response = await http.get(`jw/download?url=${link}&language=${options.translationLanguage}`);
+  const response = await http.get(`jw/download?url=${link}&language=${options.translationLanguage}&ideogramType=${options.ideogramType}`);
   return response.data;
 }
 

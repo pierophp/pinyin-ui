@@ -1,15 +1,25 @@
 <template>
-  <md-menu md-size="4" md-direction="top left" md-offset-y="-52" ref="menuLinks">
-    <span md-menu-trigger></span>
+  <div>
+    <md-menu md-size="4" md-direction="top left" md-offset-y="-52" ref="menuLinks" v-if="list == 0">
+      <span md-menu-trigger></span>
 
-    <md-menu-content>
-      <a v-for="(link, index) in links" :href="link.href" v-bind:key="index" target="_blank">
-        <md-menu-item>
-          <span>{{ link.title }}</span>
-        </md-menu-item>
-      </a>
-    </md-menu-content>
-  </md-menu>
+      <md-menu-content>
+        <a v-for="(link, index) in links" :href="link.href" v-bind:key="index" target="_blank">
+          <md-menu-item>
+            <span>{{ link.title }}</span>
+          </md-menu-item>
+        </a>
+      </md-menu-content>
+    </md-menu>
+
+    <div v-if="list == 1">
+      <div v-for="(link, index) in links" v-bind:key="index">
+        <a :href="link.href" target="_blank">
+          <md-button class="link-button md-primary">{{ link.title }}</md-button>
+        </a>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -17,6 +27,7 @@
     name: 'links',
     props: {
       character: '',
+      list: 0,
     },
     computed: {
       links: function links() {
@@ -34,8 +45,12 @@
             href: `https://chinese.stackexchange.com/search?q=${this.character}&amp;characterMode=s`,
           },
           {
-            title: '51240 (Dictionary)',
-            href: `https://cidian.51240.com/${this.character}__cidian/`,
+            title: 'Bing Dictionary',
+            href: `http://www.bing.com/dict/search?q=${this.character}&mkt=zh-CN&setlang=ZH`,
+          },
+          {
+            title: 'Baidu Dictionary',
+            href: `http://dict.baidu.com/s?wd=${this.character}`,
           },
           {
             title: 'Chinese Pod Sentences',
@@ -46,36 +61,20 @@
             href: `https://resources.allsetlearning.com/chinese/grammar/${this.character}`,
           },
           {
-            title: 'Baidu Dictionary',
-            href: `http://dict.baidu.com/s?wd=${this.character}`,
-          },
-          {
-            title: 'Bing Dictionary',
-            href: `http://www.bing.com/dict/search?q=${this.character}&mkt=zh-CN&setlang=ZH`,
+            title: 'Google Images',
+            href: `https://www.google.com.br/search?tbm=isch&q=${this.character}`,
           },
           {
             title: 'Baidu Images',
             href: `http://image.baidu.com/search/index?tn=baiduimage&word=${this.character}`,
           },
           {
-            title: 'Google Images',
-            href: `https://www.google.com.br/search?tbm=isch&q=${this.character}`,
-          },
-          {
-            title: 'Google News',
-            href: `https://www.google.com.br/search?tbm=nws&q=${this.character}`,
+            title: 'Google Translate',
+            href: `https://translate.google.com/translate#zh-CN|en|${this.character}`,
           },
           {
             title: 'Baidu Translate',
             href: `http://fanyi.baidu.com/#zh/en/${this.character}`,
-          },
-          {
-            title: 'Google Translate',
-            href: `https://translate.google.com/m/translate#zh-CN|en|${this.character}`,
-          },
-          {
-            title: 'HanziCraft',
-            href: `http://www.hanzicraft.com/character/${this.character}`,
           },
           {
             title: 'Tatoeba (sentences)',
@@ -86,16 +85,36 @@
             href: `https://www.yellowbridge.com/chinese/sentsearch.php?word=${this.character}&amp;characterMode=s`,
           },
           {
-            title: 'Wikipedia',
-            href: `https://zh.wikipedia.org/wiki/${this.character}`,
+            title: 'Line',
+            href: `http://linedictionary.naver.com/dict.html#/cnen/search?query=${this.character}`,
+          },
+          {
+            title: 'Line (sentences)',
+            href: `http://linedictionary.naver.com/dict.html#/cnen/example?query=${this.character}`,
+          },
+          {
+            title: 'WordReference',
+            href: `http://www.wordreference.com/zhen/${this.character}`,
           },
           {
             title: 'Wiktionary',
             href: `https://en.wiktionary.org/wiki/${this.character}?#Mandarin`,
           },
           {
-            title: 'WordReference',
-            href: `http://www.wordreference.com/zhen/${this.character}`,
+            title: '51240 (Dictionary)',
+            href: `https://cidian.51240.com/${this.character}__cidian/`,
+          },
+          {
+            title: 'Google News',
+            href: `https://www.google.com.br/search?tbm=nws&q=${this.character}`,
+          },
+          {
+            title: 'HanziCraft',
+            href: `http://www.hanzicraft.com/character/${this.character}`,
+          },
+          {
+            title: 'Wikipedia',
+            href: `https://zh.wikipedia.org/wiki/${this.character}`,
           },
           {
             title: 'iCIBA',
@@ -105,10 +124,7 @@
             title: 'CiBo',
             href: `http://www.cibo.cn/search.php?dictkeyword=${this.character}`,
           },
-          {
-            title: 'Line',
-            href: `http://linedictionary.naver.com/dict.html#/cnen/search?query=${this.character}`,
-          },
+
           {
             title: 'MDBG Word Dict',
             href: `https://www.mdbg.net/chinese/dictionary?page=worddict&wdrst=0&wdqb=${this.character}`,
@@ -124,10 +140,6 @@
           {
             title: 'JuKuu (sentences)',
             href: `http://jukuu.com/search.php?q=${this.character}`,
-          },
-          {
-            title: 'Line (sentences)',
-            href: `http://linedictionary.naver.com/dict.html#/cnen/example?query=${this.character}`,
           },
           {
             title: 'CantoDict',
@@ -155,3 +167,8 @@
   };
 </script>
 
+<style scoped>
+.link-button {
+  margin: 5px 0 !important;
+}
+</style>

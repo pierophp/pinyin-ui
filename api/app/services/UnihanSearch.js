@@ -9,6 +9,7 @@ const ArrayCache = require('../cache/ArrayCache');
 const RedisCache = require('../cache/RedisCache');
 const ChineseToolsDownloader = require('../services/ChineseToolsDownloader');
 const fs = Promise.promisifyAll(require('fs'));
+const opencc = require('node-opencc');
 
 nodejieba.load({
   userDict: `${__dirname}/../data/compiled.utf8`,
@@ -36,7 +37,7 @@ module.exports = class UnihanSearch {
     if (isChinese(search)) {
       cjkList = await knex('cjk')
       .where({
-        ideogram: UnihanSearch.convertIdeogramsToUtf16(search),
+        ideogram: UnihanSearch.convertIdeogramsToUtf16(await opencc.traditionalToSimplified(search)),
       })
       .orderBy('main', 'DESC')
       .orderBy('frequency', 'ASC')
@@ -45,7 +46,7 @@ module.exports = class UnihanSearch {
       .select('id', 'pronunciation', 'ideogram');
 
       const cjkListLike = await knex('cjk')
-      .where('ideogram', 'LIKE', `${UnihanSearch.convertIdeogramsToUtf16(search)}%`)
+      .where('ideogram', 'LIKE', `${UnihanSearch.convertIdeogramsToUtf16(await opencc.traditionalToSimplified(search))}%`)
       .orderBy('main', 'DESC')
       .orderBy('frequency', 'ASC')
       .orderBy('hsk', 'ASC')
@@ -79,8 +80,9 @@ module.exports = class UnihanSearch {
       cjkList = _.uniqBy([].concat(cjkList, cjkListLike), 'id');
     }
 
-    cjkList.map((entry) => {
+    await Promise.map(cjkList, async (entry) => {
       entry.ideogram = UnihanSearch.convertUtf16ToIdeograms(entry.ideogram);
+      entry.ideogramTraditional = await opencc.simplifiedToTraditional(entry.ideogram);
       return entry;
     });
 
@@ -90,7 +92,7 @@ module.exports = class UnihanSearch {
   static async searchToDictionary(search) {
     const where = {};
     if (search.ideograms !== undefined) {
-      where.ideogram = UnihanSearch.convertIdeogramsToUtf16(search.ideograms);
+      where.ideogram = UnihanSearch.convertIdeogramsToUtf16(await opencc.traditionalToSimplified(search.ideograms));
     }
 
     if (search.id !== undefined) {
@@ -105,6 +107,9 @@ module.exports = class UnihanSearch {
 
     const response = {};
     response.ideograms = search.ideograms;
+    if (search.ideograms) {
+      response.ideogramsTraditional = await opencc.simplifiedToTraditional(search.ideograms);
+    }
     response.pronunciation = null;
     response.unihan = null;
     response.pt = null;
@@ -121,6 +126,10 @@ module.exports = class UnihanSearch {
       const ideograms = UnihanSearch.convertUtf16ToIdeograms(cjk.ideogram);
       response.pronunciation = cjk.pronunciation;
       response.ideograms = ideograms;
+      if (!response.ideogramsTraditional) {
+        response.ideogramsTraditional = await opencc.simplifiedToTraditional(ideograms);
+      }
+
       if (cjk.definition_unihan) {
         response.unihan = [cjk.definition_unihan];
       }
@@ -344,6 +353,8 @@ module.exports = class UnihanSearch {
       '·': ' ',
       '*': ' ',
       '"': ' ',
+      '「': ' ',
+      '」': ' ',
       1: ' ',
       2: ' ',
       3: ' ',

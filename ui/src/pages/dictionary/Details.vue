@@ -2,7 +2,7 @@
 <div class="dictionary-container">
   <loadable-content :loading="loading">
     <h2>
-      <ideograms-show :pinyin="dictionary.pronunciation" :character="dictionary.ideograms"/>
+      <traditional-simplified-show :pinyin="dictionary.pronunciation" :simplified="dictionary.ideograms" :traditional="dictionary.ideogramsTraditional"/>
       - {{ dictionary.pronunciation }} <md-icon class="md-warn sound" @click.native="openSound">volume_up</md-icon>
     </h2>
 
@@ -12,20 +12,16 @@
       </md-tab>
 
       <md-tab id="stroke" :md-label="$t('stroke')">
-        <dictionary-stroke-order :ideograms="dictionary.ideograms"/>
+        <dictionary-stroke-order :ideograms="ideograms"/>
+      </md-tab>
+
+      <md-tab id="links" md-label="Links">
+          <Links list=1 :character="dictionary.ideograms"/>
       </md-tab>
     </md-tabs>
   </loadable-content>
 
-  <md-dialog ref="dialogForvo">
-    <md-dialog-content>
-      <iframe :src="forvoUrl" id="forvo"/>
-    </md-dialog-content>
-
-    <md-dialog-actions>
-      <md-button class="md-primary" @click.native="closeDialog('dialogForvo')">OK</md-button>
-    </md-dialog-actions>
-  </md-dialog>
+  <forvo-modal ref="dialogForvo" :character="dictionary.ideograms" />
 
   <md-button @click.native="back" class="md-fab md-fab-bottom-right md-warn">
     <md-icon>arrow_back</md-icon>
@@ -38,7 +34,12 @@
   import LoadableContent from 'src/components/common/loading/LoadableContent';
   import DictionaryDetails from 'src/components/dictionary/Details';
   import DictionaryStrokeOrder from 'src/components/dictionary/StrokeOrder';
-  import IdeogramsShow from 'src/components/ideograms/Show';
+  import TraditionalSimplifiedShow from 'src/components/ideograms/TraditionalSimplifiedShow';
+  import ForvoModal from 'src/components/modals/Forvo';
+  import Links from 'src/components/ideograms/Links';
+  import OptionsManager from 'src/domain/options-manager';
+
+  const options = OptionsManager.getOptions();
 
   export default {
     name: 'dicionary-search',
@@ -46,7 +47,9 @@
       LoadableContent,
       DictionaryDetails,
       DictionaryStrokeOrder,
-      IdeogramsShow,
+      TraditionalSimplifiedShow,
+      ForvoModal,
+      Links,
     },
     data() {
       return {
@@ -57,6 +60,14 @@
     },
     mounted() {
       this.search();
+    },
+    computed: {
+      ideograms: function first() {
+        if (options.ideogramType === 't') {
+          return this.dictionary.ideogramsTraditional;
+        }
+        return this.dictionary.ideograms;
+      },
     },
     methods: {
       search() {
@@ -69,7 +80,6 @@
         })
         .then((response) => {
           this.dictionary = response.data;
-          this.forvoUrl = `https://pt.forvo.com/word/${this.dictionary.ideograms}/#zh`;
           this.loading = false;
         });
       },

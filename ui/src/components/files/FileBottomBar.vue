@@ -11,7 +11,7 @@
         <md-icon>find_in_page</md-icon>
       </md-button>
 
-      <Links :character="block.character" ref="links"/>
+
 
       <md-menu md-size="4" md-direction="top left" md-offset-y="-52">
         <md-button class="md-icon-button md-primary md-2" md-menu-trigger>
@@ -41,6 +41,8 @@
           </md-menu-item>
         </md-menu-content>
       </md-menu>
+
+      <Links list=0 :character="block.character" ref="links"/>
     </div>
 
 
@@ -48,6 +50,13 @@
       <md-dialog-title>
         <ideograms-show :pinyin="block.pinyin" :character="block.character"/>
         - {{ block.pinyin }}
+        <md-button class="md-icon-button md-primary clipboard-btn" v-clipboard="block.character" @success="clipboardSuccess">
+          <md-icon>content_copy</md-icon>
+        </md-button>
+
+        <md-button class="md-icon-button md-warn sound-btn" @click.native="openSound">
+          <md-icon>volume_up</md-icon>
+        </md-button>
       </md-dialog-title>
 
       <md-dialog-content>
@@ -93,6 +102,12 @@
       </md-dialog-actions>
     </md-dialog>
 
+    <forvo-modal ref="dialogForvo" :character="block.character" />
+
+    <md-snackbar md-position="bottom center" ref="snackbarClipboard" md-duration="1300">
+      <span>{{ $t('copied_to_clipboard') }}</span>
+    </md-snackbar>
+
   </div>
 </template>
 
@@ -100,12 +115,13 @@
   import http from 'src/helpers/http';
   import DictionaryDetails from 'src/components/dictionary/Details';
   import IdeogramsShow from 'src/components/ideograms/Show';
-  import Links from 'src/components/files/Links';
+  import Links from 'src/components/ideograms/Links';
   import OptionsManager from 'src/domain/options-manager';
   import MobileDetect from 'mobile-detect';
   import separatePinyinInSyllables from 'shared/helpers/separate-pinyin-in-syllables';
   import replaceall from 'replaceall';
   import pinyinHelper from 'src/helpers/pinyin';
+  import ForvoModal from 'src/components/modals/Forvo';
 
   import {
     mapActions,
@@ -147,6 +163,7 @@
       DictionaryDetails,
       IdeogramsShow,
       Links,
+      ForvoModal,
     },
     computed: {
       ...mapGetters({
@@ -222,8 +239,13 @@
             characterLink = chars;
           }
 
+          let pinyinSeparated = '';
+          if (pinyin[i]) {
+            pinyinSeparated = pinyin[i].trim();
+          }
+
           printData.push({
-            pinyin: pinyin[i].trim(),
+            pinyin: pinyinSeparated,
             character: chars[i],
             characterLink,
           });
@@ -254,7 +276,9 @@
           },
         })
         .then((response) => {
-          if (response.data.ideograms !== this.block.character) {
+          const isSimplifiedEquals = response.data.ideograms === this.block.character;
+          const isTradiaionalEquals = response.data.ideogramsTraditional === this.block.character;
+          if (!isSimplifiedEquals && !isTradiaionalEquals) {
             return;
           }
           this.dictionary = response.data;
@@ -271,6 +295,14 @@
           // eslint-disable-next-line
           console.log(response.data);
         });
+      },
+
+      clipboardSuccess() {
+        this.$refs.snackbarClipboard.open();
+      },
+
+      openSound() {
+        this.openDialog('dialogForvo');
       },
 
       openDialog(ref) {
@@ -306,10 +338,29 @@
   flex-shrink: 0;
 }
 .bottom-bar .md-menu {
-  margin-left: -18px;
+  margin-left: -30px;
 }
 .bottom-bar-pinyin{
   font-size: 15px;
+}
+
+.sound-btn,
+.clipboard-btn {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 30px !important;
+  min-width: 30px !important;
+  height: 30px !important;
+  min-height: 30px !important;
+}
+
+.sound-btn i,
+.clipboard-btn i{
+  width: 20px !important;
+  min-width: 20px !important;
+  height: 20px !important;
+  min-height: 20px !important;
+  font-size: 20px !important;
 }
 
 .bottom-bar #menu-pinyin .md-menu .md-button{

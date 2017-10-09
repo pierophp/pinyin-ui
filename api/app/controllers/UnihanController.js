@@ -5,10 +5,11 @@ const Promise = require('bluebird');
 const ArrayCache = require('../cache/ArrayCache');
 const RedisCache = require('../cache/RedisCache');
 const removeDiacritics = require('diacritics').remove;
+const opencc = require('node-opencc');
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
-router.get('/search', (req, res) => {
+router.get('/search', async (req, res) => {
   const pinyin = req.query.pinyin.toLowerCase();
 
   const mostUsedPromise = knex('cjk')
@@ -85,7 +86,7 @@ router.post('/save', async (req, res) => {
     return;
   }
 
-  const ideogram = UnihanSearch.convertIdeogramsToUtf16(req.body.ideograms);
+  const ideogram = UnihanSearch.convertIdeogramsToUtf16(await opencc.simplifiedToTraditional(req.body.ideograms));
   const response = await knex('cjk')
         .where({
           ideogram,

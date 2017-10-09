@@ -13,7 +13,7 @@
       <md-list-item v-for="entry in entries" @click="details(entry.id)" v-bind:key="entry.id">
         <span>
           <span class="ideogram">
-            <ideograms-show :pinyin="entry.pronunciation" :character="entry.ideogram"/>
+            <traditional-simplified-show :pinyin="entry.pronunciation" :simplified="entry.ideogram" :traditional="entry.ideogramTraditional"/>
           </span
           ><span class="pinyin"> - {{ entry.pronunciation }}</span>
         </span>
@@ -28,14 +28,14 @@
 <script>
   import http from 'src/helpers/http';
   import LoadableContent from 'src/components/common/loading/LoadableContent';
-  import IdeogramsShow from 'src/components/ideograms/Show';
+  import TraditionalSimplifiedShow from 'src/components/ideograms/TraditionalSimplifiedShow';
   import replaceall from 'replaceall';
 
   export default {
     name: 'dicionary-search',
     components: {
       LoadableContent,
-      IdeogramsShow,
+      TraditionalSimplifiedShow,
     },
     data() {
       return {

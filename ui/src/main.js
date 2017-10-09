@@ -3,6 +3,7 @@ import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import VueI18n from 'vue-i18n';
 import VueAnalytics from 'vue-analytics';
+import VueClipboards from 'vue-clipboards';
 
 // @todo Implement autocomplete
 // @todo melhorar ordenação
@@ -25,6 +26,7 @@ import localePt from 'src/data/locale/pt';
 
 Vue.use(VueI18n);
 Vue.use(VueMaterial);
+Vue.use(VueClipboards);
 
 Vue.locale('en', localeEn);
 Vue.locale('pt', localePt);

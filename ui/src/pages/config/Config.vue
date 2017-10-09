@@ -48,6 +48,14 @@
         </md-input-container>
 
         <md-input-container>
+          <label for="ideogramType">{{ $t('ideogram_type') }}</label>
+          <md-select name="ideogramType" id="ideogramType" v-model="ideogramType">
+            <md-option value="s">{{ $t('simplified') }}</md-option>
+            <md-option value="t">{{ $t('traditional') }}</md-option>
+          </md-select>
+        </md-input-container>
+
+        <md-input-container>
           <label for="ideogramColored">{{ $t('ideograms_colored') }}</label>
           <md-select name="ideogramColored" id="ideogramColored" v-model="ideogramColored">
             <md-option value="1">{{ $t('yes') }}</md-option>
