@@ -9,7 +9,7 @@ module.exports = {
       user: env.database_user,
       password: env.database_pass,
       charset: 'utf8mb4',
-      port: 3306,
+      port: env.database_port || '3306',
     },
     pool: {
       min: 2,
