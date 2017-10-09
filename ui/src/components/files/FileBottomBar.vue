@@ -276,7 +276,9 @@
           },
         })
         .then((response) => {
-          if (response.data.ideograms !== this.block.character) {
+          const isSimplifiedEquals = response.data.ideograms === this.block.character;
+          const isTradiaionalEquals = response.data.ideogramsTraditional === this.block.character;
+          if (!isSimplifiedEquals && !isTradiaionalEquals) {
             return;
           }
           this.dictionary = response.data;
