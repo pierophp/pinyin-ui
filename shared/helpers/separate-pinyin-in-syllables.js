@@ -1,3 +1,4 @@
+const replaceall = require('replaceall');
 const vowels = 'aāáǎàeēéěèiīíǐìoōóǒòuūúǔùüǖǘǚǜ';
 const tones = 'āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ';
 function separate(pinyin) {
@@ -22,18 +23,32 @@ module.exports = function separatePinyinInSyllables(pinyin, separateBySpaces) {
     return pinyin.split(String.fromCharCode(160));
   }
 
+  pinyin = replaceall(String.fromCharCode(160), '', pinyin);
+
   const pinyinSeparated = separate(pinyin).split(' ');
   const newPinyin = [];
+
   pinyinSeparated.forEach((p) => {
     let totalTones = 1;
-    const pregMatch = p.match(new RegExp(`([${tones}])`, 'g'));
+    let pregMatch = p.match(new RegExp(`([${tones}])`, 'g'));
     if (pregMatch) {
       totalTones = pregMatch.length;
     }
 
     if (p.length > 4 || totalTones > 1) {
       separate(p).split(' ').forEach((newP) => {
-        newPinyin.push(newP.trim());
+        pregMatch = newP.match(new RegExp(`([${tones}])`, 'g'));
+        if (pregMatch) {
+          totalTones = pregMatch.length;
+        }
+
+        if (newP.length > 4 || totalTones > 1) {
+          separate(newP).split(' ').forEach((newP2) => {
+            newPinyin.push(newP2.trim());
+          });
+        } else {
+          newPinyin.push(newP.trim());
+        }
       });
     } else {
       newPinyin.push(p.trim());
