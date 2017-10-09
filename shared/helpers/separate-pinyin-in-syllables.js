@@ -1,4 +1,3 @@
-const replaceall = require('replaceall');
 const vowels = 'aāáǎàeēéěèiīíǐìoōóǒòuūúǔùüǖǘǚǜ';
 const tones = 'āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ';
 function separate(pinyin) {
@@ -22,9 +21,6 @@ module.exports = function separatePinyinInSyllables(pinyin, separateBySpaces) {
   if (separateBySpaces) {
     return pinyin.split(String.fromCharCode(160));
   }
-
-  pinyin = replaceall(String.fromCharCode(160), '', pinyin);
-
   const pinyinSeparated = separate(pinyin).split(' ');
   const newPinyin = [];
 
