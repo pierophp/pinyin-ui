@@ -94,4 +94,7 @@ export default {
   show_track: 'Mostrar Legenda',
   hide_track: 'Esconder Legenda',
   copied_to_clipboard: 'Copiado para a área de transferência',
+  ideogram_type: 'Tipo de Ideograma',
+  simplified: 'Simplificado',
+  traditional: 'Tradicional',
 };

@@ -94,4 +94,7 @@ export default {
   show_track: 'Show Track',
   hide_track: 'Hide Track',
   copied_to_clipboard: 'Copied to clipboard',
+  ideogram_type: 'Ideogram Type',
+  simplified: 'Simplified',
+  traditional: 'Traditional',
 };

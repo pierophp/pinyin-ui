@@ -225,7 +225,9 @@
 
 </script>
 <style>
-  @import url(https://fonts.googleapis.com/earlyaccess/notosanssc.css);
+  @import url(//fonts.googleapis.com/earlyaccess/notosansscsliced.css);
+  @import url(//fonts.googleapis.com/earlyaccess/notosanstc.css);
+
   :root {
     --larger-pinyin-font-size: 23px;
     --larger-character-font-size: 34px;
@@ -282,7 +284,7 @@
   .print .character,
   .print .character span {
     min-width: 0;
-    font-family: 'Noto Sans SC', sans-serif;
+    font-family: 'Noto Sans SC Sliced', 'Noto Sans TC', sans-serif;
     font-weight: lighter;
   }
 

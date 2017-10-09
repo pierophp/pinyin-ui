@@ -239,8 +239,13 @@
             characterLink = chars;
           }
 
+          let pinyinSeparated = '';
+          if (pinyin[i]) {
+            pinyinSeparated = pinyin[i].trim();
+          }
+
           printData.push({
-            pinyin: pinyin[i].trim(),
+            pinyin: pinyinSeparated,
             character: chars[i],
             characterLink,
           });

@@ -8,6 +8,7 @@ class OptionsManager {
       size: 'normal', // normal, larger
       type: '1', // 1 = pinyin_ideograms_without_knew, 2 = ideograms_only, 4 = pinyin_ideograms
       ideogramColored: '1', // bool
+      ideogramType: 's', // s = simplified, t = traditional
       ideogramSpaced: '1',  // bool
       pinyinHide: '2',  // 1 = ideograms, 2 = word
       color0: '#000000',

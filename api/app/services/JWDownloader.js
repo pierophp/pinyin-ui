@@ -277,8 +277,12 @@ module.exports = class JwDownloader {
     return trackList.join('\n');
   }
 
-  static async download(url, language) {
+  static async download(url, language, ideogramType) {
     profiler(`Download JW Start - ${this.encodeUrl(url)}`);
+    if (!ideogramType) {
+      ideogramType = 's';
+    }
+
     const chineseSites = [
       'https://www.jw.org/cmn-hans',
       'https://www.jw.org/cmn-hant',
@@ -296,7 +300,8 @@ module.exports = class JwDownloader {
     let $ = cheerio.load(response.data);
     if (!isChinese) {
       newLanguage = url.replace('https://www.jw.org/', '').split('/')[0];
-      const chineseLink = $('link[hreflang="cmn-hans"]');
+
+      const chineseLink = $(`link[hreflang="cmn-han${ideogramType}"]`);
       if (chineseLink.length > 0) {
         const link = `https://www.jw.org${chineseLink.attr('href')}`;
         profiler(`Download JW Start - Chinese - ${this.encodeUrl(link)}`);
@@ -666,6 +671,7 @@ module.exports = class JwDownloader {
     text = $('<textarea />').html(text).text();
     text = text.replace(/[\u200B-\u200D\uFEFF]/g, ' '); // replace zero width space to space
     text = replaceall(String.fromCharCode(160), ' ', text); // Convert NO-BREAK SPACE to SPACE
+    text = replaceall(String.fromCharCode(8201), ' ', text); // Convert THIN SPACE to SPACE
 
     text = replaceall('//STRONG-OPEN//', '<b>', text);
     text = replaceall('//STRONG-CLOSE//', '</b>', text);
