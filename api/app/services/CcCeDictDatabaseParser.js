@@ -1,5 +1,4 @@
 const knex = require('./knex');
-const removeDiacritics = require('diacritics').remove;
 const Promise = require('bluebird');
 const UnihanSearch = require('../services/UnihanSearch');
 const readline = require('readline');
@@ -7,30 +6,6 @@ const fs = require('fs');
 const replaceall = require('replaceall');
 
 module.exports = class CcCeDictDatabaseParser {
-
-  static saveWord(pinyin, ideograms) {
-    let ideogramsConverted = '';
-
-    for (let i = 0; i < ideograms.length; i += 1) {
-      ideogramsConverted += ideograms[i].charCodeAt(0).toString(16);
-    }
-
-    return new Promise((resolve) => {
-      knex('cjk').insert({
-        ideogram: ideogramsConverted,
-        pronunciation: pinyin,
-        pronunciation_unaccented: removeDiacritics(pinyin),
-        definition: '',
-        frequency: 1,
-        language_id: 1,
-        type: 'W',
-        usage: 0,
-        created_at: new Date(),
-      }).then(() => {
-        resolve();
-      });
-    });
-  }
 
   static loadFile(file) {
     return new Promise((resolve, reject) => {
@@ -58,7 +33,10 @@ module.exports = class CcCeDictDatabaseParser {
         }
 
         let parts = line.split('/');
-        let ideogram = parts[0].split(' ')[1];
+        const ideogramParts = parts[0].split(' ');
+        let ideogram = ideogramParts[1];
+        let ideogramTraditional = ideogramParts[0];
+
         parts = line.split('/');
 
         let pronunciation = '';
@@ -92,83 +70,108 @@ module.exports = class CcCeDictDatabaseParser {
         }
 
         ideogramList.push(key);
-        const importPromise = () => {
-          return new Promise((resolveImport, rejectImport) => {
-            parts.shift();
-            const descriptions = [];
-            const measureWords = [];
-            for (const part of parts) {
-              if (part.substr(0, 3) !== 'CL:') {
-                if (part) {
-                  descriptions.push(part);
-                }
-                continue;
-              }
+        const importPromise = async () => {
+          parts.shift();
+          const descriptions = [];
+          const measureWords = [];
+          let variants = [];
 
-              const measureWordsTmp = part.replace('CL:', '').split(',');
-              for (let measureWord of measureWordsTmp) {
-                measureWord = measureWord.split('[')[0].split('|');
-                if (measureWord[1] !== undefined) {
-                  measureWord = measureWord[1];
-                } else {
-                  measureWord = measureWord[0];
-                }
-
-                measureWords.push(measureWord);
+          for (const part of parts) {
+            if (part.substr(0, 3) !== 'CL:') {
+              if (part) {
+                descriptions.push(part);
               }
+              continue;
             }
 
-            ideogram = UnihanSearch.convertIdeogramsToUtf16(ideogram);
+            const measureWordsTmp = part.replace('CL:', '').split(',');
+            for (let measureWord of measureWordsTmp) {
+              measureWord = measureWord.split('[')[0].split('|');
+              if (measureWord[1] !== undefined) {
+                measureWord = measureWord[1];
+              } else {
+                measureWord = measureWord[0];
+              }
 
-            knex('cjk')
-              .select('id')
-              .where({
-                ideogram,
-                pronunciation,
-              })
-              .then((dataCjk) => {
-                if (dataCjk.length === 0) {
-                  const toInsert = {
-                    ideogram,
-                    pronunciation,
-                    pronunciation_unaccented: pronunciationUnaccented,
-                    definition_cedict: JSON.stringify(descriptions),
-                    language_id: 1,
-                    measure_words: JSON.stringify(measureWords),
-                    type: 'W',
-                    usage: 0,
-                    created_at: new Date(),
-                  };
+              measureWords.push(measureWord);
+            }
+          }
 
-                  knex('cjk')
-                    .insert(toInsert)
-                    .then(() => {
-                      resolveImport();
-                    })
-                    .error((err) => {
-                      // eslint-disable-next-line
-                      console.log(err);
-                      rejectImport();
-                    });
-                } else {
-                  knex('cjk')
-                    .where('id', '=', dataCjk[0].id)
-                    .update({
-                      definition_cedict: JSON.stringify(descriptions),
-                      measure_words: JSON.stringify(measureWords),
-                    })
-                    .then(() => {
-                      resolveImport();
-                    })
-                    .error(() => {
-                      rejectImport();
-                    });
-                }
-              })
-              .error(() => {
-                rejectImport();
-              });
-          });
+          ideogram = UnihanSearch.convertIdeogramsToUtf16(ideogram);
+          ideogramTraditional = UnihanSearch.convertIdeogramsToUtf16(ideogramTraditional);
+
+          let traditional = 0;
+          if (ideogramTraditional === ideogram) {
+            traditional = 1;
+          } else {
+            variants.push(ideogramTraditional);
+          }
+
+          const toInsert = {
+            ideogram,
+            pronunciation,
+            pronunciation_unaccented: pronunciationUnaccented,
+            definition_cedict: JSON.stringify(descriptions),
+            language_id: 1,
+            measure_words: JSON.stringify(measureWords),
+            type: 'W',
+            usage: 0,
+            created_at: new Date(),
+            simplified: 1,
+            traditional,
+            variants: JSON.stringify(variants),
+          };
+
+          const toUpdate = {
+            simplified: 1,
+            traditional,
+            definition_cedict: JSON.stringify(descriptions),
+            measure_words: JSON.stringify(measureWords),
+            variants: JSON.stringify(variants),
+          };
+
+          let dataCjk = await knex('cjk')
+            .select('id')
+            .where({
+              ideogram,
+              pronunciation,
+            });
+
+
+          if (dataCjk.length === 0) {
+            await knex('cjk').insert(toInsert);
+          } else {
+            await knex('cjk').where('id', '=', dataCjk[0].id).update(toUpdate);
+          }
+
+          if (ideogramTraditional !== ideogram) {
+
+            variants = [];
+            variants.push(ideogram);
+
+            dataCjk = await knex('cjk')
+            .select('id')
+            .where({
+              ideogram: ideogramTraditional,
+              pronunciation,
+            });
+
+            if (dataCjk.length === 0) {
+              toInsert.ideogram = ideogramTraditional;
+              toInsert.simplified = 0;
+              toInsert.traditional = 1;
+              toInsert.variants = JSON.stringify(variants);
+
+              await knex('cjk').insert(toInsert);
+            } else {
+              toUpdate.ideogram = ideogramTraditional;
+              toUpdate.simplified = 0;
+              toUpdate.traditional = 1;
+              toUpdate.variants = JSON.stringify(variants);
+
+              await knex('cjk').where('id', '=', dataCjk[0].id).update(toUpdate);
+            }
+          }
         };
 
         return importPromise;

@@ -30,7 +30,7 @@ services:
     user: "node"
     working_dir: /home/node/pinyin/api
     environment:
-      - NODE_ENV=dev
+      - NODE_ENV=development
     ports:
       - "9090:9090"
     restart: always
@@ -47,7 +47,7 @@ services:
     user: "node"
     working_dir: /home/node/pinyin/ui
     environment:
-      - NODE_ENV=dev
+      - NODE_ENV=development
     ports:
       - "8090:8090"
     restart: always

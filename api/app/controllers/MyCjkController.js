@@ -25,16 +25,28 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/report', (req, res) => {
+  let ideogramType = 's';
+  if (req.query.ideogramType) {
+    ideogramType = req.query.ideogramType;
+  }
+
+  const where = {
+    type: 'C',
+    main: 1,
+  };
+
+  if (ideogramType === 's') {
+    where.simplified = 1;
+  } else {
+    where.traditional = 1;
+  }
+
   knex('cjk')
     .select(knex.raw('cjk.frequency, COUNT(*) as total, COUNT(my_cjk.id) total_my, round(COUNT(my_cjk.id) / COUNT(*) * 100) percent'))
     .leftJoin('my_cjk', function leftJoin() {
       this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
     })
-    .where({
-      type: 'C',
-      main: 1,
-      simplified: 1,
-    })
+    .where(where)
     .groupBy('cjk.frequency')
     .then((report) => {
       let total = 0;
@@ -46,15 +58,27 @@ router.get('/report', (req, res) => {
 });
 
 router.get('/report_words', async (req, res) => {
+  let ideogramType = 's';
+  if (req.query.ideogramType) {
+    ideogramType = req.query.ideogramType;
+  }
+
+  const where = {
+    main: 1,
+  };
+
+  if (ideogramType === 's') {
+    where.simplified = 1;
+  } else {
+    where.traditional = 1;
+  }
+
   const report = await knex('cjk')
     .select(knex.raw('cjk.hsk, COUNT(cjk.id) as total, COUNT(my_cjk.id) total_my, round(COUNT(my_cjk.id) / COUNT(*) * 100) percent'))
     .leftJoin('my_cjk', function leftJoin() {
       this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
     })
-    .where({
-      main: 1,
-      simplified: 1,
-    })
+    .where(where)
     .groupBy('cjk.hsk');
 
   let total = 0;
@@ -66,17 +90,29 @@ router.get('/report_words', async (req, res) => {
 });
 
 router.get('/report_unknown', async (req, res) => {
+  let ideogramType = 's';
+  if (req.query.ideogramType) {
+    ideogramType = req.query.ideogramType;
+  }
+
+  const where = {
+    type: 'C',
+    main: 1,
+    frequency: req.query.frequency,
+  };
+
+  if (ideogramType === 's') {
+    where.simplified = 1;
+  } else {
+    where.traditional = 1;
+  }
+
   const result = await knex('cjk')
     .select('my_cjk.id', 'cjk.ideogram', 'cjk.frequency', 'cjk.pronunciation')
     .leftJoin('my_cjk', function leftJoin() {
       this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
     })
-    .where({
-      type: 'C',
-      simplified: 1,
-      main: 1,
-      frequency: req.query.frequency,
-    })
+    .where(where)
     .whereNull('my_cjk.id')
     .limit(2500);
 
@@ -90,17 +126,30 @@ router.get('/report_unknown', async (req, res) => {
 });
 
 router.get('/report_known', async (req, res) => {
+  let ideogramType = 's';
+  if (req.query.ideogramType) {
+    ideogramType = req.query.ideogramType;
+  }
+
+  const where = {
+    type: 'C',
+    main: 1,
+    frequency: req.query.frequency,
+  };
+
+  if (ideogramType === 's') {
+    where.simplified = 1;
+  } else {
+    where.traditional = 1;
+  }
+
+
   const result = await knex('cjk')
     .select('my_cjk.id', 'cjk.ideogram', 'cjk.frequency', 'cjk.pronunciation')
     .join('my_cjk', function leftJoin() {
       this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
     })
-    .where({
-      type: 'C',
-      simplified: 1,
-      main: 1,
-      frequency: req.query.frequency,
-    })
+    .where(where)
     .limit(2500);
 
   const ideograms = [];
@@ -113,16 +162,28 @@ router.get('/report_known', async (req, res) => {
 });
 
 router.get('/report_unknown_words', async (req, res) => {
+  let ideogramType = 's';
+  if (req.query.ideogramType) {
+    ideogramType = req.query.ideogramType;
+  }
+
+  const where = {
+    main: 1,
+    hsk: req.query.hsk,
+  };
+
+  if (ideogramType === 's') {
+    where.simplified = 1;
+  } else {
+    where.traditional = 1;
+  }
+
   const result = await knex('cjk')
     .select('my_cjk.id', 'cjk.ideogram', 'cjk.hsk', 'cjk.pronunciation')
     .leftJoin('my_cjk', function leftJoin() {
       this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
     })
-    .where({
-      simplified: 1,
-      main: 1,
-      hsk: req.query.hsk,
-    })
+    .where(where)
     .whereNull('my_cjk.id')
     .limit(2500);
 
@@ -136,16 +197,29 @@ router.get('/report_unknown_words', async (req, res) => {
 });
 
 router.get('/report_known_words', async (req, res) => {
+  let ideogramType = 's';
+  if (req.query.ideogramType) {
+    ideogramType = req.query.ideogramType;
+  }
+
+  const where = {
+    main: 1,
+    hsk: req.query.hsk,
+  };
+
+  if (ideogramType === 's') {
+    where.simplified = 1;
+  } else {
+    where.traditional = 1;
+  }
+
+
   const result = await knex('cjk')
     .select('my_cjk.id', 'cjk.ideogram', 'cjk.hsk', 'cjk.pronunciation')
     .join('my_cjk', function leftJoin() {
       this.on('my_cjk.cjk_id', '=', 'cjk.id').on('my_cjk.user_id', '=', req.user.id);
     })
-    .where({
-      simplified: 1,
-      main: 1,
-      hsk: req.query.hsk,
-    })
+    .where(where)
     .limit(2500);
 
   const ideograms = [];

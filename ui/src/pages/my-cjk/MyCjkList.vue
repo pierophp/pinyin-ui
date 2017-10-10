@@ -222,6 +222,7 @@
   import IdeogramsShow from 'src/components/ideograms/Show';
   import LoadableContent from 'src/components/common/loading/LoadableContent';
   import AddRemoveCharacterModal from 'src/components/modals/AddRemoveCharacter';
+  import OptionsManager from 'src/domain/options-manager';
 
   import {
     mapMutations,
@@ -230,6 +231,8 @@
   import {
     FILE_MUTATION_SET_MY_CJK_TEMP,
   } from 'src/data/file/types';
+
+  const options = OptionsManager.getOptions();
 
   export default {
     name: 'my-cjk-list',
@@ -270,6 +273,7 @@
         .get('my-cjk/report_known', {
           params: {
             frequency,
+            ideogramType: options.ideogramType,
           },
         })
         .then((result) => {
@@ -285,6 +289,7 @@
         .get('my-cjk/report_unknown', {
           params: {
             frequency,
+            ideogramType: options.ideogramType,
           },
         })
         .then((result) => {
@@ -300,6 +305,7 @@
         .get('my-cjk/report_known_words', {
           params: {
             hsk,
+            ideogramType: options.ideogramType,
           },
         })
         .then((result) => {
@@ -315,6 +321,7 @@
         .get('my-cjk/report_unknown_words', {
           params: {
             hsk,
+            ideogramType: options.ideogramType,
           },
         })
         .then((result) => {
@@ -332,14 +339,22 @@
     },
     created() {
       http
-      .get('my-cjk/report')
+      .get('my-cjk/report', {
+        params: {
+          ideogramType: options.ideogramType,
+        },
+      })
       .then((result) => {
         this.total = result.data.total;
         this.report = result.data.report;
       });
 
       http
-      .get('my-cjk/report_words')
+      .get('my-cjk/report_words', {
+        params: {
+          ideogramType: options.ideogramType,
+        },
+      })
       .then((result) => {
         this.totalWords = result.data.total;
         this.reportWords = result.data.report;
