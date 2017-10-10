@@ -1,7 +1,7 @@
 <template>
     <div class="ideogram-show">
       <ideograms-show :pinyin="pinyin" :character="first"/>
-      [<ideograms-show :pinyin="pinyin" :character="second"/>]
+      [<ideograms-show :pinyin="pinyin" :character="secondOnlyDiff"/>]
     </div>
 </template>
 
@@ -34,6 +34,23 @@
           return this.simplified;
         }
         return this.traditional;
+      },
+
+      secondOnlyDiff() {
+        const total = this.second.length;
+        let secondWithDiff = '';
+        for (let i = 0; i < total; i += 1) {
+          const firstChar = this.first[i];
+          const secondChar = this.second[i];
+
+          if (firstChar === secondChar) {
+            secondWithDiff += '-';
+          } else {
+            secondWithDiff += secondChar;
+          }
+        }
+
+        return secondWithDiff;
       },
     },
   };

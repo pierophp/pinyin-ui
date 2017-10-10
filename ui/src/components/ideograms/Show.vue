@@ -69,10 +69,14 @@
         for (let i = 0; i < chars.length; i += 1) {
           let ideogramClass = '';
 
-          const tone = extractPinyinTone(pinyin[i]);
-
           if (specialIdeograms.indexOf(chars[i]) > -1 || numberRegex.test(chars[i])) {
             ideogramClass = 'special-ideogram';
+          }
+
+          let tone = extractPinyinTone(pinyin[i]);
+          if (chars[i] === '-') {
+            tone = 0;
+            ideogramClass = 'no-ideogram';
           }
 
           printData.push({
@@ -96,5 +100,9 @@
 <style>
 .ideogram-show {
   display:inline-block;
+}
+
+.no-ideogram {
+  width: auto !important;
 }
 </style>
