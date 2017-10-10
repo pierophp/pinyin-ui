@@ -29,7 +29,7 @@
         return this.simplified;
       },
 
-      second: function first() {
+      second: function second() {
         if (options.ideogramType === 't') {
           return this.simplified;
         }

@@ -26,7 +26,7 @@ services:
   pinyin_api:
     hostname: api
     container_name: pinyin_api
-    image: node:8.6
+    build: ./docker/api
     user: "node"
     working_dir: /home/node/pinyin/api
     environment:

@@ -35,9 +35,11 @@ module.exports = class UnihanSearch {
     let cjkList = [];
 
     if (isChinese(search)) {
+      const simplifiedIdeogram = await opencc.traditionalToSimplified(search);
+
       cjkList = await knex('cjk')
       .where({
-        ideogram: UnihanSearch.convertIdeogramsToUtf16(await opencc.traditionalToSimplified(search)),
+        ideogram: UnihanSearch.convertIdeogramsToUtf16(simplifiedIdeogram),
       })
       .orderBy('main', 'DESC')
       .orderBy('frequency', 'ASC')
@@ -46,7 +48,7 @@ module.exports = class UnihanSearch {
       .select('id', 'pronunciation', 'ideogram');
 
       const cjkListLike = await knex('cjk')
-      .where('ideogram', 'LIKE', `${UnihanSearch.convertIdeogramsToUtf16(await opencc.traditionalToSimplified(search))}%`)
+      .where('ideogram', 'LIKE', `${UnihanSearch.convertIdeogramsToUtf16(simplifiedIdeogram)}%`)
       .orderBy('main', 'DESC')
       .orderBy('frequency', 'ASC')
       .orderBy('hsk', 'ASC')
@@ -92,7 +94,8 @@ module.exports = class UnihanSearch {
   static async searchToDictionary(search) {
     const where = {};
     if (search.ideograms !== undefined) {
-      where.ideogram = UnihanSearch.convertIdeogramsToUtf16(await opencc.traditionalToSimplified(search.ideograms));
+      const simplifiedIdeogram = await opencc.traditionalToSimplified(search.ideograms);
+      where.ideogram = UnihanSearch.convertIdeogramsToUtf16(simplifiedIdeogram);
     }
 
     if (search.id !== undefined) {
@@ -331,6 +334,7 @@ module.exports = class UnihanSearch {
       ':': ' ',
       ' ': ' ',
       '；': ' ',
+      ';': ' ',
       '（': ' ',
       '）': ' ',
       '！': ' ',
