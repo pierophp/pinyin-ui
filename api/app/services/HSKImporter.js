@@ -5,7 +5,7 @@ const UnihanSearch = require('../services/UnihanSearch');
 
 module.exports = class HSKImporter {
   static async import() {
-    const totalHsk = 1;
+    const totalHsk = 6;
     for (let i = 1; i <= totalHsk; i += 1) {
       // eslint-disable-next-line
       console.log(i);
