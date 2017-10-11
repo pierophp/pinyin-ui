@@ -169,50 +169,64 @@ module.exports = class JwDownloader {
   }
 
   static async loadTracks() {
-    const response = await axios.get('https://data.jw-api.org/mediator/v1/categories/CHS/VideoOnDemand?detailed=1');
-    const categories = response.data.category.subcategories;
-    await Promise.map(categories, async (category) => {
-      const res = await axios.get(`https://data.jw-api.org/mediator/v1/categories/CHS/${category.key}?detailed=1`);
-      const subcategories = res.data.category.subcategories;
+    const languages = ['CH', 'CHS'];
+    const videosInserted = {};
+    await Promise.mapSeries(languages, async (language) => {
+      const response = await axios.get(`https://data.jw-api.org/mediator/v1/categories/${language}/VideoOnDemand?detailed=1`);
+      const categories = response.data.category.subcategories;
+      await Promise.mapSeries(categories, async (category) => {
+        const res = await axios.get(`https://data.jw-api.org/mediator/v1/categories/${language}/${category.key}?detailed=1`);
+        const subcategories = res.data.category.subcategories;
 
-      await Promise.map(subcategories, async (subcategory) => {
-        if (subcategory.key.substr(-8) === 'Featured') {
-          return;
-        }
-        const url = `https://data.jw-api.org/mediator/v1/categories/CHS/${subcategory.key}?detailed=0`;
-        try {
-          const subRes = await axios.get(url);
+        await Promise.mapSeries(subcategories, async (subcategory) => {
+          if (subcategory.key.substr(-8) === 'Featured') {
+            return;
+          }
+          const url = `https://data.jw-api.org/mediator/v1/categories/${language}/${subcategory.key}?detailed=0`;
+          try {
+            const subRes = await axios.get(url);
 
-          await Promise.map(subRes.data.category.media, async (media) => {
-            await Promise.map(media.files, async (file) => {
-              if (file.subtitles !== undefined) {
-                const urlParts = media.files[0].progressiveDownloadURL.split('/');
-                const video = urlParts[urlParts.length - 1].replace(/_r(.*)P/g, '').replace('.mp4', '');
-                const videoTrack = await knex('video_track').where({ video });
-                if (videoTrack.length === 0) {
-                  await knex('video_track').insert({
-                    video,
-                    track_url: media.files[0].subtitles.url,
-                    description: media.title,
-                    created_at: new Date(),
-                  });
-                  // eslint-disable-next-line
-                  console.log(video);
-                  // eslint-disable-next-line
-                  console.log(media.title);
-                  // eslint-disable-next-line
-                  console.log(media.files[0].subtitles.url);
-                }
+            await Promise.mapSeries(subRes.data.category.media, async (media) => {
+              if (!media) {
+                return;
               }
+
+              await Promise.mapSeries(media.files, async (file) => {
+                if (file.subtitles !== undefined) {
+                  const urlParts = media.files[0].progressiveDownloadURL.split('/');
+                  const video = urlParts[urlParts.length - 1].replace(/_r(.*)P/g, '').replace('.mp4', '');
+                  if (videosInserted[video]) {
+                    return;
+                  }
+
+                  const videoTrack = await knex('video_track').where({ video });
+                  if (videoTrack.length === 0) {
+                    await knex('video_track').insert({
+                      video,
+                      track_url: file.subtitles.url,
+                      description: media.title,
+                      created_at: new Date(),
+                    });
+                    // eslint-disable-next-line
+                    console.log(video);
+                    // eslint-disable-next-line
+                    console.log(media.title);
+                    // eslint-disable-next-line
+                    console.log(file.subtitles.url);
+
+                    videosInserted[video] = 1;
+                  }
+                }
+              });
             });
-          });
-        } catch (e) {
-          // eslint-disable-next-line
-          console.log(url);
-          // eslint-disable-next-line
-          console.log(e);
-          return;
-        }
+          } catch (e) {
+            // eslint-disable-next-line
+            console.log(url);
+            // eslint-disable-next-line
+            console.log(e);
+            return;
+          }
+        });
       });
     });
   }
