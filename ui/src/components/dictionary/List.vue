@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="dict-list" v-for="(dictionary, dictionaryId) in list" v-bind:key="dictionaryId">
+    <div v-if="list" class="dict-list" v-for="(dictionary, dictionaryId) in list" v-bind:key="dictionaryId">
       <a href="javascript:void(0)" @click="changeShowDictionary(dictionaryId)">
         <traditional-simplified-show :pinyin="dictionary.pronunciation" :ideograms="dictionary.ideograms" :variants="[]"/>
       </a>
@@ -30,7 +30,7 @@ export default {
     };
   },
   props: {
-    list: [],
+    list: null,
   },
   methods: {
     changeShow(editing) {

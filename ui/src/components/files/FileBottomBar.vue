@@ -57,8 +57,8 @@
       </md-dialog-title>
 
       <md-dialog-content>
-        <dictionary-details v-if="dictionary" :dictionary="dictionary" :pinyin="block.pinyin" @change-show="changeShow" ref="dictionaryDetails"/>
-        <dictionary-list v-if="!dictionary" :list="dictionaryList"/>
+        <dictionary-details :dictionary="dictionary" :pinyin="block.pinyin" @change-show="changeShow" ref="dictionaryDetails"/>
+        <dictionary-list :list="dictionaryList"/>
       </md-dialog-content>
 
       <md-dialog-actions>
@@ -136,6 +136,15 @@ const md = new MobileDetect(window.navigator.userAgent);
 export default {
   name: 'file-bottom-bar',
   data() {
+    const baseDictionary = {
+      pt: null,
+      unihan: null,
+      cedict: null,
+      chinese_tools_pt: null,
+      chinese_tools_es: null,
+      chinese_tools_en: null,
+    };
+
     return {
       editPinyin: '',
       separateCharacter: '',
@@ -147,14 +156,9 @@ export default {
       modalSeparateOpen: false,
       modalEditOpen: false,
       clipboardOpen: false,
-      dictionary: {
-        pt: null,
-        unihan: null,
-        cedict: null,
-        chinese_tools_pt: null,
-        chinese_tools_es: null,
-        chinese_tools_en: null,
-      },
+      baseDictionary,
+      dictionary: baseDictionary,
+      dictionaryList: [],
     };
   },
   components: {
@@ -312,7 +316,8 @@ export default {
         },
       })).data;
 
-      this.dictionary = null;
+      this.dictionary = this.baseDictionary;
+      this.dictionaryList = [];
 
       if (response.list) {
         this.dictionaryList = response.list;
