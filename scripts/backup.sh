@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 sudo rm -Rf ~/backup
 
 array=(
