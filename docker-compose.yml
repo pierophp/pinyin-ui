@@ -12,7 +12,7 @@ services:
       MYSQL_PASSWORD: "docker"
       MYSQL_ROOT_PASSWORD: "root"
     volumes:
-      - ./api/storage/mysql:/var/lib/mysql
+      - ./api/storage/mysql:/var/lib/mysql:cached
 
   pinyin_redis:
     hostname: redis
@@ -35,7 +35,7 @@ services:
       - pinyin_db
       - pinyin_redis
     volumes:
-      - ./:/home/node/pinyin
+      - ./:/home/node/pinyin:cached
     command: "yarn dev"
 
   # pinyin_elasticsearch:
