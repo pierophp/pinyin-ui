@@ -51,7 +51,7 @@
           <img src="/static/favicon-2pinyin/android-icon-72x72.png"/>
         </a>
         <a href="http://2pinyin.net" target="_blank">
-        {{ $t('app.converter').split('-')[1].trim() }}
+          2pinyin.net
         </a>
       </div>
 
