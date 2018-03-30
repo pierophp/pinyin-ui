@@ -20,8 +20,11 @@
 <script>
 import { mapMutations, mapGetters } from 'vuex';
 
-import { BROWSER_MUTATION_SET_URL } from 'src/data/browser/types';
-import { BROWSER_GETTER_URL } from 'src/data/browser/types';
+import {
+  BROWSER_GETTER_URL,
+  BROWSER_MUTATION_SET_URL,
+} from 'src/data/browser/types';
+
 export default {
   data() {
     return {

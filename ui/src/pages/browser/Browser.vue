@@ -12,11 +12,11 @@
 <script>
 import clipboard03 from 'src/domain/clipboard-03';
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
-import OptionsManager from 'src/domain/options-manager';
 
 import { mapGetters } from 'vuex';
 
 import { BROWSER_GETTER_URL } from 'src/data/browser/types';
+
 export default {
   name: 'browser',
 
