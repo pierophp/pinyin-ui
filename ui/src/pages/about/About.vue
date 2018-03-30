@@ -20,37 +20,28 @@
     <h2>{{ $t('other_apps') }}</h2>
     <div class="other-apps-container">
       <div class="other-apps-item" v-if="showEditor">
-        <a href="https://editor.2pinyin.net" target="_blank">
+        <a href="https://editor.pinzi.org" target="_blank">
           <img src="/static/favicon/android-icon-72x72.png"/>
         </a>
-        <a href="https://editor.2pinyin.net" target="_blank">
+        <a href="https://editor.pinzi.org" target="_blank">
           {{ $t('app.editor').split('-')[1].trim() }}
         </a>
       </div>
 
-      <div class="other-apps-item" v-if="showBible">
-        <a href="https://biblia.2pinyin.net" target="_blank">
-          <img src="/static/favicon-bible/android-icon-72x72.png"/>
-        </a>
-        <a href="https://biblia.2pinyin.net" target="_blank">
-          {{ $t('app.bible').split('-')[1].trim() }}
-        </a>
-      </div>
-
       <div class="other-apps-item" v-if="showVideos">
-        <a href="https://videos.2pinyin.net" target="_blank">
+        <a href="https://videos.pinzi.org" target="_blank">
           <img src="/static/favicon-videos/android-icon-72x72.png"/>
         </a>
-        <a href="https://videos.2pinyin.net" target="_blank">
+        <a href="https://videos.pinzi.org" target="_blank">
           {{ $t('app.videos').split('-')[1].trim() }}
         </a>
       </div>
 
       <div class="other-apps-item" v-if="showDictionary">
-        <a href="https://dicionario.2pinyin.net" target="_blank">
+        <a href="https://dic.pinzi.org" target="_blank">
           <img src="/static/favicon-dictionary/android-icon-72x72.png"/>
         </a>
-        <a href="https://dicionario.2pinyin.net" target="_blank">
+        <a href="https://dic.pinzi.org" target="_blank">
         {{ $t('app.dictionary').split('-')[1].trim() }}
         </a>
       </div>
@@ -88,7 +79,6 @@ export default {
     return {
       hasShare: navigator.share,
       showEditor: appOptions.title !== 'app.editor',
-      showBible: appOptions.title !== 'app.bible',
       showDictionary: appOptions.title !== 'app.dictionary',
       showVideos: appOptions.title !== 'app.videos',
       tutorialsLink,

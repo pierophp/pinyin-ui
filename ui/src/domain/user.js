@@ -15,13 +15,11 @@ class User {
     let response;
 
     if (auth === 'google') {
-      response = await http
-      .get(`${apiUrl}auth/google/callback`, {
+      response = await http.get(`${apiUrl}auth/google/callback`, {
         params: { code: parsed.code },
       });
     } else if (auth === 'baidu') {
-      response = await http
-      .get(`${apiUrl}auth/baidu/callback`, {
+      response = await http.get(`${apiUrl}auth/baidu/callback`, {
         params: { code: parsed.code },
       });
     }
@@ -58,13 +56,16 @@ class User {
       domain = '.2pinyin.net';
     }
 
+    if (window.location.host.indexOf('pinzi.org') !== -1) {
+      domain = '.pinzi.org';
+    }
+
     if (window.location.host.indexOf('giusit.com.br') !== -1) {
       domain = '.giusit.com.br';
     }
 
     return domain;
   }
-
 }
 
 export default User;

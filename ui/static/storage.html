@@ -3,6 +3,10 @@ if (window.location.host.indexOf('2pinyin.net') !== -1) {
   document.domain = '2pinyin.net';
 }
 
+if (window.location.host.indexOf('pinzi.org') !== -1) {
+  document.domain = 'pinzi.org';
+}
+
 function get(key) {
   const value = localStorage.getItem(key);
 

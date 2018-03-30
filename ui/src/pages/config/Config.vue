@@ -107,7 +107,7 @@
       <md-field>
         <label for="hidePinyinSource">{{ $t('hide_pinyin_from') }}</label>
         <md-select name="hidePinyinSource" id="hidePinyinSource" v-model="hidePinyinSource">
-          <md-option value="editor">editor.2pinyin.net</md-option>
+          <md-option value="editor">pinzi.org</md-option>
           <md-option value="2pinyin">2pinyin.net</md-option>
         </md-select>
       </md-field>
