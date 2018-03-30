@@ -8,6 +8,7 @@
     <bible-chapters-top-bar v-if="topBar == 'bible-chapters'"/>
     <bible-chapter-top-bar v-if="topBar == 'bible-chapter'"/>
     <bible-save-top-bar v-if="topBar == 'bible-save'"/>
+    <browser-top-bar v-if="topBar == 'browser'"/>
   </div>
 </template>
 
@@ -20,6 +21,7 @@ import BibleBooksTopBar from 'src/components/bible/top-bar/Books';
 import BibleChaptersTopBar from 'src/components/bible/top-bar/Chapters';
 import BibleChapterTopBar from 'src/components/bible/top-bar/Chapter';
 import BibleSaveTopBar from 'src/components/bible/top-bar/Save';
+import BrowserTopBar from 'src/components/browser/top-bar/Browser';
 
 export default {
   components: {
@@ -31,6 +33,7 @@ export default {
     BibleChaptersTopBar,
     BibleChapterTopBar,
     BibleSaveTopBar,
+    BrowserTopBar,
   },
   watch: {
     $route() {

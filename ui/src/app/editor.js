@@ -27,10 +27,10 @@ export default {
       link: '/video',
     },
     {
-      icon: 'today',
-      title: 'menu.daily_text',
+      icon: 'language',
+      title: 'menu.browser',
       action: 'goTo',
-      link: '/daily_text',
+      link: '/browser',
     },
     {
       icon: 'settings',

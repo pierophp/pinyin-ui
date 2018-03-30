@@ -9,7 +9,7 @@ import Config from 'src/pages/config/Config';
 import VideoShow from 'src/pages/video/Show';
 
 import About from 'src/pages/about/About';
-import DailyText from 'src/pages/daily/DailyText';
+import Browser from 'src/pages/browser/Browser';
 import NotFound from 'src/pages/NotFound';
 
 export default [
@@ -104,10 +104,14 @@ export default [
     meta: {},
   },
   {
-    path: '/daily_text',
-    name: 'daily-text',
-    component: DailyText,
-    meta: {},
+    path: '/browser',
+    name: 'browser',
+    component: Browser,
+    meta: {
+      topBarLeft: true,
+      hideTitle: true,
+      topBar: 'browser',
+    },
   },
   {
     path: '*',
