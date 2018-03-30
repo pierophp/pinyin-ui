@@ -16,7 +16,7 @@ class OptionsManager {
       pinyinHide: '2', // 1 = ideograms, 2 = word
       color0: '#000000',
       color1: '#0000ff',
-      color2: '#d16f00',
+      color2: '#af31af',
       color3: '#00a000',
       color4: '#ff0000',
       translationLanguage: 'pt',

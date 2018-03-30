@@ -146,4 +146,6 @@ export default {
     'You can only add / remove ideograms at 2pinyin.net',
   view: 'View',
   saved_successfully: 'Saved successfully',
+  pinyin_ideograms: 'Pinyin + Ideograms',
+  ideograms_only: 'Ideograms only',
 };
