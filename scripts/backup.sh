@@ -28,3 +28,5 @@ done
 
 cd ~
 sudo tar -czvf backup.tar.gz backup
+
+/var/scripts/store.sh
