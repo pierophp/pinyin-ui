@@ -10,6 +10,7 @@ const postDeployCommands = [
     isProduction ? '/var/www/pinyin' : '/var/www/pinyin.staging'
   }`,
   'ln -sf /var/local/pinyin/Dicionario_Pleco.txt /var/www/pinyin/Dicionario_Pleco.txt',
+  'ln -sf /var/local/pinyin/bible /var/www/pinyin/static/bible',
   // Bible Editor UI
   'rm -Rf dist/',
   `unzip bible.pinyin.dist-${process.env.TRAVIS_BRANCH}.zip > /dev/null`,
@@ -42,6 +43,7 @@ const postDeployCommands = [
   `mv /home/ubuntu/dist ${
     isProduction ? '/var/www/videos.pinyin' : '/var/www/videos.pinyin.staging'
   }`,
+  'ln -sf /var/local/pinyin/bible /var/www/bible.pinyin/static/bible',
   // API
   `cd ${
     isProduction
