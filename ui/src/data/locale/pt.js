@@ -120,7 +120,7 @@ export default {
   confirmation_download_bible: 'Tem certeza que deseja baixar essa Bíblia?',
   confirmation_delete_bible: 'Tem certeza que deseja apagar essa Bíblia?',
   about_text:
-    'Para dúvidas ou sugestões, mande um e-mail para pinyineditor@gmail.com',
+    'Para dúvidas ou sugestões, mande um e-mail para pinzi.org@gmail.com',
   other_apps: 'Outros Aplicativos',
   share: 'Compartilhar',
   file: 'Arquivo',

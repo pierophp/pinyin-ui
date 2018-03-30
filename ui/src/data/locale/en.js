@@ -122,7 +122,7 @@ export default {
   confirmation_download_bible: 'Would you like to download the Bible?',
   confirmation_delete_bible: 'Would you like to delete the Bible?',
   about_text:
-    'For questions or suggestions, send an email to pinyineditor@gmail.com',
+    'For questions or suggestions, send an email to pinzi.org@gmail.com',
   other_apps: 'Other Apps',
   share: 'Share',
   file: 'File',
