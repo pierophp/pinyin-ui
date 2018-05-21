@@ -328,7 +328,7 @@ export default {
       const isSimplifiedEquals = response.ideograms === this.block.character;
 
       const isTraditionalEquals =
-        response.ideogramsTraditional === this.block.character;
+        response.search_ideograms === this.block.character;
 
       if (!isSimplifiedEquals && !isTraditionalEquals) {
         return;

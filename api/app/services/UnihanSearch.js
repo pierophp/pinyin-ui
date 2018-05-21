@@ -202,8 +202,8 @@ module.exports = class UnihanSearch {
     }
 
     const response = {};
+    response.search_ideograms = search.ideograms;
     response.ideograms = search.ideograms;
-
     response.measure_words = null;
     response.variants = null;
     response.pronunciation = null;
