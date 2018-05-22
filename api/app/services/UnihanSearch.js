@@ -135,8 +135,9 @@ module.exports = class UnihanSearch {
 
   static async searchToDictionary(search) {
     let where = {};
+    let simplifiedIdeogram = '';
     if (search.ideograms !== undefined) {
-      const simplifiedIdeogram = await ideogramsConverter.traditionalToSimplified(
+      simplifiedIdeogram = await ideogramsConverter.traditionalToSimplified(
         search.ideograms,
       );
       where.ideogram = UnihanSearch.convertIdeogramsToUtf16(simplifiedIdeogram);
@@ -172,12 +173,69 @@ module.exports = class UnihanSearch {
         'measure_words',
       );
 
+    let cjkListTraditional = [];
+    if (
+      search.ideograms !== undefined &&
+      search.ideograms !== simplifiedIdeogram
+    ) {
+      where.ideogram = UnihanSearch.convertIdeogramsToUtf16(search.ideograms);
+      cjkListTraditional = await knex('cjk')
+        .where(where)
+        .orderBy('frequency', 'ASC')
+        .orderBy('usage', 'DESC')
+        .select(
+          'id',
+          'ideogram',
+          'pronunciation',
+          'definition_unihan',
+          'definition_pt',
+          'definition_cedict',
+          'definition_ct_pt',
+          'definition_ct_es',
+          'definition_ct_en',
+          'definition_glosbe_pt',
+          'definition_glosbe_es',
+          'definition_glosbe_en',
+          'hsk',
+          'variants',
+          'measure_words',
+        );
+    }
+
     if (cjkList.length === 0 && search.pinyin && search.ideograms) {
       where = {};
-      const simplifiedIdeogram = await ideogramsConverter.traditionalToSimplified(
-        search.ideograms,
-      );
       where.ideogram = UnihanSearch.convertIdeogramsToUtf16(simplifiedIdeogram);
+      cjkList = await knex('cjk')
+        .where(where)
+        .orderBy('frequency', 'ASC')
+        .orderBy('usage', 'DESC')
+        .select(
+          'id',
+          'ideogram',
+          'pronunciation',
+          'definition_unihan',
+          'definition_pt',
+          'definition_cedict',
+          'definition_ct_pt',
+          'definition_ct_es',
+          'definition_ct_en',
+          'definition_glosbe_pt',
+          'definition_glosbe_es',
+          'definition_glosbe_en',
+          'hsk',
+          'variants',
+          'measure_words',
+        );
+    }
+
+    if (
+      cjkListTraditional.length === 0 &&
+      search.pinyin &&
+      search.ideograms &&
+      search.ideograms !== simplifiedIdeogram
+    ) {
+      where = {};
+      where.ideogram = UnihanSearch.convertIdeogramsToUtf16(search.ideograms);
       cjkList = await knex('cjk')
         .where(where)
         .orderBy('frequency', 'ASC')
@@ -225,13 +283,22 @@ module.exports = class UnihanSearch {
     let glosbeEs = null;
     let glosbeEn = null;
 
-    await Promise.map(cjkList, async cjk => {
+    await Promise.map(cjkListTraditional.concat(cjkList), async cjk => {
       const ideograms = ideogramsConverter.convertUtf16ToIdeograms(
         cjk.ideogram,
       );
-      response.pronunciation = cjk.pronunciation;
-      response.ideograms = ideograms;
-      response.hsk = cjk.hsk;
+
+      if (!response.pronunciation) {
+        response.pronunciation = cjk.pronunciation;
+      }
+
+      if (!response.ideograms) {
+        response.ideograms = ideograms;
+      }
+
+      if (!response.hsk) {
+        response.hsk = cjk.hsk;
+      }
 
       if (!response.variants) {
         if (cjk.variants) {
@@ -249,11 +316,11 @@ module.exports = class UnihanSearch {
         }
       }
 
-      if (cjk.definition_unihan) {
+      if (!response.unihan && cjk.definition_unihan) {
         response.unihan = [cjk.definition_unihan];
       }
 
-      if (cjk.definition_pt) {
+      if (!response.pt && cjk.definition_pt) {
         response.pt = JSON.parse(cjk.definition_pt);
       }
 
@@ -267,30 +334,34 @@ module.exports = class UnihanSearch {
         }
       }
 
-      if (cjk.definition_ct_pt) {
+      if (!response.chinese_tools_pt && cjk.definition_ct_pt) {
         response.chinese_tools_pt = JSON.parse(cjk.definition_ct_pt);
       }
 
-      if (cjk.definition_ct_es) {
+      if (!response.chinese_tools_es && cjk.definition_ct_es) {
         response.chinese_tools_es = JSON.parse(cjk.definition_ct_es);
       }
 
-      if (cjk.definition_ct_en) {
+      if (!response.chinese_tools_en && cjk.definition_ct_en) {
         response.chinese_tools_en = JSON.parse(cjk.definition_ct_en);
       }
 
-      if (cjk.definition_glosbe_pt) {
+      if (!response.glosbe_pt && cjk.definition_glosbe_pt) {
         response.glosbe_pt = JSON.parse(cjk.definition_glosbe_pt);
       }
 
-      if (cjk.definition_glosbe_es) {
+      if (!response.glosbe_es && cjk.definition_glosbe_es) {
         response.glosbe_es = JSON.parse(cjk.definition_glosbe_es);
       }
 
-      if (cjk.definition_glosbe_en) {
+      if (!response.glosbe_en && cjk.definition_glosbe_en) {
         response.glosbe_en = JSON.parse(cjk.definition_glosbe_en);
       }
     });
+
+    if (response.cedict) {
+      response.cedict = _.uniq(response.cedict);
+    }
 
     return response;
   }
