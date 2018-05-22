@@ -151,27 +151,29 @@ module.exports = class UnihanSearch {
       where.id = search.id;
     }
 
+    const fields = [
+      'id',
+      'ideogram',
+      'pronunciation',
+      'definition_unihan',
+      'definition_pt',
+      'definition_cedict',
+      'definition_ct_pt',
+      'definition_ct_es',
+      'definition_ct_en',
+      'definition_glosbe_pt',
+      'definition_glosbe_es',
+      'definition_glosbe_en',
+      'hsk',
+      'variants',
+      'measure_words',
+    ];
+
     let cjkList = await knex('cjk')
       .where(where)
       .orderBy('frequency', 'ASC')
       .orderBy('usage', 'DESC')
-      .select(
-        'id',
-        'ideogram',
-        'pronunciation',
-        'definition_unihan',
-        'definition_pt',
-        'definition_cedict',
-        'definition_ct_pt',
-        'definition_ct_es',
-        'definition_ct_en',
-        'definition_glosbe_pt',
-        'definition_glosbe_es',
-        'definition_glosbe_en',
-        'hsk',
-        'variants',
-        'measure_words',
-      );
+      .select(...fields);
 
     let cjkListTraditional = [];
     if (
@@ -183,23 +185,7 @@ module.exports = class UnihanSearch {
         .where(where)
         .orderBy('frequency', 'ASC')
         .orderBy('usage', 'DESC')
-        .select(
-          'id',
-          'ideogram',
-          'pronunciation',
-          'definition_unihan',
-          'definition_pt',
-          'definition_cedict',
-          'definition_ct_pt',
-          'definition_ct_es',
-          'definition_ct_en',
-          'definition_glosbe_pt',
-          'definition_glosbe_es',
-          'definition_glosbe_en',
-          'hsk',
-          'variants',
-          'measure_words',
-        );
+        .select(...fields);
     }
 
     if (cjkList.length === 0 && search.pinyin && search.ideograms) {
@@ -209,23 +195,7 @@ module.exports = class UnihanSearch {
         .where(where)
         .orderBy('frequency', 'ASC')
         .orderBy('usage', 'DESC')
-        .select(
-          'id',
-          'ideogram',
-          'pronunciation',
-          'definition_unihan',
-          'definition_pt',
-          'definition_cedict',
-          'definition_ct_pt',
-          'definition_ct_es',
-          'definition_ct_en',
-          'definition_glosbe_pt',
-          'definition_glosbe_es',
-          'definition_glosbe_en',
-          'hsk',
-          'variants',
-          'measure_words',
-        );
+        .select(...fields);
     }
 
     if (
@@ -240,23 +210,7 @@ module.exports = class UnihanSearch {
         .where(where)
         .orderBy('frequency', 'ASC')
         .orderBy('usage', 'DESC')
-        .select(
-          'id',
-          'ideogram',
-          'pronunciation',
-          'definition_unihan',
-          'definition_pt',
-          'definition_cedict',
-          'definition_ct_pt',
-          'definition_ct_es',
-          'definition_ct_en',
-          'definition_glosbe_pt',
-          'definition_glosbe_es',
-          'definition_glosbe_en',
-          'hsk',
-          'variants',
-          'measure_words',
-        );
+        .select(...fields);
     }
 
     const response = {};
