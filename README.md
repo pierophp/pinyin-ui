@@ -15,7 +15,6 @@ npm run init
 Create a env.js file based on env.js.example
 
 
-
 Load the Unihan Database:
 ```
 ./app/console unihan-load
