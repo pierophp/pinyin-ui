@@ -45,7 +45,7 @@
 
     <md-dialog ref="dialogDictionary" :md-active.sync="modalDictionaryOpen" :md-fullscreen="false">
       <md-dialog-title>
-        <ideograms-show :pinyin="block.pinyin" :character="block.character"/>
+        <traditional-simplified-show :pinyin="block.pinyin" :ideograms="block.character" :variants="dictionary.variants"/>
         - {{ block.pinyin }}
         <md-button class="md-icon-button md-primary clipboard-btn" @click="clipboard(block.character)">
           <md-icon>content_copy</md-icon>
@@ -120,6 +120,7 @@ import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables'
 import replaceall from 'replaceall';
 import pinyinHelper from 'src/helpers/pinyin';
 import ForvoModal from 'src/components/modals/Forvo';
+import TraditionalSimplifiedShow from 'src/components/ideograms/TraditionalSimplifiedShow';
 
 import { mapActions, mapMutations, mapGetters } from 'vuex';
 
@@ -138,6 +139,7 @@ export default {
   data() {
     const baseDictionary = {
       pt: null,
+      variants: null,
       unihan: null,
       cedict: null,
       chinese_tools_pt: null,
@@ -167,6 +169,7 @@ export default {
     IdeogramsShow,
     Links,
     ForvoModal,
+    TraditionalSimplifiedShow,
   },
   computed: {
     ...mapGetters({
