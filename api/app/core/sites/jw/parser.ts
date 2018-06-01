@@ -1,11 +1,11 @@
+import { padStart } from 'lodash';
 import * as replaceall from 'replaceall';
-import * as replaceIdeogramsToSpace from '../../../../../shared/helpers/special-ideograms-chars';
 import * as bibleBooks from '../../../../../shared/data/bible/bible';
+import * as isChinese from '../../../../../shared/helpers/is-chinese';
+import * as separatePinyinInSyllables from '../../../../../shared/helpers/separate-pinyin-in-syllables';
+import * as replaceIdeogramsToSpace from '../../../../../shared/helpers/special-ideograms-chars';
 import { http } from '../../../helpers/http';
 import * as UnihanSearch from '../../../services/UnihanSearch';
-import { padStart } from 'lodash';
-import * as separatePinyinInSyllables from '../../../../../shared/helpers/separate-pinyin-in-syllables';
-import * as isChinese from '../../../../../shared/helpers/is-chinese';
 
 export class Parser {
   protected text: any[] = [];
@@ -101,8 +101,15 @@ export class Parser {
               });
             }
 
-            $(subChildren)
-              .children('div')
+            let bodyTxtChildren =  $(subChildren)
+              .children('div.pGroup');
+
+            if (bodyTxtChildren.length === 0) {
+              bodyTxtChildren =  $(subChildren)
+              .children('div');
+            }
+
+            bodyTxtChildren
               .children()
               .each((k, subChildren02) => {
                 this.parseBlock($, subChildren02);
