@@ -56,27 +56,27 @@ export class Parser {
       });
     }
 
-    let mainElement = $('article > .docSubContent .textSizeIncrement');
+    const mainElements = [
+      'article > .docSubContent .textSizeIncrement > div[class=""]',
+      'article > .docSubContent .textSizeIncrement',
+      'article > .docSubContent',
+      'article #bibleText',
+      'article .docSubContent',
+      '#dailyText',
+      '#article',
+    ];
 
-    if (!mainElement.length) {
-      mainElement = $('article > .docSubContent');
+    let selectedMainElement: string = '';
+    let mainElement: any;
+    for (const me of mainElements) {
+      selectedMainElement = me;
+      mainElement = $(me);
+      if (mainElement.length) {
+        break;
+      }
     }
 
-    if (!mainElement.length) {
-      mainElement = $('article #bibleText');
-    }
-
-    if (!mainElement.length) {
-      mainElement = $('article .docSubContent');
-    }
-
-    if (!mainElement.length) {
-      mainElement = $('#dailyText');
-    }
-
-    if (!mainElement.length) {
-      mainElement = $('#article');
-    }
+    console.log('Main Element', selectedMainElement);
 
     mainElement.children().each((i, children) => {
       if ($(children).hasClass('blockTeach')) {
@@ -101,19 +101,15 @@ export class Parser {
               });
             }
 
-            let bodyTxtChildren =  $(subChildren)
-              .children('div.pGroup');
+            let bodyTxtChildren = $(subChildren).children('div.pGroup');
 
             if (bodyTxtChildren.length === 0) {
-              bodyTxtChildren =  $(subChildren)
-              .children('div');
+              bodyTxtChildren = $(subChildren).children('div');
             }
 
-            bodyTxtChildren
-              .children()
-              .each((k, subChildren02) => {
-                this.parseBlock($, subChildren02);
-              });
+            bodyTxtChildren.children().each((k, subChildren02) => {
+              this.parseBlock($, subChildren02);
+            });
           });
       } else if ($(children).hasClass('article')) {
         $(children)
