@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR="/home/node/pinyin/api/node_mdules"
+DIR="/home/node/pinyin/api/node_modules"
 
 cd api
 if [ -d "$DIR" ]; then
