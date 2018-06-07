@@ -11,6 +11,7 @@ service: serverless-pinyin
 provider:
   name: aws
   runtime: nodejs8.10
+  profile: pinyin
 
 # The `functions` block defines what code to deploy
 functions:
