@@ -110,6 +110,10 @@ export default {
   },
 
   [types.FILE_MUTATION_SET_LINE](state, { line, lineIndex }) {
+    if (!line) {
+      return;
+    }
+
     line.forEach((block, blockIndex) => {
       if (block.h === undefined) {
         line[blockIndex].h = '';
