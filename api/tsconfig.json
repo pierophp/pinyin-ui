@@ -13,7 +13,11 @@
     "allowJs": true,
     "strict": true,
     "moduleResolution": "node",
-    "outDir": "dist"
+    "baseUrl": "./app/",
+    "outDir": "dist",
+    "paths": {
+      "*": ["./*"]
+    }
   },
   "include": ["app/**/*", "../shared/**/*"],
   "exclude": ["node_modules", "**/*.test.ts"]

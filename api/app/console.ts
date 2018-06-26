@@ -5,9 +5,10 @@ import { ElasticsearchStructureCommand } from './commands/elasticsearch.structur
 import { ElasticsearchSyncCommand } from './commands/elasticsearch.sync.command';
 import { GlosbeInsertCommand } from './commands/glosbe.insert.command';
 import { IdeogramRawCommand } from './commands/ideogram.raw.command';
+import { JiebaCompilerCommand } from './commands/jieba.compiler.command';
+import { JwBibleTraditionalCommand } from './commands/jw.bible.traditional.command';
 import { JwTrackCommand } from './commands/jw.track.command';
 import { PlecoExportCommand } from './commands/pleco.export.command';
-import { JiebaCompilerCommand } from './commands/jieba.compiler.command';
 
 require('yargs')
   .usage('Usage: $0 <command> [options]')
@@ -21,6 +22,7 @@ require('yargs')
   .command(new IdeogramRawCommand())
   .command(new PlecoExportCommand())
   .command(new JiebaCompilerCommand())
+  .command(new JwBibleTraditionalCommand())
   .demandCommand(1)
   .strict()
   .help('h')
