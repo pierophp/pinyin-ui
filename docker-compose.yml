@@ -9,8 +9,6 @@ services:
     environment:
       NODE_ENV: 'development'
       SERVICE_NAME: 'pinyin'
-      SERVICE_CHECK_HTTP: '/'
-      SERVICE_CHECK_INTERVAL: '5s'
     ports:
       - "9090:9090"
     expose:

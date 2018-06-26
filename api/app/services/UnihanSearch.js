@@ -10,6 +10,8 @@ const { RedisCache } = require('../cache/redis.cache');
 
 const fs = Promise.promisifyAll(require('fs'));
 const { IdeogramsConverter } = require('../core/converter/ideograms.converter');
+const ideogramPinyinRules = require('../core/converter/ideogram.pinyin.rules')
+  .default;
 
 nodejieba.load({
   dict: `${__dirname.replace('dist/api/', '')}/../data/jieba.full.utf8`,
@@ -31,6 +33,10 @@ module.exports = class UnihanSearch {
         4: 'yí',
       },
     };
+  }
+
+  static getIdeogramPinyinRules() {
+    return ideogramPinyinRules;
   }
 
   static async searchToDictionaryList(search) {
@@ -671,6 +677,7 @@ module.exports = class UnihanSearch {
     );
 
     const changeToneRules = UnihanSearch.getChangeToneRules();
+
     result.forEach((item, itemIndex) => {
       const pinyins = separatePinyinInSyllables(item.pinyin);
       item.ideogram.split('').forEach((ideogram, ideogramIndex) => {
@@ -700,6 +707,24 @@ module.exports = class UnihanSearch {
           result[itemIndex].pinyin = pinyins.join('');
         }
       });
+    });
+    const ideogramPinyinRules = UnihanSearch.getIdeogramPinyinRules();
+    result.forEach((item, itemIndex) => {
+      if (!ideogramPinyinRules[item.ideogram]) {
+        return;
+      }
+
+      if (!result[itemIndex + 1]) {
+        return;
+      }
+
+      const nextIdeogram = result[itemIndex + 1].ideogram;
+      if (!ideogramPinyinRules[item.ideogram][nextIdeogram]) {
+        return;
+      }
+
+      result[itemIndex + 1].pinyin =
+        ideogramPinyinRules[item.ideogram][nextIdeogram];
     });
 
     return result;
