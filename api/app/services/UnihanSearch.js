@@ -229,14 +229,6 @@ module.exports = class UnihanSearch {
     response.glosbe_es = null;
     response.glosbe_en = null;
 
-    let chineseToolsPt = null;
-    let chineseToolsEs = null;
-    let chineseToolsEn = null;
-
-    let glosbePt = null;
-    let glosbeEs = null;
-    let glosbeEn = null;
-
     await Promise.map(cjkListTraditional.concat(cjkList), async cjk => {
       const ideograms = ideogramsConverter.convertUtf16ToIdeograms(
         cjk.ideogram,

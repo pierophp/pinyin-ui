@@ -11,6 +11,7 @@ service: serverless-pinyin
 provider:
   name: aws
   runtime: nodejs8.10
+  region: us-east-1 # Overwrite the default region used. Default is us-east-1
 
 # The `functions` block defines what code to deploy
 functions:

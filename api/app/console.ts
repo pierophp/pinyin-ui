@@ -7,6 +7,7 @@ import { GlosbeInsertCommand } from './commands/glosbe.insert.command';
 import { IdeogramRawCommand } from './commands/ideogram.raw.command';
 import { JwTrackCommand } from './commands/jw.track.command';
 import { PlecoExportCommand } from './commands/pleco.export.command';
+import { JiebaCompilerCommand } from './commands/jieba.compiler.command';
 
 require('yargs')
   .usage('Usage: $0 <command> [options]')
@@ -19,6 +20,7 @@ require('yargs')
   .command(new CedictLoadCommand())
   .command(new IdeogramRawCommand())
   .command(new PlecoExportCommand())
+  .command(new JiebaCompilerCommand())
   .demandCommand(1)
   .strict()
   .help('h')
