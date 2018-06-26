@@ -304,11 +304,7 @@ export default {
     const footnotes = [];
 
     lines.forEach((line, lineIndex) => {
-      if (
-        line !== undefined &&
-        line[0] !== undefined &&
-        line[0].line !== undefined
-      ) {
+      if (line && line[0] !== undefined && line[0].line !== undefined) {
         const type = line[0].line.type;
         if (type === 'foot') {
           footnotes.push(lineIndex);
