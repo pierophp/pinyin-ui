@@ -12,6 +12,7 @@ const fs = Promise.promisifyAll(require('fs'));
 const { IdeogramsConverter } = require('../core/converter/ideograms.converter');
 
 nodejieba.load({
+  dict: `${__dirname.replace('dist/api/', '')}/../data/jieba.full.utf8`,
   userDict: `${__dirname.replace('dist/api/', '')}/../data/compiled.utf8`,
 });
 
