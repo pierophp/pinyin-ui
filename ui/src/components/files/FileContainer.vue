@@ -509,9 +509,10 @@ export default {
 }
 
 audio {
-  margin-top: 30px;
+  margin-top: 10px;
   margin-bottom: 5px;
   width: 100%;
+  height: 55px
 }
 
 .print .block .footnote {
