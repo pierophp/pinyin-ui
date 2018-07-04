@@ -147,6 +147,7 @@ module.exports = class UnihanSearch {
       simplifiedIdeogram = await ideogramsConverter.traditionalToSimplified(
         search.ideograms,
       );
+
       where.ideogram = UnihanSearch.convertIdeogramsToUtf16(simplifiedIdeogram);
     }
 
@@ -213,7 +214,7 @@ module.exports = class UnihanSearch {
     ) {
       where = {};
       where.ideogram = UnihanSearch.convertIdeogramsToUtf16(search.ideograms);
-      cjkList = await knex('cjk')
+      cjkListTraditional = await knex('cjk')
         .where(where)
         .orderBy('frequency', 'ASC')
         .orderBy('usage', 'DESC')
@@ -236,7 +237,9 @@ module.exports = class UnihanSearch {
     response.glosbe_es = null;
     response.glosbe_en = null;
 
-    await Promise.map(cjkListTraditional.concat(cjkList), async cjk => {
+    const list = cjkListTraditional.concat(cjkList);
+
+    for (const cjk of list) {
       const ideograms = ideogramsConverter.convertUtf16ToIdeograms(
         cjk.ideogram,
       );
@@ -310,7 +313,7 @@ module.exports = class UnihanSearch {
       if (!response.glosbe_en && cjk.definition_glosbe_en) {
         response.glosbe_en = JSON.parse(cjk.definition_glosbe_en);
       }
-    });
+    }
 
     if (response.cedict) {
       response.cedict = _.uniq(response.cedict);
