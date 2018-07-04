@@ -260,9 +260,13 @@ module.exports = class UnihanSearch {
         if (cjk.variants) {
           response.variants = JSON.parse(cjk.variants);
         } else {
-          response.variants = [
-            await ideogramsConverter.simplifiedToTraditional(ideograms),
-          ];
+          if (simplifiedIdeogram && simplifiedIdeogram !== search.ideograms) {
+            response.variants = [simplifiedIdeogram];
+          } else {
+            response.variants = [
+              await ideogramsConverter.simplifiedToTraditional(ideograms),
+            ];
+          }
         }
       }
 
