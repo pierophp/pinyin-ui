@@ -7,6 +7,7 @@ export default [
   {
     path: '/',
     name: 'dictionary-home',
+    component: DictionarySearch,
     meta: {
       topBar: 'dictionary',
     },
