@@ -455,7 +455,7 @@ module.exports = class UnihanSearch {
       item = replaceall(String.fromCharCode(8201), '', item); // Convert THIN SPACE to SPACE
       item = replaceall(String.fromCharCode(8203), '', item); // Zero Width Space
       item = replaceall(String.fromCharCode(8206), '', item); // Left-To-Right Mark
-      item = replaceall(String.fromCharCode(8206), '', item); // Left-To-Right Embedding
+      item = replaceall(String.fromCharCode(8234), '', item); // Left-To-Right Embedding
 
       return item.trim();
     });
