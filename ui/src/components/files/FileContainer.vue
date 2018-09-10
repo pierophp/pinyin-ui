@@ -8,10 +8,12 @@
         <h2 v-if="filename && filename.split('|||').length != 3">
           {{filename}}
         </h2>
+
+        <div v-if="lines && lines[0]  && lines[0][0].line.audio !== undefined">
+          <audio :src="lines[0][0].line.audio" controls/>
+        </div>
+
         <template v-for="(line, lineIndex) in lines">
-          <div v-if="lineIndex === 0 && line && line[0].line !== undefined && line[0].line.audio !== undefined"  :key="'audio-' + lineIndex">
-            <audio :src="line[0].line.audio" controls/>
-          </div>
           <file-row-print
             :line="line"
             :lineIndex="lineIndex"
@@ -127,6 +129,7 @@ export default {
       footnotes: FILE_GETTER_FOOTNOTES,
     }),
   },
+
   created() {
     this.options = OptionsManager.getOptions();
     this.worker = new PinyinWorker();
@@ -512,7 +515,7 @@ audio {
   margin-top: 10px;
   margin-bottom: 5px;
   width: 100%;
-  height: 55px
+  height: 55px;
 }
 
 .print .block .footnote {

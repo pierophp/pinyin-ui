@@ -1,5 +1,5 @@
 <template>
-  <!-- @click is on FilePrint cause performance  -->
+  <!-- @click is on FilePrint because performance  -->
   <div class="block" :data-line="lineIndex" :data-block="blockIndex" :class="[classHighlight, classExtra]" ref="block">
     <div class="image" v-if="block.small">
       <a href="javascript:void(0)" @click="openImage(block.large)">
