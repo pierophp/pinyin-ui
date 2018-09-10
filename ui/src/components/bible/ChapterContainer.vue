@@ -63,7 +63,7 @@ import {
 
 let options = {};
 
-const CACHE_VERSION = 2;
+const CACHE_VERSION = 3;
 
 export default {
   name: 'bible-chapter',
@@ -325,7 +325,7 @@ export default {
       this.setFileContent([]);
       this.setFileContentLanguage([]);
       this.verses = [];
-      
+
       const language = `cmn-han${options.ideogramType}`;
 
       if (LocalStorage.get(`BIBLE_SAVE_${language}`)) {
