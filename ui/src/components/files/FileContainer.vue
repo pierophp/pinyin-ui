@@ -9,7 +9,7 @@
           {{filename}}
         </h2>
 
-        <div v-if="lines && lines[0]  && lines[0][0].line.audio !== undefined">
+        <div v-if="lines && lines[0] && lines[0][0] && lines[0][0].line !== undefined && lines[0][0].line.audio !== undefined">
           <audio :src="lines[0][0].line.audio" controls/>
         </div>
 
