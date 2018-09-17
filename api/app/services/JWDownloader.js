@@ -212,7 +212,7 @@ module.exports = class JwDownloader {
     //   );
     // });
 
-    const bibles = ['馬可福音'];
+    const bibles = ['馬太福音'];
 
     await Promise.mapSeries(bibles, async bible => {
       const urlChapter = `${urlBible}${bible}/`;
@@ -235,8 +235,8 @@ module.exports = class JwDownloader {
       // eslint-disable-next-line
       console.log(bibleEnglish);
 
-      const biblePath = `${__dirname}/../../../ui/static/bible/cmn-hans/`;
-      const biblePathTraditional = `${__dirname}/../../../ui/static/bible/cmn-hant/`;
+      const biblePath = `${__dirname}/../../../ui/public/static/bible/cmn-hans/`;
+      const biblePathTraditional = `${__dirname}/../../../ui/public/static/bible/cmn-hant/`;
 
       await Promise.mapSeries(chapters, async chapter => {
         let chapterTraditionalExists = true;
