@@ -12,7 +12,10 @@
     </div>
 
     <div class="character" :data-highlight="highlight" :data-line="lineIndex" :data-block="blockIndex" :class="[classBold, classItalic]" v-if="!block.small && !block.footnote && !block.noIdeogram">
-      <ideograms-show :pinyin="pinyin" :character="character" :useSpaces="true" ref="ideogram-show"/>
+      <span v-for="(data, index) in printDataCharacters"
+            :class="[data.ideogramClass]"
+            :style="{ color: data.toneColor }"
+            v-bind:key="index">{{data.character}}</span>
     </div>
 
     <div class="character footnote" v-if="block.footnote" @click.prevent="openFootnote(block.footnote)">
@@ -23,7 +26,7 @@
 
 <script>
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
-import IdeogramsShow from 'src/components/ideograms/Show';
+import ideogramsShow from 'src/helpers/ideograms.show';
 import OptionsManager from 'src/domain/options-manager';
 
 import { mapActions } from 'vuex';
@@ -32,9 +35,6 @@ import { FILE_ACTION_CAN_HIDE_PINYIN } from 'src/data/file/types';
 
 export default {
   name: 'file-block-print',
-  components: {
-    IdeogramsShow,
-  },
   data() {
     return {
       classHighlight: '',
@@ -44,6 +44,8 @@ export default {
       printData: [],
       pinyinStyleObject: {},
       updating: false,
+      printDataCharacters: [],
+      useSpaces: true,
     };
   },
   props: {
@@ -199,11 +201,7 @@ export default {
       }
 
       this.printData = printData;
-
-      if (this.$refs['ideogram-show']) {
-        this.$refs['ideogram-show'].updateRender();
-      }
-
+      this.printDataCharacters = ideogramsShow(this);
       this.updating = false;
     },
   },

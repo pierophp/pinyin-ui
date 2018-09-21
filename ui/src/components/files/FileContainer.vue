@@ -181,7 +181,7 @@ export default {
     },
 
     openBottomBarClick(e) {
-      const element = e.target.parentNode.parentNode;
+      const element = e.target.parentNode;
       if (!element.classList.contains('character')) {
         return;
       }
