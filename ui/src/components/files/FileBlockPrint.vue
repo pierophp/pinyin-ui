@@ -8,9 +8,7 @@
     </div>
 
     <div class="pinyin" v-if="!block.small" v-bind:style="pinyinStyleObject">
-      <span>
-        <span v-for="(data, dataIndex) in printData" :class="[data.pinyinClass]" v-html="data.pinyin" v-bind:key="dataIndex" ></span>
-      </span>
+      <span v-for="(data, dataIndex) in printData" :class="[data.pinyinClass]" v-html="data.pinyin" v-bind:key="dataIndex" ></span>
     </div>
 
     <div class="character" :data-highlight="highlight" :data-line="lineIndex" :data-block="blockIndex" :class="[classBold, classItalic]" v-if="!block.small && !block.footnote && !block.noIdeogram">
