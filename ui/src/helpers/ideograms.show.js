@@ -32,6 +32,8 @@ export default function(params) {
 
   const chars = params.character.toString();
   const numberRegex = new RegExp('^[0-9]+$');
+  let sameTone = true;
+  let currentTone = null;
   for (let i = 0; i < chars.length; i += 1) {
     let ideogramClass = '';
 
@@ -45,6 +47,14 @@ export default function(params) {
       ideogramClass = 'no-ideogram';
     }
 
+    if (currentTone === null) {
+      currentTone = tone;
+    }
+
+    if (currentTone !== tone) {
+      sameTone = false;
+    }
+
     printData.push({
       ideogramClass,
       toneColor: colors[tone] !== '#000000' ? `${colors[tone]} !important` : '',
@@ -56,6 +66,10 @@ export default function(params) {
     printData.push({
       character: '',
     });
+  }
+
+  for (let i = 0; i < printData.length; i++) {
+    printData[i].sameTone = sameTone;
   }
 
   return printData;

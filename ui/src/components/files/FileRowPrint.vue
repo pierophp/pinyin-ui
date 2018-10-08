@@ -25,10 +25,19 @@
             <template v-if="!block.pinyinStyleObject">{{ data.pinyin }}</template>
           </template>
         </template>
-        <div class="character" :data-highlight="block.h" :data-line="lineIndex" :data-block="blockIndex" :class="[block.classBold, block.classItalic]" v-if="!block.small && !block.footnote && !block.noIdeogram">
+        <div class="character"
+          :data-highlight="block.h"
+          :data-line="lineIndex"
+          :data-block="blockIndex"
+          :class="[block.classBold, block.classItalic]"
+          v-if="!block.small && !block.footnote && !block.noIdeogram"
+          :style="{
+            color: block.printDataCharacters.length ?
+            block.printDataCharacters[0].toneColor : ''
+          }">
           <template v-for="(data, index) in block.printDataCharacters">
-            <template v-if="!data.toneColor">{{ data.character }}</template>
-            <span v-if="data.toneColor"
+            <template v-if="!data.toneColor || data.sameTone">{{ data.character }}</template>
+            <span v-if="data.toneColor && !data.sameTone"
                 :class="[data.ideogramClass]"
                 :style="{ color: data.toneColor }"
                 v-bind:key="index">{{ data.character }}</span>
