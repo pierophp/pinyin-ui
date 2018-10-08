@@ -27,12 +27,6 @@ function addHighlight(state, data) {
       state.file[i][j].h = data.type;
 
       if (data.worker) {
-        console.log('postMessage', {
-          type: 'changeCharacter',
-          lineIndex: i,
-          blockIndex: j,
-        });
-
         data.worker.postMessage({
           type: 'changeCharacter',
           lineIndex: i,

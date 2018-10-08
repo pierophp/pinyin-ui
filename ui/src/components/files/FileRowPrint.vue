@@ -1,5 +1,5 @@
 <template>
-  <div class="line" :class=[type]>
+  <div class="line" :class=[type] v-if="!loading">
     <span v-if="startTime">
       <md-button class="md-icon-button md-primary" @click="goToVideoTime">
         <md-icon>play_circle_filled</md-icon>
@@ -55,6 +55,7 @@ export default {
       type: '',
       startTime: '',
       blocks: [],
+      loading: true,
     };
   },
   props: {
@@ -93,15 +94,20 @@ export default {
       this.$emit('open-footnote', footnote);
     },
     async updateBlockRender(blockIndex) {
-      this.blocks[blockIndex] = await this.generateBlock(this.line[blockIndex]);
+      const newBlock = await this.generateBlock(this.line[blockIndex]);
+
+      this.$set(this.blocks, blockIndex, newBlock);
     },
 
     async updateRender() {
+      this.loading = true;
       let blockIndex = 0;
       for (const block of this.line) {
-        this.blocks[blockIndex] = await this.generateBlock(block);
+        this.$set(this.blocks, blockIndex, await this.generateBlock(block));
+
         blockIndex++;
       }
+      this.loading = false;
     },
     async generateBlock(block) {
       const generatedBlock = {};
@@ -111,9 +117,7 @@ export default {
       generatedBlock.noIdeogram = block.noIdeogram;
 
       const options = OptionsManager.getOptions();
-      generatedBlock.classHighlight = `highlight-${
-        block.h ? block.h : ''
-      }`;
+      generatedBlock.classHighlight = `highlight-${block.h ? block.h : ''}`;
       generatedBlock.classBold = '';
       if (block.isBold === 1) {
         generatedBlock.classBold = 'bold';

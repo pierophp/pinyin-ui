@@ -212,8 +212,8 @@ export default {
 .highlight-modal .circle {
   border: 1px solid;
   cursor: pointer;
-  width: 25px;
-  height: 25px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   align-self: center;
 }

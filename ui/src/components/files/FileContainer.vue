@@ -135,7 +135,6 @@ export default {
     this.worker = new PinyinWorker();
 
     this.worker.addEventListener('message', async e => {
-      console.log('Message Received');
       if (e.data.type === 'changeCharacter') {
         await this.$refs.fileRowPrint[e.data.lineIndex].updateBlockRender(
           e.data.blockIndex,
@@ -143,16 +142,6 @@ export default {
       }
     });
 
-    console.log('worker', this.worker);
-
-    setTimeout(() => {
-      console.log('Send message');
-      this.worker.postMessage({
-        type: 'changeCharacter',
-        lineIndex: 1,
-        blockIndex: 1,
-      });
-    }, 1000);
 
     this.updateCss();
 
