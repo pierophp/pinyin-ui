@@ -443,10 +443,6 @@ export default {
   font-size: calc(var(--character-font-size) - 4px);
 }
 
-.print .type-qu .character span {
-  width: calc(var(--character-font-size) - 4px);
-}
-
 .print .character span.special-ideogram {
   width: 17px;
 }
