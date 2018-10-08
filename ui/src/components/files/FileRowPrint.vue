@@ -32,7 +32,7 @@
           :class="[block.classBold, block.classItalic]"
           v-if="!block.small && !block.footnote && !block.noIdeogram"
           :style="{
-            color: block.printDataCharacters.length ?
+            color: block.printDataCharacters.length && block.printDataCharacters[0].sameTone ?
             block.printDataCharacters[0].toneColor : ''
           }">
           <template v-for="(data, index) in block.printDataCharacters">
