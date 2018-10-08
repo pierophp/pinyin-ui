@@ -378,11 +378,14 @@ export default {
   padding-bottom: 0 !important;
 }
 
-.print .type-h1 .character span {
+.print .type-h1 .character {
   line-height: calc(var(--character-font-size) + 17px);
   font-size: calc(var(--character-font-size) + 17px);
-  width: calc(var(--character-font-size) + 17px);
   font-weight: 400;
+}
+
+.print .type-h1 .character span {
+  width: calc(var(--character-font-size) + 17px);
 }
 
 .print .type-h1 {
@@ -396,19 +399,28 @@ export default {
   border-bottom: 1px solid #fcd79c;
 }
 
-.print .type-box-h2 .character span,
-.print .type-h2 .character span {
+.print .type-box-h2 .character,
+.print .type-h2 .character {
   line-height: calc(var(--character-font-size) + 11px);
   font-size: calc(var(--character-font-size) + 11px);
-  width: calc(var(--character-font-size) + 10px);
   font-weight: 400;
+}
+
+.print .type-box-h2 .character span,
+.print .type-h2 .character span {
+  width: calc(var(--character-font-size) + 10px);
+}
+
+.print .type-foot .character,
+.print .type-box-imgcaption .character,
+.print .type-imgcaption .character {
+  line-height: calc(var(--character-font-size) - 3px);
+  font-size: calc(var(--character-font-size) - 3px);
 }
 
 .print .type-foot .character span,
 .print .type-box-imgcaption .character span,
 .print .type-imgcaption .character span {
-  line-height: calc(var(--character-font-size) - 3px);
-  font-size: calc(var(--character-font-size) - 3px);
   width: calc(var(--character-font-size) - 3px);
 }
 
