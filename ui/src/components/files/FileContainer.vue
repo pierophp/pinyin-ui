@@ -374,7 +374,8 @@ export default {
   padding-bottom: 0 !important;
 }
 
-.print .type-h1 .character {
+.print .type-h1 .character,
+.print .type-h1 .character span {
   line-height: calc(var(--character-font-size) + 17px);
   font-size: calc(var(--character-font-size) + 17px);
   font-weight: 400;
