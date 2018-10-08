@@ -349,10 +349,6 @@ export default {
   min-width: 0;
   font-family: 'Noto Sans SC', 'Noto Sans TC', sans-serif;
   font-weight: lighter;
-}
-
-.print .character span {
-  display: inline-block;
   font-weight: 300;
 }
 
