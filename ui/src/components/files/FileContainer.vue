@@ -435,7 +435,8 @@ export default {
   border-bottom: 1px solid #ccc;
 }
 
-.print .type-qu .character {
+.print .type-qu .character,
+.print .type-qu .character span {
   line-height: calc(var(--character-font-size) - 4px);
   font-size: calc(var(--character-font-size) - 4px);
 }
