@@ -76,8 +76,6 @@ export class Parser {
       }
     }
 
-    console.log('Main Element', selectedMainElement);
-
     mainElement.children().each((i, children) => {
       if ($(children).hasClass('blockTeach')) {
         const boxH2 = $(children).find('aside h2');
@@ -172,13 +170,9 @@ export class Parser {
 
       let title = this.getText($, link);
 
-      console.log(title);
-
       if (subtitle.length) {
         title = this.getText($, subtitle) + ' - ' + title;
       }
-
-      console.log($(link).attr('href'));
 
       downloadResponse.links.push({
         link: $(link).attr('href'),

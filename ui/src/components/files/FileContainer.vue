@@ -33,7 +33,7 @@
           @remove-character="removeCharacter"
           ref="addRemoveCharacterModal"/>
 
-        <highlight-modal v-if="showHighlight"/>
+        <highlight-modal v-if="showHighlight" :worker="worker" />
 
         <bible-modal ref="bibleModal" v-if="parent" :bookIndex="bible.bookIndex" :chapter="bible.chapter" :verse="bible.verse" @open-bottom-bar="openBottomBar"/>
       </div>
@@ -134,13 +134,25 @@ export default {
     this.options = OptionsManager.getOptions();
     this.worker = new PinyinWorker();
 
-    this.worker.addEventListener('message', e => {
+    this.worker.addEventListener('message', async e => {
+      console.log('Message Received');
       if (e.data.type === 'changeCharacter') {
-        this.$refs.fileRowPrint[e.data.lineIndex].updateBlockRender(
+        await this.$refs.fileRowPrint[e.data.lineIndex].updateBlockRender(
           e.data.blockIndex,
         );
       }
     });
+
+    console.log('worker', this.worker);
+
+    setTimeout(() => {
+      console.log('Send message');
+      this.worker.postMessage({
+        type: 'changeCharacter',
+        lineIndex: 1,
+        blockIndex: 1,
+      });
+    }, 1000);
 
     this.updateCss();
 

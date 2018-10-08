@@ -122,10 +122,14 @@ export default {
       visible: false,
     };
   },
+  props: {
+    worker: '',
+  },
   created() {
     const that = this;
     let selectionIndex = 0;
     let currentSelectionIndex = 0;
+
     // eslint-disable-next-line
     document.addEventListener(
       'selectionchange',
@@ -158,6 +162,7 @@ export default {
         startBlock: this.startBlock,
         endBlock: this.endBlock,
         type,
+        worker: this.worker,
       });
     },
     removeHighlight() {
@@ -166,6 +171,7 @@ export default {
         endLine: this.endLine,
         startBlock: this.startBlock,
         endBlock: this.endBlock,
+        worker: this.worker,
       });
     },
   },

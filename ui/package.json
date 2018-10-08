@@ -45,7 +45,8 @@
     "vue-material": "1.0.0-beta-10.2",
     "vue-property-decorator": "^6.0.0",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "worker-loader": "^2.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.0",
@@ -57,11 +58,14 @@
     "node-sass": "^4.7.2",
     "postcss-import": "^11.1.0",
     "sass-loader": "^7.0.1",
-    "vue-template-compiler": "^2.5.13",
-    "worker-loader": "^1.1.1"
+    "vue-template-compiler": "^2.5.13"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "json", "vue"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"
     },
@@ -69,7 +73,9 @@
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
       ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
     },
-    "setupFiles": ["<rootDir>/test/unit/setup"],
+    "setupFiles": [
+      "<rootDir>/test/unit/setup"
+    ],
     "mapCoverage": true,
     "coverageDirectory": "<rootDir>/test/unit/coverage",
     "collectCoverageFrom": [
@@ -83,5 +89,9 @@
     "node": ">= 6.0.0",
     "npm": ">= 3.0.0"
   },
-  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"]
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
 }
