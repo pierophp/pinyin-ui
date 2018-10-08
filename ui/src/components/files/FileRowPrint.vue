@@ -5,6 +5,7 @@
         <md-icon>play_circle_filled</md-icon>
       </md-button>
     </span>
+
     <file-row-translation :line="line" />
 
     <template v-for="(block, blockIndex) in blocks">
@@ -17,14 +18,22 @@
         </div>
 
         <template v-if="!block.small">
-          <span class="pinyin" v-bind:style="block.pinyinStyleObject" v-for="(data, dataIndex) in block.printData" :class="[data.pinyinClass]" v-html="data.pinyin" v-bind:key="dataIndex" ></span>
+          <template v-for="(data, dataIndex) in block.printData">
+            <template v-if="block.pinyinStyleObject">
+              <span class="pinyin" :class="[data.pinyinClass]" v-bind:style="block.pinyinStyleObject" v-html="data.pinyin" v-bind:key="dataIndex"></span>
+            </template>
+            <template v-if="!block.pinyinStyleObject">{{ data.pinyin }}</template>
+          </template>
         </template>
-
         <div class="character" :data-highlight="block.h" :data-line="lineIndex" :data-block="blockIndex" :class="[block.classBold, block.classItalic]" v-if="!block.small && !block.footnote && !block.noIdeogram">
-          <span v-for="(data, index) in block.printDataCharacters"
+          <template v-for="(data, index) in block.printDataCharacters">
+            <template v-if="!data.toneColor">{{ data.character }}</template>
+            <span v-if="data.toneColor"
                 :class="[data.ideogramClass]"
                 :style="{ color: data.toneColor }"
                 v-bind:key="index">{{ data.character }}</span>
+          </template>
+
         </div>
 
         <div class="character footnote" v-if="block.footnote" @click.prevent="openFootnote(block.footnote)">
@@ -147,12 +156,14 @@ export default {
         let pinyinClass = '';
         let hidePinyin = false;
 
+        // 1 = pinyin_ideograms_without_knew,
         if (options.pinyinHide === '1') {
           // eslint-disable-next-line
           hidePinyin =
             (await this.canHidePinyin(chars[i])) ||
             pinyin[i] === undefined ||
             pinyin[i] === '';
+          // 2 = ideograms_only,
         } else if (options.pinyinHide === '2') {
           // eslint-disable-next-line
           hidePinyin =
@@ -161,6 +172,7 @@ export default {
             pinyin[i] === '';
         }
 
+        // 4 = pinyin_ideograms
         if (options.type === '4' && !hidePinyin && chars[i].trim()) {
           pinyinClass = 'hide-pinyin';
           newPinyin = '&nbsp;';
@@ -185,15 +197,15 @@ export default {
         });
       }
 
+      generatedBlock.pinyinStyleObject = null;
+
       if (withoutPinyn) {
         printData.forEach((item, i) => {
           printData[i].pinyinClass = '';
           printData[i].pinyin = '';
         });
-      }
 
-      generatedBlock.pinyinStyleObject = {};
-      if (withoutPinyn) {
+        generatedBlock.pinyinStyleObject = {};
         generatedBlock.pinyinStyleObject.height = 'auto';
       }
 

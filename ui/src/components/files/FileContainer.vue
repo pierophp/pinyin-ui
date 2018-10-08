@@ -5,7 +5,7 @@
     <div class="print-scroll" ref="fileScroll">
       <div class="print" :class="[sizeClass, typeClass, ideogramSpacedClass]">
         <folder-structure :show-last="true" v-if="parent"/>
-        <h2 v-if="filename && filename.split('|||').length != 3">
+        <h2 v-if="filename && filename.split('|||').length != 3" class="file-title">
           {{filename}}
         </h2>
 
@@ -142,7 +142,6 @@ export default {
       }
     });
 
-
     this.updateCss();
 
     let type = 'known';
@@ -182,7 +181,11 @@ export default {
     },
 
     openBottomBarClick(e) {
-      const element = e.target.parentNode;
+      let element = e.target.parentNode;
+      if (!element.classList.contains('character')) {
+        element = e.target;
+      }
+
       if (!element.classList.contains('character')) {
         return;
       }
@@ -296,6 +299,10 @@ export default {
   color: #000 !important;
 }
 
+.file-title {
+  min-height: 80px;
+}
+
 .print-container {
   flex: 1;
   display: flex;
@@ -343,9 +350,13 @@ export default {
   font-family: 'Noto Sans SC', 'Noto Sans TC', sans-serif;
   font-weight: lighter;
 }
+
 .print .character span {
   display: inline-block;
   font-weight: 300;
+}
+
+.print .character span {
   width: calc(var(--character-font-size) - 1px);
 }
 
@@ -415,9 +426,12 @@ export default {
   border-bottom: 1px solid #ccc;
 }
 
-.print .type-qu .character span {
+.print .type-qu .character {
   line-height: calc(var(--character-font-size) - 4px);
   font-size: calc(var(--character-font-size) - 4px);
+}
+
+.print .type-qu .character span {
   width: calc(var(--character-font-size) - 4px);
 }
 

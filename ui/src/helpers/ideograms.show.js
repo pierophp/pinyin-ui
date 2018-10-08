@@ -47,7 +47,7 @@ export default function(params) {
 
     printData.push({
       ideogramClass,
-      toneColor: `${colors[tone]} !important`,
+      toneColor: colors[tone] !== '#000000' ? `${colors[tone]} !important` : '',
       character: chars[i],
     });
   }
