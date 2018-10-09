@@ -396,8 +396,9 @@ export default {
   border-bottom: 1px solid #fcd79c;
 }
 
-.print .type-box-h2 .character,
-.print .type-h2 .character {
+.print .type-box-h2 .character .print .type-box-h2 .character span,
+.print .type-h2 .character,
+.print .type-h2 .character span {
   line-height: calc(var(--character-font-size) + 11px);
   font-size: calc(var(--character-font-size) + 11px);
   font-weight: 400;
