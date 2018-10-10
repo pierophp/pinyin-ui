@@ -72,7 +72,7 @@ export default {
     return {
       type: '',
       startTime: '',
-      blocks: [],
+      // blocks: [],
       loading: true,
     };
   },
@@ -95,7 +95,9 @@ export default {
     if (this.line[0] !== undefined && this.line[0].startTime !== undefined) {
       this.startTime = this.line[0].startTime;
     }
+  },
 
+  async mounted() {
     await this.updateRender();
   },
   methods: {
@@ -114,14 +116,18 @@ export default {
     async updateBlockRender(blockIndex) {
       const newBlock = await this.generateBlock(this.line[blockIndex]);
 
-      this.$set(this.blocks, blockIndex, newBlock);
+      // this.$set(this.blocks, blockIndex, newBlock);
+      this.blocks[blockIndex] = newBlock;
+      this.$forceUpdate();
     },
 
     async updateRender() {
       this.loading = true;
       let blockIndex = 0;
+      this.blocks = [];
       for (const block of this.line) {
-        this.$set(this.blocks, blockIndex, await this.generateBlock(block));
+        // this.$set(this.blocks, blockIndex, await this.generateBlock(block));
+        this.blocks[blockIndex] = await this.generateBlock(block);
 
         blockIndex++;
       }
