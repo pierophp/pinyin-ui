@@ -343,6 +343,7 @@ export default {
   height: calc(var(--pinyin-font-size) + 2px);
   min-width: 0;
   min-height: 5px;
+  display: block;
 }
 
 .print .character,
