@@ -22,8 +22,9 @@
             @open-footnote="openFootnote"
             @go-to-video-time="(time) => $emit('go-to-video-time', time)"
             ref="fileRowPrint"
-            :key="'file-row-' + lineIndex"/>
+            :key="'file-row-' + (line[0] && line[0].key ? `key-${line[0].key}` : `no-key-${lineIndex}`)"/>
         </template>
+        
         <div class="loading-container">
           <md-progress-spinner md-mode="indeterminate" v-if="fileLoading"></md-progress-spinner>
         </div>
