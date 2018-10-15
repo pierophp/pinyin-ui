@@ -299,8 +299,6 @@ export default {
       document.body.classList.add('has-bottom-bar');
       this.show = true;
 
-      this.requestDictionary(block.character, block.pinyin).then();
-
       if (md.mobile() && this.tempDictCharacter === block.character) {
         block.openDictionary = true;
       }
@@ -311,6 +309,8 @@ export default {
         '',
         block.pinyin || '',
       );
+
+      this.requestDictionary(block.character, block.pinyin).then();
       this.tempDictCharacter = block.character;
       const pinyin = separatePinyinInSyllables(block.pinyin);
 
