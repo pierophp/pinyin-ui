@@ -63,7 +63,7 @@ import {
 
 let options = {};
 
-const CACHE_VERSION = 3;
+const CACHE_VERSION = 4;
 
 export default {
   name: 'bible-chapter',
