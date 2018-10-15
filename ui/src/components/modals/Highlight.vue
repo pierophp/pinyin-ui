@@ -98,10 +98,15 @@ function selectionChange(that) {
   const leftAdd =
     (Math.max(startBounds.right, endBounds.right) - startBounds.left) / 2;
   const minLeft = 5;
+  const maxLeft = window.innerWidth - 295;
   that.left = startBounds.left + leftAdd;
   that.left -= 131;
   if (that.left < minLeft) {
     that.left = minLeft;
+  }
+
+  if (that.left > maxLeft) {
+    that.left = maxLeft;
   }
 
   if (md.mobile() !== null) {
