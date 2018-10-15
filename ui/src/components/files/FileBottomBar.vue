@@ -133,7 +133,7 @@ import {
 } from 'src/data/file/types';
 
 const md = new MobileDetect(window.navigator.userAgent);
-const memoryDictionary = {};
+let memoryDictionary = {};
 const loadingDictionary = {};
 
 export default {
@@ -203,6 +203,7 @@ export default {
       this.show = !show;
       const action = show ? 'remove' : 'add';
       document.body.classList[action]('has-bottom-bar');
+      memoryDictionary = {};
     },
 
     separate() {
