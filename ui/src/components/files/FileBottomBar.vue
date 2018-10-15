@@ -133,6 +133,8 @@ import {
 } from 'src/data/file/types';
 
 const md = new MobileDetect(window.navigator.userAgent);
+const memoryDictionary = {};
+const loadingDictionary = {};
 
 export default {
   name: 'file-bottom-bar',
@@ -247,9 +249,58 @@ export default {
       this.show = false;
     },
 
+    async requestDictionary(character, pinyin) {
+      const cacheKey = `${character}_${pinyin}`;
+
+      if (memoryDictionary[cacheKey]) {
+        return memoryDictionary[cacheKey];
+      }
+
+      if (loadingDictionary[cacheKey]) {
+        const awaitedResult = await new Promise(resolve => {
+          function verifyLoadDictionary() {
+            if (memoryDictionary[cacheKey]) {
+              resolve(memoryDictionary[cacheKey]);
+            }
+
+            if (!loadingDictionary[cacheKey]) {
+              resolve(null);
+            }
+
+            setTimeout(() => {
+              verifyLoadDictionary();
+            }, 500);
+          }
+          verifyLoadDictionary();
+        });
+
+        if (awaitedResult) {
+          return awaitedResult;
+        }
+      }
+
+      loadingDictionary[cacheKey] = true;
+
+      setTimeout(() => {
+        loadingDictionary[cacheKey] = false;
+      }, 5000);
+
+      memoryDictionary[cacheKey] = (await http.get('unihan/dictionary', {
+        params: {
+          ideograms: character,
+          pinyin: pinyin,
+        },
+      })).data;
+
+      return memoryDictionary[cacheKey];
+    },
+
     open(block) {
       document.body.classList.add('has-bottom-bar');
       this.show = true;
+
+      this.requestDictionary(block.character, block.pinyin).then();
+
       if (md.mobile() && this.tempDictCharacter === block.character) {
         block.openDictionary = true;
       }
@@ -262,6 +313,8 @@ export default {
       );
       this.tempDictCharacter = block.character;
       const pinyin = separatePinyinInSyllables(block.pinyin);
+
+      // clean the selection in 2 seconds
       setTimeout(() => {
         this.tempDictCharacter = null;
       }, 2000);
@@ -312,12 +365,10 @@ export default {
     },
 
     async loadDictionary() {
-      const response = (await http.get('unihan/dictionary', {
-        params: {
-          ideograms: this.block.character,
-          pinyin: this.block.pinyin,
-        },
-      })).data;
+      const response = await this.requestDictionary(
+        this.block.character,
+        this.block.pinyin,
+      );
 
       this.dictionary = this.baseDictionary;
       this.dictionaryList = [];

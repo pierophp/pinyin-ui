@@ -212,7 +212,7 @@ module.exports = class JwDownloader {
     //   );
     // });
 
-    const bibles = ['馬太福音'];
+    const bibles = ['箴言'];
 
     await Promise.mapSeries(bibles, async bible => {
       const urlChapter = `${urlBible}${bible}/`;

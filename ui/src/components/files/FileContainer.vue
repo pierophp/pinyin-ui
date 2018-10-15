@@ -24,7 +24,7 @@
             ref="fileRowPrint"
             :key="'file-row-' + (line[0] && line[0].key ? `key-${line[0].key}` : `no-key-${lineIndex}`)"/>
         </template>
-        
+
         <div class="loading-container">
           <md-progress-spinner md-mode="indeterminate" v-if="fileLoading"></md-progress-spinner>
         </div>
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <file-bottom-bar ref="fileBottomBar" @open-modal="openModal" @reopen="(lineIndex, blockIndex) => openBottomBarByLineAndBlock(lineIndex, blockIndex)"/>
+    <file-bottom-bar ref="fileBottomBar" @open-modal="openModal" @reopen="(lineIndex, blockIndex) => reopenBottomBarByLineAndBlock(lineIndex, blockIndex)"/>
   </div>
 </template>
 
@@ -226,6 +226,11 @@ export default {
         blockIndex,
         e.ctrlKey || e.metaKey,
       );
+    },
+
+    reopenBottomBarByLineAndBlock(lineIndex, blockIndex) {
+      this.openBottomBarByLineAndBlock(lineIndex, blockIndex);
+      this.$refs.fileRowPrint[lineIndex].updateRender().then();
     },
 
     openBottomBarByLineAndBlock(lineIndex, blockIndex, openDictionary) {
