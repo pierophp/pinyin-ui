@@ -230,7 +230,9 @@ export default {
 
     reopenBottomBarByLineAndBlock(lineIndex, blockIndex) {
       this.openBottomBarByLineAndBlock(lineIndex, blockIndex);
-      this.$refs.fileRowPrint[lineIndex].updateRender().then();
+      this.$nextTick(() => {
+        this.$refs.fileRowPrint[lineIndex].updateRender().then();
+      });
     },
 
     openBottomBarByLineAndBlock(lineIndex, blockIndex, openDictionary) {
