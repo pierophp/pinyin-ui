@@ -260,11 +260,11 @@ export default {
         const awaitedResult = await new Promise(resolve => {
           function verifyLoadDictionary() {
             if (memoryDictionary[cacheKey]) {
-              resolve(memoryDictionary[cacheKey]);
+              return resolve(memoryDictionary[cacheKey]);
             }
 
             if (!loadingDictionary[cacheKey]) {
-              resolve(null);
+              return resolve(null);
             }
 
             setTimeout(() => {
