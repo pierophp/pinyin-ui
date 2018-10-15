@@ -269,7 +269,7 @@ export default {
 
             setTimeout(() => {
               verifyLoadDictionary();
-            }, 500);
+            }, 50);
           }
           verifyLoadDictionary();
         });
