@@ -256,7 +256,7 @@ export default {
         return memoryDictionary[cacheKey];
       }
 
-      if (loadingDictionary[cacheKey]) {
+      if (loadingDictionary[cacheKey] === true) {
         const awaitedResult = await new Promise(resolve => {
           function verifyLoadDictionary() {
             if (memoryDictionary[cacheKey]) {
