@@ -21,6 +21,8 @@ import {
 } from 'src/data/file/types';
 
 const md = new MobileDetect(window.navigator.userAgent);
+let selectionIndex = 0;
+let currentSelectionIndex = 0;
 
 function getParentBlockSelected(element) {
   if (element == null) {
@@ -131,28 +133,16 @@ export default {
     worker: '',
   },
   created() {
-    const that = this;
-    let selectionIndex = 0;
-    let currentSelectionIndex = 0;
-
     // eslint-disable-next-line
     document.addEventListener(
       'selectionchange',
-      e => {
-        e.preventDefault();
-        selectionIndex += 1;
-        const localSelectionIndex = selectionIndex;
-        currentSelectionIndex = selectionIndex;
-        setTimeout(() => {
-          if (currentSelectionIndex !== localSelectionIndex) {
-            return;
-          }
-
-          selectionChange(that);
-        }, 500);
-      },
+      this.selectionChangeEvent,
       false,
     );
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('selectionchange', this.selectionChangeEvent);
   },
 
   methods: {
@@ -178,6 +168,22 @@ export default {
         endBlock: this.endBlock,
         worker: this.worker,
       });
+    },
+
+    selectionChangeEvent(e) {
+      e.preventDefault();
+      const that = this;
+
+      selectionIndex += 1;
+      const localSelectionIndex = selectionIndex;
+      currentSelectionIndex = selectionIndex;
+      setTimeout(() => {
+        if (currentSelectionIndex !== localSelectionIndex) {
+          return;
+        }
+
+        selectionChange(that);
+      }, 500);
     },
   },
 };

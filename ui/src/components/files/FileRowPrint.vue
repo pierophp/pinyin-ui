@@ -72,7 +72,6 @@ export default {
     return {
       type: '',
       startTime: '',
-      // blocks: [],
       loading: true,
     };
   },
@@ -115,8 +114,6 @@ export default {
     },
     async updateBlockRender(blockIndex) {
       const newBlock = await this.generateBlock(this.line[blockIndex]);
-
-      // this.$set(this.blocks, blockIndex, newBlock);
       this.blocks[blockIndex] = newBlock;
       this.$forceUpdate();
     },
@@ -126,7 +123,6 @@ export default {
       let blockIndex = 0;
       this.blocks = [];
       for (const block of this.line) {
-        // this.$set(this.blocks, blockIndex, await this.generateBlock(block));
         this.blocks[blockIndex] = await this.generateBlock(block);
 
         blockIndex++;
