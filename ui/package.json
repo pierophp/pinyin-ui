@@ -26,7 +26,7 @@
     "bootstrap": "^3.3.7",
     "bootstrap-social": "^5.1.1",
     "font-awesome": "^4.7.0",
-    "hanzi-writer": "^0.2.0",
+    "hanzi-writer": "^1.1.0",
     "js-cookie": "^2.1.4",
     "lodash": "^4.17.2",
     "medium-editor": "^5.22.1",
@@ -61,11 +61,7 @@
     "vue-template-compiler": "^2.5.13"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "vue"
-    ],
+    "moduleFileExtensions": ["js", "json", "vue"],
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"
     },
@@ -73,9 +69,7 @@
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
       ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
     },
-    "setupFiles": [
-      "<rootDir>/test/unit/setup"
-    ],
+    "setupFiles": ["<rootDir>/test/unit/setup"],
     "mapCoverage": true,
     "coverageDirectory": "<rootDir>/test/unit/coverage",
     "collectCoverageFrom": [
@@ -89,9 +83,5 @@
     "node": ">= 6.0.0",
     "npm": ">= 3.0.0"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"]
 }

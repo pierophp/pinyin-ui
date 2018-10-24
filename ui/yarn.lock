@@ -3030,9 +3030,9 @@ handle-thing@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/handle-thing/-/handle-thing-1.2.5.tgz#fd7aad726bf1a5fd16dfc29b2f7a6601d27139c4"
 
-hanzi-writer@^0.2.0:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/hanzi-writer/-/hanzi-writer-0.2.2.tgz#688659420256cf8a1146c8cbf95e63bd9eecb136"
+hanzi-writer@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/hanzi-writer/-/hanzi-writer-1.1.0.tgz#752f38e8877fcf43be1795d4a610796328bea553"
 
 har-schema@^2.0.0:
   version "2.0.0"
