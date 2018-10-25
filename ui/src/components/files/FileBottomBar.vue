@@ -57,8 +57,22 @@
       </md-dialog-title>
 
       <md-dialog-content>
-        <dictionary-details :dictionary="dictionary" :pinyin="block.pinyin" @change-show="changeShow" ref="dictionaryDetails"/>
-        <dictionary-list :list="dictionaryList"/>
+
+      <md-tabs>
+        <md-tab id="dict" :md-label="$t('definition')">
+          <dictionary-details :dictionary="dictionary" :pinyin="block.pinyin" @change-show="changeShow" ref="dictionaryDetails"/>
+          <dictionary-list :list="dictionaryList"/>
+        </md-tab>
+
+        <md-tab id="stroke" :md-label="$t('stroke')">
+          <dictionary-stroke-order :ideograms="block.character"/>
+        </md-tab>
+
+        <md-tab id="links" md-label="Links">
+            <Links list=1 :character="block.character"/>
+        </md-tab>
+      </md-tabs>
+
       </md-dialog-content>
 
       <md-dialog-actions>
@@ -121,6 +135,7 @@ import replaceall from 'replaceall';
 import pinyinHelper from 'src/helpers/pinyin';
 import ForvoModal from 'src/components/modals/Forvo';
 import TraditionalSimplifiedShow from 'src/components/ideograms/TraditionalSimplifiedShow';
+import DictionaryStrokeOrder from 'src/components/dictionary/StrokeOrder';
 
 import { mapActions, mapMutations, mapGetters } from 'vuex';
 
@@ -168,6 +183,7 @@ export default {
   components: {
     DictionaryDetails,
     DictionaryList,
+    DictionaryStrokeOrder,
     IdeogramsShow,
     Links,
     ForvoModal,
