@@ -43,9 +43,9 @@
       <Links list=0 :character="block.character" ref="links"/>
     </div>
 
-    <md-dialog 
-      ref="dialogDictionary" 
-      :md-active.sync="modalDictionaryOpen" 
+    <md-dialog
+      ref="dialogDictionary"
+      :md-active.sync="modalDictionaryOpen"
       :md-fullscreen="false"
       id="dialog-dictionary"
     >
@@ -466,12 +466,29 @@ export default {
   flex-shrink: 0;
 }
 
+#dialog-dictionary.md-dialog {
+  height: 80%;
+}
+
+#dialog-dictionary .md-dialog-title {
+  margin-bottom: 0 !important;
+  padding: 15px 15px 0;
+}
+
+#dialog-dictionary .md-dialog-content {
+  padding: 0 15px 15px;
+}
+
 #dialog-dictionary .md-dialog-container .md-tabs-navigation {
   padding: 0 !important;
 }
 
 #dialog-dictionary .md-dialog-container .md-tab {
   padding: 10px 0 !important;
+}
+
+#dialog-dictionary .md-tabs-navigation .md-button {
+  height: 32px;
 }
 
 .bottom-bar .md-menu {

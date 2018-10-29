@@ -131,18 +131,18 @@ export default {
 
 <style>
 .hanzi-container {
-  width: 240px;
+  width: 230px;
   text-align: center;
   position: relative;
 }
 
 #hanzi-writer svg {
-  min-height: 240px;
+  min-height: 230px;
 }
 
 #hanzi-controls {
   top: 20px;
-  left: 240px;
+  left: 225px;
   position: absolute;
   width: 30px;
   height: 100px;
