@@ -28,13 +28,14 @@ export default {
   data() {
     return {
       items: [],
+      charData: {},
       hanziWriterCache: {},
     };
   },
   mounted() {
     this.writer = new HanziWriter('hanzi-writer', '', {
-      onLoadCharDataSuccess: a => {
-        console.log('onLoadCharDataSuccess', a);
+      onLoadCharDataSuccess: charData => {
+        this.charData = charData;
       },
       // this method doesn't work async
       charDataLoader: (char, onComplete) => {

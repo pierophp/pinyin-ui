@@ -65,6 +65,9 @@
 
       <md-tabs>
         <md-tab id="dict" :md-label="$t('definition')">
+          <div class="loadable-loader" v-show="modalDictionaryLoading">
+            <md-progress-spinner class="md-accent" md-mode="indeterminate" :visible="modalDictionaryLoading"></md-progress-spinner>
+          </div>
           <dictionary-details :dictionary="dictionary" :pinyin="block.pinyin" @change-show="changeShow" ref="dictionaryDetails"/>
           <dictionary-list :list="dictionaryList"/>
         </md-tab>
@@ -177,6 +180,7 @@ export default {
       block: {},
       printData: {},
       modalDictionaryOpen: false,
+      modalDictionaryLoading: false,
       modalSeparateOpen: false,
       modalEditOpen: false,
       clipboardOpen: false,
@@ -387,6 +391,10 @@ export default {
     },
 
     async loadDictionary() {
+      this.dictionary = this.baseDictionary;
+      this.dictionaryList = [];
+      this.modalDictionaryOpen = true;
+      this.modalDictionaryLoading = true;
       const response = await this.requestDictionary(
         this.block.character,
         this.block.pinyin,
@@ -397,7 +405,7 @@ export default {
 
       if (response.list) {
         this.dictionaryList = response.list;
-        this.modalDictionaryOpen = true;
+        this.modalDictionaryLoading = false;
         return;
       }
 
@@ -410,7 +418,7 @@ export default {
         return;
       }
       this.dictionary = response;
-      this.modalDictionaryOpen = true;
+      this.modalDictionaryLoading = false;
     },
 
     openPinyinList() {
@@ -464,6 +472,12 @@ export default {
   height: 40px;
   width: 100%;
   flex-shrink: 0;
+}
+
+#dialog-dictionary .loadable-loader {
+  min-height: 200px;
+  text-align: center;
+  margin: 50px;
 }
 
 #dialog-dictionary.md-dialog {
