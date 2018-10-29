@@ -5,14 +5,17 @@
     </div>
 
     <div id="hanzi-writer"></div>
-    <md-button class="md-icon-button md-raised md-primary" @click.native="animate">
+    <md-button class="md-icon-button md-dense md-raised md-primary" @click.native="animate">
       <md-icon>play_arrow</md-icon>
     </md-button>
+
+    <!-- <md-button class="md-icon-button md-dense md-raised md-primary" @click.native="test">
+      <md-icon>chevron_right</md-icon>
+    </md-button> -->
   </div>
 </template>
-
 <script>
-import http from 'src/helpers/http';
+import axios from 'axios';
 import HanziWriter from 'hanzi-writer';
 
 export default {
@@ -30,22 +33,24 @@ export default {
   },
   mounted() {
     this.writer = new HanziWriter('hanzi-writer', '', {
+      onLoadCharDataSuccess: a => {
+        console.log('onLoadCharDataSuccess', a);
+      },
+      // this method doesn't work async
       charDataLoader: (char, onComplete) => {
         if (!char) {
           return;
         }
 
         if (!this.hanziWriterCache[char]) {
-          http
-            .get('hanzi-writer', {
-              params: {
-                ideogram: char,
-              },
-            })
+          axios
+            .get(
+              `https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${char}.json`,
+            )
             .then(response => {
-              if (response.data.response) {
-                onComplete(response.data.response);
-                this.hanziWriterCache[char] = response.data.response;
+              if (response.data) {
+                onComplete(response.data);
+                this.hanziWriterCache[char] = response.data;
               }
             });
         } else {
@@ -54,18 +59,21 @@ export default {
       },
       showOutline: true,
       showCharacter: true,
-      width: 250,
-      height: 250,
+      width: 230,
+      height: 230,
       padding: 0,
       strokeAnimationDuration: 300, // duration of each stroke in ms
-      delayBetweenStrokes: 500, // delay between drawing subsequent strokes in ms
+      delayBetweenStrokes: 300, // delay between drawing subsequent strokes in ms
+      strokeFadeDuration: 400,
+      delayBetweenStrokes: 200,
       strokeColor: '#555',
+      radicalColor: '#168F16',
       highlightColor: '#AAF', // color used to highlight strokes as a hint during quizzing
       outlineColor: '#DDD',
       drawingColor: '#333', // color of the line drawn by the user during quizzing
-
       showHintAfterMisses: 3, // give a hint after this many subsequent mistakes during quizzing
       highlightOnComplete: true, // flash the character when the quiz is successfully completed
+      leniency: 1,
     });
     this.update();
   },
@@ -75,12 +83,28 @@ export default {
         onComplete: () => {},
       });
     },
+    // test() {
+    //   const svgObject = this.writer.getScalingTransform(230, 230, 0);
+
+    //   console.log('svgObject', svgObject);
+    // },
     changeIdeogram(itemId) {
       this.items.forEach((item, i) => {
         this.items[i].classActive = '';
       });
       this.items[itemId].classActive = 'active';
       this.writer.setCharacter(this.items[itemId].ideogram);
+
+      // HanziWriter.loadCharacterData(this.items[itemId].ideogram).then(
+      //   charData => {
+      //     const target = document.getElementById('target');
+      //     for (var i = 0; i < charData.strokes.length; i++) {
+      //       const strokesPortion = charData.strokes.slice(0, i + 1);
+      //       console.log({ strokesPortion });
+      //       //  renderFanningStrokes(target, strokesPortion);
+      //     }
+      //   },
+      // );
     },
     update() {
       this.items = [];
@@ -88,14 +112,14 @@ export default {
         return;
       }
       for (let i = 0; i < this.ideograms.length; i += 1) {
-        if (i === 0) {
-          this.writer.setCharacter(this.ideograms[i]);
-        }
-        const classActive = i === 0 ? 'active' : '';
         this.items.push({
-          classActive,
+          classActive: '',
           ideogram: this.ideograms[i],
         });
+
+        if (i === 0) {
+          this.changeIdeogram(i);
+        }
       }
     },
   },
@@ -107,18 +131,18 @@ export default {
 
 <style>
 .hanzi-container {
-  width: 250px;
+  width: 240px;
   text-align: center;
   position: relative;
 }
 
 #hanzi-writer svg {
-  min-height: 250px;
+  min-height: 240px;
 }
 
 #hanzi-controls {
   top: 20px;
-  left: 260px;
+  left: 240px;
   position: absolute;
   width: 30px;
   height: 100px;
