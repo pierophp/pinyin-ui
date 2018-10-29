@@ -67,7 +67,7 @@ export default {
       strokeFadeDuration: 400,
       delayBetweenStrokes: 200,
       strokeColor: '#555',
-      radicalColor: '#168F16',
+      radicalColor: '#143dd9',
       highlightColor: '#AAF', // color used to highlight strokes as a hint during quizzing
       outlineColor: '#DDD',
       drawingColor: '#333', // color of the line drawn by the user during quizzing

@@ -43,7 +43,12 @@
       <Links list=0 :character="block.character" ref="links"/>
     </div>
 
-    <md-dialog ref="dialogDictionary" :md-active.sync="modalDictionaryOpen" :md-fullscreen="false">
+    <md-dialog 
+      ref="dialogDictionary" 
+      :md-active.sync="modalDictionaryOpen" 
+      :md-fullscreen="false"
+      id="dialog-dictionary"
+    >
       <md-dialog-title>
         <traditional-simplified-show :pinyin="block.pinyin" :ideograms="block.character" :variants="dictionary.variants"/>
         - {{ block.pinyin }}
@@ -460,9 +465,19 @@ export default {
   width: 100%;
   flex-shrink: 0;
 }
+
+#dialog-dictionary .md-dialog-container .md-tabs-navigation {
+  padding: 0 !important;
+}
+
+#dialog-dictionary .md-dialog-container .md-tab {
+  padding: 10px 0 !important;
+}
+
 .bottom-bar .md-menu {
   margin-left: -20px;
 }
+
 .bottom-bar-pinyin {
   font-size: 15px;
 }
