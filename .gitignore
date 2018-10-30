@@ -6,6 +6,7 @@ travis/secrets.tar
 .history/*
 api/deploy-local.sh
 api/yarn-error.log
+api/app/data/tmp/*
 ui/yarn-error.log
 ui/static/bible
 ui/public/static/bible

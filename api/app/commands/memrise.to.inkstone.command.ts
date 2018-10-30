@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio';
 import { IdeogramsConverter } from '../core/converter/ideograms.converter';
 import * as UnihanSearch from '../services/UnihanSearch';
 import * as fs from 'fs-extra';
+import { pinyinAccentsToNumbers } from '../helpers/pinyin.accents.to.numbers';
 
 const ideogramsConverter = new IdeogramsConverter();
 
@@ -20,6 +21,7 @@ export class MemriseToInkstoneCommand implements CommandModule {
       const filename = `contemporary-chinese-B1L${chapter}.list`;
 
       let response = await axios.get(url);
+
       let $ = cheerio.load(response.data);
 
       const items = $('.container .things .thing');
@@ -60,18 +62,18 @@ export class MemriseToInkstoneCommand implements CommandModule {
 
         const pinyin = (await UnihanSearch.toPinyin(ideogram.ideogram))
           .map(item => {
-            return item.pinyin;
+            return pinyinAccentsToNumbers(item.pinyin);
           })
           .join(' ');
 
         result += pinyin + '\t';
-        //  result += pinyin + '\t';
-        result += ideogram.meaning;
+
+        result += `/${ideogram.meaning.replace(/;/g, '/')}/`;
         result += '\n';
       }
 
       await fs.writeFile(
-        __dirname + `/../../../api/app/data/${filename}`,
+        __dirname + `/../../../api/app/data/tmp/${filename}`,
         result,
       );
     }
