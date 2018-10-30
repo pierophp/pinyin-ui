@@ -16,9 +16,12 @@ export class MemriseToInkstoneCommand implements CommandModule {
     const chapters = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
     for (const chapter of chapters) {
-      const url = `https://www.memrise.com/course/909679/a-course-in-contemporary-chinese-book-1/${chapter}/`;
+      const book = 2;
+      const url = `https://www.memrise.com/course/947655/a-course-in-contemporary-chinese-2-2/${chapter}/`;
 
-      const filename = `contemporary-chinese-B1L${chapter}.list`;
+      const filename = `contemporary-chinese-B${book}L${chapter
+        .toString()
+        .padStart(2, '0')}.list`;
 
       let response = await axios.get(url);
 
