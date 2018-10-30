@@ -43,20 +43,7 @@ export default {
           return;
         }
 
-        if (!this.hanziWriterCache[char]) {
-          axios
-            .get(
-              `https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${char}.json`,
-            )
-            .then(response => {
-              if (response.data) {
-                onComplete(response.data);
-                this.hanziWriterCache[char] = response.data;
-              }
-            });
-        } else {
-          onComplete(this.hanziWriterCache[char]);
-        }
+        this.loadIdeogram(char).then(response => onComplete(response));
       },
       showOutline: true,
       showCharacter: true,
@@ -107,6 +94,17 @@ export default {
       //   },
       // );
     },
+    async loadIdeogram(char) {
+      if (this.hanziWriterCache[char]) {
+        return this.hanziWriterCache[char];
+      }
+
+      this.hanziWriterCache[char] = (await axios.get(
+        `https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${char}.json`,
+      )).data;
+
+      return this.hanziWriterCache[char];
+    },
     update() {
       this.items = [];
       if (!this.ideograms) {
@@ -117,6 +115,8 @@ export default {
           classActive: '',
           ideogram: this.ideograms[i],
         });
+
+        this.loadIdeogram(this.ideograms[i]).then();
 
         if (i === 0) {
           this.changeIdeogram(i);
