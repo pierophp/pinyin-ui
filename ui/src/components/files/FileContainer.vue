@@ -201,7 +201,11 @@ export default {
       const lineIndex = element.getAttribute('data-line');
       const blockIndex = element.getAttribute('data-block');
 
-      if (this.lines[lineIndex][blockIndex].b) {
+      if (
+        this.lines[lineIndex] &&
+        this.lines[lineIndex][blockIndex] &&
+        this.lines[lineIndex][blockIndex].b
+      ) {
         const bible = this.lines[lineIndex][blockIndex].b.split(':');
         this.bible.bookIndex = bible[0];
         this.bible.chapter = bible[1];
