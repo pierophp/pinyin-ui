@@ -110,11 +110,20 @@ export default {
       if (!this.ideograms) {
         return;
       }
+
+      const loadedIdeograms = {};
+
       for (let i = 0; i < this.ideograms.length; i += 1) {
+        if (loadedIdeograms[this.ideograms[i]]) {
+          continue;
+        }
+
         this.items.push({
           classActive: '',
           ideogram: this.ideograms[i],
         });
+
+        loadedIdeograms[this.ideograms[i]] = true;
 
         this.loadIdeogram(this.ideograms[i]).then();
 
