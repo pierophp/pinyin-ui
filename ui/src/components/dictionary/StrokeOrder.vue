@@ -4,19 +4,56 @@
       <span v-for="(item, itemId) in items" v-bind:key="itemId" @click="changeIdeogram(itemId)" :class="item.classActive"></span>
     </div>
 
-    <div id="hanzi-writer"></div>
+    <div id="hanzi-writer" v-show="!partial"></div>
+
+    <div id="partial-hanzi-writer" v-show="partial"></div>
+
+    <md-button class="md-icon-button md-dense md-raised md-primary" @click.native="previous">
+      <md-icon>chevron_left</md-icon>
+    </md-button>
+
     <md-button class="md-icon-button md-dense md-raised md-primary" @click.native="animate">
       <md-icon>play_arrow</md-icon>
     </md-button>
 
-    <!-- <md-button class="md-icon-button md-dense md-raised md-primary" @click.native="test">
+    <md-button class="md-icon-button md-dense md-raised md-primary" @click.native="next">
       <md-icon>chevron_right</md-icon>
-    </md-button> -->
+    </md-button>
   </div>
 </template>
 <script>
 import axios from 'axios';
 import HanziWriter from 'hanzi-writer';
+
+function renderFanningStrokes(target, strokes) {
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.style.width = '230px';
+  svg.style.height = '230px';
+  svg.style.border = '1px solid #EEE';
+  svg.style.marginRight = '3px';
+
+  while (target.firstChild) {
+    target.removeChild(target.firstChild);
+  }
+
+  target.appendChild(svg);
+
+  const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+  const transformData = HanziWriter.getScalingTransform(230, 230);
+
+  group.setAttributeNS(null, 'transform', transformData.transform);
+
+  svg.appendChild(group);
+
+  strokes.forEach(function(strokePath) {
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttributeNS(null, 'd', strokePath);
+
+    path.style.fill = '#555';
+    group.appendChild(path);
+  });
+}
 
 export default {
   name: 'dictionary-stroke-order',
@@ -28,6 +65,8 @@ export default {
   data() {
     return {
       items: [],
+      partial: false,
+      currentStroke: 0,
       charData: {},
       hanziWriterCache: {},
     };
@@ -67,32 +106,48 @@ export default {
   },
   methods: {
     animate() {
+      this.currentStroke = 0;
+      this.partial = false;
       this.writer.animateCharacter({
         onComplete: () => {},
       });
     },
-    // test() {
-    //   const svgObject = this.writer.getScalingTransform(230, 230, 0);
+    previous() {
+      const target = document.getElementById('partial-hanzi-writer');
 
-    //   console.log('svgObject', svgObject);
-    // },
+      this.currentStroke -= 1;
+      if (this.currentStroke < 0) {
+        this.currentStroke = 0;
+      }
+
+      const strokesPortion = this.charData.strokes.slice(0, this.currentStroke);
+
+      this.partial = true;
+
+      renderFanningStrokes(target, strokesPortion);
+    },
+    next() {
+      const target = document.getElementById('partial-hanzi-writer');
+
+      this.currentStroke += 1;
+      if (this.currentStroke > this.charData.strokes.length) {
+        this.currentStroke = this.charData.strokes.length;
+      }
+
+      const strokesPortion = this.charData.strokes.slice(0, this.currentStroke);
+
+      renderFanningStrokes(target, strokesPortion);
+
+      this.partial = true;
+    },
     changeIdeogram(itemId) {
       this.items.forEach((item, i) => {
         this.items[i].classActive = '';
       });
       this.items[itemId].classActive = 'active';
+      this.currentStroke = 0;
+      this.partial = false;
       this.writer.setCharacter(this.items[itemId].ideogram);
-
-      // HanziWriter.loadCharacterData(this.items[itemId].ideogram).then(
-      //   charData => {
-      //     const target = document.getElementById('target');
-      //     for (var i = 0; i < charData.strokes.length; i++) {
-      //       const strokesPortion = charData.strokes.slice(0, i + 1);
-      //       console.log({ strokesPortion });
-      //       //  renderFanningStrokes(target, strokesPortion);
-      //     }
-      //   },
-      // );
     },
     async loadIdeogram(char) {
       if (this.hanziWriterCache[char]) {
