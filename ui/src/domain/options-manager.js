@@ -2,10 +2,26 @@ import LocalStorage from 'src/helpers/local-storage';
 import _ from 'lodash';
 import Vue from 'vue';
 
+const languageCodes = {
+  pt: 'portuguese',
+  en: 'english',
+  es: 'spanish',
+  ko: 'korean',
+  ja: 'japanese',
+  it: 'italian',
+  fr: 'french',
+  de: 'german',
+};
+
 class OptionsManager {
   static options;
 
   static getDefaultOptions() {
+    let translationLanguage = 'en';
+    if (languageCodes[Vue.config.lang]) {
+      translationLanguage = Vue.config.lang;
+    }
+
     return {
       ideogramSize: '23px',
       pinyinSize: '15px',
@@ -19,23 +35,20 @@ class OptionsManager {
       color2: '#af31af',
       color3: '#00a000',
       color4: '#ff0000',
-      translationLanguage: 'pt',
+      translationLanguage,
       blockMarginBottom: '0px',
       hidePinyinSource: 'editor',
     };
   }
 
   static getLanguages(chinese) {
-    const languages = [
-      { code: 'pt', language: Vue.t('portuguese') },
-      { code: 'en', language: Vue.t('english') },
-      { code: 'es', language: Vue.t('spanish') },
-      { code: 'ko', language: Vue.t('korean') },
-      { code: 'ja', language: Vue.t('japanese') },
-      { code: 'it', language: Vue.t('italian') },
-      { code: 'fr', language: Vue.t('french') },
-      { code: 'de', language: Vue.t('german') },
-    ];
+    const languages = [];
+    for (const languageCode of Object.keys(languageCodes)) {
+      languages.push({
+        code: languageCode,
+        language: Vue.t(languageCodes[languageCode]),
+      });
+    }
 
     if (chinese) {
       languages.push({
