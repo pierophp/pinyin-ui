@@ -73,9 +73,9 @@
             :pinyin="block.pinyin"
             @change-show="changeShow"
             ref="dictionaryDetails"
-            v-show="modalDictionaryLoading"
+            v-show="!modalDictionaryLoading"
             />
-          <dictionary-list :list="dictionaryList" v-show="modalDictionaryLoading"/>
+          <dictionary-list :list="dictionaryList" v-show="!modalDictionaryLoading"/>
         </md-tab>
 
         <md-tab id="stroke" :md-label="$t('stroke')">
