@@ -39,8 +39,6 @@ before_install:
   - rm src/.config.js
   - cp src/.config-${TRAVIS_BRANCH}.js src/.config.js
   - chmod +x ../travis/${TRAVIS_BRANCH}.sh
-  - echo pwd
-  - echo "../travis/${TRAVIS_BRANCH}.sh"
   - ../travis/${TRAVIS_BRANCH}.sh
   # editor
   - rm public/index.html

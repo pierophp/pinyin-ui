@@ -58,12 +58,18 @@ export default {
   methods: {
     confirm() {
       this.closeDialog('newFileModal');
-      this.newFile({
-        filename: this.filename,
-        type: this.type,
-        dirname: this.$route.query.d ? this.$route.query.d : '/',
+      this.$nextTick(() => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            this.newFile({
+              filename: this.filename,
+              type: this.type,
+              dirname: this.$route.query.d ? this.$route.query.d : '/',
+            });
+            this.filename = '';
+          });
+        });
       });
-      this.filename = '';
     },
     openDialog() {
       this.modalOpen = true;
