@@ -14,7 +14,14 @@
       </div>
     </div>
 
-    <file-container :lines="lines.concat(linesLanguage)" :fullLines="fullLines.concat(fullLinesLanguage)" filename="" :fileLoading="fileLoading" @open-bottom-bar="openBottomBar" :parent="parent" :showHighlight="false"/>
+    <file-container 
+      :lines="lines.concat(linesLanguage)" 
+      :fullLines="fullLines.concat(fullLinesLanguage)" 
+      filename="" 
+      :fileLoading="fileLoading" 
+      @open-bottom-bar="openBottomBar" 
+      :parent="parent" 
+      :showHighlight="false" />
 
     <md-dialog ref="modal" class="dialog-bible-verses" :md-active.sync="versesModalOpenTemp" :md-fullscreen="false" :md-backdrop="true" v-if="versesShowAsModal && parent">
       <md-dialog-content>
