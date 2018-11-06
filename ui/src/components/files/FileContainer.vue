@@ -137,9 +137,15 @@ export default {
 
     this.worker.addEventListener('message', async e => {
       if (e.data.type === 'changeCharacter') {
-        await this.$refs.fileRowPrint[e.data.lineIndex].updateBlockRender(
-          e.data.blockIndex,
-        );
+        const filteredElements = this.$refs.fileRowPrint.filter(item => {
+          return item.lineIndex === e.data.lineIndex;
+        });
+
+        for (const filteredElement of filteredElements) {
+          filteredElement.updateBlockRender(
+            e.data.blockIndex,
+          );
+        }
       }
     });
 
