@@ -1,11 +1,10 @@
-import _ from 'lodash';
 // eslint-disable-next-line
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
-
-export default function (content) {
+import compact from 'lodash/compact';
+export default function(content) {
   const rows = [];
   const row = [];
-  const lines = _.compact(content.split('\n'));
+  const lines = compact(content.split('\n'));
 
   const hanziLine = lines[0];
   const pinyinLine = lines[1];
@@ -14,12 +13,12 @@ export default function (content) {
 
   let i = 0;
 
-  pinyinWords.forEach((pinyinWord) => {
+  pinyinWords.forEach(pinyinWord => {
     const words = separatePinyinInSyllables(pinyinWord);
     let pinyin = '';
     let char = '';
 
-    words.forEach((word) => {
+    words.forEach(word => {
       const hanziWord = hanziLine.substr(i, 1);
       pinyin += word;
       char += hanziWord;
@@ -34,7 +33,7 @@ export default function (content) {
     rows.push(row);
   });
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     resolve(rows);
   });
 }

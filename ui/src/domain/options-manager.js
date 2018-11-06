@@ -1,6 +1,6 @@
 import LocalStorage from 'src/helpers/local-storage';
-import _ from 'lodash';
 import Vue from 'vue';
+import orderBy from 'lodash/orderBy';
 
 const languageCodes = {
   pt: 'portuguese',
@@ -60,7 +60,7 @@ class OptionsManager {
         language: Vue.t('chinese.traditional'),
       });
     }
-    return _.orderBy(languages, ['language']);
+    return orderBy(languages, ['language']);
   }
 
   static getOptions() {

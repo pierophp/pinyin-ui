@@ -7,7 +7,7 @@ import clipboard04 from 'src/domain/clipboard-04';
 import clipboardUrl from 'src/domain/clipboard-url';
 import LocalStorage from 'src/helpers/local-storage';
 import replaceall from 'replaceall';
-import { trimStart } from 'lodash';
+import trimStart from 'lodash/trimStart';
 import * as types from './types';
 
 function sortFiles(files) {

@@ -1,17 +1,17 @@
 // Multi NWT
-import _ from 'lodash';
 import isChinese from 'src/helpers/is-chinese';
+import compact from 'lodash/compact';
 
-export default function (content) {
+export default function(content) {
   content = content.replace(/(\r\n|\n|\r)/gm, ' ');
 
-  const parts = _.compact(content.split(' '));
+  const parts = compact(content.split(' '));
   const rows = [];
   const row = [];
   let char = '';
   let pinyin = '';
 
-  parts.forEach((part) => {
+  parts.forEach(part => {
     if (isChinese(part)) {
       char = part;
       row.push({
@@ -42,7 +42,7 @@ export default function (content) {
 
   rows.push(row);
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     resolve(rows);
   });
 }

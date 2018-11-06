@@ -47,7 +47,7 @@
 <script>
 import chaptersData from 'shared/data/bible/chapters';
 import axios from 'axios';
-import _ from 'lodash';
+import sortBy from 'lodash/sortBy';
 import OptionsManager from 'src/domain/options-manager';
 import LocalStorage from 'src/helpers/local-storage';
 import replaceall from 'replaceall';
@@ -159,7 +159,7 @@ export default {
         this.selecteds.remove(this.selecteds.indexOf(verse));
       }
 
-      this.selecteds = _.sortBy(this.selecteds);
+      this.selecteds = sortBy(this.selecteds);
 
       const newLines = [];
 
@@ -205,7 +205,7 @@ export default {
         this.selectedsLanguage.remove(this.selectedsLanguage.indexOf(verse));
       }
 
-      this.selectedsLanguage = _.sortBy(this.selectedsLanguage);
+      this.selectedsLanguage = sortBy(this.selectedsLanguage);
 
       const newLines = [];
 

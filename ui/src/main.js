@@ -2,10 +2,8 @@
 
 import offlinePlugin from 'offline-plugin/runtime';
 import Vue from 'vue';
-
-import VueMaterial from 'vue-material';
 import VueI18n from 'vue-i18n';
-// import { MdButton, MdIcon, MdToolbar } from 'vue-i18n';
+
 import VueAnalytics from 'vue-analytics';
 import VueClipboard from 'v-clipboard';
 import Raven from 'raven-js';
@@ -14,8 +12,6 @@ import RavenVue from 'raven-js/plugins/vue';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-social/bootstrap-social.css';
 import 'font-awesome/css/font-awesome.min.css';
-// import 'vue-material/dist/vue-material.min.css';
-// import 'vue-material/dist/theme/default.css';
 import 'src/css/vue-material/vue-material.min.css';
 import 'src/css/vue-material/default.css';
 
@@ -35,6 +31,7 @@ import store from 'src/data/store';
 import localeEn from 'src/data/locale/en';
 import localePt from 'src/data/locale/pt';
 import FileContainer from 'src/components/files/FileContainer';
+import vueMaterialLoader from './vue.material.loader';
 
 export default async function loadMain(moduleName) {
   const routerMethod = (await import('src/router')).default;
@@ -46,8 +43,9 @@ export default async function loadMain(moduleName) {
     (await import(`src/app/${moduleName}`)).default,
   );
 
+  vueMaterialLoader(Vue);
+
   Vue.use(VueI18n);
-  Vue.use(VueMaterial);
   Vue.use(VueClipboard);
 
   Vue.component('file-container', FileContainer);

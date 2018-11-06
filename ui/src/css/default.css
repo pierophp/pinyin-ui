@@ -168,5 +168,5 @@ body {
 }
 
 .md-dialog-container {
-  overflow: hidden;
+  overflow: hidden !important;
 }

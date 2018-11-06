@@ -67,7 +67,7 @@ import ImportSiteModal from 'src/components/modals/ImportSite';
 import LoadableContent from 'src/components/common/loading/LoadableContent';
 
 import { mapActions, mapGetters } from 'vuex';
-import { trimStart } from 'lodash';
+import trimStart from 'lodash/trimStart';
 import {
   FILES_ACTION_FETCH,
   FILES_GETTER,
