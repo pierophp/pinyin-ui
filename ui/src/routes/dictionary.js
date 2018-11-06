@@ -1,29 +1,18 @@
-import Login from 'src/pages/auth/Login';
-import DictionarySearch from 'src/pages/dictionary/Search';
-import DictionaryDetails from 'src/pages/dictionary/Details';
-import NotFound from 'src/pages/NotFound';
-
 export default [
   {
     path: '/',
     name: 'dictionary-home',
-    component: DictionarySearch,
+    component: () =>
+      import(/* webpackChunkName: "dictionary" */ 'src/pages/dictionary/Search'),
     meta: {
       topBar: 'dictionary',
     },
   },
   {
-    path: '/login/baidu',
-    name: 'login-baidu',
-    component: Login,
-    meta: {
-      hideTopBar: true,
-    },
-  },
-  {
     path: '/dictionary',
     name: 'dictionary',
-    component: DictionarySearch,
+    component: () =>
+      import(/* webpackChunkName: "dictionary" */ 'src/pages/dictionary/Search'),
     meta: {
       topBar: 'dictionary',
     },
@@ -31,7 +20,8 @@ export default [
   {
     path: '/dictionary-details/:id',
     name: 'dictionary-details',
-    component: DictionaryDetails,
+    component: () =>
+      import(/* webpackChunkName: "dictionary" */ 'src/pages/dictionary/Details'),
     meta: {
       topBar: 'dictionary',
     },
@@ -39,6 +29,7 @@ export default [
   {
     path: '*',
     name: 'not-found',
-    component: NotFound,
+    component: () =>
+      import(/* webpackChunkName: "dictionary" */ 'src/pages/NotFound'),
   },
 ];

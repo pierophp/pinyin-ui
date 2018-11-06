@@ -1,14 +1,9 @@
-import Login from 'src/pages/auth/Login';
-import VideoShow from 'src/pages/video/Show';
-import NotFound from 'src/pages/NotFound';
-import Config from 'src/pages/config/Config';
-import About from 'src/pages/about/About';
-
 export default [
   {
     path: '/',
     name: 'login',
-    component: Login,
+    component: () =>
+      import(/* webpackChunkName: "videos" */ 'src/pages/auth/Login'),
     meta: {
       hideTopBar: true,
       redirectTo: '/#/video',
@@ -17,7 +12,8 @@ export default [
   {
     path: '/login/baidu',
     name: 'login-baidu',
-    component: Login,
+    component: () =>
+      import(/* webpackChunkName: "videos" */ 'src/pages/auth/Login'),
     meta: {
       hideTopBar: true,
     },
@@ -25,7 +21,8 @@ export default [
   {
     path: '/video',
     name: 'video',
-    component: VideoShow,
+    component: () =>
+      import(/* webpackChunkName: "videos" */ 'src/pages/video/Show'),
     meta: {
       topBar: 'videos',
       protected: true,
@@ -34,7 +31,8 @@ export default [
   {
     path: '/config',
     name: 'config',
-    component: Config,
+    component: () =>
+      import(/* webpackChunkName: "videos" */ 'src/pages/config/Config'),
     meta: {
       protected: true,
     },
@@ -42,12 +40,14 @@ export default [
   {
     path: '/about',
     name: 'about',
-    component: About,
+    component: () =>
+      import(/* webpackChunkName: "videos" */ 'src/pages/about/About'),
     meta: {},
   },
   {
     path: '*',
     name: 'not-found',
-    component: NotFound,
+    component: () =>
+      import(/* webpackChunkName: "videos" */ 'src/pages/NotFound'),
   },
 ];

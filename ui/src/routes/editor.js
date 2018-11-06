@@ -1,22 +1,9 @@
-import Login from 'src/pages/auth/Login';
-import FilesList from 'src/pages/files/FilesList';
-import FileDetails from 'src/pages/files/FileDetails';
-import FilePrint from 'src/pages/files/FilePrint';
-import MyCjkList from 'src/pages/my-cjk/MyCjkList';
-import DictionarySearch from 'src/pages/dictionary/Search';
-import DictionaryDetails from 'src/pages/dictionary/Details';
-import Config from 'src/pages/config/Config';
-import VideoShow from 'src/pages/video/Show';
-
-import About from 'src/pages/about/About';
-import Browser from 'src/pages/browser/Browser';
-import NotFound from 'src/pages/NotFound';
-
 export default [
   {
     path: '/',
     name: 'login',
-    component: Login,
+    component: () =>
+      import(/* webpackChunkName: "editor" */ 'src/pages/auth/Login'),
     meta: {
       hideTopBar: true,
       redirectTo: '/#/files',
@@ -25,7 +12,8 @@ export default [
   {
     path: '/login/baidu',
     name: 'login-baidu',
-    component: Login,
+    component: () =>
+      import(/* webpackChunkName: "editor" */ 'src/pages/auth/Login'),
     meta: {
       hideTopBar: true,
     },
@@ -33,7 +21,8 @@ export default [
   {
     path: '/files',
     name: 'files',
-    component: FilesList,
+    component: () =>
+      import(/* webpackChunkName: "editor" */ 'src/pages/files/FilesList'),
     meta: {
       protected: true,
     },
@@ -41,7 +30,8 @@ export default [
   {
     path: '/files/file/:filename',
     name: 'file',
-    component: FileDetails,
+    component: () =>
+      import(/* webpackChunkName: "editor" */ 'src/pages/files/FileDetails'),
     meta: {
       protected: true,
       topBar: 'file-details',
@@ -50,7 +40,8 @@ export default [
   {
     path: '/files/print/:filename',
     name: 'print',
-    component: FilePrint,
+    component: () =>
+      import(/* webpackChunkName: "editor" */ 'src/pages/files/FilePrint'),
     meta: {
       protected: true,
       topBar: 'file-print',
@@ -59,7 +50,8 @@ export default [
   {
     path: '/my-cjk',
     name: 'my-cjk',
-    component: MyCjkList,
+    component: () =>
+      import(/* webpackChunkName: "editor" */ 'src/pages/my-cjk/MyCjkList'),
     meta: {
       protected: true,
     },
@@ -67,7 +59,9 @@ export default [
   {
     path: '/dictionary',
     name: 'dictionary',
-    component: DictionarySearch,
+    component: () =>
+      import(/* webpackChunkName: "editor" */ 'src/pages/dictionary/Search'),
+
     meta: {
       topBar: 'dictionary',
     },
@@ -75,7 +69,8 @@ export default [
   {
     path: '/dictionary-details/:id',
     name: 'dictionary-details',
-    component: DictionaryDetails,
+    component: () =>
+      import(/* webpackChunkName: "editor" */ 'src/pages/dictionary/Details'),
     meta: {
       topBar: 'dictionary',
     },
@@ -83,7 +78,8 @@ export default [
   {
     path: '/config',
     name: 'config',
-    component: Config,
+    component: () =>
+      import(/* webpackChunkName: "editor" */ 'src/pages/config/Config'),
     meta: {
       protected: true,
     },
@@ -91,7 +87,8 @@ export default [
   {
     path: '/video',
     name: 'video',
-    component: VideoShow,
+    component: () =>
+      import(/* webpackChunkName: "editor" */ 'src/pages/video/Show'),
     meta: {
       topBar: 'videos',
       protected: true,
@@ -100,13 +97,15 @@ export default [
   {
     path: '/about',
     name: 'about',
-    component: About,
+    component: () =>
+      import(/* webpackChunkName: "editor" */ 'src/pages/about/About'),
     meta: {},
   },
   {
     path: '/browser',
     name: 'browser',
-    component: Browser,
+    component: () =>
+      import(/* webpackChunkName: "editor" */ 'src/pages/browser/Browser'),
     meta: {
       topBarLeft: true,
       hideTitle: true,
@@ -116,6 +115,7 @@ export default [
   {
     path: '*',
     name: 'not-found',
-    component: NotFound,
+    component: () =>
+      import(/* webpackChunkName: "editor" */ 'src/pages/NotFound'),
   },
 ];

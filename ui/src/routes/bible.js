@@ -1,18 +1,9 @@
-import Login from 'src/pages/auth/Login';
-import BibleBooks from 'src/pages/bible/Books';
-import BibleChapters from 'src/pages/bible/Chapters';
-import BibleChapter from 'src/pages/bible/Chapter';
-import BibleSave from 'src/pages/bible/Save';
-import Config from 'src/pages/config/Config';
-import MyCjkList from 'src/pages/my-cjk/MyCjkList';
-import NotFound from 'src/pages/NotFound';
-import About from 'src/pages/about/About';
-
 export default [
   {
     path: '/',
     name: 'login',
-    component: Login,
+    component: () =>
+      import(/* webpackChunkName: "bible" */ 'src/pages/auth/Login'),
     meta: {
       hideTopBar: true,
       redirectTo: '/#/bible',
@@ -21,7 +12,8 @@ export default [
   {
     path: '/login/baidu',
     name: 'login-baidu',
-    component: Login,
+    component: () =>
+      import(/* webpackChunkName: "bible" */ 'src/pages/auth/Login'),
     meta: {
       hideTopBar: true,
     },
@@ -29,7 +21,8 @@ export default [
   {
     path: '/bible',
     name: 'bible',
-    component: BibleBooks,
+    component: () =>
+      import(/* webpackChunkName: "bible" */ 'src/pages/bible/Books'),
     meta: {
       protected: true,
       topBar: 'bible-books',
@@ -39,7 +32,8 @@ export default [
   {
     path: '/bible/save',
     name: 'bible-save',
-    component: BibleSave,
+    component: () =>
+      import(/* webpackChunkName: "bible" */ 'src/pages/bible/Save'),
     meta: {
       protected: true,
       hideTitle: true,
@@ -49,8 +43,9 @@ export default [
   },
   {
     path: '/bible/:book',
-    name: 'bible-chaoters',
-    component: BibleChapters,
+    name: 'bible-chapters',
+    component: () =>
+      import(/* webpackChunkName: "bible" */ 'src/pages/bible/Chapters'),
     meta: {
       protected: true,
       hideTitle: true,
@@ -60,8 +55,9 @@ export default [
   },
   {
     path: '/bible/:book/:chapter',
-    name: 'bible-chaoter',
-    component: BibleChapter,
+    name: 'bible-chapter',
+    component: () =>
+      import(/* webpackChunkName: "bible" */ 'src/pages/bible/Chapter'),
     meta: {
       protected: true,
       hideTitle: true,
@@ -72,7 +68,8 @@ export default [
   {
     path: '/my-cjk',
     name: 'my-cjk',
-    component: MyCjkList,
+    component: () =>
+      import(/* webpackChunkName: "bible" */ 'src/pages/my-cjk/MyCjkList'),
     meta: {
       protected: true,
     },
@@ -80,7 +77,8 @@ export default [
   {
     path: '/config',
     name: 'config',
-    component: Config,
+    component: () =>
+      import(/* webpackChunkName: "bible" */ 'src/pages/config/Config'),
     meta: {
       protected: true,
     },
@@ -88,14 +86,14 @@ export default [
   {
     path: '/about',
     name: 'about',
-    component: About,
-    meta: {
-
-    },
+    component: () =>
+      import(/* webpackChunkName: "bible" */ 'src/pages/about/About'),
+    meta: {},
   },
   {
     path: '*',
     name: 'not-found',
-    component: NotFound,
+    component: () =>
+      import(/* webpackChunkName: "bible" */ 'src/pages/NotFound'),
   },
 ];
