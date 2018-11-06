@@ -9,8 +9,6 @@ import VueClipboard from 'v-clipboard';
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-social/bootstrap-social.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'src/css/vue-material/vue-material.min.css';
 import 'src/css/vue-material/default.css';
