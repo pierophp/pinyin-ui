@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import 'medium-editor/dist/css/medium-editor.css';
+import 'medium-editor/dist/css/themes/default.css';
 import MediumEditor from 'medium-editor';
 
 export default {
@@ -16,8 +18,8 @@ export default {
   },
   props: {
     content: {
-        // eslint-disable-next-line quote-props
-      'default': () => (''),
+      // eslint-disable-next-line quote-props
+      default: () => '',
     },
   },
   watch: {

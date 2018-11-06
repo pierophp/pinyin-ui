@@ -1,7 +1,6 @@
 // JW ORG (spaced)
 import http from 'src/helpers/http';
 import replaceall from 'replaceall';
-import Promise from 'bluebird';
 import OptionsManager from 'src/domain/options-manager';
 import isChinese from 'src/helpers/is-chinese';
 
@@ -17,7 +16,8 @@ async function parseLink(link) {
 }
 
 async function parseSite(lines, audio, url) {
-  const rows = await Promise.map(lines, async line => {
+  const rows = [];
+  for (const line of lines) {
     if (typeof line === 'string') {
       line = { text: line };
     }
@@ -35,7 +35,9 @@ async function parseSite(lines, audio, url) {
       });
       row[0].line = {};
       row[0].line.type = line.type;
-      return row;
+
+      rows.push(row);
+      continue;
     }
 
     const ideograms = line.text.split(' ');
@@ -118,8 +120,8 @@ async function parseSite(lines, audio, url) {
       row[0].trans = line.trans;
     }
 
-    return row;
-  });
+    rows.push(row);
+  }
 
   if (audio) {
     rows[0][0].line.audio = audio;

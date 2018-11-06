@@ -1,6 +1,5 @@
 // Ideograms spaced
 import replaceall from 'replaceall';
-import Promise from 'bluebird';
 
 function parseContent(content) {
   return new Promise(resolve => {
@@ -20,7 +19,8 @@ function parseContent(content) {
 }
 
 async function parseSite(lines) {
-  const rows = await Promise.map(lines, async line => {
+  const rows = [];
+  for (const line of lines) {
     if (typeof line === 'string') {
       line = { text: line };
     }
@@ -38,7 +38,9 @@ async function parseSite(lines) {
       });
       row[0].line = {};
       row[0].line.type = line.type;
-      return row;
+
+      rows.push(row);
+      continue;
     }
 
     const ideograms = line.text.split(' ');
@@ -106,8 +108,8 @@ async function parseSite(lines) {
       row[0].trans = line.trans;
     }
 
-    return row;
-  });
+    rows.push(row);
+  }
 
   return rows;
 }

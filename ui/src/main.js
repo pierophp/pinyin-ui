@@ -23,8 +23,6 @@ import 'src/css/fonts/noto-sans-sc.css';
 import 'src/css/fonts/noto-sans-tc.css';
 import 'src/css/fonts/roboto.css';
 import 'src/helpers/array';
-import 'medium-editor/dist/css/medium-editor.css';
-import 'medium-editor/dist/css/themes/default.css';
 
 import App from 'src/pages/App';
 import store from 'src/data/store';
