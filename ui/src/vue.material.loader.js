@@ -1,20 +1,18 @@
-import {
-  MdButton,
-  MdContent,
-  MdDialog,
-  MdDrawer,
-  MdField,
-  MdIcon,
-  MdList,
-  MdMenu,
-  MdProgress,
-  MdRipple,
-  MdSnackbar,
-  MdSwitch,
-  MdTable,
-  MdTabs,
-  MdToolbar,
-} from 'vue-material/dist/components';
+import MdButton from 'vue-material/dist/components/MdButton';
+import MdContent from 'vue-material/dist/components/MdContent';
+import MdDialog from 'vue-material/dist/components/MdDialog';
+import MdDrawer from 'vue-material/dist/components/MdDrawer';
+import MdField from 'vue-material/dist/components/MdField';
+import MdIcon from 'vue-material/dist/components/MdIcon';
+import MdList from 'vue-material/dist/components/MdList';
+import MdMenu from 'vue-material/dist/components/MdMenu';
+import MdProgress from 'vue-material/dist/components/MdProgress';
+import MdRipple from 'vue-material/dist/components/MdRipple';
+import MdSnackbar from 'vue-material/dist/components/MdSnackbar';
+import MdSwitch from 'vue-material/dist/components/MdSwitch';
+import MdTable from 'vue-material/dist/components/MdTable';
+import MdTabs from 'vue-material/dist/components/MdTabs';
+import MdToolbar from 'vue-material/dist/components/MdToolbar';
 
 export default Vue => {
   Vue.use(MdButton);
