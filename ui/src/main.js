@@ -19,17 +19,22 @@ import 'src/css/fonts/material-icons.css';
 import 'src/css/fonts/roboto.css';
 import 'src/css/fonts/noto-sans-sc.css';
 import 'src/css/fonts/noto-sans-tc.css';
-import 'src/css/fonts/roboto.css';
 import 'src/helpers/array';
 
 import App from 'src/pages/App';
 import store from 'src/data/store';
 import localeEn from 'src/data/locale/en';
 import localePt from 'src/data/locale/pt';
-import FileContainer from 'src/components/files/FileContainer';
+
 import vueMaterialLoader from './vue.material.loader';
 
 export default async function loadMain(moduleName) {
+  if (['bible', 'editor', 'videos'].includes(moduleName)) {
+    const FileContainer = (await import('src/components/files/FileContainer'))
+      .default;
+    Vue.component('file-container', FileContainer);
+  }
+
   const routerMethod = (await import('src/router')).default;
 
   const routes = (await import(`src/routes/${moduleName}`)).default;
@@ -43,8 +48,6 @@ export default async function loadMain(moduleName) {
 
   Vue.use(VueI18n);
   Vue.use(VueClipboard);
-
-  Vue.component('file-container', FileContainer);
 
   Vue.locale('en', localeEn);
   Vue.locale('pt', localePt);
