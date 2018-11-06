@@ -6,8 +6,6 @@ import VueI18n from 'vue-i18n';
 
 import VueAnalytics from 'vue-analytics';
 import VueClipboard from 'v-clipboard';
-import Raven from 'raven-js';
-import RavenVue from 'raven-js/plugins/vue';
 
 import 'font-awesome/css/font-awesome.min.css';
 import 'src/css/vue-material/vue-material.min.css';
@@ -27,10 +25,11 @@ import localeEn from 'src/data/locale/en';
 import localePt from 'src/data/locale/pt';
 
 import vueMaterialLoader from './vue.material.loader';
+import ravenLoader from './raven.loader';
 
 export default async function loadMain(moduleName) {
   if (['bible', 'editor', 'videos'].includes(moduleName)) {
-    const FileContainer = (await import('src/components/files/FileContainer'))
+    const FileContainer = (await import(/* webpackChunkName: "file-container" */ 'src/components/files/FileContainer'))
       .default;
     Vue.component('file-container', FileContainer);
   }
@@ -45,6 +44,7 @@ export default async function loadMain(moduleName) {
   );
 
   vueMaterialLoader(Vue);
+  ravenLoader(Vue).then();
 
   Vue.use(VueI18n);
   Vue.use(VueClipboard);
@@ -71,10 +71,6 @@ export default async function loadMain(moduleName) {
       id: 'UA-4081205-4',
       router,
     });
-
-    Raven.config('https://c66b5a8acf4440d796646fdab764969a@sentry.io/245293')
-      .addPlugin(RavenVue, Vue)
-      .install();
   }
 
   const Main = Vue.extend(App);

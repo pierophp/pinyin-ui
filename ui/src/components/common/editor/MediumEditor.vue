@@ -7,7 +7,6 @@
 <script>
 import 'medium-editor/dist/css/medium-editor.css';
 import 'medium-editor/dist/css/themes/default.css';
-import MediumEditor from 'medium-editor';
 
 export default {
   name: 'medium-editor',
@@ -30,12 +29,13 @@ export default {
       }
     },
   },
-  mounted() {
+  async mounted() {
     const editorToDataSync = (data, editable) => {
       this.internalContent = editable.innerText.trim();
       this.$emit('content', this.internalContent);
     };
 
+    const MediumEditor = await import(/* webpackChunkName: "medium-editor" */ 'medium-editor');
     this.editor = new MediumEditor(this.$el, {
       disableReturn: true,
       placeholder: false,
