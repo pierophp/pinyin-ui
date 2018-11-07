@@ -35,7 +35,8 @@ export default {
       this.$emit('content', this.internalContent);
     };
 
-    const MediumEditor = await import(/* webpackChunkName: "medium-editor" */ 'medium-editor');
+    const MediumEditor = (await import(/* webpackChunkName: "medium-editor" */ 'medium-editor'))
+      .default;
     this.editor = new MediumEditor(this.$el, {
       disableReturn: true,
       placeholder: false,

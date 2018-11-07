@@ -4,14 +4,14 @@
       <loadable-content :loading="loading">
         <div class="video-form" v-show="!showSubtitle || !isPhone || orientation === 'landscape'" >
           <div class="video-form-container" >
-            <md-field class="type-form-container">
+            <div class="field-container">
               <label for="type">{{ $t('show') }}</label>
-              <md-select name="type" id="type" v-model="type">
-                <md-option value="a">{{ $t('pinyin_ideograms') }}</md-option>
-                <md-option value="p">{{ $t('pinyin_only') }}</md-option>
-                <md-option value="c">{{ $t('ideograms_only') }}</md-option>
-              </md-select>
-            </md-field>
+              <select v-model="type" name="type" class="select-field">
+                <option value="a">{{ $t('pinyin_ideograms') }}</option>
+                <option value="p">{{ $t('pinyin_only') }}</option>
+                <option value="c">{{ $t('ideograms_only') }}</option>
+              </select>
+            </div>
 
             <md-field class="url-form-container">
                 <md-icon>play_circle_outline</md-icon>
@@ -41,9 +41,9 @@
                 {{ $t("end_time") }}
                 <span v-if="endTime !== null"><br/>({{ secondsToHms(endTime) }})</span>
               </md-button>
-              <md-button class="md-raised md-primary" 
-                @click.native="startRepeatPhrase" 
-                v-if="!repeating" 
+              <md-button class="md-raised md-primary"
+                @click.native="startRepeatPhrase"
+                v-if="!repeating"
                 :disabled="startTime === null || endTime === null">
                 {{ $t("start") }}
               </md-button>

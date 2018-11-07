@@ -1,16 +1,18 @@
 <template>
   <div class="bible-save-container">
-    <md-table>
-      <md-table-row>
-        <md-table-head>{{ $t('language') }}</md-table-head>
-        <md-table-head></md-table-head>
-      </md-table-row>
-
-      <md-table-row v-for="(language, index) in languages" :key="index">
-        <md-table-cell>
+    <table class="spaced-table">
+      <thead>
+      <tr>
+        <th>{{ $t('language') }}</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(language, index) in languages" :key="index">
+        <td>
           {{ language.language }}
-        </md-table-cell>
-        <md-table-cell class="cell-button">
+        </td>
+        <td class="cell-button">
           <md-button class="md-icon-button md-raised" @click.native="openModalConfirm('download', language.code, index)" v-if="!language.downloaded">
             <md-icon>cloud_download</md-icon>
           </md-button>
@@ -18,9 +20,10 @@
           <md-button class="md-icon-button md-raised downloaded" @click.native="openModalConfirm('delete', language.code, index)" v-if="language.downloaded">
             <md-icon>cloud_download</md-icon>
           </md-button>
-        </md-table-cell>
-      </md-table-row>
-    </md-table>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
     <md-dialog :md-active.sync="modalConfirmOpened" :md-fullscreen="false">
       <md-dialog-title>{{ $t('confirmation') }}</md-dialog-title>
@@ -116,7 +119,7 @@ export default {
 
           count += 1;
 
-          this.percent = count * 100 / this.total;
+          this.percent = (count * 100) / this.total;
 
           const chapter = chaptersData[book][chapterIndex].c;
 
@@ -148,7 +151,7 @@ export default {
       for (const book of Object.keys(chaptersData)) {
         for (const chapterIndex of Object.keys(chaptersData[book])) {
           count += 1;
-          this.percent = count * 100 / this.total;
+          this.percent = (count * 100) / this.total;
 
           const chapter = chaptersData[book][chapterIndex].c;
 

@@ -5,10 +5,16 @@
         <md-icon>more_vert</md-icon>
       </md-button>
       <md-menu-content>
-        <md-menu-item @click.native="downloadPleco()">
-          <md-icon>arrow_downward</md-icon>
-          <span class="md-list-item-text">{{ $t('download_pleco_dictionary') }}</span>
-        </md-menu-item>
+        <div class="list-container">
+          <div class="list-item" @click="downloadPleco()">
+            <div class="icon">
+              <md-icon>arrow_downward</md-icon>
+            </div>
+            <div class="content">
+              {{ $t("download_pleco_dictionary") }}
+            </div>
+          </div>
+        </div>
       </md-menu-content>
     </md-menu>
   </div>

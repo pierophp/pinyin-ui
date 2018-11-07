@@ -3,7 +3,7 @@ export default [
     path: '/',
     name: 'login',
     component: () =>
-      import(/* webpackChunkName: "editor" */ 'src/pages/auth/Login'),
+      import(/* webpackChunkName: "login" */ 'src/pages/auth/Login'),
     meta: {
       hideTopBar: true,
       redirectTo: '/#/files',
@@ -13,7 +13,7 @@ export default [
     path: '/login/baidu',
     name: 'login-baidu',
     component: () =>
-      import(/* webpackChunkName: "editor" */ 'src/pages/auth/Login'),
+      import(/* webpackChunkName: "login" */ 'src/pages/auth/Login'),
     meta: {
       hideTopBar: true,
     },
@@ -22,7 +22,7 @@ export default [
     path: '/files',
     name: 'files',
     component: () =>
-      import(/* webpackChunkName: "editor" */ 'src/pages/files/FilesList'),
+      import(/* webpackChunkName: "files-list" */ 'src/pages/files/FilesList'),
     meta: {
       protected: true,
     },
@@ -31,7 +31,7 @@ export default [
     path: '/files/file/:filename',
     name: 'file',
     component: () =>
-      import(/* webpackChunkName: "editor" */ 'src/pages/files/FileDetails'),
+      import(/* webpackChunkName: "files-details" */ 'src/pages/files/FileDetails'),
     meta: {
       protected: true,
       topBar: 'file-details',
@@ -41,7 +41,7 @@ export default [
     path: '/files/print/:filename',
     name: 'print',
     component: () =>
-      import(/* webpackChunkName: "editor" */ 'src/pages/files/FilePrint'),
+      import(/* webpackChunkName: "files-print" */ 'src/pages/files/FilePrint'),
     meta: {
       protected: true,
       topBar: 'file-print',
@@ -51,7 +51,7 @@ export default [
     path: '/my-cjk',
     name: 'my-cjk',
     component: () =>
-      import(/* webpackChunkName: "editor" */ 'src/pages/my-cjk/MyCjkList'),
+      import(/* webpackChunkName: "my-cjk" */ 'src/pages/my-cjk/MyCjkList'),
     meta: {
       protected: true,
     },
@@ -60,7 +60,7 @@ export default [
     path: '/dictionary',
     name: 'dictionary',
     component: () =>
-      import(/* webpackChunkName: "editor" */ 'src/pages/dictionary/Search'),
+      import(/* webpackChunkName: "dictionary" */ 'src/pages/dictionary/Search'),
 
     meta: {
       topBar: 'dictionary',
@@ -70,7 +70,7 @@ export default [
     path: '/dictionary-details/:id',
     name: 'dictionary-details',
     component: () =>
-      import(/* webpackChunkName: "editor" */ 'src/pages/dictionary/Details'),
+      import(/* webpackChunkName: "dictionary" */ 'src/pages/dictionary/Details'),
     meta: {
       topBar: 'dictionary',
     },
@@ -79,7 +79,7 @@ export default [
     path: '/config',
     name: 'config',
     component: () =>
-      import(/* webpackChunkName: "editor" */ 'src/pages/config/Config'),
+      import(/* webpackChunkName: "config" */ 'src/pages/config/Config'),
     meta: {
       protected: true,
     },
@@ -88,7 +88,7 @@ export default [
     path: '/video',
     name: 'video',
     component: () =>
-      import(/* webpackChunkName: "editor" */ 'src/pages/video/Show'),
+      import(/* webpackChunkName: "video" */ 'src/pages/video/Show'),
     meta: {
       topBar: 'videos',
       protected: true,
@@ -98,14 +98,14 @@ export default [
     path: '/about',
     name: 'about',
     component: () =>
-      import(/* webpackChunkName: "editor" */ 'src/pages/about/About'),
+      import(/* webpackChunkName: "about" */ 'src/pages/about/About'),
     meta: {},
   },
   {
     path: '/browser',
     name: 'browser',
     component: () =>
-      import(/* webpackChunkName: "editor" */ 'src/pages/browser/Browser'),
+      import(/* webpackChunkName: "browser" */ 'src/pages/browser/Browser'),
     meta: {
       topBarLeft: true,
       hideTitle: true,

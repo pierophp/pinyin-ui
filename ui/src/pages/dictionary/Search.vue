@@ -138,10 +138,6 @@ export default {
   overflow: auto;
 }
 
-.dictionary-container .md-list {
-  padding: 0;
-}
-
 .dictionary-container .md-input-container {
   margin-bottom: 15px;
 }

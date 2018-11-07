@@ -17,26 +17,52 @@
         </md-button>
 
         <md-menu-content>
-          <md-menu-item @click.native="close()">
-            <md-icon>clear</md-icon>
-            <span class="md-list-item-text">{{ $t('close') }}</span>
-          </md-menu-item>
-          <md-menu-item @click.native="joinLeft(block)">
-            <md-icon>arrow_back</md-icon>
-            <span class="md-list-item-text">{{ $t('join_left') }}</span>
-          </md-menu-item>
-          <md-menu-item @click.native="separate(block)">
-            <md-icon>swap_horiz</md-icon>
-            <span class="md-list-item-text">{{ $t('split') }}</span>
-          </md-menu-item>
-          <md-menu-item @click.native="edit(block)">
-            <md-icon>edit</md-icon>
-            <span class="md-list-item-text">{{ $t('edit') }}</span>
-          </md-menu-item>
-          <md-menu-item @click.native="openLinkMenu()">
-            <md-icon>open_in_browser</md-icon>
-            <span class="md-list-item-text">Links</span>
-          </md-menu-item>
+          <div class="list-container">
+            <div class="list-item" @click="close()">
+              <div class="icon">
+                <md-icon>clear</md-icon>
+              </div>
+              <div class="content">
+                {{ $t("close") }}
+              </div>
+            </div>
+
+            <div class="list-item" @click="joinLeft(block)">
+              <div class="icon">
+                <md-icon>arrow_back</md-icon>
+              </div>
+              <div class="content">
+                {{ $t("join_left") }}
+              </div>
+            </div>
+
+            <div class="list-item" @click="separate(block)">
+              <div class="icon">
+                <md-icon>swap_horiz</md-icon>
+              </div>
+              <div class="content">
+                {{ $t("split") }}
+              </div>
+            </div>
+
+            <div class="list-item" @click="edit(block)">
+              <div class="icon">
+                <md-icon>edit</md-icon>
+              </div>
+              <div class="content">
+                {{ $t("edit") }}
+              </div>
+            </div>
+
+            <div class="list-item" @click="openLinkMenu()">
+              <div class="icon">
+                <md-icon>open_in_browser</md-icon>
+              </div>
+              <div class="content">
+                Links
+              </div>
+            </div>
+          </div>
         </md-menu-content>
       </md-menu>
 

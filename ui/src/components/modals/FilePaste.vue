@@ -3,13 +3,13 @@
     <md-dialog-title>{{ $t('paste') }}</md-dialog-title>
 
     <md-dialog-content>
-      <md-field>
+      <div class="field-container">
         <label for="action">{{ $t('action') }}</label>
-        <md-select name="action" id="action" v-model="action">
-          <md-option value="4">{{ $t('paste_action.ideograms') }}</md-option>
-          <md-option value="3">{{ $t('paste_action.ideograms_spaced') }}</md-option>
-        </md-select>
-      </md-field>
+        <select v-model="action" name="action" class="select-field">
+          <option value="4">{{ $t('paste_action.ideograms') }}</option>
+          <option value="3">{{ $t('paste_action.ideograms_spaced') }}</option>
+        </select>
+      </div>
 
       <md-field>
         <label for="action">{{ $t('paste') }}</label>
@@ -70,9 +70,5 @@ export default {
   width: 500px;
   min-height: 350px;
   max-height: auto;
-}
-
-.md-select-menu {
-  z-index: 1000;
 }
 </style>

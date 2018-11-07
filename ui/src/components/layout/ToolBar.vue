@@ -16,63 +16,68 @@
         <span>{{user.email}}</span>
       </md-toolbar>
 
-      <md-list >
-        <md-list-item @click="doAction(menuItem.action, menuItem.link)" v-for="(menuItem, menuItemId) in menu" v-bind:key="menuItemId">
-          <md-icon>{{ menuItem.icon }}</md-icon>
-          <span class="md-list-item-text">{{ $t(menuItem.title) }}</span>
-        </md-list-item>
-      </md-list>
+      <div class="list-container">
+          <div class="list-item"  @click="doAction(menuItem.action, menuItem.link)" v-for="(menuItem, menuItemId) in menu" v-bind:key="menuItemId">
+            <div class="icon">
+              <md-icon>{{ menuItem.icon }}</md-icon>
+            </div>
+
+            <div class="content">
+              {{ $t(menuItem.title) }}
+            </div>
+          </div>
+        </div>
     </md-drawer>
   </div>
 </template>
 <script>
-  import Dynamic from 'src/components/layout/Dynamic';
-  import User from 'src/domain/user';
+import Dynamic from 'src/components/layout/Dynamic';
+import User from 'src/domain/user';
 
-  export default {
-    components: {
-      Dynamic,
+export default {
+  components: {
+    Dynamic,
+  },
+  props: {
+    showMenu: true,
+  },
+  watch: {
+    $route() {
+      this.topBar = this.$route.meta.topBar;
+      this.hideTopBar = this.$route.meta.hideTopBar;
+      this.hideTitle = this.$route.meta.hideTitle;
     },
-    props: {
-      showMenu: true,
+  },
+  created() {
+    document.title = this.$t(this.$router.options.appOptions.title);
+  },
+  data() {
+    return {
+      showNavigation: false,
+      topBar: this.$route.meta.topBar,
+      hideTopBar: this.$route.meta.hideTopBar,
+      hideTitle: this.$route.meta.hideTitle,
+      user: User.getUser(),
+      menu: this.$router.options.appOptions.menu,
+    };
+  },
+  methods: {
+    doAction(action, param) {
+      if (action === 'goTo') {
+        this.goTo(param);
+      } else if (action === 'logout') {
+        this.logout();
+      }
     },
-    watch: {
-      $route() {
-        this.topBar = this.$route.meta.topBar;
-        this.hideTopBar = this.$route.meta.hideTopBar;
-        this.hideTitle = this.$route.meta.hideTitle;
-      },
+    goTo(link) {
+      this.showNavigation = false;
+      this.$router.push(link);
     },
-    created() {
-      document.title = this.$t(this.$router.options.appOptions.title);
+    logout() {
+      User.logout();
     },
-    data() {
-      return {
-        showNavigation: false,
-        topBar: this.$route.meta.topBar,
-        hideTopBar: this.$route.meta.hideTopBar,
-        hideTitle: this.$route.meta.hideTitle,
-        user: User.getUser(),
-        menu: this.$router.options.appOptions.menu,
-      };
-    },
-    methods: {
-      doAction(action, param) {
-        if (action === 'goTo') {
-          this.goTo(param);
-        } else if (action === 'logout') {
-          this.logout();
-        }
-      },
-      goTo(link) {
-        this.showNavigation = false;
-        this.$router.push(link);
-      },
-      logout() {
-        User.logout();
-      },
-    },
-  };
+  },
+};
 </script>
 <style>
 .md-toolbar .md-title {

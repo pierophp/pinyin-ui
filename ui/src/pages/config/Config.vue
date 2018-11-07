@@ -2,133 +2,134 @@
   <div class="config-container">
     <h3>{{ $t('settings') }}</h3>
     <div class="size-container">
-      <md-field>
+      <div class="field-container">
         <label for="pinyinSize">{{ $t('Pinyin') }} - {{ $t('size') }}</label>
-        <md-select name="pinyinSize" id="pinyinSize" v-model="pinyinSize">
-          <md-option value="12px">12</md-option>
-          <md-option value="13px">13</md-option>
-          <md-option value="14px">14</md-option>
-          <md-option value="15px">15</md-option>
-          <md-option value="16px">16</md-option>
-          <md-option value="17px">17</md-option>
-          <md-option value="18px">18</md-option>
-          <md-option value="19px">19</md-option>
-          <md-option value="20px">20</md-option>
-          <md-option value="21px">21</md-option>
-          <md-option value="22px">22</md-option>
-          <md-option value="23px">23</md-option>
-          <md-option value="24px">24</md-option>
-          <md-option value="25px">25</md-option>
-          <md-option value="26px">26</md-option>
-          <md-option value="27px">27</md-option>
-        </md-select>
-      </md-field>
+        <select v-model="pinyinSize" name="pinyinSize" class="select-field">
+          <option value="12px">12</option>
+          <option value="13px">13</option>
+          <option value="14px">14</option>
+          <option value="15px">15</option>
+          <option value="16px">16</option>
+          <option value="17px">17</option>
+          <option value="18px">18</option>
+          <option value="19px">19</option>
+          <option value="20px">20</option>
+          <option value="21px">21</option>
+          <option value="22px">22</option>
+          <option value="23px">23</option>
+          <option value="24px">24</option>
+          <option value="25px">25</option>
+          <option value="26px">26</option>
+          <option value="27px">27</option>
+        </select>
+      </div>
 
-      <md-field>
+      <div class="field-container">
         <label for="ideogramSize">{{ $t('ideogram') }} - {{ $t('size') }}</label>
-        <md-select name="ideogramSize" id="ideogramSize" v-model="ideogramSize">
-          <md-option value="17px">17</md-option>
-          <md-option value="18px">18</md-option>
-          <md-option value="19px">19</md-option>
-          <md-option value="20px">20</md-option>
-          <md-option value="21px">21</md-option>
-          <md-option value="22px">22</md-option>
-          <md-option value="23px">23</md-option>
-          <md-option value="24px">24</md-option>
-          <md-option value="25px">25</md-option>
-          <md-option value="26px">26</md-option>
-          <md-option value="27px">27</md-option>
-          <md-option value="27px">28</md-option>
-          <md-option value="29px">29</md-option>
-          <md-option value="30px">30</md-option>
-        </md-select>
-      </md-field>
+        <select v-model="ideogramSize" name="ideogramSize" class="select-field">
+          <option value="17px">17</option>
+          <option value="18px">18</option>
+          <option value="19px">19</option>
+          <option value="20px">20</option>
+          <option value="21px">21</option>
+          <option value="22px">22</option>
+          <option value="23px">23</option>
+          <option value="24px">24</option>
+          <option value="25px">25</option>
+          <option value="26px">26</option>
+          <option value="27px">27</option>
+          <option value="27px">28</option>
+          <option value="29px">29</option>
+          <option value="30px">30</option>
+        </select>
+      </div>
 
-      <md-field>
+      <div class="field-container">
         <label for="blockMarginBottom">{{ $t('margin_bottom') }}</label>
-        <md-select name="blockMarginBottom" id="blockMarginBottom" v-model="blockMarginBottom">
-          <md-option value="0px">0</md-option>
-          <md-option value="1px">1</md-option>
-          <md-option value="2px">2</md-option>
-          <md-option value="3px">3</md-option>
-          <md-option value="4px">4</md-option>
-          <md-option value="5px">5</md-option>
-          <md-option value="6px">6</md-option>
-          <md-option value="7px">7</md-option>
-          <md-option value="8px">8</md-option>
-          <md-option value="9px">9</md-option>
-          <md-option value="10px">10</md-option>
-          <md-option value="11px">11</md-option>
-          <md-option value="12px">12</md-option>
-          <md-option value="13px">13</md-option>
-          <md-option value="14px">14</md-option>
-          <md-option value="15px">15</md-option>
-        </md-select>
-      </md-field>
+        <select v-model="blockMarginBottom" name="blockMarginBottom" class="select-field">
+          <option value="0px">0</option>
+          <option value="1px">1</option>
+          <option value="2px">2</option>
+          <option value="3px">3</option>
+          <option value="4px">4</option>
+          <option value="5px">5</option>
+          <option value="6px">6</option>
+          <option value="7px">7</option>
+          <option value="8px">8</option>
+          <option value="9px">9</option>
+          <option value="10px">10</option>
+          <option value="11px">11</option>
+          <option value="12px">12</option>
+          <option value="13px">13</option>
+          <option value="14px">14</option>
+          <option value="15px">15</option>
+        </select>
+      </div>
     </div>
 
     <div class="language-container">
-      <md-field>
+      <div class="field-container">
         <label for="translationLanguage">{{ $t('translation_language') }}</label>
-        <md-select name="translationLanguage" id="translationLanguage" v-model="translationLanguage">
-          <md-option value="">{{ $t('no_translation') }}</md-option>
-          <md-option v-for="(language, languageId) in languages" v-bind:key="languageId"  :value="language.code">{{ language.language }}</md-option>
-        </md-select>
-      </md-field>
+        <select v-model="translationLanguage" name="translationLanguage" class="select-field">
+          <option value="">{{ $t('no_translation') }}</option>
+          <option v-for="(language, languageId) in languages" v-bind:key="languageId"  :value="language.code">{{ language.language }}</option>
+        </select>
+      </div>
 
-      <md-field>
+      <div class="field-container">
         <label for="ideogramType">{{ $t('ideogram_type') }}</label>
-        <md-select name="ideogramType" id="ideogramType" v-model="ideogramType">
-          <md-option value="s">{{ $t('simplified') }}</md-option>
-          <md-option value="t">{{ $t('traditional') }}</md-option>
-        </md-select>
-      </md-field>
+        <select v-model="ideogramType" name="ideogramType" class="select-field">
+          <option value="s">{{ $t('simplified') }}</option>
+          <option value="t">{{ $t('traditional') }}</option>
+        </select>
+      </div>
     </div>
 
     <div class="pinyin-container">
-      <md-field>
+      <div class="field-container">
         <label for="type">{{ $t('show_pinyin') }}</label>
-        <md-select name="type" id="type" v-model="type">
-          <md-option value="1">{{ $t('without_knew') }}</md-option>
-          <md-option value="4" v-if="hidePinyinSource === 'editor'">{{ $t('with_unknew') }}</md-option>
-          <md-option value="2">{{ $t('without_any') }}</md-option>
-          <md-option value="3">{{ $t('all') }}</md-option>
-        </md-select>
-      </md-field>
+        <select v-model="type" name="type" class="select-field">
+          <option value="1">{{ $t('without_knew') }}</option>
+          <option value="4" v-if="hidePinyinSource === 'editor'">{{ $t('with_unknew') }}</option>
+          <option value="2">{{ $t('without_any') }}</option>
+          <option value="3">{{ $t('all') }}</option>
+        </select>
+      </div>
 
-      <md-field>
+      <div class="field-container">
         <label for="pinyinHide">{{ $t('hide_pinyin_by') }}</label>
-        <md-select name="pinyinHide" id="pinyinHide" v-model="pinyinHide">
-          <md-option value="1">{{ $t('ideogram') }}</md-option>
-          <md-option value="2">{{ $t('word') }}</md-option>
-        </md-select>
-      </md-field>
+        <select v-model="pinyinHide" name="pinyinHide" class="select-field">
+          <option value="1">{{ $t('ideogram') }}</option>
+          <option value="2">{{ $t('word') }}</option>
+        </select>
+      </div>
 
-      <md-field>
+      <div class="field-container">
         <label for="hidePinyinSource">{{ $t('hide_pinyin_from') }}</label>
-        <md-select name="hidePinyinSource" id="hidePinyinSource" v-model="hidePinyinSource">
-          <md-option value="editor">pinzi.org</md-option>
-          <md-option value="2pinyin">2pinyin.net</md-option>
-        </md-select>
-      </md-field>
+        <select v-model="hidePinyinSource" name="hidePinyinSource" class="select-field">
+          <option value="editor">pinzi.org</option>
+          <option value="2pinyin">2pinyin.net</option>
+        </select>
+      </div>
     </div>
 
     <div class="ideogram-container">
-      <md-field>
+      <div class="field-container">
         <label for="ideogramColored">{{ $t('ideograms_colored') }}</label>
-        <md-select name="ideogramColored" id="ideogramColored" v-model="ideogramColored">
-          <md-option value="1">{{ $t('yes') }}</md-option>
-          <md-option value="0">{{ $t('no') }}</md-option>
-        </md-select>
-      </md-field>
+        <select v-model="ideogramColored" name="ideogramColored" class="select-field">
+          <option value="1">{{ $t('yes') }}</option>
+          <option value="0">{{ $t('no') }}</option>
+        </select>
+      </div>
 
-      <md-field>
+      <div class="field-container">
         <label for="ideogramSpaced">{{ $t('ideograms_spaced') }}</label>
-        <md-select name="ideogramSpaced" id="ideogramSpaced" v-model="ideogramSpaced">
-          <md-option value="1">{{ $t('yes') }}</md-option>
-          <md-option value="0">{{ $t('no') }}</md-option>
-        </md-select>
-      </md-field>
+        <select v-model="ideogramSpaced" name="ideogramSpaced" class="select-field">
+          <option value="1">{{ $t('yes') }}</option>
+          <option value="0">{{ $t('no') }}</option>
+        </select>
+      </div>
+
     </div>
 
     <div class="color-container">

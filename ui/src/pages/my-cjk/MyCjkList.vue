@@ -4,72 +4,91 @@
       <md-tab id="ideograms" :md-label="$t('ideograms')">
         <loadable-content :loading="loading">
           <h3 v-if="options.type !== '4'">{{ $t('my_total') }}: {{total}}</h3>
-          <md-table>
+          <table class="spaced-table">
+            <thead>
+            <tr>
+              <th>{{ $t('freq.') }}</th>
+              <th>{{ $t('my_ideograms') }}</th>
+              <th></th>
+            </tr>
+            </thead>
 
-            <md-table-row>
-              <md-table-head>{{ $t('freq.') }}</md-table-head>
-              <md-table-head>{{ $t('my_ideograms') }}</md-table-head>
-              <md-table-head></md-table-head>
-            </md-table-row>
-
-            <md-table-row v-for="row in report" :key="row.frequency">
-              <md-table-cell>{{ (row.frequency === 999) ? '-' : row.frequency }}</md-table-cell>
-              <md-table-cell>
+            <tbody>
+            <tr v-for="row in report" :key="row.frequency">
+              <td>{{ (row.frequency === 999) ? '-' : row.frequency }}</td>
+              <td>
                 {{row.total_my}}
                 {{ (row.frequency === 999) ? '' : ('/ ' + row.total + ' (' + row.percent + '%)') }}
-              </md-table-cell>
-              <md-table-cell>
+              </td>
+              <td>
                 <md-menu md-size="medium" >
                   <md-button class="md-raised md-primary" md-menu-trigger>
                     {{ $t('view') }}
                   </md-button>
                   <md-menu-content>
-                    <md-menu-item @click.native="unknownIdeograms(row.frequency)" v-if="row.frequency !== 999">
-                      <span>{{ $t('unknown') }}</span>
-                    </md-menu-item>
-                    <md-menu-item @click.native="knownIdeograms(row.frequency)">
-                      <span>{{ $t('known') }}</span>
-                    </md-menu-item>
+                    <div class="list-container">
+                      <div class="list-item" @click="unknownIdeograms(row.frequency)" v-if="row.frequency !== 999">
+                        <div class="content">
+                          {{ $t("unknown") }}
+                        </div>
+                      </div>
+                      <div class="list-item" @click="knownIdeograms(row.frequency)">
+                        <div class="content">
+                          {{ $t("known") }}
+                        </div>
+                      </div>
+                    </div>
                   </md-menu-content>
                 </md-menu>
-              </md-table-cell>
-            </md-table-row>
-          </md-table>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </loadable-content>
       </md-tab>
 
       <md-tab id="words" :md-label="$t('words')">
         <loadable-content :loading="loading">
         <h3 v-if="options.type !== '4'">{{ $t('my_total') }}: {{totalWords}}</h3>
-          <md-table>
-            <md-table-row>
-              <md-table-head>HSK</md-table-head>
-              <md-table-head>{{ $t('word') }}</md-table-head>
-              <md-table-head></md-table-head>
-            </md-table-row>
+          <table class="spaced-table">
+            <thead>
+            <tr>
+              <th>HSK</th>
+              <th>{{ $t('word') }}</th>
+              <th></th>
+            </tr>
+            </thead>
 
-            <md-table-row v-for="row in reportWords" :key="row.hsk">
-              <md-table-cell>{{ (row.hsk === 999) ? '-' : row.hsk }}</md-table-cell>
-              <md-table-cell>{{row.total_my}}
+            <tbody>
+            <tr v-for="row in reportWords" :key="row.hsk">
+              <td>{{ (row.hsk === 999) ? '-' : row.hsk }}</td>
+              <td>{{row.total_my}}
                 {{ (row.hsk === 999) ? '' : ('/ ' + row.total + ' (' + row.percent + '%)') }}
-              </md-table-cell>
-              <md-table-cell>
+              </td>
+              <td>
                 <md-menu md-size="medium" >
                   <md-button class="md-raised md-primary" md-menu-trigger>
                     {{ $t('action') }}
                   </md-button>
                   <md-menu-content>
-                    <md-menu-item @click.native="unknownWords(row.hsk)" v-if="row.hsk !== 999">
-                      <span>{{ $t('unknown') }}</span>
-                    </md-menu-item>
-                    <md-menu-item @click.native="knownWords(row.hsk)">
-                      <span>{{ $t('known') }}</span>
-                    </md-menu-item>
+                    <div class="list-container">
+                      <div class="list-item" @click="unknownWords(row.hsk)" v-if="row.hsk !== 999">
+                        <div class="content">
+                          {{ $t("unknown") }}
+                        </div>
+                      </div>
+                      <div class="list-item" @click="knownWords(row.hsk)">
+                        <div class="content">
+                          {{ $t("known") }}
+                        </div>
+                      </div>
+                    </div>
                   </md-menu-content>
                 </md-menu>
-              </md-table-cell>
-            </md-table-row>
-          </md-table>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </loadable-content>
       </md-tab>
     </md-tabs>
@@ -269,12 +288,6 @@ export default {
 </script>
 
 <style>
-.ideograms-container .md-table .md-table-head-text,
-.ideograms-container .md-table .md-table-cell .md-table-cell-container {
-  padding-left: 10px !important;
-  padding-right: 10px !important;
-}
-
 .ideograms-container {
   flex: 1;
   padding: 0 10px;
@@ -286,40 +299,26 @@ export default {
   margin-top: 0px;
 }
 
-#ideograms .md-table {
+#ideograms .spaced-table,
+#words .spaced-table {
   max-width: 650px;
 }
 
-#ideograms .md-table th:first-child {
-  width: 20px;
-}
-
-#words .md-table {
-  max-width: 650px;
-}
-
-#ideograms .md-table-head-label,
-#words .md-table-head-label {
-  font-size: 16px !important;
-}
-
-#ideograms .md-table-cell-container,
-#words .md-table-cell-container {
+#ideograms .spaced-table th,
+#words .spaced-table th,
+#ideograms .spaced-table td,
+#words .spaced-table td {
   font-size: 16px;
+}
+
+#ideograms .spaced-table th:first-child {
+  width: 20px;
 }
 
 .spaced-table .ideogram {
   font-family: 'Noto Sans SC', 'Noto Sans TC', sans-serif;
   font-size: 21px !important;
   font-weight: 300 !important;
-}
-
-.ideograms-container .md-table .md-table-head-label {
-  padding-left: 0 !important;
-}
-
-.ideograms-container .md-table .md-table-cell .md-button {
-  width: auto;
 }
 
 .ideograms-container .md-tabs-content {

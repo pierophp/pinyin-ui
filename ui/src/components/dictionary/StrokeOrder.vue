@@ -23,9 +23,8 @@
 </template>
 <script>
 import axios from 'axios';
-import HanziWriter from 'hanzi-writer';
 
-function renderFanningStrokes(target, strokes) {
+function renderFanningStrokes(HanziWriter, target, strokes) {
   var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.style.width = '230px';
   svg.style.height = '230px';
@@ -69,9 +68,13 @@ export default {
       currentStroke: 0,
       charData: {},
       hanziWriterCache: {},
+      hanziWriterClass: undefined,
     };
   },
-  mounted() {
+  async mounted() {
+    const HanziWriter = (await import(/* webpackChunkName: "hanzi-writer" */ 'hanzi-writer'))
+      .default;
+    this.hanziWriterClass = HanziWriter;
     this.writer = new HanziWriter('hanzi-writer', '', {
       onLoadCharDataSuccess: charData => {
         this.charData = charData;
@@ -124,7 +127,7 @@ export default {
 
       this.partial = true;
 
-      renderFanningStrokes(target, strokesPortion);
+      renderFanningStrokes(this.hanziWriterClass, target, strokesPortion);
     },
     next() {
       const target = document.getElementById('partial-hanzi-writer');
@@ -136,7 +139,7 @@ export default {
 
       const strokesPortion = this.charData.strokes.slice(0, this.currentStroke);
 
-      renderFanningStrokes(target, strokesPortion);
+      renderFanningStrokes(this.hanziWriterClass, target, strokesPortion);
 
       this.partial = true;
     },

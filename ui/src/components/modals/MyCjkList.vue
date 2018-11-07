@@ -90,9 +90,6 @@ export default {
     IdeogramsShow,
     AddRemoveCharacterModal,
   },
-  async mounted() {
-    await this.updateRender();
-  },
   watch: {
     active() {
       this.forceUpdate();

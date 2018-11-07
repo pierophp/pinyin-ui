@@ -8,13 +8,13 @@
       <md-dialog-title>{{ $t('new') }}</md-dialog-title>
 
       <md-dialog-content >
-        <md-field>
+        <div class="field-container">
           <label>{{ $t('type') }}</label>
-           <md-select v-model="type" name="type" md-dense id="select-type">
-            <md-option value="file">{{ $t('file') }}</md-option>
-            <md-option value="dir">{{ $t('folder') }}</md-option>
-          </md-select>
-        </md-field>
+          <select v-model="type" name="type" id="select-type" class="select-field">
+            <option value="file">{{ $t('file') }}</option>
+            <option value="dir">{{ $t('folder') }}</option>
+          </select>
+        </div>
 
         <md-field>
           <label>{{ $t('name') }}</label>
@@ -90,7 +90,4 @@ export default {
 </script>
 
 <style>
-.md-select-menu {
-  z-index: 1000 !important;
-}
 </style>

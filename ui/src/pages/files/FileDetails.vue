@@ -137,9 +137,7 @@ export default {
   padding: 0 10px;
   overflow: auto;
 }
-.md-list-item .md-list-item-holder > .md-icon:first-child {
-  margin-right: 14px;
-}
+
 /* REMOVE THIS */
 .modal-backdrop {
   z-index: -1;

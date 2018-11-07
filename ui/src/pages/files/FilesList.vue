@@ -3,9 +3,13 @@
     <div class="files-container">
       <loadable-content :loading="loading">
         <folder-structure/>
-        <md-list class="md-double-line">
-          <md-list-item v-for="(file, fileId) in filesList" @click="openOptions(fileId, $event)" v-bind:key="fileId">
-            <md-button class="md-icon-button list-icon" v-if="file.type === 'file'">
+
+        <div class="list-container">
+          <div class="list-item" v-for="(file, fileId) in filesList"
+          @click="openOptions(fileId, $event)"
+          v-bind:key="fileId">
+            <div class="icon">
+              <md-button class="md-icon-button list-icon" v-if="file.type === 'file'">
               <md-icon class="md-primary">
                 note
               </md-icon>
@@ -16,40 +20,69 @@
                 folder
               </md-icon>
             </md-button>
+            </div>
 
-            <div class="md-list-item-text">
+            <div class="content">
               <filename :filename="file.filename"/>
             </div>
 
-            <md-menu md-size="big" :md-offset-x="menuX" ref="menu" :md-active="fileId === menuFileId">
+            <div class="actions">
+              <md-menu md-size="big" :md-offset-x="menuX" ref="menu" :md-active="fileId === menuFileId">
               <md-button md-menu-trigger class="md-icon-button md-list-action">
                 <md-icon>more_vert</md-icon>
               </md-button>
               <md-menu-content>
-                <md-menu-item @click="openImportDialog(file.path)">
-                  <md-icon>cloud_upload</md-icon>
-                  <span class="md-list-item-text">{{ $t("import_site") }}</span>
-                </md-menu-item>
-                <md-menu-item @click="visualizationMode(file.filename, file.dirname)" v-if="file.type == 'file'">
-                  <md-icon>visibility</md-icon>
-                  <span class="md-list-item-text">{{ $t("visualization_mode") }}</span>
-                </md-menu-item>
-                <md-menu-item @click="goToFile(file.filename, file.dirname)" v-if="file.type == 'file'">
-                  <md-icon>edit</md-icon>
-                  <span class="md-list-item-text">{{ $t("edition_mode") }}</span>
-                </md-menu-item>
-                <md-menu-item @click="goToDir(file.path)" v-if="file.type == 'dir'">
-                  <md-icon>visibility</md-icon>
-                  <span class="md-list-item-text">{{ $t("visualization_mode") }}</span>
-                </md-menu-item>
-                <md-menu-item @click="openDeleteDialog(file)">
-                  <md-icon>delete</md-icon>
-                  <span class="md-list-item-text">{{ $t("delete") }}</span>
-                </md-menu-item>
+                <div class="list-container">
+                  <div class="list-item" @click="openImportDialog(file.path)">
+                    <div class="icon">
+                      <md-icon>cloud_upload</md-icon>
+                    </div>
+                    <div class="content">
+                      {{ $t("import_site") }}
+                    </div>
+                  </div>
+
+                  <div class="list-item" @click="visualizationMode(file.filename, file.dirname)" v-if="file.type == 'file'">
+                    <div class="icon">
+                      <md-icon>visibility</md-icon>
+                    </div>
+                    <div class="content">
+                      {{ $t("visualization_mode") }}
+                    </div>
+                  </div>
+
+                  <div class="list-item" @click="goToFile(file.filename, file.dirname)" v-if="file.type == 'file'">
+                    <div class="icon">
+                      <md-icon>edit</md-icon>
+                    </div>
+                    <div class="content">
+                      {{ $t("edition_mode") }}
+                    </div>
+                  </div>
+
+                  <div class="list-item" @click="goToDir(file.path)" v-if="file.type == 'dir'">
+                    <div class="icon">
+                      <md-icon>visibility</md-icon>
+                    </div>
+                    <div class="content">
+                      {{ $t("visualization_mode") }}
+                    </div>
+                  </div>
+
+                  <div class="list-item" @click="openDeleteDialog(file)">
+                    <div class="icon">
+                      <md-icon>delete</md-icon>
+                    </div>
+                    <div class="content">
+                      {{ $t("delete") }}
+                    </div>
+                  </div>
+                </div>
               </md-menu-content>
             </md-menu>
-          </md-list-item>
-        </md-list>
+            </div>
+          </div>
+        </div>
       </loadable-content>
     </div>
     <new-file-modal></new-file-modal>
@@ -209,13 +242,5 @@ export default {
 .files-container {
   padding-bottom: 65px;
   will-change: transform;
-}
-
-.files-container .md-list-item .list-icon {
-  padding: 0;
-}
-
-.files-container .md-list-item-text {
-  text-transform: none !important;
 }
 </style>

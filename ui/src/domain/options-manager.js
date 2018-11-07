@@ -87,6 +87,10 @@ class OptionsManager {
   }
 
   static save(newOptions) {
+    if (!this.options) {
+      this.getOptions();
+    }
+
     for (const prop in this.getDefaultOptions()) {
       if (Object.prototype.hasOwnProperty.call(newOptions, prop)) {
         this.options[prop] = newOptions[prop];
