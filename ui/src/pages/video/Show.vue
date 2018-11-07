@@ -72,15 +72,12 @@ import http from 'src/helpers/http';
 import LoadableContent from 'src/components/common/loading/LoadableContent';
 import webVTTParser from 'src/domain/webvtt-parser';
 import VideoSubtitle from 'src/components/video/Subtitle';
-import MobileDetect from 'mobile-detect';
 
 import { mapGetters, mapMutations } from 'vuex';
 import {
   VIDEO_GETTER_VIDEO_URL,
   VIDEO_MUTATION_SET_SUBTITLE,
 } from 'src/data/video/types';
-
-const md = new MobileDetect(window.navigator.userAgent);
 
 export default {
   name: 'video-show',
@@ -96,13 +93,19 @@ export default {
       return this.isPhone ? 'phone' : '';
     },
   },
-  mounted() {
+
+  async mounted() {
     setTimeout(() => {
       this.$refs.inputSearch.$el.focus();
     }, 500);
 
     this.setOrientation();
     window.addEventListener('resize', this.setOrientation);
+
+    const MobileDetect = (await import(/* webpackChunkName: "mobile-detect" */ 'mobile-detect'))
+      .default;
+    const md = new MobileDetect(window.navigator.userAgent);
+    this.isPhone = md.phone() !== null;
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.setOrientation);
@@ -305,7 +308,7 @@ export default {
       type: 'a',
       loading: false,
       showSubtitle: false,
-      isPhone: md.phone() !== null,
+      isPhone: false,
       repeatPhrase: false,
       startTime: null,
       endTime: null,

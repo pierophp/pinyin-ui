@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import MobileDetect from 'mobile-detect';
 import { mapMutations } from 'vuex';
 
 import {
@@ -20,7 +19,6 @@ import {
   FILE_MUTATION_REMOVE_HIGHLIGHT,
 } from 'src/data/file/types';
 
-const md = new MobileDetect(window.navigator.userAgent);
 let selectionIndex = 0;
 let currentSelectionIndex = 0;
 
@@ -43,7 +41,7 @@ function getParentBlockSelected(element) {
   return getParentBlockSelected(element.parentElement);
 }
 
-function selectionChange(that) {
+function selectionChange(isMobile, that) {
   const Selection = window.getSelection();
   if (Selection.isCollapsed) {
     that.visible = false;
@@ -111,7 +109,7 @@ function selectionChange(that) {
     that.left = maxLeft;
   }
 
-  if (md.mobile() !== null) {
+  if (isMobile !== null) {
     that.top -= 40;
   }
 }
@@ -127,6 +125,7 @@ export default {
       startBlock: 0,
       endBlock: 0,
       visible: false,
+      isMobile: false,
     };
   },
   props: {
@@ -139,6 +138,12 @@ export default {
       this.selectionChangeEvent,
       false,
     );
+  },
+  async mounted() {
+    const MobileDetect = (await import(/* webpackChunkName: "mobile-detect" */ 'mobile-detect'))
+      .default;
+    const md = new MobileDetect(window.navigator.userAgent);
+    this.isMobile = md.mobile();
   },
 
   beforeDestroy() {
@@ -182,7 +187,7 @@ export default {
           return;
         }
 
-        selectionChange(that);
+        selectionChange(this.isMobile, that);
       }, 500);
     },
   },

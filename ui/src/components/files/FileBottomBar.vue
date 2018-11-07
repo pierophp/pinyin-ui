@@ -169,7 +169,7 @@ import DictionaryList from 'src/components/dictionary/List';
 import IdeogramsShow from 'src/components/ideograms/Show';
 import Links from 'src/components/ideograms/Links';
 import OptionsManager from 'src/domain/options-manager';
-import MobileDetect from 'mobile-detect';
+
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
 import replaceall from 'replaceall';
 import pinyinHelper from 'src/helpers/pinyin';
@@ -187,7 +187,6 @@ import {
   FILE_GETTER_MY_CJK,
 } from 'src/data/file/types';
 
-const md = new MobileDetect(window.navigator.userAgent);
 let memoryDictionary = {};
 const loadingDictionary = {};
 
@@ -219,6 +218,7 @@ export default {
       baseDictionary,
       dictionary: baseDictionary,
       dictionaryList: [],
+      isMobile: false,
     };
   },
   components: {
@@ -240,6 +240,13 @@ export default {
     editPinyin() {
       this.changeEditPinyin(this.editPinyin);
     },
+  },
+
+  async mounted() {
+    const MobileDetect = (await import(/* webpackChunkName: "mobile-detect" */ 'mobile-detect'))
+      .default;
+    const md = new MobileDetect(window.navigator.userAgent);
+    this.isMobile = md.mobile();
   },
 
   methods: {
@@ -357,7 +364,7 @@ export default {
       document.body.classList.add('has-bottom-bar');
       this.show = true;
 
-      if (md.mobile() && this.tempDictCharacter === block.character) {
+      if (this.isMobile && this.tempDictCharacter === block.character) {
         block.openDictionary = true;
       }
 
