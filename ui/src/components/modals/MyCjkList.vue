@@ -7,38 +7,41 @@
         <span v-if="type === 'ideograms' && frequency !== 999">- {{ $t('frequency') }} {{frequency}}</span>
       </md-dialog-title>
       <md-dialog-content>
-        <md-table>
-          <md-table-row>
-            <md-table-head>{{ $t('ideogram') }}</md-table-head>
-            <md-table-head>{{ $t('pronunciation') }}</md-table-head>
-            <md-table-head></md-table-head>
-          </md-table-row>
-
-          <md-table-row v-for="(item, index) in renderItems" :key="item.ideogram + item.pronunciation">
-            <md-table-cell class="ideogram">
+        <table class="spaced-table">
+          <thead>
+            <tr>
+              <th>{{ $t('ideogram') }}</th>
+              <th>{{ $t('pronunciation') }}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(item, index) in renderItems" :key="item.ideogram + item.pronunciation">
+            <td class="ideogram">
               <ideograms-show :pinyin="item.pronunciation" :character="item.ideogram"/>
-            </md-table-cell>
-            <md-table-cell>{{item.pronunciation}}</md-table-cell>
+            </td>
+            <td>{{item.pronunciation}}</td>
 
-            <md-table-cell v-if="action === 'unknown'" class="cell-button">
+            <td v-if="action === 'unknown'" class="cell-button">
               <md-button v-if="options.type !== '4'" class="md-icon-button md-raised" @click.native="openModal(true, item.ideogram, index)">
                 <md-icon>add</md-icon>
               </md-button>
               <md-button v-if="options.type === '4'" class="md-icon-button md-raised" @click.native="openModal(false, item.ideogram, index)">
                 <md-icon>remove</md-icon>
               </md-button>
-            </md-table-cell>
+            </td>
 
-            <md-table-cell v-if="action === 'known'" class="cell-button">
+            <td v-if="action === 'known'" class="cell-button">
               <md-button v-if="options.type !== '4'" class="md-icon-button md-raised" @click.native="openModal(false, item.ideogram, index)">
                 <md-icon>remove</md-icon>
               </md-button>
               <md-button v-if="options.type === '4'" class="md-icon-button md-raised" @click.native="openModal(true, item.ideogram, index)">
                 <md-icon>add</md-icon>
               </md-button>
-            </md-table-cell>
-          </md-table-row>
-        </md-table>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </md-dialog-content>
 
       <md-dialog-actions>

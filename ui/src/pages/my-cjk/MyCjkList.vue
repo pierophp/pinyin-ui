@@ -269,10 +269,6 @@ export default {
 </script>
 
 <style>
-.md-table .md-icon {
-  margin: auto !important;
-}
-
 .ideograms-container .md-table .md-table-head-text,
 .ideograms-container .md-table .md-table-cell .md-table-cell-container {
   padding-left: 10px !important;
@@ -312,7 +308,7 @@ export default {
   font-size: 16px;
 }
 
-.ideogram .md-table-cell-container {
+.spaced-table .ideogram {
   font-family: 'Noto Sans SC', 'Noto Sans TC', sans-serif;
   font-size: 21px !important;
   font-weight: 300 !important;
