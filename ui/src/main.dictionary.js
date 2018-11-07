@@ -1,15 +1,22 @@
 import loadMain from './main';
+import globalLoader from 'src/global-loader/dictionary';
+import routes from 'src/routes/dictionary';
+import app from 'src/app/dictionary';
 
-function tryLoadMain() {
+async function tryLoadMain() {
   try {
     if (window.frames['iframe-storage'].get) {
-      loadMain('dictionary');
+      loadMain(routes, app, globalLoader);
     } else {
-      setTimeout(tryLoadMain, 50);
+      setTimeout(() => {
+        tryLoadMain().then();
+      }, 50);
     }
   } catch (e) {
-    setTimeout(tryLoadMain, 50);
+    setTimeout(() => {
+      tryLoadMain().then();
+    }, 50);
   }
 }
 
-tryLoadMain();
+tryLoadMain().then();

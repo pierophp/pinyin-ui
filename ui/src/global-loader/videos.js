@@ -1,0 +1,35 @@
+import MdButton from 'vue-material/dist/components/MdButton';
+import MdContent from 'vue-material/dist/components/MdContent';
+import MdDialog from 'vue-material/dist/components/MdDialog';
+import MdDrawer from 'vue-material/dist/components/MdDrawer';
+import MdField from 'vue-material/dist/components/MdField';
+import MdIcon from 'vue-material/dist/components/MdIcon';
+import MdList from 'vue-material/dist/components/MdList';
+import MdMenu from 'vue-material/dist/components/MdMenu';
+import MdProgress from 'vue-material/dist/components/MdProgress';
+import MdRipple from 'vue-material/dist/components/MdRipple';
+import MdSnackbar from 'vue-material/dist/components/MdSnackbar';
+import MdSwitch from 'vue-material/dist/components/MdSwitch';
+import MdTable from 'vue-material/dist/components/MdTable';
+import MdTabs from 'vue-material/dist/components/MdTabs';
+import MdToolbar from 'vue-material/dist/components/MdToolbar';
+import FileContainer from 'src/components/files/FileContainer';
+
+export default Vue => {
+  Vue.use(MdButton);
+  Vue.use(MdContent);
+  Vue.use(MdDialog);
+  Vue.use(MdDrawer);
+  Vue.use(MdField);
+  Vue.use(MdIcon);
+  Vue.use(MdList);
+  Vue.use(MdMenu);
+  Vue.use(MdProgress);
+  Vue.use(MdRipple);
+  Vue.use(MdSnackbar);
+  Vue.use(MdSwitch);
+  Vue.use(MdTable);
+  Vue.use(MdTabs);
+  Vue.use(MdToolbar);
+  Vue.component('file-container', FileContainer);
+};

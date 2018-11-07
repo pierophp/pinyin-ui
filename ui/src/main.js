@@ -24,26 +24,14 @@ import store from 'src/data/store';
 import localeEn from 'src/data/locale/en';
 import localePt from 'src/data/locale/pt';
 
-import vueMaterialLoader from './vue.material.loader';
 import ravenLoader from './raven.loader';
 
-export default async function loadMain(moduleName) {
-  if (['bible', 'editor', 'videos'].includes(moduleName)) {
-    const FileContainer = (await import(/* webpackChunkName: "file-container" */ 'src/components/files/FileContainer'))
-      .default;
-    Vue.component('file-container', FileContainer);
-  }
-
+export default async function loadMain(routes, app, globalLoader) {
   const routerMethod = (await import('src/router')).default;
 
-  const routes = (await import(`src/routes/${moduleName}`)).default;
+  const router = routerMethod(routes, app);
 
-  const router = routerMethod(
-    routes,
-    (await import(`src/app/${moduleName}`)).default,
-  );
-
-  vueMaterialLoader(Vue);
+  globalLoader(Vue);
   ravenLoader(Vue).then();
 
   Vue.use(VueI18n);

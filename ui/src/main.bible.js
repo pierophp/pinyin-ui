@@ -1,15 +1,22 @@
 import loadMain from './main';
+import globalLoader from 'src/global-loader/bible';
+import routes from 'src/routes/bible';
+import app from 'src/app/bible';
 
-function tryLoadMain() {
+async function tryLoadMain() {
   try {
     if (window.frames['iframe-storage'].get) {
-      loadMain('bible');
+      loadMain(routes, app, globalLoader);
     } else {
-      setTimeout(tryLoadMain, 50);
+      setTimeout(() => {
+        tryLoadMain().then();
+      }, 50);
     }
   } catch (e) {
-    setTimeout(tryLoadMain, 50);
+    setTimeout(() => {
+      tryLoadMain().then();
+    }, 50);
   }
 }
 
-tryLoadMain();
+tryLoadMain().then();

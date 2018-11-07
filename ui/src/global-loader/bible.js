@@ -13,6 +13,7 @@ import MdSwitch from 'vue-material/dist/components/MdSwitch';
 import MdTable from 'vue-material/dist/components/MdTable';
 import MdTabs from 'vue-material/dist/components/MdTabs';
 import MdToolbar from 'vue-material/dist/components/MdToolbar';
+import FileContainer from 'src/components/files/FileContainer';
 
 export default Vue => {
   Vue.use(MdButton);
@@ -26,9 +27,9 @@ export default Vue => {
   Vue.use(MdProgress);
   Vue.use(MdRipple);
   Vue.use(MdSnackbar);
-  Vue.use(MdSnackbar);
   Vue.use(MdSwitch);
   Vue.use(MdTable);
   Vue.use(MdTabs);
   Vue.use(MdToolbar);
+  Vue.component('file-container', FileContainer);
 };
