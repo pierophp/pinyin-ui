@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import offlinePlugin from 'offline-plugin/runtime';
+// import offlinePlugin from 'offline-plugin/runtime';
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 
@@ -23,8 +23,8 @@ import App from 'src/pages/App';
 import store from 'src/data/store';
 import localeEn from 'src/data/locale/en';
 import localePt from 'src/data/locale/pt';
-
 import ravenLoader from './raven.loader';
+import './register.service.worker';
 
 export default async function loadMain(routes, app, globalLoader) {
   const routerMethod = (await import('src/router')).default;
@@ -44,17 +44,6 @@ export default async function loadMain(routes, app, globalLoader) {
   Vue.config.fallbackLang = 'en';
 
   if (process.env.NODE_ENV === 'production') {
-    offlinePlugin.install({
-      onUpdateReady() {
-        // Tells to new SW to take control immediately
-        offlinePlugin.applyUpdate();
-      },
-      onUpdated() {
-        // Reload the webpage to load into the new version
-        // window.location.reload();
-      },
-    });
-
     Vue.use(VueAnalytics, {
       id: 'UA-4081205-4',
       router,
