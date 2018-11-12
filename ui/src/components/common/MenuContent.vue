@@ -52,7 +52,7 @@ export default {
         top = top - 30;
       }
 
-      let left = e.pageX - 180;
+      let left = e.pageX - 190;
 
       if (left < 3) {
         left = 3;
@@ -77,7 +77,7 @@ export default {
   overflow-y: scroll;
   padding: 10px 0;
   position: absolute;
-  width: 200px;
+  width: 220px;
   z-index: 1000000;
 }
 

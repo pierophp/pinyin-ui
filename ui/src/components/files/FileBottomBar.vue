@@ -65,7 +65,7 @@
             </div>
         </div>
       </menu-content>
-      <Links list=0 :character="block.character" ref="links"/>
+      <Links list="0" :character="block.character" ref="links"/>
     </div>
 
     <md-dialog
@@ -553,11 +553,7 @@ export default {
   height: 32px;
 }
 
-.bottom-bar .md-menu {
-  margin-left: -20px;
-}
-
-.bottom-bar-pinyin {
+-pinyin {
   font-size: 15px;
 }
 
@@ -578,11 +574,6 @@ export default {
   height: 20px !important;
   min-height: 20px !important;
   font-size: 20px !important;
-}
-
-.bottom-bar #menu-pinyin .md-menu .md-button {
-  margin: 6px 0;
-  padding: 0 6px;
 }
 
 .bottom-bar .ideogram-link {

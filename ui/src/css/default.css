@@ -154,10 +154,6 @@ body {
   cursor: pointer;
 }
 
-.md-menu-content {
-  max-height: 40vh !important;
-}
-
 .md-overlay {
   background: transparent;
 }

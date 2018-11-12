@@ -27,11 +27,13 @@
             </div>
 
             <div class="actions">
-              <md-menu md-size="big" :md-offset-x="menuX" ref="menu" :md-active="fileId === menuFileId">
-              <md-button md-menu-trigger class="md-icon-button md-list-action">
-                <md-icon>more_vert</md-icon>
-              </md-button>
-              <md-menu-content>
+              <menu-content>
+                <template slot="click">
+                  <md-button class="md-icon-button md-list-action">
+                    <md-icon>more_vert</md-icon>
+                  </md-button>
+                </template>
+
                 <div class="list-container">
                   <div class="list-item" @click="openImportDialog(file.path)">
                     <div class="icon">
@@ -78,8 +80,7 @@
                     </div>
                   </div>
                 </div>
-              </md-menu-content>
-            </md-menu>
+              </menu-content>
             </div>
           </div>
         </div>
@@ -98,7 +99,7 @@ import FolderStructure from 'src/components/files/FolderStructure';
 import DeleteFileModal from 'src/components/modals/DeleteFile';
 import ImportSiteModal from 'src/components/modals/ImportSite';
 import LoadableContent from 'src/components/common/loading/LoadableContent';
-
+import MenuContent from 'src/components/common/MenuContent';
 import { mapActions, mapGetters } from 'vuex';
 import trimStart from 'lodash/trimStart';
 import {
@@ -117,6 +118,7 @@ export default {
     LoadableContent,
     Filename,
     FolderStructure,
+    MenuContent,
   },
 
   watch: {

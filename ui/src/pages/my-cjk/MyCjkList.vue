@@ -21,12 +21,14 @@
                 {{ (row.frequency === 999) ? '' : ('/ ' + row.total + ' (' + row.percent + '%)') }}
               </td>
               <td>
-                <md-menu md-size="medium" >
-                  <md-button class="md-raised md-primary" md-menu-trigger>
-                    {{ $t('view') }}
-                  </md-button>
-                  <md-menu-content>
-                    <div class="list-container">
+                <menu-content>
+                  <template slot="click">
+                    <md-button class="md-raised md-primary">
+                      {{ $t('view') }}
+                    </md-button>
+                  </template>
+
+                  <div class="list-container">
                       <div class="list-item" @click="unknownIdeograms(row.frequency)" v-if="row.frequency !== 999">
                         <div class="content">
                           {{ $t("unknown") }}
@@ -38,8 +40,7 @@
                         </div>
                       </div>
                     </div>
-                  </md-menu-content>
-                </md-menu>
+                </menu-content>
               </td>
             </tr>
             </tbody>
@@ -66,12 +67,14 @@
                 {{ (row.hsk === 999) ? '' : ('/ ' + row.total + ' (' + row.percent + '%)') }}
               </td>
               <td>
-                <md-menu md-size="medium" >
-                  <md-button class="md-raised md-primary" md-menu-trigger>
+                <menu-content>
+                  <template slot="click">
+                    <md-button class="md-raised md-primary">
                     {{ $t('action') }}
-                  </md-button>
-                  <md-menu-content>
-                    <div class="list-container">
+                    </md-button>
+                  </template>
+
+                  <div class="list-container">
                       <div class="list-item" @click="unknownWords(row.hsk)" v-if="row.hsk !== 999">
                         <div class="content">
                           {{ $t("unknown") }}
@@ -83,8 +86,7 @@
                         </div>
                       </div>
                     </div>
-                  </md-menu-content>
-                </md-menu>
+                </menu-content>
               </td>
             </tr>
             </tbody>
@@ -145,7 +147,7 @@ import http from 'src/helpers/http';
 import LoadableContent from 'src/components/common/loading/LoadableContent';
 import MyCjkListModal from 'src/components/modals/MyCjkList';
 import OptionsManager from 'src/domain/options-manager';
-
+import MenuContent from 'src/components/common/MenuContent';
 const options = OptionsManager.getOptions();
 let type = 'known';
 if (options.type === '4') {
@@ -176,6 +178,7 @@ export default {
   components: {
     LoadableContent,
     MyCjkListModal,
+    MenuContent,
   },
   methods: {
     async knownIdeograms(frequency) {

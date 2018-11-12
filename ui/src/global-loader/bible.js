@@ -3,7 +3,6 @@ import MdContent from 'vue-material/dist/components/MdContent';
 import MdDialog from 'vue-material/dist/components/MdDialog';
 import MdDrawer from 'vue-material/dist/components/MdDrawer';
 import MdIcon from 'vue-material/dist/components/MdIcon';
-import MdMenu from 'vue-material/dist/components/MdMenu';
 import MdProgress from 'vue-material/dist/components/MdProgress';
 import MdRipple from 'vue-material/dist/components/MdRipple';
 import MdSnackbar from 'vue-material/dist/components/MdSnackbar';
@@ -17,7 +16,6 @@ export default Vue => {
   Vue.use(MdDialog);
   Vue.use(MdDrawer);
   Vue.use(MdIcon);
-  Vue.use(MdMenu);
   Vue.use(MdProgress);
   Vue.use(MdRipple);
   Vue.use(MdSnackbar);
