@@ -1,29 +1,33 @@
 <template>
   <div>
-      <md-menu md-size="medium" md-direction="top-start" :md-offset-y="-52">
-      <md-button class="md-icon-button" md-menu-trigger>
-        <md-icon>more_vert</md-icon>
-      </md-button>
-      <md-menu-content>
-        <div class="list-container">
-          <div class="list-item" @click="downloadPleco()">
-            <div class="icon">
-              <md-icon>arrow_downward</md-icon>
-            </div>
-            <div class="content">
-              {{ $t("download_pleco_dictionary") }}
-            </div>
+    <menu-content>
+      <template slot="click">
+        <md-button class="md-icon-button">
+          <md-icon>more_vert</md-icon>
+        </md-button>
+      </template>
+
+      <div class="list-container">
+        <div class="list-item" @click="downloadPleco()">
+          <div class="icon">
+            <md-icon>arrow_downward</md-icon>
+          </div>
+          <div class="content">
+            {{ $t("download_pleco_dictionary") }}
           </div>
         </div>
-      </md-menu-content>
-    </md-menu>
+      </div>
+    </menu-content>
   </div>
 </template>
 <script>
 import axios from 'axios';
-
+import MenuContent from 'src/components/common/MenuContent';
 const http = axios.create();
 export default {
+  components: {
+    MenuContent,
+  },
   methods: {
     async downloadPleco() {
       const fileName = 'Dicionario_Pleco.txt';
