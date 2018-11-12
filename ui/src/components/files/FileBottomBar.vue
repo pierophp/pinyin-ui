@@ -145,7 +145,7 @@
 
       <md-dialog-content>
         <div class="field-container">
-          <input type="text" :value="editPinyin" />
+          <input type="text" v-model="editPinyin"/>
         </div>
       </md-dialog-content>
 
