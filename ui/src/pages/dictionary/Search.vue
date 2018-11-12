@@ -1,16 +1,18 @@
 <template>
 <div class="dictionary-container">
   <form novalidate>
-    <md-field>
+    <div class="search-container">
       <md-icon>pageview</md-icon>
-      <label>{{ $t("search") }}</label>
-      <md-input type="text" ref="inputSearch" autofocus autocapitalize="none" v-model="searchValue"></md-input>
-      <div class="clean-dictionaty">
-        <md-button class="md-icon-button md-clear md-input-action" @click.native="clear()">
-          <md-icon>clear</md-icon>
-        </md-button>
+      <div class="field-container">
+        <label>{{ $t("search") }}</label>
+        <input type="text" ref="inputSearch" autofocus autocapitalize="none" v-model="searchValue" :placeholder="$t('search')"/>
+        <div class="clean-dictionaty">
+          <md-button class="md-icon-button md-clear md-input-action" @click.native="clear()">
+            <md-icon>clear</md-icon>
+          </md-button>
+        </div>
       </div>
-    </md-field>
+    </div>
   </form>
 
   <div>
@@ -54,8 +56,8 @@ export default {
   },
   created() {
     setTimeout(() => {
-      this.$refs.inputSearch.$el.focus();
-      this.$refs.inputSearch.$el.setSelectionRange(0, 1000);
+      this.$refs.inputSearch.focus();
+      this.$refs.inputSearch.setSelectionRange(0, 1000);
     }, 500);
   },
   mounted() {
@@ -71,7 +73,7 @@ export default {
       this.searchValue = '';
       this.entries = [];
       this.loading = false;
-      this.$refs.inputSearch.$el.focus();
+      this.$refs.inputSearch.focus();
     },
     search(value) {
       const that = this;
@@ -136,6 +138,24 @@ export default {
   flex: 1;
   padding: 0 10px;
   overflow: auto;
+}
+
+.dictionary-container .search-container {
+  display: flex;
+}
+
+.dictionary-container .search-container .field-container {
+  flex: 1 100%;
+}
+
+.dictionary-container .search-container input {
+  width: 100%;
+}
+
+.dictionary-container .search-container .clean-dictionaty {
+  float: right;
+  margin-top: -35px;
+  margin-right: -10px;
 }
 
 .dictionary-container .md-input-container {

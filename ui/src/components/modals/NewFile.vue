@@ -16,10 +16,10 @@
           </select>
         </div>
 
-        <md-field>
-          <label>{{ $t('name') }}</label>
-          <md-input :placeholder="$t('name')" v-model="filename" ref="inputFilename"></md-input>
-        </md-field>
+        <div class="field-container new-file-input-container">
+          <label for="name">{{ $t('name') }}</label>
+          <input type="text" :placeholder="$t('name')" id="name" v-model="filename" ref="inputFilename"/>
+        </div>
       </md-dialog-content>
 
       <md-dialog-actions>
@@ -51,7 +51,7 @@ export default {
           return;
         }
 
-        this.$refs.inputFilename.$el.focus();
+        this.$refs.inputFilename.focus();
       }, 200);
     },
   },
@@ -79,7 +79,7 @@ export default {
     },
     onOpen() {
       setTimeout(() => {
-        this.$refs.inputFilename.$el.focus();
+        this.$refs.inputFilename.focus();
       }, 100);
     },
     ...mapActions({
@@ -90,4 +90,7 @@ export default {
 </script>
 
 <style>
+.new-file-input-container input {
+  width: 100%;
+}
 </style>

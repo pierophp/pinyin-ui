@@ -13,11 +13,16 @@
               </select>
             </div>
 
-            <md-field class="url-form-container">
-                <md-icon>play_circle_outline</md-icon>
-                <label>{{ $t("url") }}</label>
-                <md-input type="text" ref="inputSearch" v-model="videoUrl"></md-input>
-            </md-field>
+            <div>
+              <br />
+              <md-icon>play_circle_outline</md-icon>
+            </div>
+
+            <div class="field-container url-form-container">
+              <label>{{ $t('url') }}</label>
+              <input type="text" ref="inputSearch" v-model="videoUrl" :placeholder="$t('url')"/>
+            </div>
+
           </div>
         </div>
 
@@ -31,7 +36,11 @@
               <md-button v-if="downloadLink" class="md-raised">{{ $t("download_track") }}</md-button>
             </a>
             <md-button v-if="downloadLink && isPhone && orientation === 'portrait'" class="md-raised md-primary" @click.native="toggleSubtitle">{{ $t("show_track") }}</md-button>
-            <md-switch v-if="downloadLink" v-model="repeatPhrase" class="md-primary">{{ $t("repeat_phrase") }}</md-switch>
+            <div class="checkbox-container" v-if="downloadLink">
+              <input type="checkbox" id="repeat-phrase" v-model="repeatPhrase"/>
+              <label for="repeat-phrase">{{ $t('repeat_phrase') }}</label>
+            </div>
+
             <div v-show="repeatPhrase">
               <md-button class="md-raised" @click.native="saveStartTime">
                 {{ $t("start_time") }}
@@ -96,7 +105,7 @@ export default {
 
   async mounted() {
     setTimeout(() => {
-      this.$refs.inputSearch.$el.focus();
+      this.$refs.inputSearch.focus();
     }, 500);
 
     this.setOrientation();
@@ -338,7 +347,12 @@ export default {
 }
 
 .url-form-container {
-  max-width: 600px;
+  width: 100%;
+  margin-left: 8px;
+}
+
+.url-form-container input {
+  width: 100%;
 }
 
 .type-form-container {
@@ -367,6 +381,7 @@ export default {
 .video-player video {
   width: 100%;
 }
+
 .editor-container {
   flex-flow: column nowrap;
   display: flex;

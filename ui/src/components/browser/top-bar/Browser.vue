@@ -1,18 +1,15 @@
 <template>
-  <md-field class="browser-url-form-container">
-    <label>{{ $t("url") }}</label>
-    <md-input type="text" ref="inputSearch" v-model="url"></md-input>
-  </md-field>
+  <div class="browser-url-form-container">
+    <input type="text" ref="inputSearch" v-model="url" autofocus placeholder="URL"/>
+  </div>
 </template>
 
 <style>
 .browser-url-form-container input {
   background: #fff !important;
   padding-left: 5px !important;
-}
-
-.browser-url-form-container label {
-  padding-left: 5px !important;
+  height: 30px;
+  width: 100%;
 }
 </style>
 
@@ -52,7 +49,7 @@ export default {
     }
 
     setTimeout(() => {
-      this.$refs.inputSearch.$el.focus();
+      this.$refs.inputSearch.focus();
     }, 500);
   },
 };

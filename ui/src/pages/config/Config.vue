@@ -133,30 +133,30 @@
     </div>
 
     <div class="color-container">
-      <md-field v-show="ideogramColored == 1">
+      <div class="field-container" v-show="ideogramColored == 1">
         <label for="color1">{{ $t('tone_1_color') }}</label>
-        <md-input name="color1" type="color" v-model="color1"/>
-      </md-field>
+        <input type="color" name="color1" v-model="color1"/>
+      </div>
 
-      <md-field v-show="ideogramColored == 1">
+      <div class="field-container" v-show="ideogramColored == 1">
         <label for="color2">{{ $t('tone_2_color') }}</label>
-        <md-input name="color2" type="color" v-model="color2"/>
-      </md-field>
+        <input type="color" name="color2" v-model="color2"/>
+      </div>
 
-      <md-field v-show="ideogramColored == 1">
+      <div class="field-container" v-show="ideogramColored == 1">
         <label for="color3">{{ $t('tone_3_color') }}</label>
-        <md-input name="color3" type="color" v-model="color3" />
-      </md-field>
+        <input type="color" name="color3" v-model="color3"/>
+      </div>
 
-      <md-field v-show="ideogramColored == 1">
+      <div class="field-container" v-show="ideogramColored == 1">
         <label for="color4">{{ $t('tone_4_color') }}</label>
-        <md-input name="color4" type="color" v-model="color4" />
-      </md-field>
+        <input type="color" name="color4" v-model="color4"/>
+      </div>
 
-      <md-field v-show="ideogramColored == 1">
+      <div class="field-container" v-show="ideogramColored == 1">
         <label for="color0">{{ $t('tone_0_color') }}</label>
-        <md-input name="color0" type="color" v-model="color0"/>
-      </md-field>
+        <input type="color" name="color0" v-model="color0"/>
+      </div>
     </div>
 
     <md-button class="md-raised md-primary" @click.native="save()">{{ $t('save') }}</md-button>
@@ -229,36 +229,14 @@ export default {
   flex-wrap: wrap;
 }
 
-.config-container .size-container .md-field {
-  margin-right: 15px;
-  width: 150px;
-}
-
 .config-container .language-container {
   display: flex;
   flex-wrap: wrap;
 }
 
-.config-container .language-container .md-field {
-  margin-right: 15px;
-  flex: 1;
-  max-width: 200px;
-}
-
 .config-container .pinyin-container {
   display: flex;
   flex-wrap: wrap;
-}
-
-.config-container .pinyin-container .md-field {
-  margin-right: 15px;
-  width: 140px;
-}
-
-.config-container .ideogram-container .md-field {
-  margin-right: 15px;
-  flex: 1;
-  max-width: 200px;
 }
 
 .config-container .ideogram-container {
@@ -271,9 +249,17 @@ export default {
   flex-wrap: wrap;
 }
 
-.config-container .color-container .md-field {
+.config-container .color-container .field-container {
   width: 95px;
   margin-bottom: 10px;
   margin-right: 15px;
+}
+
+.config-container .color-container input {
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  width: 100%;
+  height: 30px;
 }
 </style>

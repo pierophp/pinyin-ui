@@ -127,9 +127,9 @@
       </md-dialog-title>
 
       <md-dialog-content>
-        <md-field md-inline>
-          <md-input v-model="separateCharacter"></md-input>
-        </md-field>
+        <div class="field-container">
+          <input type="color" v-model="separateCharacter"/>
+        </div>
       </md-dialog-content>
 
       <md-dialog-actions>
@@ -144,9 +144,9 @@
       </md-dialog-title>
 
       <md-dialog-content>
-        <md-field md-inline>
-          <md-input :value="editPinyin" v-model="editPinyin"></md-input>
-        </md-field>
+        <div class="field-container">
+          <input type="text" :value="editPinyin" />
+        </div>
       </md-dialog-content>
 
       <md-dialog-actions>

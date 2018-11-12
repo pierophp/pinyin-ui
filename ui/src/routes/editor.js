@@ -48,6 +48,26 @@ export default [
     },
   },
   {
+    path: '/files/quiz/:filename',
+    name: 'quiz',
+    component: () =>
+      import(/* webpackChunkName: "files-quiz" */ 'src/pages/files/FileQuiz'),
+    meta: {
+      protected: true,
+      topBar: 'file-quiz',
+    },
+  },
+  {
+    path: '/files/quiz-answer/:filename',
+    name: 'quiz',
+    component: () =>
+      import(/* webpackChunkName: "files-quiz" */ 'src/pages/files/FileQuizAnswer'),
+    meta: {
+      protected: true,
+      topBar: 'file-quiz-answer',
+    },
+  },
+  {
     path: '/my-cjk',
     name: 'my-cjk',
     component: () =>

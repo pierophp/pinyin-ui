@@ -20,12 +20,18 @@
 
     <md-dialog ref="modal" class="dialog-chapter-options" :md-active.sync="modalOpen" :md-fullscreen="false" :md-backdrop="true" :md-click-outside-to-close="true">
       <md-dialog-content>
-        <md-switch v-model="versesShowAsModalInput">
-          {{ $t('open_verses_as_popup') }}
-        </md-switch><br/>
-        <md-switch v-model="openChapterOnLoadInput">
-          {{ $t('open_chapter_on_load') }}
-        </md-switch>
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="open-verses-as-popup" v-model="versesShowAsModalInput"/>
+          <label for="open-verses-as-popup">{{ $t('open_verses_as_popup') }}</label>
+        </div>
+
+        <br/>
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="open-chapter-on-load-input" v-model="openChapterOnLoadInput"/>
+          <label for="open-chapter-on-load-input">{{ $t('open_chapter_on_load') }}</label>
+        </div>
       </md-dialog-content>
 
       <md-dialog-actions>

@@ -27,7 +27,8 @@ import ravenLoader from './raven.loader';
 import './register.service.worker';
 
 export default async function loadMain(routes, app, globalLoader) {
-  const routerMethod = (await import('src/router')).default;
+  const routerMethod = (await import(/* webpackChunkName: "router" */ 'src/router'))
+    .default;
 
   const router = routerMethod(routes, app);
 

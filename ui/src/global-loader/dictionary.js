@@ -1,7 +1,6 @@
 import MdButton from 'vue-material/dist/components/MdButton';
 import MdDialog from 'vue-material/dist/components/MdDialog';
 import MdDrawer from 'vue-material/dist/components/MdDrawer';
-import MdField from 'vue-material/dist/components/MdField';
 import MdIcon from 'vue-material/dist/components/MdIcon';
 import MdMenu from 'vue-material/dist/components/MdMenu';
 import MdProgress from 'vue-material/dist/components/MdProgress';
@@ -13,7 +12,6 @@ export default Vue => {
   Vue.use(MdButton);
   Vue.use(MdDialog);
   Vue.use(MdDrawer);
-  Vue.use(MdField);
   Vue.use(MdIcon);
   Vue.use(MdMenu);
   Vue.use(MdProgress);

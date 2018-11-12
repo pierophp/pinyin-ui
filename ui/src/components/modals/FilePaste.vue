@@ -11,10 +11,10 @@
         </select>
       </div>
 
-      <md-field>
+      <div class="field-container">
         <label for="action">{{ $t('paste') }}</label>
-        <md-textarea v-model="textarea" ref="textarea"></md-textarea>
-      </md-field>
+        <textarea v-model="textarea" ref="textarea"></textarea>
+      </div>
     </md-dialog-content>
 
     <md-dialog-actions>
@@ -55,7 +55,7 @@ export default {
     },
     onOpen() {
       setTimeout(() => {
-        this.$refs.textarea.$el.focus();
+        this.$refs.textareas.focus();
       }, 500);
     },
     ...mapActions({

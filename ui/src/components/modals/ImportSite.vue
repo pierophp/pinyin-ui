@@ -3,10 +3,10 @@
     <md-dialog-title>{{ $t('import_site') }}</md-dialog-title>
 
     <md-dialog-content>
-      <md-field>
-          <label>{{ $t("url") }}</label>
-          <md-input type="text" ref="inputUrl" v-model="siteUrl"></md-input>
-      </md-field>
+      <div class="field-container">
+        <label>{{ $t("url") }}</label>
+        <input type="text" ref="inputUrl" v-model="siteUrl"/>
+      </div>
     </md-dialog-content>
 
     <md-dialog-actions>
@@ -43,7 +43,7 @@ export default {
     },
     onOpen() {
       setTimeout(() => {
-        this.$refs.inputUrl.$el.focus();
+        this.$refs.inputUrl.focus();
       }, 500);
     },
     openDialog() {
@@ -59,3 +59,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+input[type='text'] {
+  width: 100%;
+}
+</style>
