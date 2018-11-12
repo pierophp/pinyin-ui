@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="menu-container">
     <div @click="openMenu">
       <slot name="click"></slot>
     </div>
@@ -14,11 +14,16 @@
 export default {
   name: 'menu-content',
   data() {
-    return { show: false, menuStyle: {}, opening: false };
+    return {
+      show: false,
+      menuStyle: {},
+      opening: false,
+      top: null,
+      left: null,
+    };
   },
   props: {
-    top: null,
-    left: null,
+    position: null,
   },
   mounted() {
     document.addEventListener('click', this.hideOnClickOutside);
@@ -40,8 +45,18 @@ export default {
       this.opening = true;
 
       this.show = true;
-      const top = e.pageY - 30;
-      const left = e.pageX - 180;
+      let top = e.pageY;
+      if (this.position === 'top') {
+        top = top - 217;
+      } else {
+        top = top - 30;
+      }
+
+      let left = e.pageX - 180;
+
+      if (left < 3) {
+        left = 3;
+      }
 
       this.menuStyle.top = `${top}px`;
       this.menuStyle.left = `${left}px`;
@@ -58,10 +73,12 @@ export default {
 .menu {
   background: #ffffff;
   color: #000000;
-  width: 200px;
-  position: absolute;
-  z-index: 1000000;
+  max-height: 200px;
+  overflow-y: scroll;
   padding: 10px 0;
+  position: absolute;
+  width: 200px;
+  z-index: 1000000;
 }
 
 .menu .icon i {

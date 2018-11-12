@@ -189,6 +189,15 @@ export default {
 </script>
 
 <style>
+.dict-block {
+  padding-bottom: 10px;
+}
+
+.dict-title {
+  font-weight: bold;
+  font-size: 18px;
+}
+
 .dict-title a {
   color: #000 !important;
 }

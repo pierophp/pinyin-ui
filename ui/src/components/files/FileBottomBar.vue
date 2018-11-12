@@ -11,14 +11,15 @@
         <md-icon>find_in_page</md-icon>
       </md-button>
 
-      <md-menu md-size="big" md-direction="top-start" :md-offset-y="6">
-        <md-button class="md-icon-button md-primary md-2" md-menu-trigger>
-          <md-icon>more_vert</md-icon>
-        </md-button>
+      <menu-content position="top">
+        <template slot="click">
+          <md-button class="md-icon-button md-primary md-2">
+            <md-icon>more_vert</md-icon>
+          </md-button>
+        </template>
 
-        <md-menu-content>
-          <div class="list-container">
-            <div class="list-item" @click="close()">
+        <div class="list-container">
+          <div class="list-item" @click="close()">
               <div class="icon">
                 <md-icon>clear</md-icon>
               </div>
@@ -62,10 +63,8 @@
                 Links
               </div>
             </div>
-          </div>
-        </md-menu-content>
-      </md-menu>
-
+        </div>
+      </menu-content>
       <Links list=0 :character="block.character" ref="links"/>
     </div>
 
@@ -128,7 +127,7 @@
 
       <md-dialog-content>
         <div class="field-container">
-          <input type="color" v-model="separateCharacter"/>
+          <input type="text" v-model="separateCharacter"/>
         </div>
       </md-dialog-content>
 
@@ -176,7 +175,7 @@ import pinyinHelper from 'src/helpers/pinyin';
 import ForvoModal from 'src/components/modals/Forvo';
 import TraditionalSimplifiedShow from 'src/components/ideograms/TraditionalSimplifiedShow';
 import DictionaryStrokeOrder from 'src/components/dictionary/StrokeOrder';
-
+import MenuContent from 'src/components/common/MenuContent';
 import { mapActions, mapMutations, mapGetters } from 'vuex';
 
 import {
@@ -229,6 +228,7 @@ export default {
     Links,
     ForvoModal,
     TraditionalSimplifiedShow,
+    MenuContent,
   },
   computed: {
     ...mapGetters({
@@ -510,7 +510,16 @@ export default {
   line-height: 40px;
   height: 40px;
   width: 100%;
+  display: flex;
   flex-shrink: 0;
+}
+
+.bottom-bar .menu-container {
+  width: 20px;
+}
+
+.bottom-bar .list-container {
+  font-size: 14px;
 }
 
 #dialog-dictionary .loadable-loader {
@@ -578,15 +587,6 @@ export default {
 
 .bottom-bar .ideogram-link {
   cursor: pointer;
-}
-
-.dict-title {
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.dict-block {
-  padding-bottom: 10px;
 }
 
 .bottom-bar .md-button {
