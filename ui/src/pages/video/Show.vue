@@ -108,13 +108,13 @@ export default {
       this.$refs.inputSearch.focus();
     }, 500);
 
-    this.setOrientation();
-    window.addEventListener('resize', this.setOrientation);
-
     const MobileDetect = (await import(/* webpackChunkName: "mobile-detect" */ 'mobile-detect'))
       .default;
     const md = new MobileDetect(window.navigator.userAgent);
     this.isPhone = md.phone() !== null;
+
+    this.setOrientation();
+    window.addEventListener('resize', this.setOrientation);
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.setOrientation);
