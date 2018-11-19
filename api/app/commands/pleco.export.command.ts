@@ -9,7 +9,10 @@ export class PlecoExportCommand implements CommandModule {
   public async handler(argv: Argv) {
     console.info('Start export to Pleco');
     const plecoExport = new PlecoExport();
-    await plecoExport.export();
+    await plecoExport.exportPt();
+    await plecoExport.exportChineseToolsPt();
+    await plecoExport.exportChineseToolsEs();
+    await plecoExport.exportChineseToolsEn();
     process.exit();
   }
 }

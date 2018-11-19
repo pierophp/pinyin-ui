@@ -9,7 +9,39 @@ import { CjkRepository } from '../../repository/cjk.repository';
 import { IdeogramsConverter } from '../converter/ideograms.converter';
 
 export class PlecoExport {
-  async export() {
+  async exportPt() {
+    const result = await CjkRepository.findPtNotNull();
+    await this.export(result, 'definition_pt', 'PlecoDictionary.txt');
+  }
+
+  async exportChineseToolsPt() {
+    const result = await CjkRepository.findChineseToolsNotNull('pt');
+    await this.export(
+      result,
+      'definition_ct_pt',
+      'PlecoDictionary_ChineseToolsPT.txt',
+    );
+  }
+
+  async exportChineseToolsEs() {
+    const result = await CjkRepository.findChineseToolsNotNull('es');
+    await this.export(
+      result,
+      'definition_ct_es',
+      'PlecoDictionary_ChineseToolsES.txt',
+    );
+  }
+
+  async exportChineseToolsEn() {
+    const result = await CjkRepository.findChineseToolsNotNull('en');
+    await this.export(
+      result,
+      'definition_ct_en',
+      'PlecoDictionary_ChineseToolsEN.txt',
+    );
+  }
+
+  async export(result: any[], field: string, filename: string) {
     let dirname = `${__dirname}/../../../storage/`;
     if (env.storage_path) {
       dirname = `${env.storage_path}/`;
@@ -17,11 +49,15 @@ export class PlecoExport {
 
     const ideogramsConverter = new IdeogramsConverter();
 
-    const result = await CjkRepository.findPtNotNull();
     let resultFile: string = '';
 
     for (const entry of result) {
-      let definition = JSON.parse(entry.definition_pt);
+      let definition = JSON.parse(entry[field]);
+
+      if (!definition || definition.length === 0) {
+        continue;
+      }
+
       definition = definition.join(String.fromCharCode(60081));
       const pinyin = separatePinyinInSyllables(entry.pronunciation);
       let pinyinTones = '';
@@ -42,12 +78,8 @@ export class PlecoExport {
 
     resultFile = resultFile.trim();
 
-    // eslint-disable-next-line
-    const filenamePleco = `${dirname}PlecoDictionaryUTf8.txt`;
-    const filenamePlecoUTF16 = `${dirname}Dicionario_Pleco.txt`;
-    
-    await writeFile(filenamePleco, resultFile);
+    const filenamePleco = `${dirname}${filename}`;
 
-    exec(`iconv -f UTF-8 -t UTF-16LE ${filenamePleco} > ${filenamePlecoUTF16}`);
+    await writeFile(filenamePleco, resultFile);
   }
 }
