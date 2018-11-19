@@ -41,6 +41,33 @@ export class PlecoExport {
     );
   }
 
+  async exportGlosbePt() {
+    const result = await CjkRepository.findGlosbeNotNull('pt');
+    await this.export(
+      result,
+      'definition_glosbe_pt',
+      'PlecoDictionary_GlosbePT.txt',
+    );
+  }
+
+  async exportGlosbeEs() {
+    const result = await CjkRepository.findGlosbeNotNull('es');
+    await this.export(
+      result,
+      'definition_glosbe_es',
+      'PlecoDictionary_GlosbeES.txt',
+    );
+  }
+
+  async exportGlosbeEn() {
+    const result = await CjkRepository.findGlosbeNotNull('en');
+    await this.export(
+      result,
+      'definition_glosbe_en',
+      'PlecoDictionary_GlosbeEN.txt',
+    );
+  }
+
   async export(result: any[], field: string, filename: string) {
     let dirname = `${__dirname}/../../../storage/`;
     if (env.storage_path) {
