@@ -69,10 +69,23 @@ export class PlecoExport {
         pinyinTones += `${removeDiacritics(syllable)}${tone}`;
       });
 
-      const ideograms = ideogramsConverter.convertUtf16ToIdeograms(
+      let variants: any[] = [];
+
+      const ideograms: string = ideogramsConverter.convertUtf16ToIdeograms(
         entry.ideogram,
       );
-      const line = `${ideograms}\t${pinyinTones}\t${definition}\n`;
+
+      if (entry.variants) {
+        variants = JSON.parse(entry.variants);
+      } else {
+        variants = [
+          await ideogramsConverter.simplifiedToTraditional(ideograms),
+        ];
+      }
+
+      const line = `${ideograms}[${variants.join(
+        '/',
+      )}]\t${pinyinTones}\t${definition}\n`;
       resultFile += line;
     }
 
