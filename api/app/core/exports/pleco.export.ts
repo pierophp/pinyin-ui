@@ -8,6 +8,12 @@ import * as extractPinyinTone from '../../helpers/extract-pinyin-tone';
 import { CjkRepository } from '../../repository/cjk.repository';
 import { IdeogramsConverter } from '../converter/ideograms.converter';
 
+function bold(number) {
+  return number.replace(/\d/g, c =>
+    String.fromCodePoint(0x1d79e + c.charCodeAt(0)),
+  );
+}
+
 export class PlecoExport {
   async exportPt() {
     const result = await CjkRepository.findPtNotNull();
@@ -97,7 +103,7 @@ export class PlecoExport {
           const measureWords = JSON.parse(entry.measure_words);
           definition += String.fromCharCode(60081);
           definition += String.fromCharCode(60081);
-          definition += 'Classificadores: ';
+          definition += bold('Classificadores: ');
           definition += measureWords.join(', ');
         }
       }
