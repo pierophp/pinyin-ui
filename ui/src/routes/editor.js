@@ -59,7 +59,7 @@ export default [
   },
   {
     path: '/files/quiz-answer/:filename',
-    name: 'quiz',
+    name: 'quiz-aswer',
     component: () =>
       import(/* webpackChunkName: "files-quiz" */ 'src/pages/files/FileQuizAnswer'),
     meta: {

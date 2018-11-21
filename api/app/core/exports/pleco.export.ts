@@ -17,7 +17,12 @@ function bold(number) {
 export class PlecoExport {
   async exportPt() {
     const result = await CjkRepository.findPtNotNull();
-    await this.export(result, 'definition_pt', 'PlecoDictionary.txt', 'pt');
+    await this.export(
+      result,
+      'definition_pt',
+      'PlecoDictionary_PinziPT.txt',
+      'pt',
+    );
   }
 
   async exportChineseToolsPt() {
