@@ -11,7 +11,7 @@ import { IdeogramsConverter } from '../converter/ideograms.converter';
 export class PlecoExport {
   async exportPt() {
     const result = await CjkRepository.findPtNotNull();
-    await this.export(result, 'definition_pt', 'PlecoDictionary.txt');
+    await this.export(result, 'definition_pt', 'PlecoDictionary.txt', 'pt');
   }
 
   async exportChineseToolsPt() {
@@ -68,7 +68,12 @@ export class PlecoExport {
     );
   }
 
-  async export(result: any[], field: string, filename: string) {
+  async export(
+    result: any[],
+    field: string,
+    filename: string,
+    dictionary?: string,
+  ) {
     let dirname = `${__dirname}/../../../storage/`;
     if (env.storage_path) {
       dirname = `${env.storage_path}/`;
@@ -86,6 +91,17 @@ export class PlecoExport {
       }
 
       definition = definition.join(String.fromCharCode(60081));
+
+      if (dictionary === 'pt') {
+        if (entry.measure_words && entry.measure_words !== '[]') {
+          const measureWords = JSON.parse(entry.measure_words);
+          definition += String.fromCharCode(60081);
+          definition += String.fromCharCode(60081);
+          definition += 'Classificadores: ';
+          definition += measureWords.join(', ');
+        }
+      }
+
       const pinyin = separatePinyinInSyllables(entry.pronunciation);
       let pinyinTones = '';
       pinyin.forEach(syllable => {
@@ -93,6 +109,8 @@ export class PlecoExport {
         if (tone === 0) {
           tone = 5;
         }
+
+        syllable = syllable.replace(/[ǖǘǚǜü]/, 'v');
         pinyinTones += `${removeDiacritics(syllable)}${tone}`;
       });
 
