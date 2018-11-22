@@ -5,6 +5,11 @@
     <div class="dict-block">
       <div v-if="!editing" >
         <div v-for="(pt, dictId) in dictionary.pt" v-bind:key="dictId">{{ pt }}</div>
+
+        <div v-if="dictionary.measure_words && dictionary.measure_words.length">
+          <br/><b>{{$t('measure_words')}}:</b> {{ dictionary.measure_words.join(', ')}}
+        </div>
+
         <md-button v-if="user.admin" class="md-raised md-primary" @click.native="edit()">
           {{$t('edit')}}
         </md-button>

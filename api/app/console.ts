@@ -8,8 +8,9 @@ import { IdeogramRawCommand } from './commands/ideogram.raw.command';
 import { JiebaCompilerCommand } from './commands/jieba.compiler.command';
 import { JwBibleTraditionalCommand } from './commands/jw.bible.traditional.command';
 import { JwTrackCommand } from './commands/jw.track.command';
-import { PlecoExportCommand } from './commands/pleco.export.command';
 import { MemriseToInkstoneCommand } from './commands/memrise.to.inkstone.command';
+import { PlecoExportCommand } from './commands/pleco.export.command';
+import { ThreeLinesToPlecoCommand } from './commands/three.lines.to.pleco.command';
 
 require('yargs')
   .usage('Usage: $0 <command> [options]')
@@ -25,6 +26,7 @@ require('yargs')
   .command(new JiebaCompilerCommand())
   .command(new JwBibleTraditionalCommand())
   .command(new MemriseToInkstoneCommand())
+  .command(new ThreeLinesToPlecoCommand())
   .demandCommand(1)
   .strict()
   .help('h')

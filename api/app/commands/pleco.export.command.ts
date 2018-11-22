@@ -7,9 +7,25 @@ export class PlecoExportCommand implements CommandModule {
   public describe = 'Pleco Export';
 
   public async handler(argv: Argv) {
-    console.info('Start export to Pleco');
     const plecoExport = new PlecoExport();
-    await plecoExport.export();
+
+    console.info('Start export to Pleco - PT');
+    await plecoExport.exportPt();
+
+    console.info('Start export to Pleco - Chinese Tools PT');
+    await plecoExport.exportChineseToolsPt();
+    console.info('Start export to Pleco - Chinese Tools ES');
+    await plecoExport.exportChineseToolsEs();
+    console.info('Start export to Pleco - Chinese Tools EN');
+    await plecoExport.exportChineseToolsEn();
+
+    console.info('Start export to Pleco - Glosbe PT');
+    await plecoExport.exportGlosbePt();
+    console.info('Start export to Pleco - Glosbe ES');
+    await plecoExport.exportGlosbeEs();
+    console.info('Start export to Pleco - Glosbe EN');
+    await plecoExport.exportGlosbeEn();
+
     process.exit();
   }
 }

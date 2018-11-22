@@ -144,4 +144,5 @@ export default {
   saved_successfully: 'Salvo com sucesso',
   pinyin_ideograms: 'Pinyin + Ideogramas',
   ideograms_only: 'Somente ideograms',
+  measure_words: 'Classificadores',
 };

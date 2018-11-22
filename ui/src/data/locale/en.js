@@ -146,4 +146,5 @@ export default {
   saved_successfully: 'Saved successfully',
   pinyin_ideograms: 'Pinyin + Ideograms',
   ideograms_only: 'Ideograms only',
+  measure_words: 'Measure Words',
 };

@@ -32,7 +32,8 @@ export default {
     async downloadPleco() {
       const fileName = 'Dicionario_Pleco.txt';
       const content = await http.get(`/${fileName}`);
-      const blob = new Blob([content], { type: 'text/plain' });
+      console.log({ content });
+      const blob = new Blob([content.data], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       document.body.appendChild(a);
