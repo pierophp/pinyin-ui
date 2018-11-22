@@ -8,7 +8,7 @@ export default async function(content) {
   const lines = content.split('\n').filter(item => item);
 
   const rows = [];
-  for (const line of lines) {
+  for (let line of lines) {
     // remove double spaces
     line = line.replace(/\s{2,}/g, ' ');
 
