@@ -20,7 +20,7 @@ function parseContent(content) {
 
 async function parseSite(lines) {
   const rows = [];
-  for (const line of lines) {
+  for (let line of lines) {
     if (typeof line === 'string') {
       line = { text: line };
     }
