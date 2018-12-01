@@ -41,6 +41,16 @@
           <option value="27px">28</option>
           <option value="29px">29</option>
           <option value="30px">30</option>
+          <option value="31px">31</option>
+          <option value="32px">32</option>
+          <option value="33px">33</option>
+          <option value="34px">34</option>
+          <option value="35px">35</option>
+          <option value="36px">36</option>
+          <option value="37px">37</option>
+          <option value="38px">38</option>
+          <option value="39px">39</option>
+          <option value="40px">40</option>
         </select>
       </div>
 
@@ -71,8 +81,12 @@
       <div class="field-container">
         <label for="translationLanguage">{{ $t('translation_language') }}</label>
         <select v-model="translationLanguage" name="translationLanguage" class="select-field">
-          <option value="">{{ $t('no_translation') }}</option>
-          <option v-for="(language, languageId) in languages" v-bind:key="languageId"  :value="language.code">{{ language.language }}</option>
+          <option value>{{ $t('no_translation') }}</option>
+          <option
+            v-for="(language, languageId) in languages"
+            v-bind:key="languageId"
+            :value="language.code"
+          >{{ language.language }}</option>
         </select>
       </div>
 
@@ -129,38 +143,40 @@
           <option value="0">{{ $t('no') }}</option>
         </select>
       </div>
-
     </div>
 
     <div class="color-container">
       <div class="field-container" v-show="ideogramColored == 1">
         <label for="color1">{{ $t('tone_1_color') }}</label>
-        <input type="color" name="color1" v-model="color1"/>
+        <input type="color" name="color1" v-model="color1">
       </div>
 
       <div class="field-container" v-show="ideogramColored == 1">
         <label for="color2">{{ $t('tone_2_color') }}</label>
-        <input type="color" name="color2" v-model="color2"/>
+        <input type="color" name="color2" v-model="color2">
       </div>
 
       <div class="field-container" v-show="ideogramColored == 1">
         <label for="color3">{{ $t('tone_3_color') }}</label>
-        <input type="color" name="color3" v-model="color3"/>
+        <input type="color" name="color3" v-model="color3">
       </div>
 
       <div class="field-container" v-show="ideogramColored == 1">
         <label for="color4">{{ $t('tone_4_color') }}</label>
-        <input type="color" name="color4" v-model="color4"/>
+        <input type="color" name="color4" v-model="color4">
       </div>
 
       <div class="field-container" v-show="ideogramColored == 1">
         <label for="color0">{{ $t('tone_0_color') }}</label>
-        <input type="color" name="color0" v-model="color0"/>
+        <input type="color" name="color0" v-model="color0">
       </div>
     </div>
 
     <md-button class="md-raised md-primary" @click.native="save()">{{ $t('save') }}</md-button>
-    <md-button class="md-raised md-primary" @click.native="restoreDefault()">{{ $t('restore_default') }}</md-button>
+    <md-button
+      class="md-raised md-primary"
+      @click.native="restoreDefault()"
+    >{{ $t('restore_default') }}</md-button>
 
     <md-snackbar md-position="center" :md-duration="1300" :md-active.sync="saveNotify">
       <span>{{ $t('saved_successfully') }}</span>
