@@ -6,8 +6,8 @@ import * as separatePinyinInSyllables from '../../../../../shared/helpers/separa
 import * as replaceIdeogramsToSpace from '../../../../../shared/helpers/special-ideograms-chars';
 import { http } from '../../../helpers/http';
 import * as UnihanSearch from '../../../services/UnihanSearch';
-
-export class Parser {
+import { AbstractParser } from '../abstract.parser';
+export class Parser extends AbstractParser {
   protected text: any[] = [];
   protected figcaptionsText: any[] = [];
   protected isChinese: boolean;
@@ -513,24 +513,7 @@ export class Parser {
 
     let newText = '';
     lines.forEach(line => {
-      let lineText = '';
-      let verifyText = line;
-      replaceIdeogramsToSpace.forEach(item => {
-        verifyText = replaceall(`${item} `, item, verifyText);
-      });
-
-      verifyText = verifyText.replace(/(\d+)/, '');
-      verifyText = verifyText.trim();
-      if (!verifyText) {
-        verifyText = '';
-      }
-
-      if (verifyText.split(' ').length === 1) {
-        const segementedText = UnihanSearch.segment(line).join(' ');
-        lineText = segementedText;
-      } else {
-        lineText = line;
-      }
+      let lineText = this.segmentText(line);
 
       const specialWord = 'JOIN_SPECIAL';
 
@@ -635,19 +618,7 @@ export class Parser {
 
       lineText = ` ${ideogramsFiltered.join(' ')} `;
 
-      const wordsToReplace = ['各地', '可见', '称为', '处于', '忠于', '何时'];
-      const wordsToReplaceTraditional = [
-        '可見',
-        '稱為',
-        '處於',
-        '忠於',
-        '何時',
-      ];
-
-      wordsToReplace.concat(wordsToReplaceTraditional).forEach(word => {
-        const replaceWord = ` ${word.split('').join(' ')} `;
-        lineText = replaceall(replaceWord, ` ${word} `, lineText);
-      });
+      lineText = this.replaceWords(lineText);
 
       if (footNoteId) {
         lineText = replaceall(
