@@ -5,21 +5,20 @@
         <folder-structure/>
 
         <div class="list-container">
-          <div class="list-item" v-for="(file, fileId) in filesList"
-          @click="openOptions(fileId, $event)"
-          v-bind:key="fileId">
+          <div
+            class="list-item"
+            v-for="(file, fileId) in filesList"
+            @click="openOptions(fileId, $event)"
+            v-bind:key="fileId"
+          >
             <div class="icon">
               <md-button class="md-icon-button list-icon" v-if="file.type === 'file'">
-              <md-icon class="md-primary">
-                note
-              </md-icon>
-            </md-button>
+                <md-icon class="md-primary">note</md-icon>
+              </md-button>
 
-            <md-button class="md-icon-button list-icon" v-if="file.type !== 'file'">
-              <md-icon class="md-accent">
-                folder
-              </md-icon>
-            </md-button>
+              <md-button class="md-icon-button list-icon" v-if="file.type !== 'file'">
+                <md-icon class="md-accent">folder</md-icon>
+              </md-button>
             </div>
 
             <div class="content">
@@ -39,45 +38,43 @@
                     <div class="icon">
                       <md-icon>cloud_upload</md-icon>
                     </div>
-                    <div class="content">
-                      {{ $t("import_site") }}
-                    </div>
+                    <div class="content">{{ $t("import_site") }}</div>
                   </div>
 
-                  <div class="list-item" @click="visualizationMode(file.filename, file.dirname)" v-if="file.type == 'file'">
+                  <div
+                    class="list-item"
+                    @click="visualizationMode(file.filename, file.dirname)"
+                    v-if="file.type == 'file'"
+                  >
                     <div class="icon">
                       <md-icon>visibility</md-icon>
                     </div>
-                    <div class="content">
-                      {{ $t("visualization_mode") }}
-                    </div>
+                    <div class="content">{{ $t("visualization_mode") }}</div>
                   </div>
 
-                  <div class="list-item" @click="goToFile(file.filename, file.dirname)" v-if="file.type == 'file'">
+                  <div
+                    class="list-item"
+                    @click="goToFile(file.filename, file.dirname)"
+                    v-if="file.type == 'file'"
+                  >
                     <div class="icon">
                       <md-icon>edit</md-icon>
                     </div>
-                    <div class="content">
-                      {{ $t("edition_mode") }}
-                    </div>
+                    <div class="content">{{ $t("edition_mode") }}</div>
                   </div>
 
                   <div class="list-item" @click="goToDir(file.path)" v-if="file.type == 'dir'">
                     <div class="icon">
                       <md-icon>visibility</md-icon>
                     </div>
-                    <div class="content">
-                      {{ $t("visualization_mode") }}
-                    </div>
+                    <div class="content">{{ $t("visualization_mode") }}</div>
                   </div>
 
                   <div class="list-item" @click="openDeleteDialog(file)">
                     <div class="icon">
                       <md-icon>delete</md-icon>
                     </div>
-                    <div class="content">
-                      {{ $t("delete") }}
-                    </div>
+                    <div class="content">{{ $t("delete") }}</div>
                   </div>
                 </div>
               </menu-content>

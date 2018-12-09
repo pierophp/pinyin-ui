@@ -1,11 +1,7 @@
 <template>
   <div class="container">
-    <div class="ideograms">
-      喜樂
-    </div>
-    <div class="pinyin">
-      xǐlè
-    </div>
+    <div class="ideograms">喜樂</div>
+    <div class="pinyin">xǐlè</div>
 
     <div class="actions">
       <a class="hard" href="javascript:void(0)">Difícil</a>

@@ -1,31 +1,45 @@
 <template>
-  <div class="line" :class=[type] v-if="!loading">
+  <div class="line" :class="[type]" v-if="!loading">
     <span v-if="startTime">
       <md-button class="md-icon-button md-primary" @click="goToVideoTime">
         <md-icon>play_circle_filled</md-icon>
       </md-button>
     </span>
 
-    <file-row-translation :line="line" />
+    <file-row-translation :line="line"/>
 
     <template v-for="(block, blockIndex) in blocks">
       <!-- @click is on FilePrint because performance  -->
-      <div :key="blockIndex" class="block" :data-line="lineIndex" :data-block="blockIndex" :class="[block.classHighlight, block.classExtra]" ref="block">
+      <div
+        :key="blockIndex"
+        class="block"
+        :data-line="lineIndex"
+        :data-block="blockIndex"
+        :class="[block.classHighlight, block.classExtra]"
+        ref="block"
+      >
         <div class="image" v-if="block.small">
           <a href="javascript:void(0)" @click="openImage(block.large)">
-            <img :src="block.small" referrerpolicy="no-referrer"/>
+            <img :src="block.small" referrerpolicy="no-referrer">
           </a>
         </div>
 
         <template v-if="!block.small">
           <template v-for="(data, dataIndex) in block.printData">
             <template v-if="block.pinyinStyleObject">
-              <span class="pinyin" :class="[data.pinyinClass]" v-bind:style="block.pinyinStyleObject" v-html="data.pinyin" v-bind:key="dataIndex"></span>
+              <span
+                class="pinyin"
+                :class="[data.pinyinClass]"
+                v-bind:style="block.pinyinStyleObject"
+                v-html="data.pinyin"
+                v-bind:key="dataIndex"
+              ></span>
             </template>
             <template v-if="!block.pinyinStyleObject">{{ data.pinyin }}</template>
           </template>
         </template>
-        <div class="character"
+        <div
+          class="character"
           :data-highlight="block.h"
           :data-line="lineIndex"
           :data-block="blockIndex"
@@ -34,20 +48,24 @@
           :style="{
             color: block.printDataCharacters.length && block.printDataCharacters[0].sameTone ?
             block.printDataCharacters[0].toneColor : ''
-          }">
+          }"
+        >
           <template v-for="(data, index) in block.printDataCharacters">
             <template v-if="!data.toneColor || data.sameTone">{{ data.character }}</template>
-            <span v-if="data.toneColor && !data.sameTone"
-                :class="[data.ideogramClass]"
-                :style="{ color: data.toneColor }"
-                v-bind:key="index">{{ data.character }}</span>
+            <span
+              v-if="data.toneColor && !data.sameTone"
+              :class="[data.ideogramClass]"
+              :style="{ color: data.toneColor }"
+              v-bind:key="index"
+            >{{ data.character }}</span>
           </template>
-
         </div>
 
-        <div class="character footnote" v-if="block.footnote" @click.prevent="openFootnote(block.footnote)">
-            {{ block.c }}
-        </div>
+        <div
+          class="character footnote"
+          v-if="block.footnote"
+          @click.prevent="openFootnote(block.footnote)"
+        >{{ block.c }}</div>
       </div>
     </template>
     <div class="clearfix"></div>
