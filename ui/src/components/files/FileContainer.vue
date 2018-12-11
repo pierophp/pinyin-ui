@@ -217,9 +217,7 @@ export default {
         return;
       }
       const lineIndex = this.footnotes[footnoteIndex];
-      this.footnoteLine = this.lines[lineIndex]
-        ? this.lines[lineIndex]
-        : this.fullLines[lineIndex];
+      this.footnoteLine = this.fullLines[lineIndex];
       this.footnoteLineIndex = lineIndex;
       this.$refs.footnote.openDialog();
     },
@@ -245,11 +243,11 @@ export default {
       const blockIndex = element.getAttribute('data-block');
 
       if (
-        this.lines[lineIndex] &&
-        this.lines[lineIndex][blockIndex] &&
-        this.lines[lineIndex][blockIndex].b
+        this.fullLines[lineIndex] &&
+        this.fullLines[lineIndex][blockIndex] &&
+        this.fullLines[lineIndex][blockIndex].b
       ) {
-        const bible = this.lines[lineIndex][blockIndex].b.split(':');
+        const bible = this.fullLines[lineIndex][blockIndex].b.split(':');
         this.bible.bookIndex = bible[0];
         this.bible.chapter = bible[1];
         this.bible.verse = bible[2];

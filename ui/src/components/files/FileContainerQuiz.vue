@@ -3,11 +3,11 @@
     <div class="print-scroll" ref="fileScroll">
       <div class="print" :class="[sizeClass, typeClass]">
         <folder-structure :show-last="true" v-if="parent"/>
-        <h2 v-if="filename && filename.split('|||').length != 3">
-          {{filename}}
-        </h2>
+        <h2 v-if="filename && filename.split('|||').length != 3">{{filename}}</h2>
 
-        <div v-if="lines && lines[0] && lines[0][0] && lines[0][0].line !== undefined && lines[0][0].line.audio !== undefined">
+        <div
+          v-if="lines && lines[0] && lines[0][0] && lines[0][0].line !== undefined && lines[0][0].line.audio !== undefined"
+        >
           <audio :src="lines[0][0].line.audio" controls/>
         </div>
 
@@ -19,7 +19,7 @@
             ref="fileRowPrint"
             :key="'file-row-' + (line[0] && line[0].key ? `key-${line[0].key}` : `no-key-${lineIndex}`)"
             v-if="line && !line.small"
-            />
+          />
         </template>
 
         <div class="loading-container">
@@ -150,9 +150,7 @@ export default {
         return;
       }
       const lineIndex = this.footnotes[footnoteIndex];
-      this.footnoteLine = this.lines[lineIndex]
-        ? this.lines[lineIndex]
-        : this.fullLines[lineIndex];
+      this.footnoteLine = this.fullLines[lineIndex];
       this.footnoteLineIndex = lineIndex;
       this.$refs.footnote.openDialog();
     },

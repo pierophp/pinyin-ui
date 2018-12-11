@@ -9,7 +9,8 @@ export default {
   files: [],
   file: [],
   fileSelecteds: {},
-  fullFile: [],
+  fullFile: undefined, // not reactive
+  fullFileString: '[]',
   footnotes: [],
   fileLoading: false,
   fileParsing: false,

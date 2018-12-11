@@ -39,6 +39,7 @@ function addHighlight(state, data) {
   }
 
   state.fileChangeTimestamp = Date.now();
+  state.fullFileString = JSON.stringify(state.fullFile);
   window.getSelection().removeAllRanges();
 }
 
@@ -157,6 +158,7 @@ export default {
 
     state.fullFile[0][0].line.pinyinSpaced = 1;
     state.fileChangeTimestamp = Date.now();
+    state.fullFileString = JSON.stringify(state.fullFile);
   },
 
   [types.FILES_MUTATION_SET](state, files) {
@@ -179,6 +181,7 @@ export default {
 
     state.fullFile[data.lineIndex][data.blockIndex].p = newPinyin;
     state.fileChangeTimestamp = Date.now();
+    state.fullFileString = JSON.stringify(state.fullFile);
   },
 
   [types.FILE_MUTATION_UPDATE_CHARACTER](state, data) {
@@ -187,6 +190,7 @@ export default {
     )[data.blockIndex].c = data.character;
     state.fullFile[data.lineIndex][data.blockIndex].c = data.character;
     state.fileChangeTimestamp = Date.now();
+    state.fullFileString = JSON.stringify(state.fullFile);
   },
 
   [types.FILE_MUTATION_FAILURE](state, data) {
@@ -233,6 +237,7 @@ export default {
 
     state.file.push([]);
     state.fileChangeTimestamp = Date.now();
+    state.fullFileString = JSON.stringify(state.fullFile);
   },
 
   [types.FILE_MUTATION_CONCATENATE_LINE](state, data) {
@@ -240,10 +245,12 @@ export default {
       state.file[data.lineIndex].push(newBlock);
     });
     state.fileChangeTimestamp = Date.now();
+    state.fullFileString = JSON.stringify(state.fullFile);
   },
   [types.FILE_MUTATION_ADD_LINE](state, data) {
     state.file.splice(data.lineIndex, 0, data.content);
     state.fileChangeTimestamp = Date.now();
+    state.fullFileString = JSON.stringify(state.fullFile);
   },
 
   [types.FILE_MUTATION_ADD_EMPTY_BLOCK](state, data) {
@@ -256,11 +263,13 @@ export default {
       c: '',
     });
     state.fileChangeTimestamp = Date.now();
+    state.fullFileString = JSON.stringify(state.fullFile);
   },
 
   [types.FILE_MUTATION_REMOVE_LINE](state, data) {
     state.file.remove(data.lineIndex);
     state.fileChangeTimestamp = Date.now();
+    state.fullFileString = JSON.stringify(state.fullFile);
   },
 
   [types.FILE_MUTATION_REMOVE_BLOCK](state, data) {
@@ -281,6 +290,7 @@ export default {
     }
 
     state.fileChangeTimestamp = Date.now();
+    state.fullFileString = JSON.stringify(state.fullFile);
   },
 
   [types.FILE_MUTATION_PASTE_ACTION](state, filePasteAction) {
@@ -321,6 +331,7 @@ export default {
 
   [types.FILE_MUTATION_SET_FULL_FILE](state, fullFile) {
     state.fullFile = fullFile;
+    state.fullFileString = JSON.stringify(fullFile);
   },
 
   [types.FILE_MUTATION_SET_CURRENT_PAGE](state, currentPage) {

@@ -69,7 +69,6 @@ export default {
       this.timer = setInterval(() => {
         this.save({
           filename: `${this.$route.query.d}/${this.$route.params.filename}`,
-          content: this.fullLines,
         });
       }, 3000);
     }

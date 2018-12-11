@@ -278,14 +278,16 @@ export default {
       return;
     }
 
+    let content = data.content ? data.content : state.fullFile;
+
     const fileKey = `file_${data.filename}`;
 
     async function actionSave() {
       const fileChangeTimestamp = state.fileChangeTimestamp;
-      LocalStorage.save(fileKey, data.content);
+      LocalStorage.save(fileKey, content);
       try {
         await http.post(`files/save?filename=${data.filename}.json&type=file`, {
-          content: JSON.stringify({ lines: data.content, hasSeparator: 0 }),
+          content: JSON.stringify({ lines: content, hasSeparator: 0 }),
         });
 
         if (state.fileChangeTimestamp === fileChangeTimestamp) {
