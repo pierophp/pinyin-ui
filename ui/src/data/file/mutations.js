@@ -10,7 +10,7 @@ function addHighlight(state, data) {
     i += 1
   ) {
     let startBlock = 0;
-    let endBlock = state.file[i].length - 1;
+    let endBlock = state.fullFile[i].length - 1;
     if (i === parseInt(data.startLine, 10)) {
       startBlock = data.startBlock;
     }
@@ -24,7 +24,9 @@ function addHighlight(state, data) {
       j <= parseInt(endBlock, 10);
       j += 1
     ) {
-      state.file[i][j].h = data.type;
+      state.file.find(item => Number(item[0].lineIndex) === Number(i))[j].h =
+        data.type;
+      state.fullFile[i][j].h = data.type;
 
       if (data.worker) {
         data.worker.postMessage({
@@ -45,10 +47,10 @@ function findRange(state, data) {
   let startBlock = parseInt(data.startBlock, 10);
   let endLine = parseInt(data.endtLine, 10);
   let endBlock = parseInt(data.endBlock, 10);
-  const highlight = state.file[startLine][startBlock].h;
+  const highlight = state.fullFile[startLine][startBlock].h;
 
   function findRangeStart(line, block) {
-    if (state.file[line][block].h !== highlight) {
+    if (state.fullFile[line][block].h !== highlight) {
       return;
     }
 
@@ -62,7 +64,7 @@ function findRange(state, data) {
         return;
       }
 
-      block = state.file[line].length - 1;
+      block = state.fullFile[line].length - 1;
     }
 
     findRangeStart(line, block);
@@ -71,7 +73,7 @@ function findRange(state, data) {
   findRangeStart(startLine, startBlock);
 
   function findRangeEnd(line, block) {
-    if (state.file[line][block].h !== highlight) {
+    if (state.fullFile[line][block].h !== highlight) {
       return;
     }
 
@@ -79,12 +81,12 @@ function findRange(state, data) {
     endBlock = block;
 
     block += 1;
-    if (block === state.file[line].length) {
+    if (block === state.fullFile[line].length) {
       line += 1;
       block = 0;
     }
 
-    if (line === state.file.length) {
+    if (line === state.fullFile.length) {
       return;
     }
 
@@ -118,34 +120,22 @@ export default {
   },
 
   [types.FILE_MUTATION_SET_LINE](state, { line, lineIndex }) {
-    if (!line) {
-      return;
-    }
-
-    line.forEach((block, blockIndex) => {
-      if (block.h === undefined) {
-        line[blockIndex].h = '';
-      }
-
-      if (block.p === undefined) {
-        line[blockIndex].p = '';
-      }
-
-      if (block.c === undefined) {
-        line[blockIndex].c = '';
-      }
-
-      if (
-        state.fullFile &&
-        state.fullFile[0] &&
-        (!state.fullFile[0][0].line || !state.fullFile[0][0].line.pinyinSpaced)
-      ) {
-        const pinyinList = separatePinyinInSyllables(line[blockIndex].p);
-        line[blockIndex].p = pinyinList.join(String.fromCharCode(160));
-      }
-    });
-
     Vue.set(state.file, lineIndex, line);
+  },
+
+  [types.FILE_MUTATION_SET_LINE_AND_SAVE](state, { line, lineIndex }) {
+    Vue.set(state.fullFile, lineIndex, line);
+    const relativeIndex = state.file.findIndex(
+      blocks => blocks[0] && Number(blocks[0].lineIndex) === Number(lineIndex),
+    );
+
+    if (relativeIndex >= 0) {
+      if (line[0]) {
+        line[0].lineIndex = lineIndex;
+      }
+
+      Vue.set(state.file, relativeIndex, line);
+    }
   },
 
   [types.FILE_MUTATION_SET_PINYIN_SPACED](state) {
@@ -166,7 +156,6 @@ export default {
     }
 
     state.fullFile[0][0].line.pinyinSpaced = 1;
-    state.file[0][0].line.pinyinSpaced = 1;
     state.fileChangeTimestamp = Date.now();
   },
 
@@ -178,12 +167,25 @@ export default {
     const newPinyin = separatePinyinInSyllables(pinyin(data.pinyin)).join(
       String.fromCharCode(160),
     );
-    state.file[data.lineIndex][data.blockIndex].p = newPinyin;
+
+    const relativeIndex = state.file.findIndex(
+      blocks =>
+        blocks[0] && Number(blocks[0].lineIndex) === Number(data.lineIndex),
+    );
+
+    if (relativeIndex >= 0) {
+      state.file[relativeIndex][data.blockIndex].p = newPinyin;
+    }
+
+    state.fullFile[data.lineIndex][data.blockIndex].p = newPinyin;
     state.fileChangeTimestamp = Date.now();
   },
 
   [types.FILE_MUTATION_UPDATE_CHARACTER](state, data) {
-    state.file[data.lineIndex][data.blockIndex].c = data.character;
+    state.file.find(
+      item => Number(item[0].lineIndex) === Number(data.lineIndex),
+    )[data.blockIndex].c = data.character;
+    state.fullFile[data.lineIndex][data.blockIndex].c = data.character;
     state.fileChangeTimestamp = Date.now();
   },
 
@@ -197,7 +199,7 @@ export default {
     let startBlock = null;
     let endLine = null;
     let endBlock = null;
-    if (state.file[data.startLine][data.startBlock].h) {
+    if (state.fullFile[data.startLine][data.startBlock].h) {
       [startLine, startBlock, endLine, endBlock] = findRange(state, data);
       data.startLine = startLine;
       data.startBlock = startBlock;
@@ -221,6 +223,7 @@ export default {
       endLine,
       endBlock,
       type: '',
+      worker: data.worker,
     });
   },
   [types.FILE_MUTATION_ADD_EMPTY_LINE](state) {
@@ -263,11 +266,19 @@ export default {
   [types.FILE_MUTATION_REMOVE_BLOCK](state, data) {
     const lineIndex = parseInt(data.lineIndex, 10);
     const blockIndex = parseInt(data.blockIndex, 10);
-    const line = state.file[data.lineIndex].filter(
+    const line = state.fullFile[data.lineIndex].filter(
       (block, index) => index !== blockIndex,
     );
 
-    Vue.set(state.file, lineIndex, line);
+    Vue.set(state.fullFile, lineIndex, line);
+
+    const fileIndex = state.file.findIndex(
+      item => Number(item[0].lineIndex) === Number(data.lineIndex),
+    );
+
+    if (fileIndex >= 0) {
+      Vue.set(state.file, fileIndex, line);
+    }
 
     state.fileChangeTimestamp = Date.now();
   },
@@ -310,6 +321,10 @@ export default {
 
   [types.FILE_MUTATION_SET_FULL_FILE](state, fullFile) {
     state.fullFile = fullFile;
+  },
+
+  [types.FILE_MUTATION_SET_CURRENT_PAGE](state, currentPage) {
+    state.currentPage = currentPage;
   },
 
   [types.FILE_MUTATION_SET_FOOTNOTES](state, lines) {

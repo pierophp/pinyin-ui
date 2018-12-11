@@ -28,8 +28,15 @@ export default {
   [types.FILE_GETTER_FULL_FILE]({ fullFile }) {
     return fullFile;
   },
+  [types.FILE_GETTER_FULL_FILE_TOTAL_PAGES]({ fullFile, perPage }) {
+    return Math.ceil(fullFile.length / perPage);
+  },
+
+  [types.FILE_GETTER_CURRENT_PAGE]({ currentPage }) {
+    return currentPage;
+  },
+
   [types.FILE_GETTER_SELECTEDS]({ fileSelecteds }) {
     return fileSelecteds;
   },
-
 };
