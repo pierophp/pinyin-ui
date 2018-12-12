@@ -147,4 +147,5 @@ export default {
   pinyin_ideograms: 'Pinyin + Ideograms',
   ideograms_only: 'Ideograms only',
   measure_words: 'Measure Words',
+  separable_verb: 'Separable verb',
 };

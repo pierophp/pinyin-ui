@@ -1,125 +1,143 @@
 <template>
   <div>
-  <div v-if="type === 'pt' &&  ((dictionary.pt && dictionary.pt.length) || user.admin)">
-    <div class="dict-title">PT</div>
-    <div class="dict-block">
-      <div v-if="!editing" >
-        <div v-for="(pt, dictId) in dictionary.pt" v-bind:key="dictId">{{ pt }}</div>
+    <div v-if="type === 'pt' &&  ((dictionary.pt && dictionary.pt.length) || user.admin)">
+      <div class="dict-title">PT</div>
+      <div class="dict-block">
+        <div v-if="!editing">
+          <div v-for="(pt, dictId) in dictionary.pt" v-bind:key="dictId">{{ pt }}</div>
 
-        <div v-if="dictionary.measure_words && dictionary.measure_words.length">
-          <br/><b>{{$t('measure_words')}}:</b> {{ dictionary.measure_words.join(', ')}}
+          <md-button
+            v-if="user.admin"
+            class="md-raised md-primary"
+            @click.native="edit()"
+          >{{$t('edit')}}</md-button>
         </div>
-
-        <md-button v-if="user.admin" class="md-raised md-primary" @click.native="edit()">
-          {{$t('edit')}}
-        </md-button>
-      </div>
-      <div v-if="editing">
-        <div class="field-container">
-          <textarea v-model="dictionaryEntry" autocapitalize="none"></textarea>
+        <div v-if="editing">
+          <div class="field-container">
+            <textarea v-model="dictionaryEntry" autocapitalize="none"></textarea>
+          </div>
+          <md-button class="md-raised md-primary" @click.native="save()">{{$t('save')}}</md-button>
+          <md-button class="md-raised md-accent" @click.native="cancelEdit()">{{$t('cancel')}}</md-button>
         </div>
-        <md-button class="md-raised md-primary" @click.native="save()">{{$t('save')}}</md-button>
-        <md-button class="md-raised md-accent" @click.native="cancelEdit()">{{$t('cancel')}}</md-button>
       </div>
     </div>
-  </div>
 
-  <div v-if="type === 'chinese_tools_pt' && dictionary.chinese_tools_pt && dictionary.chinese_tools_pt.length">
-    <form action="http://www.chinese-tools.com/tools/chinese-portuguese-dictionary.html" method="POST" target="_blank" id="form-ct-pt">
-      <input type="hidden" name="dico" :value="dictionary.ideograms" />
-    </form>
-    <div class="dict-title">
-      <a href="javascript:void(0)" @click="openChineseTools('pt')">
-        Chinese Tools - PT
-      </a>
+    <div
+      v-if="type === 'chinese_tools_pt' && dictionary.chinese_tools_pt && dictionary.chinese_tools_pt.length"
+    >
+      <form
+        action="http://www.chinese-tools.com/tools/chinese-portuguese-dictionary.html"
+        method="POST"
+        target="_blank"
+        id="form-ct-pt"
+      >
+        <input type="hidden" name="dico" :value="dictionary.ideograms">
+      </form>
+      <div class="dict-title">
+        <a href="javascript:void(0)" @click="openChineseTools('pt')">Chinese Tools - PT</a>
+      </div>
+      <div class="dict-block">
+        <div
+          v-for="(chinese_tools_pt, dictId) in dictionary.chinese_tools_pt"
+          v-bind:key="dictId"
+        >{{ chinese_tools_pt }}</div>
+      </div>
     </div>
-    <div class="dict-block">
-      <div v-for="(chinese_tools_pt, dictId) in dictionary.chinese_tools_pt" v-bind:key="dictId">{{ chinese_tools_pt }}</div>
-    </div>
-  </div>
 
-  <div v-if="type === 'glosbe_pt' && dictionary.glosbe_pt && dictionary.glosbe_pt.length">
-    <div class="dict-title">
-      <a :href="'https://glosbe.com/zh/pt/' + dictionary.ideograms" target="_blank">
-        GLOSBE - PT
-      </a>
+    <div v-if="type === 'glosbe_pt' && dictionary.glosbe_pt && dictionary.glosbe_pt.length">
+      <div class="dict-title">
+        <a :href="'https://glosbe.com/zh/pt/' + dictionary.ideograms" target="_blank">GLOSBE - PT</a>
+      </div>
+      <div class="dict-block">
+        <div v-for="(glosbe_pt, dictId) in dictionary.glosbe_pt" v-bind:key="dictId">{{ glosbe_pt }}</div>
+      </div>
     </div>
-    <div class="dict-block">
-      <div v-for="(glosbe_pt, dictId) in dictionary.glosbe_pt" v-bind:key="dictId">{{ glosbe_pt }}</div>
-    </div>
-  </div>
 
-  <div v-if="type === 'chinese_tools_es' && dictionary.chinese_tools_es && dictionary.chinese_tools_es.length">
-    <form action="http://www.chinese-tools.com/tools/chinese-spanish-dictionary.html" method="POST" target="_blank" id="form-ct-es">
-      <input type="hidden" name="dico" :value="dictionary.ideograms" />
-    </form>
-    <div class="dict-title">
-      <a href="javascript:void(0)" @click="openChineseTools('es')">
-        Chinese Tools - ES
-      </a>
+    <div
+      v-if="type === 'chinese_tools_es' && dictionary.chinese_tools_es && dictionary.chinese_tools_es.length"
+    >
+      <form
+        action="http://www.chinese-tools.com/tools/chinese-spanish-dictionary.html"
+        method="POST"
+        target="_blank"
+        id="form-ct-es"
+      >
+        <input type="hidden" name="dico" :value="dictionary.ideograms">
+      </form>
+      <div class="dict-title">
+        <a href="javascript:void(0)" @click="openChineseTools('es')">Chinese Tools - ES</a>
+      </div>
+      <div class="dict-block">
+        <div
+          v-for="(chinese_tools_es, dictId) in dictionary.chinese_tools_es"
+          v-bind:key="dictId"
+        >{{ chinese_tools_es }}</div>
+      </div>
     </div>
-    <div class="dict-block">
-      <div v-for="(chinese_tools_es, dictId) in dictionary.chinese_tools_es" v-bind:key="dictId">{{ chinese_tools_es }}</div>
-    </div>
-  </div>
 
-  <div v-if="type === 'glosbe_es' && dictionary.glosbe_es && dictionary.glosbe_es.length">
-    <div class="dict-title">
-      <a :href="'https://glosbe.com/zh/es/' + dictionary.ideograms" target="_blank">
-        GLOSBE - ES
-      </a>
+    <div v-if="type === 'glosbe_es' && dictionary.glosbe_es && dictionary.glosbe_es.length">
+      <div class="dict-title">
+        <a :href="'https://glosbe.com/zh/es/' + dictionary.ideograms" target="_blank">GLOSBE - ES</a>
+      </div>
+      <div class="dict-block">
+        <div v-for="(glosbe_es, dictId) in dictionary.glosbe_es" v-bind:key="dictId">{{ glosbe_es }}</div>
+      </div>
     </div>
-    <div class="dict-block">
-      <div v-for="(glosbe_es, dictId) in dictionary.glosbe_es" v-bind:key="dictId">{{ glosbe_es }}</div>
-    </div>
-  </div>
 
-  <div v-if="type === 'unihan' && dictionary.unihan">
-    <div class="dict-title">
-      <a :href="'https://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=' + dictionary.ideograms" target="_blank">
-        Unihan
-      </a>
+    <div v-if="type === 'unihan' && dictionary.unihan">
+      <div class="dict-title">
+        <a
+          :href="'https://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=' + dictionary.ideograms"
+          target="_blank"
+        >Unihan</a>
+      </div>
+      <div class="dict-block">
+        <div v-for="(unihan, dictId) in dictionary.unihan" v-bind:key="dictId">{{ unihan }}</div>
+      </div>
     </div>
-    <div class="dict-block">
-      <div v-for="(unihan, dictId) in dictionary.unihan" v-bind:key="dictId">{{ unihan }}</div>
-    </div>
-  </div>
 
-  <div v-if="type === 'cedict' && dictionary.cedict">
-    <div class="dict-title">
-      <a :href="'https://cc-cedict.org/editor/editor.php?handler=QueryDictionary&amp;querydictionary_search=' + dictionary.ideograms" target="_blank">
-        CC-CEDICT
-      </a>
+    <div v-if="type === 'cedict' && dictionary.cedict">
+      <div class="dict-title">
+        <a
+          :href="'https://cc-cedict.org/editor/editor.php?handler=QueryDictionary&amp;querydictionary_search=' + dictionary.ideograms"
+          target="_blank"
+        >CC-CEDICT</a>
+      </div>
+      <div class="dict-block">
+        <div v-for="(cedict, dictId) in dictionary.cedict" v-bind:key="dictId">{{ cedict }}</div>
+      </div>
     </div>
-    <div  class="dict-block">
-      <div v-for="(cedict, dictId) in dictionary.cedict" v-bind:key="dictId">{{ cedict }}</div>
-    </div>
-  </div>
 
-  <div v-if="type === 'chinese_tools_en' && dictionary.chinese_tools_en && dictionary.chinese_tools_en.length">
-    <form action="http://www.chinese-tools.com/tools/dictionary.html" method="POST" target="_blank" id="form-ct-en">
-      <input type="hidden" name="dico" :value="dictionary.ideograms" />
-    </form>
-    <div class="dict-title">
-      <a href="javascript:void(0)" @click="openChineseTools('en')">
-        Chinese Tools - EN
-      </a>
+    <div
+      v-if="type === 'chinese_tools_en' && dictionary.chinese_tools_en && dictionary.chinese_tools_en.length"
+    >
+      <form
+        action="http://www.chinese-tools.com/tools/dictionary.html"
+        method="POST"
+        target="_blank"
+        id="form-ct-en"
+      >
+        <input type="hidden" name="dico" :value="dictionary.ideograms">
+      </form>
+      <div class="dict-title">
+        <a href="javascript:void(0)" @click="openChineseTools('en')">Chinese Tools - EN</a>
+      </div>
+      <div class="dict-block">
+        <div
+          v-for="(chinese_tools_en, dictId) in dictionary.chinese_tools_en"
+          v-bind:key="dictId"
+        >{{ chinese_tools_en }}</div>
+      </div>
     </div>
-    <div class="dict-block">
-      <div v-for="(chinese_tools_en, dictId) in dictionary.chinese_tools_en" v-bind:key="dictId">{{ chinese_tools_en }}</div>
-    </div>
-  </div>
 
-  <div v-if="type === 'glosbe_en' && dictionary.glosbe_en && dictionary.glosbe_en.length">
-    <div class="dict-title">
-      <a :href="'https://glosbe.com/zh/en/' + dictionary.ideograms" target="_blank">
-        GLOSBE - EN
-      </a>
+    <div v-if="type === 'glosbe_en' && dictionary.glosbe_en && dictionary.glosbe_en.length">
+      <div class="dict-title">
+        <a :href="'https://glosbe.com/zh/en/' + dictionary.ideograms" target="_blank">GLOSBE - EN</a>
+      </div>
+      <div class="dict-block">
+        <div v-for="(glosbe_en, dictId) in dictionary.glosbe_en" v-bind:key="dictId">{{ glosbe_en }}</div>
+      </div>
     </div>
-    <div class="dict-block">
-      <div v-for="(glosbe_en, dictId) in dictionary.glosbe_en" v-bind:key="dictId">{{ glosbe_en }}</div>
-    </div>
-  </div>
   </div>
 </template>
 

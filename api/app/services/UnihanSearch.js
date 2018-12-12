@@ -175,6 +175,7 @@ module.exports = class UnihanSearch {
       'hsk',
       'variants',
       'measure_words',
+      'is_separable',
     ];
 
     let cjkList = await knex('cjk')
@@ -254,6 +255,10 @@ module.exports = class UnihanSearch {
 
       if (!response.hsk) {
         response.hsk = cjk.hsk;
+      }
+
+      if (!response.is_separable) {
+        response.is_separable = cjk.is_separable;
       }
 
       if (!response.variants) {

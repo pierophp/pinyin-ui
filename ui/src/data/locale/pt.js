@@ -145,4 +145,5 @@ export default {
   pinyin_ideograms: 'Pinyin + Ideogramas',
   ideograms_only: 'Somente ideograms',
   measure_words: 'Classificadores',
+  separable_verb: 'Verbo separável',
 };
