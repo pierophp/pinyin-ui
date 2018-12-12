@@ -1,7 +1,6 @@
 <template>
   <div>
     <div v-if="dictionary.measure_words && dictionary.measure_words.length">
-      <br>
       <b>{{$t('measure_words')}}:</b>
       {{ dictionary.measure_words.join(', ')}}
     </div>

@@ -1,25 +1,26 @@
 <template>
   <div class="dictionary-container">
     <loadable-content :loading="loading">
-      <h2>
+      <div class="title-container">
         <traditional-simplified-show
           :pinyin="dictionary.pronunciation"
           :ideograms="dictionary.ideograms"
           :variants="dictionary.variants"
         />
+        <span class="pinyin">- {{ dictionary.pronunciation }}</span>
+        <div>
+          <md-button
+            class="md-icon-button md-primary clipboard-btn"
+            @click="clipboard(dictionary.ideograms)"
+          >
+            <md-icon>content_copy</md-icon>
+          </md-button>
 
-        - {{ dictionary.pronunciation }}
-        <md-button
-          class="md-icon-button md-primary clipboard-btn"
-          @click="clipboard(dictionary.ideograms)"
-        >
-          <md-icon>content_copy</md-icon>
-        </md-button>
-
-        <md-button class="md-icon-button md-accent sound-btn" @click.native="openSound">
-          <md-icon>volume_up</md-icon>
-        </md-button>
-      </h2>
+          <md-button class="md-icon-button md-accent sound-btn" @click.native="openSound">
+            <md-icon>volume_up</md-icon>
+          </md-button>
+        </div>
+      </div>
 
       <md-tabs>
         <md-tab id="dict" :md-label="$t('definition')">
@@ -142,9 +143,24 @@ export default {
 .dictionary-container .md-tabs .md-tab {
   padding: 10px;
 }
-.dictionary-container h2 .ideogram-show span {
+
+.dictionary-container .title-container {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 25px;
+  min-height: 45px;
+  margin: 15px 0 0;
+}
+
+.dictionary-container .title-container .pinyin {
+  font-size: 17px;
+}
+
+.dictionary-container .title-container .ideogram-show span {
   display: inline-block;
-  width: 30px;
+  text-align: center;
+  width: 28px;
 }
 
 .sound {
