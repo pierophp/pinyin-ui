@@ -275,9 +275,9 @@ export default {
       this.modalSeparateOpen = true;
     },
 
-    confirmSeparate() {
+    async confirmSeparate() {
       this.modalSeparateOpen = false;
-      this.separateAction({
+      await this.separateAction({
         ...this.block,
         separateCharacter: this.separateCharacter,
       });
@@ -287,8 +287,8 @@ export default {
       }, 1000);
     },
 
-    joinLeft(block) {
-      this.joinLeftAction(block);
+    async joinLeft(block) {
+      await this.joinLeftAction(block);
       setTimeout(() => {
         this.$emit('reopen', this.block.lineIndex, this.block.blockIndex - 1);
       }, 1000);

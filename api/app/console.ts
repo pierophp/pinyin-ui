@@ -11,6 +11,7 @@ import { JwTrackCommand } from './commands/jw.track.command';
 import { MemriseToInkstoneCommand } from './commands/memrise.to.inkstone.command';
 import { PlecoExportCommand } from './commands/pleco.export.command';
 import { ThreeLinesToPlecoCommand } from './commands/three.lines.to.pleco.command';
+import { ThreeLinesLoadCommand } from './commands/three.lines.load.command';
 
 require('yargs')
   .usage('Usage: $0 <command> [options]')
@@ -27,6 +28,7 @@ require('yargs')
   .command(new JwBibleTraditionalCommand())
   .command(new MemriseToInkstoneCommand())
   .command(new ThreeLinesToPlecoCommand())
+  .command(new ThreeLinesLoadCommand())
   .demandCommand(1)
   .strict()
   .help('h')

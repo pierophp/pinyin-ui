@@ -347,7 +347,7 @@ export default {
     }, 5000);
   },
 
-  [types.FILE_ACTION_JOIN_LEFT]({ commit, state, dispatch }, data) {
+  async [types.FILE_ACTION_JOIN_LEFT]({ commit, state, dispatch }, data) {
     const lineIndex = parseInt(data.lineIndex, 10);
     const blockIndex = parseInt(data.blockIndex, 10);
     const previousBlockIndex = blockIndex - 1;
@@ -363,24 +363,24 @@ export default {
       state.file[lineIndex][blockIndex].p
     }`;
 
-    commit(types.FILE_MUTATION_REMOVE_BLOCK, data);
+    await commit(types.FILE_MUTATION_REMOVE_BLOCK, data);
 
-    commit(types.FILE_MUTATION_UPDATE_CHARACTER, {
+    await commit(types.FILE_MUTATION_UPDATE_CHARACTER, {
       lineIndex,
       blockIndex: previousBlockIndex,
       character,
     });
 
-    commit(types.FILE_MUTATION_UPDATE_PINYIN, {
+    await commit(types.FILE_MUTATION_UPDATE_PINYIN, {
       lineIndex,
       blockIndex: previousBlockIndex,
       pinyin,
     });
 
-    dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex });
+    await dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex });
   },
 
-  [types.FILE_ACTION_SEPARATE]({ commit, state, dispatch }, data) {
+  async [types.FILE_ACTION_SEPARATE]({ commit, state, dispatch }, data) {
     const separatedBlocks = data.separateCharacter
       .split(' ')
       .filter(character => character)
@@ -398,12 +398,12 @@ export default {
     blocks = blocks.concat(separatedBlocks);
     blocks = blocks.concat(lastBlocks);
 
-    commit(types.FILE_MUTATION_SET_LINE, {
+    await commit(types.FILE_MUTATION_SET_LINE, {
       line: blocks,
       lineIndex,
     });
 
-    dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex });
+    await dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex });
   },
 
   [types.FILE_ACTION_ADD_MY_CJK]({ commit, state }, data) {
