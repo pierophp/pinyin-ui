@@ -1,11 +1,12 @@
 <template>
-  <file-container-quiz ref="fileContainer"
+  <file-container-quiz
+    ref="fileContainer"
     :lines="lines"
     :fullLines="fullLines"
     :filename="filename"
     :fileLoading="fileLoading"
     :parent="true"
-    />
+  />
 </template>
 
 <script>

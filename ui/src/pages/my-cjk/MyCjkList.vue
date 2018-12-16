@@ -6,43 +6,41 @@
           <h3 v-if="options.type !== '4'">{{ $t('my_total') }}: {{total}}</h3>
           <table class="spaced-table">
             <thead>
-            <tr>
-              <th>{{ $t('freq.') }}</th>
-              <th>{{ $t('my_ideograms') }}</th>
-              <th></th>
-            </tr>
+              <tr>
+                <th>{{ $t('freq.') }}</th>
+                <th>{{ $t('my_ideograms') }}</th>
+                <th></th>
+              </tr>
             </thead>
 
             <tbody>
-            <tr v-for="row in report" :key="row.frequency">
-              <td>{{ (row.frequency === 999) ? '-' : row.frequency }}</td>
-              <td>
-                {{row.total_my}}
-                {{ (row.frequency === 999) ? '' : ('/ ' + row.total + ' (' + row.percent + '%)') }}
-              </td>
-              <td>
-                <menu-content>
-                  <template slot="click">
-                    <md-button class="md-raised md-primary">
-                      {{ $t('view') }}
-                    </md-button>
-                  </template>
+              <tr v-for="row in report" :key="row.frequency">
+                <td>{{ (row.frequency === 999) ? '-' : row.frequency }}</td>
+                <td>
+                  {{row.total_my}}
+                  {{ (row.frequency === 999) ? '' : ('/ ' + row.total + ' (' + row.percent + '%)') }}
+                </td>
+                <td>
+                  <menu-content>
+                    <template slot="click">
+                      <md-button class="md-raised md-primary">{{ $t('view') }}</md-button>
+                    </template>
 
-                  <div class="list-container">
-                      <div class="list-item" @click="unknownIdeograms(row.frequency)" v-if="row.frequency !== 999">
-                        <div class="content">
-                          {{ $t("unknown") }}
-                        </div>
+                    <div class="list-container">
+                      <div
+                        class="list-item"
+                        @click="unknownIdeograms(row.frequency)"
+                        v-if="row.frequency !== 999"
+                      >
+                        <div class="content">{{ $t("unknown") }}</div>
                       </div>
                       <div class="list-item" @click="knownIdeograms(row.frequency)">
-                        <div class="content">
-                          {{ $t("known") }}
-                        </div>
+                        <div class="content">{{ $t("known") }}</div>
                       </div>
                     </div>
-                </menu-content>
-              </td>
-            </tr>
+                  </menu-content>
+                </td>
+              </tr>
             </tbody>
           </table>
         </loadable-content>
@@ -50,45 +48,40 @@
 
       <md-tab id="words" :md-label="$t('words')">
         <loadable-content :loading="loading">
-        <h3 v-if="options.type !== '4'">{{ $t('my_total') }}: {{totalWords}}</h3>
+          <h3 v-if="options.type !== '4'">{{ $t('my_total') }}: {{totalWords}}</h3>
           <table class="spaced-table">
             <thead>
-            <tr>
-              <th>HSK</th>
-              <th>{{ $t('word') }}</th>
-              <th></th>
-            </tr>
+              <tr>
+                <th>HSK</th>
+                <th>{{ $t('word') }}</th>
+                <th></th>
+              </tr>
             </thead>
 
             <tbody>
-            <tr v-for="row in reportWords" :key="row.hsk">
-              <td>{{ (row.hsk === 999) ? '-' : row.hsk }}</td>
-              <td>{{row.total_my}}
-                {{ (row.hsk === 999) ? '' : ('/ ' + row.total + ' (' + row.percent + '%)') }}
-              </td>
-              <td>
-                <menu-content>
-                  <template slot="click">
-                    <md-button class="md-raised md-primary">
-                    {{ $t('action') }}
-                    </md-button>
-                  </template>
+              <tr v-for="row in reportWords" :key="row.hsk">
+                <td>{{ (row.hsk === 999) ? '-' : row.hsk }}</td>
+                <td>
+                  {{row.total_my}}
+                  {{ (row.hsk === 999) ? '' : ('/ ' + row.total + ' (' + row.percent + '%)') }}
+                </td>
+                <td>
+                  <menu-content>
+                    <template slot="click">
+                      <md-button class="md-raised md-primary">{{ $t('action') }}</md-button>
+                    </template>
 
-                  <div class="list-container">
+                    <div class="list-container">
                       <div class="list-item" @click="unknownWords(row.hsk)" v-if="row.hsk !== 999">
-                        <div class="content">
-                          {{ $t("unknown") }}
-                        </div>
+                        <div class="content">{{ $t("unknown") }}</div>
                       </div>
                       <div class="list-item" @click="knownWords(row.hsk)">
-                        <div class="content">
-                          {{ $t("known") }}
-                        </div>
+                        <div class="content">{{ $t("known") }}</div>
                       </div>
                     </div>
-                </menu-content>
-              </td>
-            </tr>
+                  </menu-content>
+                </td>
+              </tr>
             </tbody>
           </table>
         </loadable-content>
@@ -104,7 +97,7 @@
       action="unknown"
       @close="dialogUnknownOpen = false"
       @change="(selectedCharacter) => reportUnkown.remove(selectedCharacter)"
-      />
+    />
 
     <my-cjk-list-modal
       :active.sync="dialogKnownOpen"
@@ -115,7 +108,7 @@
       action="known"
       @close="dialogKnownOpen = false"
       @change="(selectedCharacter) => reportUnkown.remove(selectedCharacter)"
-      />
+    />
 
     <my-cjk-list-modal
       :active.sync="dialogUnknownWordsOpen"
@@ -126,7 +119,7 @@
       action="unknown"
       @close="dialogUnknownWordsOpen = false"
       @change="(selectedCharacter) => reportUnkown.remove(selectedCharacter)"
-      />
+    />
 
     <my-cjk-list-modal
       :active.sync="dialogKnownWordsOpen"
@@ -137,8 +130,7 @@
       action="known"
       @close="dialogKnownWordsOpen = false"
       @change="(selectedCharacter) => reportUnkown.remove(selectedCharacter)"
-      />
-
+    />
   </div>
 </template>
 

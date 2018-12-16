@@ -1,31 +1,31 @@
 <template>
-<div class="file-container">
-  <loadable-content :loading="loading">
-    <h2>{{filename}}</h2>
-    <div class="larger-print">
-      <file-row
-        v-for="(line, index) in lines"
-        v-bind:key="index"
-        :line="line"
-        :line-index="index"
-        :data-index="index"
-        drag-drop="{
+  <div class="file-container">
+    <loadable-content :loading="loading">
+      <h2>{{filename}}</h2>
+      <div class="larger-print">
+        <file-row
+          v-for="(line, index) in lines"
+          v-bind:key="index"
+          :line="line"
+          :line-index="index"
+          :data-index="index"
+          drag-drop="{
           group: 'file-row',
           drop: {
               css: 'drop',
               method: moveElement
           }
         }"
-        @open-file-paste-modal="$refs.filePasteModal.openDialog()"
+          @open-file-paste-modal="$refs.filePasteModal.openDialog()"
         ></file-row>
-      <div class="clearfix"></div>
-      <div class="footer">
-        <md-button class="md-raised md-primary" @click.native="addEmptyLine()">+ {{ $t("line") }}</md-button>
+        <div class="clearfix"></div>
+        <div class="footer">
+          <md-button class="md-raised md-primary" @click.native="addEmptyLine()">+ {{ $t("line") }}</md-button>
+        </div>
       </div>
-    </div>
-  </loadable-content>
-  <file-paste-modal ref="filePasteModal"></file-paste-modal>
-</div>
+    </loadable-content>
+    <file-paste-modal ref="filePasteModal"></file-paste-modal>
+  </div>
 </template>
 
 <script>

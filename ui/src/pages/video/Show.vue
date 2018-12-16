@@ -2,8 +2,8 @@
   <div :class="[orientation, parentClass, 'video-parent-container']">
     <div class="video-container">
       <loadable-content :loading="loading">
-        <div class="video-form" v-show="!showSubtitle || !isPhone || orientation === 'landscape'" >
-          <div class="video-form-container" >
+        <div class="video-form" v-show="!showSubtitle || !isPhone || orientation === 'landscape'">
+          <div class="video-form-container">
             <div class="field-container">
               <label for="type">{{ $t('show') }}</label>
               <select v-model="type" name="type" class="select-field">
@@ -14,55 +14,74 @@
             </div>
 
             <div>
-              <br />
+              <br>
               <md-icon>play_circle_outline</md-icon>
             </div>
 
             <div class="field-container url-form-container">
               <label>{{ $t('url') }}</label>
-              <input type="text" ref="inputSearch" v-model="videoUrl" :placeholder="$t('url')"/>
+              <input type="text" ref="inputSearch" v-model="videoUrl" :placeholder="$t('url')">
             </div>
-
           </div>
         </div>
 
         <div class="video-exibition-container">
-          <div  v-show="!showSubtitle || !isPhone || orientation === 'landscape'" class="video-player">
-            <video :src="videoUrlExhibition" controls preload ref="video" v-show="videoUrl">
-            </video>
+          <div
+            v-show="!showSubtitle || !isPhone || orientation === 'landscape'"
+            class="video-player"
+          >
+            <video :src="videoUrlExhibition" controls preload ref="video" v-show="videoUrl"></video>
 
-            <br/><br/>
+            <br>
+            <br>
             <a :href="downloadLink" v-if="downloadLink" :download="downloadFilename">
               <md-button v-if="downloadLink" class="md-raised">{{ $t("download_track") }}</md-button>
             </a>
-            <md-button v-if="downloadLink && isPhone && orientation === 'portrait'" class="md-raised md-primary" @click.native="toggleSubtitle">{{ $t("show_track") }}</md-button>
+            <md-button
+              v-if="downloadLink && isPhone && orientation === 'portrait'"
+              class="md-raised md-primary"
+              @click.native="toggleSubtitle"
+            >{{ $t("show_track") }}</md-button>
             <div class="checkbox-container" v-if="downloadLink">
-              <input type="checkbox" id="repeat-phrase" v-model="repeatPhrase"/>
+              <input type="checkbox" id="repeat-phrase" v-model="repeatPhrase">
               <label for="repeat-phrase">{{ $t('repeat_phrase') }}</label>
             </div>
 
             <div v-show="repeatPhrase">
               <md-button class="md-raised" @click.native="saveStartTime">
                 {{ $t("start_time") }}
-                <span v-if="startTime !== null"><br/>({{ secondsToHms(startTime) }})</span>
+                <span v-if="startTime !== null">
+                  <br>
+                  ({{ secondsToHms(startTime) }})
+                </span>
               </md-button>
               <md-button class="md-raised" @click.native="saveEndTime">
                 {{ $t("end_time") }}
-                <span v-if="endTime !== null"><br/>({{ secondsToHms(endTime) }})</span>
+                <span v-if="endTime !== null">
+                  <br>
+                  ({{ secondsToHms(endTime) }})
+                </span>
               </md-button>
-              <md-button class="md-raised md-primary"
+              <md-button
+                class="md-raised md-primary"
                 @click.native="startRepeatPhrase"
                 v-if="!repeating"
-                :disabled="startTime === null || endTime === null">
-                {{ $t("start") }}
-              </md-button>
-              <md-button class="md-raised md-primary" @click.native="endRepeatPhrase(true)" v-if="repeating">{{ $t("end") }}</md-button>
+                :disabled="startTime === null || endTime === null"
+              >{{ $t("start") }}</md-button>
+              <md-button
+                class="md-raised md-primary"
+                @click.native="endRepeatPhrase(true)"
+                v-if="repeating"
+              >{{ $t("end") }}</md-button>
             </div>
           </div>
 
           <div class="editor-container" v-show="showSubtitle">
             <div v-if="isPhone && orientation === 'portrait'">
-              <md-button class="md-raised md-accent no-print" @click.native="toggleSubtitle">{{ $t("hide_track") }}</md-button>
+              <md-button
+                class="md-raised md-accent no-print"
+                @click.native="toggleSubtitle"
+              >{{ $t("hide_track") }}</md-button>
             </div>
             <video-subtitle :url="videoUrl" @go-to-video-time="goToVideoTime"/>
           </div>
@@ -70,7 +89,12 @@
       </loadable-content>
     </div>
 
-    <md-snackbar md-position="center" ref="snackbar" :md-duration="3000" :md-active.sync="showSnackbar">
+    <md-snackbar
+      md-position="center"
+      ref="snackbar"
+      :md-duration="3000"
+      :md-active.sync="showSnackbar"
+    >
       <span>{{ $t("message_no_track") }}</span>
     </md-snackbar>
   </div>

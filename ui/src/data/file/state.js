@@ -9,7 +9,8 @@ export default {
   files: [],
   file: [],
   fileSelecteds: {},
-  fullFile: [],
+  fullFile: undefined, // not reactive
+  fullFileString: '[]',
   footnotes: [],
   fileLoading: false,
   fileParsing: false,
@@ -18,4 +19,6 @@ export default {
   filePasteAction: '',
   myCjk,
   myCjkTemp: '',
+  perPage: 25 * 3,
+  currentPage: 1,
 };

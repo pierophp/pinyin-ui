@@ -1,44 +1,52 @@
 <template>
-<div class="dictionary-container">
-  <loadable-content :loading="loading">
-    <h2>
-      <traditional-simplified-show :pinyin="dictionary.pronunciation" :ideograms="dictionary.ideograms" :variants="dictionary.variants"/>
-      - {{ dictionary.pronunciation }}
+  <div class="dictionary-container">
+    <loadable-content :loading="loading">
+      <div class="title-container">
+        <traditional-simplified-show
+          :pinyin="dictionary.pronunciation"
+          :ideograms="dictionary.ideograms"
+          :variants="dictionary.variants"
+        />
+        <span class="pinyin">- {{ dictionary.pronunciation }}</span>
+        <div>
+          <md-button
+            class="md-icon-button md-primary clipboard-btn"
+            @click="clipboard(dictionary.ideograms)"
+          >
+            <md-icon>content_copy</md-icon>
+          </md-button>
 
-      <md-button class="md-icon-button md-primary clipboard-btn"  @click="clipboard(dictionary.ideograms)">
-        <md-icon>content_copy</md-icon>
-      </md-button>
+          <md-button class="md-icon-button md-accent sound-btn" @click.native="openSound">
+            <md-icon>volume_up</md-icon>
+          </md-button>
+        </div>
+      </div>
 
-      <md-button class="md-icon-button md-accent sound-btn" @click.native="openSound">
-        <md-icon>volume_up</md-icon>
-      </md-button>
-    </h2>
+      <md-tabs>
+        <md-tab id="dict" :md-label="$t('definition')">
+          <dictionary-details :dictionary="dictionary" :pinyin="dictionary.pronunciation"/>
+        </md-tab>
 
-    <md-tabs>
-      <md-tab id="dict" :md-label="$t('definition')">
-        <dictionary-details :dictionary="dictionary" :pinyin="dictionary.pronunciation"/>
-      </md-tab>
+        <md-tab id="stroke" :md-label="$t('stroke')">
+          <dictionary-stroke-order :ideograms="dictionary.ideograms"/>
+        </md-tab>
 
-      <md-tab id="stroke" :md-label="$t('stroke')">
-        <dictionary-stroke-order :ideograms="dictionary.ideograms"/>
-      </md-tab>
+        <md-tab id="links" md-label="Links">
+          <Links list="1" :character="dictionary.ideograms"/>
+        </md-tab>
+      </md-tabs>
+    </loadable-content>
 
-      <md-tab id="links" md-label="Links">
-          <Links list=1 :character="dictionary.ideograms"/>
-      </md-tab>
-    </md-tabs>
-  </loadable-content>
+    <forvo-modal ref="dialogForvo" :character="dictionary.ideograms"/>
 
-  <forvo-modal ref="dialogForvo" :character="dictionary.ideograms" />
+    <md-snackbar md-position="center" :md-duration="1300" :md-active.sync="clipboardOpen">
+      <span>{{ $t('copied_to_clipboard') }}</span>
+    </md-snackbar>
 
-  <md-snackbar md-position="center" :md-duration="1300" :md-active.sync="clipboardOpen">
-    <span>{{ $t('copied_to_clipboard') }}</span>
-  </md-snackbar>
-
-  <md-button @click.native="back" class="md-fab md-fab-bottom-right md-warn">
-    <md-icon>arrow_back</md-icon>
-  </md-button>
-</div>
+    <md-button @click.native="back" class="md-fab md-fab-bottom-right md-warn">
+      <md-icon>arrow_back</md-icon>
+    </md-button>
+  </div>
 </template>
 
 <script>
@@ -135,9 +143,24 @@ export default {
 .dictionary-container .md-tabs .md-tab {
   padding: 10px;
 }
-.dictionary-container h2 .ideogram-show span {
+
+.dictionary-container .title-container {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 25px;
+  min-height: 45px;
+  margin: 15px 0 0;
+}
+
+.dictionary-container .title-container .pinyin {
+  font-size: 17px;
+}
+
+.dictionary-container .title-container .ideogram-show span {
   display: inline-block;
-  width: 30px;
+  text-align: center;
+  width: 28px;
 }
 
 .sound {

@@ -14,7 +14,7 @@ function isCharacterChange(data) {
         if (ideogram === data.character) {
           self.postMessage({
             type: 'changeCharacter',
-            lineIndex,
+            lineIndex: blocks[0].lineIndex ? blocks[0].lineIndex : lineIndex,
             blockIndex,
           });
         }

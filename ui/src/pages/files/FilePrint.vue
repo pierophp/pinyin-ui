@@ -1,13 +1,15 @@
 <template>
-  <file-container ref="fileContainer" 
-    :lines="lines" 
-    :fullLines="fullLines" 
-    :filename="filename" 
-    :fileLoading="fileLoading" 
-    :parent="true" 
+  <file-container
+    ref="fileContainer"
+    :lines="lines"
+    :fullLines="fullLines"
+    :filename="filename"
+    :fileLoading="fileLoading"
+    :parent="true"
+    :pagination="true"
     :showHighlight="showHighlight"
     @go-to-video-time="(time) => $emit('go-to-video-time', time)"
-    />
+  />
 </template>
 
 <script>
@@ -67,7 +69,6 @@ export default {
       this.timer = setInterval(() => {
         this.save({
           filename: `${this.$route.query.d}/${this.$route.params.filename}`,
-          content: this.lines,
         });
       }, 3000);
     }

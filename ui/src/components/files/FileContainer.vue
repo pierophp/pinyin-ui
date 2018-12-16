@@ -5,24 +5,25 @@
     <div class="print-scroll" ref="fileScroll">
       <div class="print" :class="[sizeClass, typeClass, ideogramSpacedClass]">
         <folder-structure :show-last="true" v-if="parent"/>
-        <h2 v-if="filename && filename.split('|||').length != 3" class="file-title">
-          {{filename}}
-        </h2>
+        <h2 v-if="filename && filename.split('|||').length != 3" class="file-title">{{filename}}</h2>
 
-        <div v-if="lines && lines[0] && lines[0][0] && lines[0][0].line !== undefined && lines[0][0].line.audio !== undefined">
-          <audio :src="lines[0][0].line.audio" controls/>
+        <div
+          v-if="fullLines && fullLines[0] && fullLines[0][0] && fullLines[0][0].line !== undefined && fullLines[0][0].line.audio !== undefined"
+        >
+          <audio :src="fullLines[0][0].line.audio" controls/>
         </div>
 
         <template v-for="(line, lineIndex) in lines">
           <file-row-print
             :line="line"
-            :lineIndex="lineIndex"
+            :lineIndex="line[0] && line[0].lineIndex ? line[0].lineIndex : lineIndex"
             @click.native="openBottomBarClick"
             @open-image="openImage"
             @open-footnote="openFootnote"
             @go-to-video-time="(time) => $emit('go-to-video-time', time)"
             ref="fileRowPrint"
-            :key="'file-row-' + (line[0] && line[0].key ? `key-${line[0].key}` : `no-key-${lineIndex}`)"/>
+            :key="'file-row-' + (line[0] && line[0].key ? `key-${line[0].key}` : `no-key-${line[0] && line[0].lineIndex ? line[0].lineIndex : lineIndex}`)"
+          />
         </template>
 
         <div class="loading-container">
@@ -32,15 +33,31 @@
         <add-remove-character-modal
           @add-character="addCharacter"
           @remove-character="removeCharacter"
-          ref="addRemoveCharacterModal"/>
+          ref="addRemoveCharacterModal"
+        />
 
-        <highlight-modal v-if="showHighlight" :worker="worker" />
+        <highlight-modal v-if="showHighlight" :worker="worker"/>
 
-        <bible-modal ref="bibleModal" v-if="parent" :bookIndex="bible.bookIndex" :chapter="bible.chapter" :verse="bible.verse" @open-bottom-bar="openBottomBar"/>
+        <bible-modal
+          ref="bibleModal"
+          v-if="parent"
+          :bookIndex="bible.bookIndex"
+          :chapter="bible.chapter"
+          :verse="bible.verse"
+          @open-bottom-bar="openBottomBar"
+        />
       </div>
     </div>
 
-    <file-bottom-bar ref="fileBottomBar" @open-modal="openModal" @reopen="(lineIndex, blockIndex) => reopenBottomBarByLineAndBlock(lineIndex, blockIndex)"/>
+    <div class="pages" v-if="totalPages > 1 && pagination">
+      <span v-for="n in totalPages" class="page" :key="n" @click="changeCurrentPage(n)">{{n}}</span>
+    </div>
+
+    <file-bottom-bar
+      ref="fileBottomBar"
+      @open-modal="openModal"
+      @reopen="(lineIndex, blockIndex) => reopenBottomBarByLineAndBlock(lineIndex, blockIndex)"
+    />
   </div>
 </template>
 
@@ -55,11 +72,15 @@ import OptionsManager from 'src/domain/options-manager';
 import ImageZoom from 'src/components/common/ImageZoom';
 import FolderStructure from 'src/components/files/FolderStructure';
 
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 import {
   FILE_ACTION_FETCH_MY_CJK,
+  FILE_ACTION_CHANGE_PAGE,
   FILE_GETTER_FOOTNOTES,
+  FILE_GETTER_FULL_FILE_TOTAL_PAGES,
+  FILE_GETTER_CURRENT_PAGE,
+  FILE_MUTATION_SET_CURRENT_PAGE,
 } from 'src/data/file/types';
 
 // eslint-disable-next-line
@@ -91,6 +112,7 @@ export default {
     filename: '',
     fileLoading: false,
     parent: false,
+    pagination: false,
     showHighlight: {
       type: Boolean,
       default: true,
@@ -128,6 +150,8 @@ export default {
   computed: {
     ...mapGetters({
       footnotes: FILE_GETTER_FOOTNOTES,
+      totalPages: FILE_GETTER_FULL_FILE_TOTAL_PAGES,
+      currentPage: FILE_GETTER_CURRENT_PAGE,
     }),
   },
 
@@ -137,15 +161,7 @@ export default {
 
     this.worker.addEventListener('message', async e => {
       if (e.data.type === 'changeCharacter') {
-        const filteredElements = this.$refs.fileRowPrint.filter(item => {
-          return item.lineIndex === e.data.lineIndex;
-        });
-
-        for (const filteredElement of filteredElements) {
-          filteredElement.updateBlockRender(
-            e.data.blockIndex,
-          );
-        }
+        this.updateByLineAndBlock(e.data.lineIndex, e.data.blockIndex);
       }
     });
 
@@ -167,8 +183,29 @@ export default {
   methods: {
     ...mapActions({
       fetchMyCjk: FILE_ACTION_FETCH_MY_CJK,
+      changePage: FILE_ACTION_CHANGE_PAGE,
     }),
 
+    ...mapMutations({
+      setCurrentPage: FILE_MUTATION_SET_CURRENT_PAGE,
+    }),
+
+    async changeCurrentPage(page) {
+      if (this.fileLoading) {
+        setTimeout(async () => {
+          await this.changeCurrentPage(page);
+        }, 500);
+        return;
+      }
+
+      if (this.currentPage === page) {
+        return;
+      }
+
+      await this.setCurrentPage(page);
+
+      await this.changePage();
+    },
     openImage(image) {
       this.imageZoom = image.src;
       this.$refs.imageZoom.openDialog();
@@ -180,9 +217,7 @@ export default {
         return;
       }
       const lineIndex = this.footnotes[footnoteIndex];
-      this.footnoteLine = this.lines[lineIndex]
-        ? this.lines[lineIndex]
-        : this.fullLines[lineIndex];
+      this.footnoteLine = this.fullLines[lineIndex];
       this.footnoteLineIndex = lineIndex;
       this.$refs.footnote.openDialog();
     },
@@ -208,11 +243,11 @@ export default {
       const blockIndex = element.getAttribute('data-block');
 
       if (
-        this.lines[lineIndex] &&
-        this.lines[lineIndex][blockIndex] &&
-        this.lines[lineIndex][blockIndex].b
+        this.fullLines[lineIndex] &&
+        this.fullLines[lineIndex][blockIndex] &&
+        this.fullLines[lineIndex][blockIndex].b
       ) {
-        const bible = this.lines[lineIndex][blockIndex].b.split(':');
+        const bible = this.fullLines[lineIndex][blockIndex].b.split(':');
         this.bible.bookIndex = bible[0];
         this.bible.chapter = bible[1];
         this.bible.verse = bible[2];
@@ -238,17 +273,25 @@ export default {
       );
     },
 
+    updateByLineAndBlock(lineIndex, blockIndex) {
+      const filteredElements = this.$refs.fileRowPrint.filter(item => {
+        return Number(item.lineIndex) === Number(lineIndex);
+      });
+
+      for (const filteredElement of filteredElements) {
+        filteredElement.updateRender().then();
+      }
+    },
+
     reopenBottomBarByLineAndBlock(lineIndex, blockIndex) {
       this.openBottomBarByLineAndBlock(lineIndex, blockIndex);
-      this.$nextTick(() => {
-        this.$refs.fileRowPrint[lineIndex].updateRender().then();
-      });
+      this.updateByLineAndBlock(lineIndex);
     },
 
     openBottomBarByLineAndBlock(lineIndex, blockIndex, openDictionary) {
       this.openBottomBar({
-        pinyin: this.lines[lineIndex][blockIndex].p,
-        character: this.lines[lineIndex][blockIndex].c,
+        pinyin: this.fullLines[lineIndex][blockIndex].p,
+        character: this.fullLines[lineIndex][blockIndex].c,
         lineIndex,
         blockIndex,
         openDictionary,
@@ -318,7 +361,7 @@ export default {
 }
 
 .file-title {
-  min-height: 80px;
+  /* min-height: 80px; */
 }
 
 .print-container {
@@ -562,5 +605,25 @@ audio {
 .print .block .footnote {
   font-size: 40px;
   color: #4286f4;
+}
+
+.pages {
+  display: flex;
+}
+
+.pages .page {
+  background: #4286f4;
+  border: 1px solid #052b68;
+  color: #fff;
+  cursor: pointer;
+  flex: 1;
+  font-size: 16px;
+  margin: 0 2px 2px;
+  padding: 2px 0;
+  text-align: center;
+}
+
+.pages .page:hover {
+  opacity: 0.8;
 }
 </style>

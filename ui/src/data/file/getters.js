@@ -25,11 +25,19 @@ export default {
   [types.FILE_GETTER_FOOTNOTES]({ footnotes }) {
     return footnotes;
   },
-  [types.FILE_GETTER_FULL_FILE]({ fullFile }) {
-    return fullFile;
+  [types.FILE_GETTER_FULL_FILE]({ fullFileString }) {
+    return JSON.parse(fullFileString);
   },
+  [types.FILE_GETTER_FULL_FILE_TOTAL_PAGES]({ fullFileString, perPage }) {
+    const fullFile = JSON.parse(fullFileString);
+    return Math.ceil(fullFile.length / perPage);
+  },
+
+  [types.FILE_GETTER_CURRENT_PAGE]({ currentPage }) {
+    return currentPage;
+  },
+
   [types.FILE_GETTER_SELECTEDS]({ fileSelecteds }) {
     return fileSelecteds;
   },
-
 };

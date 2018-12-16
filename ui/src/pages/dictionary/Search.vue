@@ -1,32 +1,48 @@
 <template>
-<div class="dictionary-container">
-  <form novalidate>
-    <div class="search-container">
-      <md-icon>pageview</md-icon>
-      <div class="field-container">
-        <label>{{ $t("search") }}</label>
-        <input type="text" ref="inputSearch" autofocus autocapitalize="none" v-model="searchValue" :placeholder="$t('search')"/>
-        <div class="clean-dictionaty">
-          <md-button class="md-icon-button md-clear md-input-action" @click.native="clear()">
-            <md-icon>clear</md-icon>
-          </md-button>
+  <div class="dictionary-container">
+    <form novalidate>
+      <div class="search-container">
+        <md-icon>pageview</md-icon>
+        <div class="field-container">
+          <label>{{ $t("search") }}</label>
+          <input
+            type="text"
+            ref="inputSearch"
+            autofocus
+            autocapitalize="none"
+            v-model="searchValue"
+            :placeholder="$t('search')"
+          >
+          <div class="clean-dictionaty">
+            <md-button class="md-icon-button md-clear md-input-action" @click.native="clear()">
+              <md-icon>clear</md-icon>
+            </md-button>
+          </div>
         </div>
       </div>
-    </div>
-  </form>
+    </form>
 
-  <div>
-    <loadable-content :loading="loading">
-      <div class="list-item" v-for="entry in entries" @click="details(entry.id)" v-bind:key="entry.id">
-        <span class="ideogram">
-          <traditional-simplified-show :pinyin="entry.pronunciation" :ideograms="entry.ideogram" :variants="entry.variants"/>
-        </span>
-        <span class="pinyin"> - {{ entry.pronunciation }}</span>
-      </div>
-      <div v-if="noResults">{{ $t("no_results") }}</div>
-    </loadable-content>
+    <div>
+      <loadable-content :loading="loading">
+        <div
+          class="list-item"
+          v-for="entry in entries"
+          @click="details(entry.id)"
+          v-bind:key="entry.id"
+        >
+          <span class="ideogram">
+            <traditional-simplified-show
+              :pinyin="entry.pronunciation"
+              :ideograms="entry.ideogram"
+              :variants="entry.variants"
+            />
+          </span>
+          <span class="pinyin">- {{ entry.pronunciation }}</span>
+        </div>
+        <div v-if="noResults">{{ $t("no_results") }}</div>
+      </loadable-content>
+    </div>
   </div>
-</div>
 </template>
 
 <script>

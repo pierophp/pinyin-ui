@@ -9,6 +9,48 @@ import LocalStorage from 'src/helpers/local-storage';
 import replaceall from 'replaceall';
 import trimStart from 'lodash/trimStart';
 import * as types from './types';
+import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
+
+function parseLines(lines) {
+  if (!lines) {
+    return [];
+  }
+
+  if (!Array.isArray(lines)) {
+    return [];
+  }
+
+  const returnLines = [];
+
+  for (const line of lines) {
+    if (!line) {
+      continue;
+    }
+
+    line.forEach((block, blockIndex) => {
+      if (block.h === undefined) {
+        line[blockIndex].h = '';
+      }
+
+      if (block.p === undefined) {
+        line[blockIndex].p = '';
+      }
+
+      if (block.c === undefined) {
+        line[blockIndex].c = '';
+      }
+
+      if (lines[0] && (!lines[0][0].line || !lines[0][0].line.pinyinSpaced)) {
+        const pinyinList = separatePinyinInSyllables(line[blockIndex].p);
+        line[blockIndex].p = pinyinList.join(String.fromCharCode(160));
+      }
+    });
+
+    returnLines.push(line);
+  }
+
+  return returnLines;
+}
 
 function sortFiles(files) {
   files.sort((a, b) =>
@@ -25,12 +67,57 @@ function arrayObjectIndexOf(array, searchTerm, property) {
   return -1;
 }
 
-function loadFile(file, lineIndex, state, commit, storage, filename) {
+function loadFile({
+  file,
+  lineIndex,
+  state,
+  commit,
+  storage,
+  filename,
+  pageLineIndex,
+  notFetch,
+}) {
   if (!state.fileLoading) {
     return;
   }
 
-  if (file.length === lineIndex) {
+  const currentPage = state.currentPage;
+  const perPage = state.perPage;
+
+  const start = perPage * currentPage - perPage;
+  const limit = perPage * currentPage - 1;
+
+  if (lineIndex < start) {
+    lineIndex += 1;
+    loadFile({
+      file,
+      lineIndex,
+      state,
+      commit,
+      storage,
+      filename,
+      pageLineIndex,
+      notFetch,
+    });
+    return;
+  }
+
+  if (lineIndex > limit && lineIndex < file.length) {
+    lineIndex += 1;
+    loadFile({
+      file,
+      lineIndex,
+      state,
+      commit,
+      storage,
+      filename,
+      pageLineIndex,
+      notFetch,
+    });
+    return;
+  }
+
+  if (lineIndex >= file.length) {
     // Remove extra lines
     if (state.file.length > file.length) {
       state.file.splice(file.length, state.file.length - file.length);
@@ -39,7 +126,7 @@ function loadFile(file, lineIndex, state, commit, storage, filename) {
     commit(types.FILE_MUTATION_SET_FILE_LOADING, false);
     commit(types.FILE_MUTATION_SET_PINYIN_SPACED);
 
-    if (storage) {
+    if (storage && !notFetch) {
       http
         .get('files/file', {
           params: {
@@ -48,19 +135,21 @@ function loadFile(file, lineIndex, state, commit, storage, filename) {
         })
         .then(response => {
           commit(types.FILE_MUTATION_SET_FILE_LOADING, true);
-          // state.fileLoading = true;
+
+          const linesParsed = parseLines(response.data.lines);
+
           const fileKey = `file_${filename}`;
-          LocalStorage.save(fileKey, response.data.lines);
-          commit(types.FILE_MUTATION_SET_FULL_FILE, response.data.lines);
-          commit(types.FILE_MUTATION_SET_FILE_LOADING, response.data.lines);
-          loadFile(
-            LocalStorage.get(fileKey),
-            0,
+          LocalStorage.save(fileKey, linesParsed);
+          commit(types.FILE_MUTATION_SET_FULL_FILE, linesParsed);
+          loadFile({
+            file: LocalStorage.get(fileKey),
+            lineIndex: 0,
             state,
             commit,
-            false,
+            storage: false,
             filename,
-          );
+            pageLineIndex: 0,
+          });
         })
         .catch(error => commit(types.FILE_MUTATION_FAILURE, error));
     }
@@ -68,25 +157,47 @@ function loadFile(file, lineIndex, state, commit, storage, filename) {
   }
 
   const line = file[lineIndex];
+  if (line && line[0]) {
+    line[0].lineIndex = lineIndex;
+    commit(types.FILE_MUTATION_SET_LINE, {
+      line,
+      lineIndex: pageLineIndex,
+    });
 
-  commit(types.FILE_MUTATION_SET_LINE, {
-    line,
-    lineIndex,
-  });
+    pageLineIndex += 1;
+  }
 
   lineIndex += 1;
   if (storage) {
     Vue.nextTick(() => {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          loadFile(file, lineIndex, state, commit, storage, filename);
+          loadFile({
+            file,
+            lineIndex,
+            state,
+            commit,
+            storage,
+            filename,
+            pageLineIndex,
+            notFetch,
+          });
         });
       });
     });
   } else {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        loadFile(file, lineIndex, state, commit, storage, filename);
+        loadFile({
+          file,
+          lineIndex,
+          state,
+          commit,
+          storage,
+          filename,
+          pageLineIndex,
+          notFetch,
+        });
       });
     });
   }
@@ -97,11 +208,7 @@ export default {
     const fileKey = `file_${filename}`;
     let lines = [];
     if (LocalStorage.has(fileKey)) {
-      lines = LocalStorage.get(fileKey);
-
-      if (!Array.isArray(lines)) {
-        lines = [];
-      }
+      lines = parseLines(LocalStorage.get(fileKey));
     }
 
     commit(types.FILE_MUTATION_SET_FULL_FILE, lines);
@@ -111,8 +218,32 @@ export default {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         commit(types.FILE_MUTATION_SET, { file: [] });
-        loadFile(lines, 0, state, commit, true, filename);
+        loadFile({
+          file: lines,
+          lineIndex: 0,
+          state,
+          commit,
+          storage: true,
+          filename,
+          pageLineIndex: 0,
+        });
       });
+    });
+  },
+
+  [types.FILE_ACTION_CHANGE_PAGE]({ commit, state }, filename) {
+    commit(types.FILE_MUTATION_SET_FILE_LOADING, true);
+    commit(types.FILE_MUTATION_SET, { file: [] });
+
+    loadFile({
+      file: JSON.parse(JSON.stringify(state.fullFile)),
+      lineIndex: 0,
+      state,
+      commit,
+      storage: true,
+      filename,
+      pageLineIndex: 0,
+      notFetch: true,
     });
   },
 
@@ -147,14 +278,16 @@ export default {
       return;
     }
 
+    let content = data.content ? data.content : state.fullFile;
+
     const fileKey = `file_${data.filename}`;
 
     async function actionSave() {
       const fileChangeTimestamp = state.fileChangeTimestamp;
-      LocalStorage.save(fileKey, data.content);
+      LocalStorage.save(fileKey, content);
       try {
         await http.post(`files/save?filename=${data.filename}.json&type=file`, {
-          content: JSON.stringify({ lines: data.content, hasSeparator: 0 }),
+          content: JSON.stringify({ lines: content, hasSeparator: 0 }),
         });
 
         if (state.fileChangeTimestamp === fileChangeTimestamp) {
@@ -171,7 +304,7 @@ export default {
   [types.FILE_ACTION_CONVERT_TO_PINYIN]({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       const ideograms = [];
-      state.file[data.lineIndex].forEach(block => {
+      state.fullFile[data.lineIndex].forEach(block => {
         ideograms.push(block.c);
       });
 
@@ -356,11 +489,12 @@ export default {
       return;
     }
 
-    const character = `${state.file[lineIndex][previousBlockIndex].c}${
-      state.file[lineIndex][blockIndex].c
+    const character = `${state.fullFile[lineIndex][previousBlockIndex].c}${
+      state.fullFile[lineIndex][blockIndex].c
     }`;
-    const pinyin = `${state.file[lineIndex][previousBlockIndex].p}${
-      state.file[lineIndex][blockIndex].p
+
+    const pinyin = `${state.fullFile[lineIndex][previousBlockIndex].p}${
+      state.fullFile[lineIndex][blockIndex].p
     }`;
 
     await commit(types.FILE_MUTATION_REMOVE_BLOCK, data);
@@ -390,15 +524,16 @@ export default {
       }));
 
     const lineIndex = parseInt(data.lineIndex, 10);
+
     const blockIndex = parseInt(data.blockIndex, 10);
 
-    let blocks = state.file[lineIndex];
+    let blocks = state.fullFile[lineIndex];
     const lastBlocks = blocks.splice(blockIndex, blocks.length - blockIndex);
     lastBlocks.shift();
     blocks = blocks.concat(separatedBlocks);
     blocks = blocks.concat(lastBlocks);
 
-    await commit(types.FILE_MUTATION_SET_LINE, {
+    await commit(types.FILE_MUTATION_SET_LINE_AND_SAVE, {
       line: blocks,
       lineIndex,
     });

@@ -203,16 +203,17 @@ module.exports = class JwDownloader {
     const urlBible = 'https://www.jw.org/cmn-hant/出版物/聖經/bi12/聖經經卷/';
     let response = await axios.get(encoder.encodeUrl(urlBible));
     let $ = cheerio.load(response.data);
-    // const bibles = [];
-    // $('.bibleBook .fullName').each((i, bibleChildren) => {
-    //   bibles.push(
-    //     $(bibleChildren)
-    //       .text()
-    //       .trim(),
-    //   );
-    // });
+    let bibles = []; // '雅各書'
 
-    const bibles = ['雅各書'];
+    if (bibles.length === 0) {
+      $('.bibleBook .fullName').each((i, bibleChildren) => {
+        bibles.push(
+          $(bibleChildren)
+            .text()
+            .trim(),
+        );
+      });
+    }
 
     await Promise.mapSeries(bibles, async bible => {
       const urlChapter = `${urlBible}${bible}/`;

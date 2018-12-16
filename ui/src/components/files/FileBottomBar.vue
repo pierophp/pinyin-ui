@@ -553,7 +553,7 @@ export default {
   height: 32px;
 }
 
--pinyin {
+.bottom-bar-pinyin {
   font-size: 15px;
 }
 

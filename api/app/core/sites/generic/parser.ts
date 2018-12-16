@@ -1,13 +1,8 @@
 import * as replaceall from 'replaceall';
 import * as replaceIdeogramsToSpace from '../../../../../shared/helpers/special-ideograms-chars';
-import * as bibleBooks from '../../../../../shared/data/bible/bible';
-import { http } from '../../../helpers/http';
 import * as UnihanSearch from '../../../services/UnihanSearch';
-import { padStart } from 'lodash';
-import * as separatePinyinInSyllables from '../../../../../shared/helpers/separate-pinyin-in-syllables';
-import * as isChinese from '../../../../../shared/helpers/is-chinese';
-
-export class Parser {
+import { AbstractParser } from '../abstract.parser';
+export class Parser extends AbstractParser {
   protected text: any[] = [];
   protected figcaptionsText: any[] = [];
   protected isChinese: boolean;
@@ -201,24 +196,7 @@ export class Parser {
 
     let newText = '';
     lines.forEach(line => {
-      let lineText = '';
-      let verifyText = line;
-      replaceIdeogramsToSpace.forEach(item => {
-        verifyText = replaceall(`${item} `, item, verifyText);
-      });
-
-      verifyText = verifyText.replace(/(\d+)/, '');
-      verifyText = verifyText.trim();
-      if (!verifyText) {
-        verifyText = '';
-      }
-
-      if (verifyText.split(' ').length === 1) {
-        const segementedText = UnihanSearch.segment(line).join(' ');
-        lineText = segementedText;
-      } else {
-        lineText = line;
-      }
+      let lineText = this.segmentText(line);
 
       const specialWord = 'JOIN_SPECIAL';
 
@@ -323,12 +301,7 @@ export class Parser {
 
       lineText = ` ${ideogramsFiltered.join(' ')} `;
 
-      const wordsToReplace = ['各地', '可见', '称为', '处于', '忠于', '何时'];
-
-      wordsToReplace.forEach(word => {
-        const replaceWord = ` ${word.split('').join(' ')} `;
-        lineText = replaceall(replaceWord, ` ${word} `, lineText);
-      });
+      lineText = this.replaceWords(lineText);
 
       newText += `${lineText}\r\n`;
     });
