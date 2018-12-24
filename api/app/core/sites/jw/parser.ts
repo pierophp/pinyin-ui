@@ -495,6 +495,7 @@ export class Parser extends AbstractParser {
     text = $('<textarea />')
       .html(text)
       .text();
+      
     text = text.replace(/[\u200B-\u200D\uFEFF]/g, ' '); // replace zero width space to space
     text = replaceall(String.fromCharCode(160), ' ', text); // Convert NO-BREAK SPACE to SPACE
     text = replaceall(String.fromCharCode(8201), ' ', text); // Convert THIN SPACE to SPACE
@@ -645,14 +646,6 @@ export class Parser extends AbstractParser {
     text = newText;
     text = this.trim(text);
     return text;
-  }
-
-  protected explodeLines(text) {
-    return text.split('\r\n').map(s => this.trim(s));
-  }
-
-  protected trim(s) {
-    return s.trim();
   }
 
   protected encodeUrl(url: string) {

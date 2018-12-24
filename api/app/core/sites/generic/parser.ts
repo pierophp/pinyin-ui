@@ -311,11 +311,5 @@ export class Parser extends AbstractParser {
     return text;
   }
 
-  protected explodeLines(text) {
-    return text.split('\r\n').map(s => this.trim(s));
-  }
-
-  protected trim(s) {
-    return s.trim();
-  }
+  
 }

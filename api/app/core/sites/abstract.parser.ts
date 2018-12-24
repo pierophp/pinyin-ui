@@ -14,6 +14,7 @@ export class AbstractParser {
       '以为',
       '因为',
       '成为',
+      '身为',
     ];
 
     const wordsToReplaceTraditional = [
@@ -25,6 +26,7 @@ export class AbstractParser {
       '以為',
       '因為',
       '成為',
+      '身為',
     ];
 
     wordsToReplace.concat(wordsToReplaceTraditional).forEach(word => {
@@ -49,10 +51,22 @@ export class AbstractParser {
 
     const minimunWords = replaceall(' ', '', verifyText).length / 2.5;
 
+    text = replaceall(String.fromCharCode(160), ' ', text); // Convert NO-BREAK SPACE to SPACE
+    text = replaceall(String.fromCharCode(8201), ' ', text); // Convert THIN SPACE to SPACE
+    text = replaceall(String.fromCharCode(8203), ' ', text); // Zero Width Space
+
     if (verifyText.split(' ').length < minimunWords) {
       return UnihanSearch.segment(line).join(' ');
     }
 
     return line;
+  }
+
+  protected explodeLines(text) {
+    return text.split('\r\n').map(s => this.trim(s));
+  }
+
+  protected trim(s) {
+    return s.trim();
   }
 }
