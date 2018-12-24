@@ -328,60 +328,59 @@ export default {
         });
     });
   },
-  [types.FILE_ACTION_PARSE_PASTE]({ commit, state, dispatch }, data) {
-    commit(types.FILE_MUTATION_SET_FILE_PARSING, true);
+  async [types.FILE_ACTION_PARSE_PASTE]({ commit, state, dispatch }, data) {
+    await commit(types.FILE_MUTATION_SET_FILE_PARSING, true);
 
-    let clipboardPromise;
+    let content;
     let convertToPinyin = false;
 
     if (data.action === '1') {
-      clipboardPromise = clipboard01(data.content);
+      content = await clipboard01(data.content);
     }
 
     if (data.action === '2') {
-      clipboardPromise = clipboard02(data.content);
+      content = await clipboard02(data.content);
     }
 
     if (data.action === '3') {
-      clipboardPromise = clipboard03(data.content);
+      content = await clipboard03(data.content);
     }
 
     if (data.action === '4') {
       convertToPinyin = true;
-      clipboardPromise = clipboard04(data.content);
+      content = await clipboard04(data.content);
     }
 
     const pinyinPromises = [];
-    clipboardPromise.then(content => {
-      content.forEach((row, index) => {
-        const lineIndex = state.filePasteAction.lineIndex + index;
-        if (index === 0) {
-          commit(types.FILE_MUTATION_CONCATENATE_LINE, {
-            lineIndex,
-            content: row,
-          });
-        } else {
-          commit(types.FILE_MUTATION_ADD_LINE, {
-            lineIndex,
-            content: row,
-          });
-        }
 
-        if (convertToPinyin) {
-          pinyinPromises.push(
-            dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex }),
-          );
-        }
-      });
-
-      if (convertToPinyin) {
-        Promise.all(pinyinPromises).then(() => {
-          commit(types.FILE_MUTATION_SET_FILE_PARSING, false);
+    content.forEach((row, index) => {
+      const lineIndex = state.filePasteAction.lineIndex + index;
+      if (index === 0) {
+        commit(types.FILE_MUTATION_CONCATENATE_LINE, {
+          lineIndex,
+          content: row,
         });
       } else {
-        commit(types.FILE_MUTATION_SET_FILE_PARSING, false);
+        commit(types.FILE_MUTATION_ADD_LINE, {
+          lineIndex,
+          content: row,
+        });
+      }
+
+      if (convertToPinyin) {
+        pinyinPromises.push(
+          dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex }),
+        );
       }
     });
+
+    if (convertToPinyin) {
+      Promise.all(pinyinPromises).then(() => {
+        commit(types.FILE_MUTATION_SET_FILE_PARSING, false);
+      });
+    } else {
+      commit(types.FILE_MUTATION_SET_FILE_PARSING, false);
+    }
   },
 
   async [types.FILE_ACTION_IMPORT_FILE]({ commit, state, dispatch }, data) {

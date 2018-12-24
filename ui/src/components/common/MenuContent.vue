@@ -45,14 +45,14 @@ export default {
       this.opening = true;
 
       this.show = true;
-      let top = e.pageY;
+      let top = e.clientY;
       if (this.position === 'top') {
         top = top - 217;
       } else {
         top = top - 30;
       }
 
-      let left = e.pageX - 190;
+      let left = e.clientX - 190;
 
       if (left < 3) {
         left = 3;

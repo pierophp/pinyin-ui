@@ -41,7 +41,7 @@ import {
   FILE_ACTION_FETCH,
   FILE_ACTION_CLEAR,
   FILE_ACTION_SAVE,
-  FILE_GETTER,
+  FILE_GETTER_FULL_FILE,
   FILE_GETTER_PARSING,
   FILE_MUTATION_ADD_EMPTY_LINE,
 } from 'src/data/file/types';
@@ -64,7 +64,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      lines: FILE_GETTER,
+      lines: FILE_GETTER_FULL_FILE,
       loading: FILE_GETTER_PARSING,
     }),
   },

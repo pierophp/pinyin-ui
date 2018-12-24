@@ -113,6 +113,7 @@ export default {
     fileLoading: false,
     parent: false,
     pagination: false,
+    useFullLines: true,
     showHighlight: {
       type: Boolean,
       default: true,
@@ -289,9 +290,10 @@ export default {
     },
 
     openBottomBarByLineAndBlock(lineIndex, blockIndex, openDictionary) {
+      const lines = this.useFullLines ? this.fullLines : this.lines;
       this.openBottomBar({
-        pinyin: this.fullLines[lineIndex][blockIndex].p,
-        character: this.fullLines[lineIndex][blockIndex].c,
+        pinyin: lines[lineIndex][blockIndex].p,
+        character: lines[lineIndex][blockIndex].c,
         lineIndex,
         blockIndex,
         openDictionary,

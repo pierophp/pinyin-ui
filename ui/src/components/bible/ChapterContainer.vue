@@ -21,7 +21,8 @@
       :fileLoading="fileLoading" 
       @open-bottom-bar="openBottomBar" 
       :parent="parent" 
-      :showHighlight="false" />
+      :showHighlight="false"
+      :useFullLines="false" />
 
     <md-dialog ref="modal" class="dialog-bible-verses" :md-active.sync="versesModalOpenTemp" :md-fullscreen="false" :md-backdrop="true" v-if="versesShowAsModal && parent">
       <md-dialog-content>

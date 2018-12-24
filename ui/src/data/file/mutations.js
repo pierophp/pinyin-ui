@@ -231,34 +231,35 @@ export default {
     });
   },
   [types.FILE_MUTATION_ADD_EMPTY_LINE](state) {
-    if (state.file === undefined) {
-      state.file = [];
+    if (state.fullFile === undefined) {
+      state.fullFile = [];
     }
 
-    state.file.push([]);
+    state.fullFile.push([]);
+
     state.fileChangeTimestamp = Date.now();
     state.fullFileString = JSON.stringify(state.fullFile);
   },
 
   [types.FILE_MUTATION_CONCATENATE_LINE](state, data) {
     data.content.forEach(newBlock => {
-      state.file[data.lineIndex].push(newBlock);
+      state.fullFile[data.lineIndex].push(newBlock);
     });
     state.fileChangeTimestamp = Date.now();
     state.fullFileString = JSON.stringify(state.fullFile);
   },
   [types.FILE_MUTATION_ADD_LINE](state, data) {
-    state.file.splice(data.lineIndex, 0, data.content);
+    state.fullFile.splice(data.lineIndex, 0, data.content);
     state.fileChangeTimestamp = Date.now();
     state.fullFileString = JSON.stringify(state.fullFile);
   },
 
   [types.FILE_MUTATION_ADD_EMPTY_BLOCK](state, data) {
-    if (state.file[data.lineIndex] === null) {
-      state.file[data.lineIndex] = [];
+    if (state.fullFile[data.lineIndex] === null) {
+      state.fullFile[data.lineIndex] = [];
     }
 
-    state.file[data.lineIndex].push({
+    state.fullFile[data.lineIndex].push({
       p: '',
       c: '',
     });
@@ -267,7 +268,7 @@ export default {
   },
 
   [types.FILE_MUTATION_REMOVE_LINE](state, data) {
-    state.file.remove(data.lineIndex);
+    state.fullFile.remove(data.lineIndex);
     state.fileChangeTimestamp = Date.now();
     state.fullFileString = JSON.stringify(state.fullFile);
   },
@@ -330,6 +331,7 @@ export default {
   },
 
   [types.FILE_MUTATION_SET_FULL_FILE](state, fullFile) {
+    console.log({ fullFile });
     state.fullFile = fullFile;
     state.fullFileString = JSON.stringify(fullFile);
   },
