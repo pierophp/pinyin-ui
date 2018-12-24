@@ -185,9 +185,11 @@ export default {
   },
 
   [types.FILE_MUTATION_UPDATE_CHARACTER](state, data) {
-    state.file.find(
-      item => Number(item[0].lineIndex) === Number(data.lineIndex),
-    )[data.blockIndex].c = data.character;
+    const line = state.file.find(item => {
+      return Number(item[0].lineIndex) === Number(data.lineIndex);
+    });
+
+    line[data.blockIndex].c = data.character;
     state.fullFile[data.lineIndex][data.blockIndex].c = data.character;
     state.fileChangeTimestamp = Date.now();
     state.fullFileString = JSON.stringify(state.fullFile);
@@ -287,6 +289,7 @@ export default {
     );
 
     if (fileIndex >= 0) {
+      line[0].lineIndex = lineIndex;
       Vue.set(state.file, fileIndex, line);
     }
 
