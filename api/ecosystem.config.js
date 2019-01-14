@@ -52,7 +52,7 @@ const postDeployCommands = [
   }`,
   '[ -d ../../source/api/dist/ ] && cp -R ../../source/api/app/data ../../source/api/dist/api/app/data',
   'cp ../../env/* .',
-  'git submodule init',
+  'git submodule update',
   'yarn install --production',
   'yarn build',
   'knex migrate:latest --env production',
