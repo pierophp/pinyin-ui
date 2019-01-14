@@ -160,7 +160,7 @@ export default {
 .dictionary-container .title-container .ideogram-show span {
   display: inline-block;
   text-align: center;
-  width: 28px;
+  width: 25px;
 }
 
 .sound {
