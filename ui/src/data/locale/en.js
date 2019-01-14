@@ -148,4 +148,5 @@ export default {
   ideograms_only: 'Ideograms only',
   measure_words: 'Measure Words',
   separable_verb: 'Separable verb',
+  my_total_ideograms: 'Ideograms Total',
 };

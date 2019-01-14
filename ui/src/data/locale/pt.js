@@ -146,4 +146,5 @@ export default {
   ideograms_only: 'Somente ideograms',
   measure_words: 'Classificadores',
   separable_verb: 'Verbo separável',
+  my_total_ideograms: 'Total de Ideogramas',
 };

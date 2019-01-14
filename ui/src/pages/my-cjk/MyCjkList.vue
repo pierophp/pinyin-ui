@@ -49,6 +49,7 @@
       <md-tab id="words" :md-label="$t('words')">
         <loadable-content :loading="loading">
           <h3 v-if="options.type !== '4'">{{ $t('my_total') }}: {{totalWords}}</h3>
+          <h3 v-if="options.type !== '4'">{{ $t('my_total_ideograms') }}: {{ideogramsKnownWords}}</h3>
           <table class="spaced-table">
             <thead>
               <tr>
