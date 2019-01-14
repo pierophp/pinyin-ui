@@ -1,3 +1,4 @@
+import * as env from '../../../../env';
 import * as bluebird from 'bluebird';
 import * as cheerio from 'cheerio';
 import { padStart } from 'lodash';
@@ -897,9 +898,19 @@ export class Parser extends AbstractParser {
         pdfPinyinList.push(children.attribs.href);
       });
 
+      let dirname = `${__dirname.replace(
+        'dist/api/',
+        '',
+      )}/../../../../storage/`;
+      if (env.storage_path) {
+        dirname = `${env.storage_path}`;
+      }
+
       if (pdfPinyinList.length) {
         const pdfPinyin = pdfPinyinList.join('|||');
-        this.pdfParsedObjectPromise = getPdfParsedObject(pdfPinyin);
+        this.pdfParsedObjectPromise = getPdfParsedObject(pdfPinyin, true, {
+          dirname,
+        });
       }
     }
   }
