@@ -1,4 +1,5 @@
 import * as express from 'express';
+// @ts-ignore
 import * as UnihanSearch from '../services/UnihanSearch';
 
 // eslint-disable-next-line new-cap

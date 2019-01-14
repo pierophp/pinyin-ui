@@ -1,4 +1,4 @@
-import * as UnihanSearch from '../services/UnihanSearch';
+// import * as UnihanSearch from '../services/UnihanSearch';
 import { ElasticsearchProvider } from './search/elasticsearch.provider';
 
 export class Dictionary {
