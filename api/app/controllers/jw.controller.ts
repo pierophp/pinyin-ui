@@ -1,5 +1,4 @@
 import * as express from 'express';
-import * as JWDownloader from '../services/JWDownloader';
 import { Downloader } from '../core/sites/jw/downloader';
 import { Frequency } from '../core/sites/jw/frequency';
 import { Track } from '../core/sites/jw/track';
