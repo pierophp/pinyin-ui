@@ -1,4 +1,4 @@
-import * as pinyinParser from '../../../../../pdf-pinyin/src/core/pinyin.parser';
+import * as pinyinParser from 'pdf-pinyin/src/core/pinyin.parser';
 import * as isChinese from '../../../../../shared/helpers/is-chinese';
 
 export class PdfParser {

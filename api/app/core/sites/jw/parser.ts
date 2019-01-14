@@ -14,7 +14,7 @@ import { Downloader as GenericDownloader } from '../downloader';
 import { PdfParser } from './pdf.parser';
 import * as moment from 'moment';
 import { profiler } from '../../../helpers/profiler';
-import * as getPdfParsedObject from '../../../../../pdf-pinyin/src/core/get.pdf.parsed.object';
+import * as getPdfParsedObject from 'pdf-pinyin/src/core/get.pdf.parsed.object';
 
 interface TextInterface {
   text?: string;
