@@ -55,6 +55,8 @@ const postDeployCommands = [
   'git submodule update --remote',
   'cd ../pdf-pinyin',
   'yarn install --production',
+  'pwd',
+  'ls',
   'cd api',
   'yarn install --production',
   'yarn build',
