@@ -559,7 +559,10 @@ export class Parser extends AbstractParser {
     }
 
     if (this.pdfParsedObjectPromise) {
-      return await this.parseWithPdf(text, footNoteIds);
+      const parsedPdfResult = await this.parseWithPdf(text, footNoteIds);
+      if (parsedPdfResult) {
+        return parsedPdfResult;
+      }
     }
 
     return await this.parseWithoutPdf(text, bibles, footNoteIds);

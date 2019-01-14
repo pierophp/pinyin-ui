@@ -52,7 +52,7 @@ const postDeployCommands = [
   }`,
   '[ -d ../../source/api/dist/ ] && cp -R ../../source/api/app/data ../../source/api/dist/api/app/data',
   'cp ../../env/* .',
-  'git submodule update',
+  'git submodule update --remote',
   'pwd',
   'ls',
   'cd pdf-pinyin',

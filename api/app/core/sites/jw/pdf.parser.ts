@@ -11,6 +11,10 @@ export class PdfParser {
     // @ts-ignore
     let result = await pinyinParser(pdfParsedObject, lines);
 
+    if (!result.isReadable) {
+      return null;
+    }
+
     let bible: any = null;
 
     if (result) {
