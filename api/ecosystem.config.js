@@ -53,6 +53,8 @@ const postDeployCommands = [
   '[ -d ../../source/api/dist/ ] && cp -R ../../source/api/app/data ../../source/api/dist/api/app/data',
   'cp ../../env/* .',
   'git submodule update',
+  'pwd',
+  'ls',
   'cd pdf-pinyin',
   'yarn install --production',
   'cd ..',
