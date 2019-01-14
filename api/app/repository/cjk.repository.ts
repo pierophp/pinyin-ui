@@ -4,8 +4,9 @@ import { BaseRepository } from './base.repository';
 import { LanguageRepository } from './language.repository';
 import { PhraseRepository } from './phrase.repository';
 import * as knex from '../services/knex';
+// @ts-ignore
 import * as UnihanSearch from '../services/UnihanSearch';
-import * as profiler from '../helpers/profiler';
+import { profiler } from '../helpers/profiler';
 
 import { ElasticsearchProvider } from '../core/search/elasticsearch.provider';
 

@@ -1,5 +1,6 @@
 import * as replaceall from 'replaceall';
 import * as replaceIdeogramsToSpace from '../../../../shared/helpers/special-ideograms-chars';
+// @ts-ignore
 import * as UnihanSearch from '../../services/UnihanSearch';
 
 export class AbstractParser {
@@ -39,6 +40,7 @@ export class AbstractParser {
 
   public segmentText(line: string): string {
     let verifyText = line;
+
     replaceIdeogramsToSpace.forEach(item => {
       verifyText = replaceall(`${item} `, item, verifyText);
     });
@@ -59,10 +61,40 @@ export class AbstractParser {
   }
 
   protected explodeLines(text) {
-    return text.split('\r\n').map(s => this.trim(s));
+    if (typeof text === 'string') {
+      return text.split('\r\n').map(s => this.trim(s));
+    }
+
+    return text;
   }
 
   protected trim(s) {
     return s.trim();
+  }
+
+  protected removeHtmlSpecialTags($, text: string): string {
+    text = replaceall('+', '', text);
+    text = replaceall('<strong>', '//STRONG-OPEN//', text);
+    text = replaceall('</strong>', '//STRONG-CLOSE//', text);
+    text = replaceall('<em>', '//ITALIC-OPEN//', text);
+    text = replaceall('</em>', '//ITALIC-CLOSE//', text);
+    text = replaceall('<wbr>', ' ', text);
+    text = replaceall('<p>', '\r\n<p>', text);
+    text = replaceall('<li>', '\r\n<li>', text);
+    text = $('<textarea />')
+      .html(text)
+      .text();
+
+    text = text.replace(/[\u200B-\u200D\uFEFF]/g, ' '); // replace zero width space to space
+    text = replaceall(String.fromCharCode(160), ' ', text); // Convert NO-BREAK SPACE to SPACE
+    text = replaceall(String.fromCharCode(8201), ' ', text); // Convert THIN SPACE to SPACE
+    text = replaceall(String.fromCharCode(8203), ' ', text); // Zero Width Space
+
+    text = replaceall('//STRONG-OPEN//', '<b>', text);
+    text = replaceall('//STRONG-CLOSE//', '</b>', text);
+    text = replaceall('//ITALIC-OPEN//', '<i>', text);
+    text = replaceall('//ITALIC-CLOSE//', '</i>', text);
+
+    return text;
   }
 }

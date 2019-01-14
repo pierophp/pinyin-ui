@@ -22,7 +22,7 @@
             @open-footnote="openFootnote"
             @go-to-video-time="(time) => $emit('go-to-video-time', time)"
             ref="fileRowPrint"
-            :key="'file-row-' + (line[0] && line[0].key ? `key-${line[0].key}` : `no-key-${line[0] && line[0].lineIndex ? line[0].lineIndex : lineIndex}`)"
+            :key="'file-row-' + (line[0] && line[0].key ? `key-${line[0].key}` : `no-key-${line[0] && line[0].lineIndex ? line[0].lineIndex : 'loop-' + lineIndex}`)"
           />
         </template>
 
@@ -213,13 +213,16 @@ export default {
     },
 
     openFootnote(footnote) {
-      const footnoteIndex = parseInt(footnote.footnote, 10) - 1;
+      const footnoteIndex = parseInt(footnote, 10) - 1;
+
       if (this.footnotes[footnoteIndex] === undefined) {
         return;
       }
+
       const lineIndex = this.footnotes[footnoteIndex];
       this.footnoteLine = this.fullLines[lineIndex];
       this.footnoteLineIndex = lineIndex;
+
       this.$refs.footnote.openDialog();
     },
 
@@ -589,10 +592,12 @@ export default {
   max-height: 200px;
 }
 
+.bold,
 .bold span {
   font-weight: 500 !important;
 }
 
+.italic,
 .italic span {
   font-style: italic !important;
 }
