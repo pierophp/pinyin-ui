@@ -1,5 +1,5 @@
 export class Encoder {
-  public encodeUrl(url: string) {
+  public encodeUrl(url: string): string {
     let newUrl = 'https://www.jw.org/';
     if (url.substr(0, newUrl.length) !== newUrl) {
       return url;
@@ -16,7 +16,7 @@ export class Encoder {
     return newUrl;
   }
 
-  public decodeUrl(url: string) {
+  public decodeUrl(url: string): string {
     let newUrl = 'https://www.jw.org/';
     if (url.substr(0, newUrl.length) !== newUrl) {
       return url;
@@ -27,6 +27,7 @@ export class Encoder {
       newUrl += decodeURIComponent(urlPart);
       newUrl += '/';
     });
+
     return newUrl;
   }
 }

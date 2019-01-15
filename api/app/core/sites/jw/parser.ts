@@ -1,43 +1,36 @@
-import * as env from '../../../../env';
 import * as bluebird from 'bluebird';
 import * as cheerio from 'cheerio';
-import { padStart } from 'lodash';
+import * as moment from 'moment';
+import * as getPdfParsedObject from 'pdf-pinyin/src/core/get.pdf.parsed.object';
 import * as replaceall from 'replaceall';
-import * as bibleBooks from '../../../../../shared/data/bible/bible';
-import * as isChinese from '../../../../../shared/helpers/is-chinese';
-import * as separatePinyinInSyllables from '../../../../../shared/helpers/separate-pinyin-in-syllables';
 import * as replaceIdeogramsToSpace from '../../../../../shared/helpers/special-ideograms-chars';
-import { http } from '../../../helpers/http';
-// @ts-ignore
-import * as UnihanSearch from '../../../services/UnihanSearch';
+import * as env from '../../../../env';
+import { BlockInterface } from '../../../core/interfaces/block.interface';
+import { profiler } from '../../../helpers/profiler';
 import { AbstractParser } from '../abstract.parser';
 import { Downloader as GenericDownloader } from '../downloader';
+import { ParserResponseInterface } from '../interfaces/parser.response.interface';
+import { AudioParser } from './parser/audio.parser';
+import { SummaryParser } from './parser/summary.parser';
 import { PdfParser } from './pdf.parser';
-import * as moment from 'moment';
-import { profiler } from '../../../helpers/profiler';
-import * as getPdfParsedObject from 'pdf-pinyin/src/core/get.pdf.parsed.object';
-
-interface TextInterface {
-  text?: string;
-  large?: string;
-  small?: string;
-  type?: string;
-}
+import { TextInterface } from '../interfaces/text.interface';
+import { DomParser } from './parser/dom.parser';
 
 export class Parser extends AbstractParser {
-  protected figcaptionsText: any[] = [];
   protected isChinese: boolean;
   protected pdfParsedObjectPromise?: Promise<any>;
   protected promisesToExecute: (() => Promise<TextInterface[]>)[];
   protected profilePdfParseStart;
   protected profilePdfParseEnd;
+  protected withSpecials;
 
   public async parse(
-    $,
+    $: CheerioStatic,
     isChinese: boolean,
-    isTraditional: boolean,
-  ): Promise<any> {
+    withSpecials: boolean = true,
+  ): Promise<ParserResponseInterface> {
     this.isChinese = isChinese;
+    this.withSpecials = withSpecials;
 
     $('.viewOptions').remove();
     $('noscript').remove();
@@ -48,7 +41,8 @@ export class Parser extends AbstractParser {
       ($('.toc').length > 0 && $('article .docSubContent').length === 0) ||
       $('#musicTOC').length > 0
     ) {
-      return await this.getSummary($);
+      const summaryParser = new SummaryParser();
+      return await summaryParser.parse($);
     }
 
     await this.getPinyinPdf($);
@@ -56,27 +50,18 @@ export class Parser extends AbstractParser {
     return await this.getContent($);
   }
 
-  protected async parseResult($, element, type): Promise<TextInterface[]> {
-    const result = await this.getText($, element);
+  public async getContent($: CheerioStatic): Promise<ParserResponseInterface> {
+    const downloadResponse: ParserResponseInterface = {
+      text: [],
+    };
 
-    const response: TextInterface[] = [];
-
-    for (const item of result) {
-      response.push({
-        text: item,
-        type,
-      });
+    if (this.isChinese) {
+      const audioParser = new AudioParser();
+      downloadResponse.audio = await audioParser.parse($);
     }
 
-    return response;
-  }
-
-  public async getContent($) {
-    const downloadResponse: any = {};
-
-    this.promisesToExecute = [];
-    downloadResponse.audio = await this.getAudio($);
-    this.figcaptionsText = [];
+    const domParser = new DomParser();
+    this.promisesToExecute = domParser.parse($, this.isChinese);
 
     const mainImage = $('.lsrBannerImage');
     if (mainImage.length) {
@@ -198,7 +183,9 @@ export class Parser extends AbstractParser {
     const result = await bluebird.map(
       this.promisesToExecute,
       async promiseFunction => {
-        return await promiseFunction();
+        const response = await promiseFunction();
+        console.log();
+        return response;
       },
       { concurrency: 10 },
     );
@@ -221,446 +208,10 @@ export class Parser extends AbstractParser {
     return downloadResponse;
   }
 
-  public async getSummary($) {
-    const downloadResponse: any = { text: [], links: [] };
-    let items = $('.synopsis .syn-body');
-    if (items.length === 0) {
-      items = $('.musicList');
-    }
-
-    const itemsList: any[] = [];
-    items.each((i, item) => {
-      itemsList.push(item);
-    });
-
-    let i = 0;
-    for (const item of itemsList) {
-      i += 1;
-
-      let link = $(item).find('h2 a');
-      if (link.length === 0) {
-        link = $(item).find('.fileTitle a');
-      }
-
-      const subtitle = $(item).find('.contextTitle');
-
-      let title = '';
-      let titleArray = await this.getText($, link);
-      title = titleArray[0];
-
-      if (subtitle.length) {
-        titleArray = await this.getText($, subtitle);
-        title = titleArray[0] + ' - ' + title;
-      }
-
-      downloadResponse.links.push({
-        link: $(link).attr('href'),
-        number: padStart(String(i), 3, '0'),
-        title,
-        title_pinyin: (await UnihanSearch.toPinyin(title.split(' ')))
-          .map(item => {
-            if (!isChinese(item.ideogram)) {
-              return item.pinyin.split('').join(String.fromCharCode(160));
-            }
-
-            const pinyinSeparated = separatePinyinInSyllables(item.pinyin);
-
-            return pinyinSeparated.join(String.fromCharCode(160));
-          })
-          .join(String.fromCharCode(160)),
-      });
-    }
-
-    return downloadResponse;
-  }
-
-  public async getAudio($) {
-    let media = $('.jsAudioPlayer a');
-    if (this.isChinese && media.length > 0) {
-      return media.attr('href');
-    } else if (this.isChinese) {
-      media = $('.jsAudioFormat a');
-      if (media.length === 0) {
-        return null;
-      }
-
-      try {
-        let titleWithoutSpaces = replaceall(
-          ' ',
-          '',
-          await this.getText($, $('article header h1')),
-        );
-        replaceIdeogramsToSpace.forEach(item => {
-          titleWithoutSpaces = replaceall(item, '', titleWithoutSpaces);
-        });
-
-        if (!titleWithoutSpaces) {
-          return null;
-        }
-
-        const responseAudio = await http.get(
-          this.encodeUrl(media.attr('data-jsonurl')),
-        );
-
-        let fileUrl = null;
-
-        responseAudio.data.files.CHS.MP3.some(file => {
-          let audioTitleWithoutSpaces = replaceall(' ', '', file.title);
-          replaceIdeogramsToSpace.forEach(item => {
-            audioTitleWithoutSpaces = replaceall(
-              item,
-              '',
-              audioTitleWithoutSpaces,
-            );
-          });
-
-          if (audioTitleWithoutSpaces.contains(titleWithoutSpaces)) {
-            fileUrl = file.file.url;
-            return true;
-          }
-
-          return false;
-        });
-
-        return fileUrl;
-      } catch (e) {
-        // eslint-disable-next-line
-        console.log(e);
-      }
-    }
-
-    return null;
-  }
-
-  public async parseBlock($, element) {
-    if (
-      $(element).attr('class') &&
-      $(element)
-        .attr('class')
-        .indexOf('boxSupplement') !== -1
-    ) {
-      //
-      const boxFigure = $(element).find('.fullBleed figure');
-      if (boxFigure.length) {
-        this.promisesToExecute.push(
-          async (): Promise<TextInterface[]> => {
-            return [
-              {
-                type: 'box-img',
-                large: $(boxFigure)
-                  .find('span')
-                  .attr('data-zoom'),
-                small: $(boxFigure)
-                  .find('span')
-                  .attr('data-img-size-lg'),
-              },
-            ];
-          },
-        );
-      }
-
-      const boxH2 = $(element).find('h2');
-      if (boxH2 && $(boxH2).text()) {
-        this.promisesToExecute.push(
-          async (): Promise<TextInterface[]> => {
-            return await this.parseResult($, boxH2, 'box-h2');
-          },
-        );
-      }
-
-      if ($(element).find('.boxContent').length > 0) {
-        for (const subChildren of $(element)
-          .find('.boxContent')
-          .children()
-          .toArray()) {
-          if ($(subChildren).get(0).tagName === 'ul') {
-            for (const subChildrenLi of $(subChildren)
-              .children()
-              .toArray()) {
-              for (const subChildrenLiContent of $(subChildrenLi)
-                .children()
-                .toArray()) {
-                await this.parseContent($, subChildrenLiContent, 'box');
-              }
-            }
-          } else if ($(subChildren).find('.imgGrid').length) {
-            for (const subChildrenImgGrid of $(subChildren)
-              .find('.imgGrid')
-              .toArray()) {
-              await this.parseContent($, subChildrenImgGrid, 'box');
-            }
-          } else {
-            await this.parseContent($, subChildren, 'box');
-          }
-        }
-      } else {
-        const subBoxH2 = $(element).find('table caption');
-        if (subBoxH2 && $(subBoxH2).text()) {
-          this.promisesToExecute.push(
-            async (): Promise<TextInterface[]> => {
-              return await this.parseResult($, subBoxH2, 'box');
-            },
-          );
-        }
-
-        for (const subChildrenTr of $(element)
-          .find('table tr')
-          .toArray()) {
-          await this.parseContent($, subChildrenTr, 'box');
-        }
-      }
-    } else if (
-      $(element).attr('class') &&
-      $(element)
-        .attr('class')
-        .indexOf('groupFootnote') !== -1
-    ) {
-      for (const subChildren of $(element)
-        .children()
-        .toArray()) {
-        await this.parseContent($, subChildren, 'foot');
-      }
-    } else {
-      await this.parseContent($, element, '');
-    }
-  }
-
-  public async parseContent($, element, type) {
-    if ($(element).hasClass('qu')) {
-      type = 'qu';
-    }
-
-    if ($(element).hasClass('stdPullQuote')) {
-      type = 'box';
-    }
-
-    let footnote = null;
-    if (type === 'foot') {
-      footnote = replaceall('footnote', '', $(element).attr('id'));
-    }
-
-    const figure = $(element).find('figure');
-
-    if (figure.length && $(element).get(0).tagName === 'aside') {
-      return;
-    }
-
-    await this.getImages($, figure, type);
-
-    this.promisesToExecute.push(
-      async (): Promise<TextInterface[]> => {
-        let text = this.trim($(element).text());
-        if (!text) {
-          return [];
-        }
-
-        const textList: TextInterface[] = [];
-
-        text = await this.getText($, element);
-
-        if (this.figcaptionsText.indexOf(text) > -1) {
-          return [];
-        }
-
-        this.explodeLines(text).forEach(line => {
-          if (!line) {
-            return;
-          }
-
-          const item: any = {
-            text: line,
-          };
-
-          if (type) {
-            item.type = type;
-          }
-
-          if (footnote) {
-            item.footnote = footnote;
-          }
-
-          textList.push(item);
-        });
-
-        return textList;
-      },
-    );
-  }
-
-  public async getText($, element): Promise<any[]> {
-    let text = $(element).html();
-    if (text === null) {
-      return [];
-    }
-
-    // asterisk
-    const footNotes = $(element).find('.footnoteLink');
-    let footNoteIds: any[] = [];
-    if (footNotes.length > 0 && this.isChinese) {
-      footNotes.each((i, footNote) => {
-        const footNoteId = replaceall(
-          '#footnote',
-          '',
-          $(footNote).attr('data-anchor'),
-        ).trim();
-
-        footNoteIds.push(footNoteId);
-
-        text = replaceall(
-          $.html(footNote),
-          `#FOOTNOTE${footNoteId}${$(
-            footNote,
-          ).html()}#ENDFOOTNOTE${footNoteId}`,
-          text,
-        );
-      });
-    }
-
-    // // bible
-    const bibles = $(element)
-      .find('.jsBibleLink')
-      .toArray();
-
-    const bibleLinks: any[] = [];
-    if (bibles.length > 0 && this.isChinese) {
-      for (const bible of bibles) {
-        const bibleLink = decodeURIComponent($(bible).attr('href')).split('/');
-        const bibleBook = bibleLink[6];
-        const bibleChapter = bibleLink[7];
-        const bibleVerses: any[] = [];
-        const bibleVersesLinks = bibleLink[8].split('-');
-
-        for (const bibleVersesLink of bibleVersesLinks) {
-          bibleVerses.push(parseInt(bibleVersesLink.substr(-3), 10));
-        }
-
-        bibleLinks.push({
-          text: $(bible).text(),
-          link: `${bibleBooks[bibleBook]}:${bibleChapter}:${bibleVerses.join(
-            '-',
-          )}`,
-        });
-
-        text = replaceall(
-          $.html(bible),
-          `BI#[${bibleBooks[bibleBook]}:${bibleChapter}:${bibleVerses.join(
-            '-',
-          )}]#BI${$(bible).html()}]#ENDBI`,
-          text,
-        );
-      }
-    }
-
-    text = this.removeHtmlSpecialTags($, text);
-
-    if (!this.isChinese) {
-      return this.trim(text)
-        .split('\r\n')
-        .filter(item => item);
-    }
-
-    if (this.pdfParsedObjectPromise) {
-      const parsedPdfResult = await this.parseWithPdf(text, footNoteIds);
-      if (parsedPdfResult) {
-        return parsedPdfResult;
-      }
-    }
-
-    return await this.parseWithoutPdf(text, bibles, footNoteIds);
-  }
-
-  protected encodeUrl(url: string) {
-    let newUrl = 'https://www.jw.org/';
-    if (url.substr(0, newUrl.length) !== newUrl) {
-      return url;
-    }
-
-    const urlParts = url.replace(newUrl, '').split('/');
-    for (const urlPart of urlParts) {
-      newUrl += encodeURIComponent(urlPart);
-      newUrl += '/';
-    }
-
-    return newUrl;
-  }
-
-  protected async getImages($, figure, type) {
-    if (!figure.length) {
-      return;
-    }
-
-    let imgType;
-    if (type) {
-      imgType = `${type}-img`;
-    } else {
-      imgType = 'img';
-    }
-
-    const spanImages = $(figure).find('span');
-
-    if (spanImages.length) {
-      for (const spanImage of spanImages.toArray()) {
-        const large = $(spanImage).attr('data-zoom');
-
-        const small = $(spanImage).attr('data-img-size-lg');
-        this.promisesToExecute.push(
-          async (): Promise<TextInterface[]> => {
-            return [
-              {
-                type: imgType,
-                large,
-                small,
-              },
-            ];
-          },
-        );
-      }
-    } else {
-      for (const a of $(figure)
-        .find('a')
-        .toArray()) {
-        const large = $(a).attr('href');
-        const small = $(a)
-          .find('img')
-          .attr('src');
-
-        this.promisesToExecute.push(
-          async (): Promise<TextInterface[]> => {
-            return [
-              {
-                type: imgType,
-                large,
-                small,
-              },
-            ];
-          },
-        );
-      }
-    }
-
-    const figcaption = $(figure).find('figcaption');
-    if (figcaption.length) {
-      let imgCaption;
-      if (type) {
-        imgCaption = `${type}-imgcaption`;
-      } else {
-        imgCaption = 'imgcaption';
-      }
-
-      this.promisesToExecute.push(
-        async (): Promise<TextInterface[]> => {
-          const result = await this.parseResult($, figcaption, imgCaption);
-          for (const item of result) {
-            this.figcaptionsText.push(item);
-          }
-
-          return result;
-        },
-      );
-    }
-  }
-
-  public async parseWithPdf(text, footNoteIds: string[]) {
+  public async parseWithPdf(
+    text,
+    footNoteIds: string[],
+  ): Promise<BlockInterface[] | undefined> {
     const pdfParser = new PdfParser();
 
     let lineJustIdeograms = replaceall(' ', '', text);
@@ -702,163 +253,156 @@ export class Parser extends AbstractParser {
     return parsedResult;
   }
 
-  public async parseWithoutPdf(text: string, bibles, footNoteIds: string[]) {
+  public async parseWithoutPdf(
+    text: string,
+    bibles,
+    footNoteIds: string[],
+  ): Promise<string> {
     const numberRegex = new RegExp('^[0-9]+$');
 
-    text = replaceall(']#ENDBI', '', text);
+    if (this.withSpecials) {
+      text = replaceall(']#ENDBI', '', text);
 
-    for (const footNoteId of footNoteIds) {
-      text = replaceall(`#ENDFOOTNOTE${footNoteId}`, '', text);
-      text = replaceall(`#FOOTNOTE${footNoteId}`, '#FOOTNOTE', text);
+      for (const footNoteId of footNoteIds) {
+        text = replaceall(`#ENDFOOTNOTE${footNoteId}`, '', text);
+        text = replaceall(`#FOOTNOTE${footNoteId}`, '#FOOTNOTE', text);
+      }
     }
 
-    const lines = text
-      .trim()
-      .split('\r\n')
-      .filter(item => item);
+    let lineText = '';
+    lineText = this.segmentText(text);
 
-    const newText: any[] = [];
-    for (const line of lines) {
-      let lineText = '';
-      lineText = this.segmentText(line);
+    const specialWord = 'JOIN_SPECIAL';
 
-      const specialWord = 'JOIN_SPECIAL';
+    // separate by numbers
+    lineText = lineText
+      .split(/(\d+)/)
+      .map(item => {
+        if (numberRegex.test(item)) {
+          item = ` ${item}${specialWord} `;
+        }
+        return item;
+      })
+      .join('');
 
-      // separate by numbers
-      lineText = lineText
-        .split(/(\d+)/)
-        .map(item => {
-          if (numberRegex.test(item)) {
-            item = ` ${item}${specialWord} `;
-          }
-          return item;
-        })
-        .join('');
+    replaceIdeogramsToSpace.forEach(item => {
+      lineText = replaceall(item, ` ${item}${specialWord} `, lineText);
+    });
 
-      replaceIdeogramsToSpace.forEach(item => {
-        lineText = replaceall(item, ` ${item}${specialWord} `, lineText);
-      });
+    // remove double spaces
+    if (lineText) {
+      lineText = lineText.replace(/\s{2,}/g, ' ').trim();
+    }
 
-      // remove double spaces
-      if (lineText) {
-        lineText = lineText.replace(/\s{2,}/g, ' ').trim();
+    // bold
+    lineText = replaceall('< b >', '<b>', lineText);
+    lineText = replaceall('< /b >', '</b>', lineText);
+
+    lineText = replaceall(`<${specialWord} b >${specialWord}`, '<b>', lineText);
+    lineText = replaceall(
+      `<${specialWord} /b >${specialWord}`,
+      '</b>',
+      lineText,
+    );
+    lineText = replaceall(
+      `<${specialWord} / b >${specialWord}`,
+      '</b>',
+      lineText,
+    );
+
+    lineText = replaceall('<b>', ' <b> ', lineText);
+    lineText = replaceall('</b>', ' </b> ', lineText);
+
+    // italic
+    lineText = replaceall('< i >', '<i>', lineText);
+    lineText = replaceall('< /i >', '</i>', lineText);
+
+    lineText = replaceall(`<${specialWord} i >${specialWord}`, '<i>', lineText);
+    lineText = replaceall(
+      `<${specialWord} / i >${specialWord}`,
+      '</i>',
+      lineText,
+    );
+    lineText = replaceall(
+      `<${specialWord} /i >${specialWord}`,
+      '</i>',
+      lineText,
+    );
+
+    lineText = replaceall('<i>', ' <i> ', lineText);
+    lineText = replaceall('</i>', ' </i> ', lineText);
+
+    if (!this.withSpecials) {
+      lineText = replaceall('<b>', '', lineText);
+      lineText = replaceall('</b>', '', lineText);
+      lineText = replaceall('<i>', '', lineText);
+      lineText = replaceall('</i>', '', lineText);
+    }
+    // remove double spaces
+    if (lineText) {
+      lineText = lineText.replace(/\s{2,}/g, ' ').trim();
+    }
+
+    const ideograms = lineText.split(' ');
+    const ideogramsFiltered: any[] = [];
+
+    let joinSpecial = '';
+
+    ideograms.forEach(ideogram => {
+      if (ideogram === specialWord) {
+        return;
       }
 
-      // bold
-      lineText = replaceall('< b >', '<b>', lineText);
-      lineText = replaceall('< /b >', '</b>', lineText);
-
-      lineText = replaceall(
-        `<${specialWord} b >${specialWord}`,
-        '<b>',
-        lineText,
-      );
-      lineText = replaceall(
-        `<${specialWord} /b >${specialWord}`,
-        '</b>',
-        lineText,
-      );
-      lineText = replaceall(
-        `<${specialWord} / b >${specialWord}`,
-        '</b>',
-        lineText,
-      );
-
-      lineText = replaceall('<b>', ' <b> ', lineText);
-      lineText = replaceall('</b>', ' </b> ', lineText);
-
-      // italic
-      lineText = replaceall('< i >', '<i>', lineText);
-      lineText = replaceall('< /i >', '</i>', lineText);
-
-      lineText = replaceall(
-        `<${specialWord} i >${specialWord}`,
-        '<i>',
-        lineText,
-      );
-      lineText = replaceall(
-        `<${specialWord} / i >${specialWord}`,
-        '</i>',
-        lineText,
-      );
-      lineText = replaceall(
-        `<${specialWord} /i >${specialWord}`,
-        '</i>',
-        lineText,
-      );
-
-      lineText = replaceall('<i>', ' <i> ', lineText);
-      lineText = replaceall('</i>', ' </i> ', lineText);
-
-      // remove double spaces
-      if (lineText) {
-        lineText = lineText.replace(/\s{2,}/g, ' ').trim();
-      }
-
-      const ideograms = lineText.split(' ');
-      const ideogramsFiltered: any[] = [];
-
-      let joinSpecial = '';
-
-      ideograms.forEach(ideogram => {
-        if (ideogram === specialWord) {
-          return;
-        }
-
-        if (
-          ideogram.substring(ideogram.length - specialWord.length) ===
-          specialWord
-        ) {
-          joinSpecial += ideogram.replace(specialWord, '');
-          return;
-        } else if (joinSpecial) {
-          ideogramsFiltered.push(joinSpecial);
-          joinSpecial = '';
-        }
-
-        ideogramsFiltered.push(ideogram);
-      });
-
-      if (joinSpecial) {
+      if (
+        ideogram.substring(ideogram.length - specialWord.length) === specialWord
+      ) {
+        joinSpecial += ideogram.replace(specialWord, '');
+        return;
+      } else if (joinSpecial) {
         ideogramsFiltered.push(joinSpecial);
+        joinSpecial = '';
       }
 
-      lineText = ` ${ideogramsFiltered.join(' ')} `;
+      ideogramsFiltered.push(ideogram);
+    });
 
-      lineText = this.replaceWords(lineText);
-
-      if (footNoteIds.length) {
-        const footNoteId = footNoteIds[0];
-
-        lineText = replaceall(
-          '# FOOTNOTE',
-          ` #FOOTNOTE-${footNoteId}-`,
-          lineText,
-        );
-
-        lineText = replaceall(
-          '# F O O T N O T E',
-          ` #FOOTNOTE-${footNoteId}-`,
-          lineText,
-        );
-
-        lineText = replaceall('- *', '-*', lineText);
-      }
-
-      if (bibles.length > 0 && this.isChinese) {
-        // separate ）from numbers
-        lineText = lineText.replace(/([1-9])(）)/g, '$1 $2');
-        lineText = replaceall('BI #[', ' BI#[', lineText);
-        lineText = replaceall(']# BI', ']#BI ', lineText);
-        lineText = replaceall('B I #[', 'BI#[', lineText);
-        lineText = replaceall(']# B I', ']#BI', lineText);
-        lineText = lineText.replace(/\s{2,}/g, ' ').trim();
-      }
-
-      newText.push(this.trim(lineText));
+    if (joinSpecial) {
+      ideogramsFiltered.push(joinSpecial);
     }
 
-    return newText;
+    lineText = ` ${ideogramsFiltered.join(' ')} `;
+
+    lineText = this.replaceWords(lineText);
+
+    if (footNoteIds.length) {
+      const footNoteId = footNoteIds[0];
+
+      lineText = replaceall(
+        '# FOOTNOTE',
+        ` #FOOTNOTE-${footNoteId}-`,
+        lineText,
+      );
+
+      lineText = replaceall(
+        '# F O O T N O T E',
+        ` #FOOTNOTE-${footNoteId}-`,
+        lineText,
+      );
+
+      lineText = replaceall('- *', '-*', lineText);
+    }
+
+    if (bibles.length > 0 && this.isChinese) {
+      // separate ）from numbers
+      lineText = lineText.replace(/([1-9])(）)/g, '$1 $2');
+      lineText = replaceall('BI #[', ' BI#[', lineText);
+      lineText = replaceall(']# BI', ']#BI ', lineText);
+      lineText = replaceall('B I #[', 'BI#[', lineText);
+      lineText = replaceall(']# B I', ']#BI', lineText);
+      lineText = lineText.replace(/\s{2,}/g, ' ').trim();
+    }
+
+    return this.trim(lineText);
   }
 
   protected async getPinyinPdf($) {

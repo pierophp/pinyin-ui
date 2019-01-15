@@ -1,70 +1,71 @@
 import * as pinyinParser from 'pdf-pinyin/src/core/pinyin.parser';
 import * as isChinese from '../../../../../shared/helpers/is-chinese';
+import { BlockInterface } from '../../../core/interfaces/block.interface';
 
 export class PdfParser {
   public async parse(
     pdfParsedObjectPromise: Promise<any>,
     lines: string[],
-  ): Promise<any> {
+  ): Promise<BlockInterface[] | undefined> {
     const pdfParsedObject: any = await pdfParsedObjectPromise;
 
     // @ts-ignore
     let result = await pinyinParser(pdfParsedObject, lines);
 
-    if (!result.isReadable) {
-      return null;
+    if (!result || !result.isReadable) {
+      return;
     }
 
     let bible: any = null;
 
-    if (result) {
-      result = result.lines.map(item => {
-        return item.map(item2 => {
-          const returnItem: any = {
-            c: item2.c.join(''),
-            p: item2.p.join(String.fromCharCode(160)),
-          };
+    return result.lines.map(
+      (item): BlockInterface[] => {
+        return item.map(
+          (item2): BlockInterface => {
+            const returnItem: BlockInterface = {
+              c: item2.c.join(''),
+              p: item2.p.join(String.fromCharCode(160)),
+            };
 
-          if (item2.isBold) {
-            returnItem.isBold = 1;
-          }
+            if (item2.isBold) {
+              returnItem.isBold = 1;
+            }
 
-          if (item2.isItalic) {
-            returnItem.isItalic = 1;
-          }
+            if (item2.isItalic) {
+              returnItem.isItalic = 1;
+            }
 
-          let indexOfBible = -1;
+            let indexOfBible = -1;
 
-          if (item2.tagsStart) {
-            indexOfBible = item2.tagsStart.indexOf('<bible');
-          }
+            if (item2.tagsStart) {
+              indexOfBible = item2.tagsStart.indexOf('<bible');
+            }
 
-          if (indexOfBible >= 0) {
-            bible = item2.tagsStart.match(/\<bible text="(.*?)"\>/);
-          }
+            if (indexOfBible >= 0) {
+              bible = item2.tagsStart.match(/\<bible text="(.*?)"\>/);
+            }
 
-          if (bible && bible[1] && !isChinese(returnItem.c, true)) {
-            returnItem.b = bible[1];
-            bible = null;
-          }
+            if (bible && bible[1] && !isChinese(returnItem.c, true)) {
+              returnItem.b = bible[1];
+              bible = null;
+            }
 
-          let indexOfFootnote = -1;
+            let indexOfFootnote = -1;
 
-          if (item2.tagsStart) {
-            indexOfFootnote = item2.tagsStart.indexOf('<footnote');
-          }
+            if (item2.tagsStart) {
+              indexOfFootnote = item2.tagsStart.indexOf('<footnote');
+            }
 
-          if (indexOfFootnote >= 0) {
-            const footnote = item2.tagsStart.match(/\<footnote id="(.*?)"\>/);
+            if (indexOfFootnote >= 0) {
+              const footnote = item2.tagsStart.match(/\<footnote id="(.*?)"\>/);
 
-            returnItem.footnote = footnote[1];
-          }
+              returnItem.footnote = footnote[1];
+            }
 
-          return returnItem;
-        });
-      });
-
-      return result;
-    }
+            return returnItem;
+          },
+        );
+      },
+    );
   }
 }

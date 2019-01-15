@@ -32,41 +32,59 @@ export class Downloader {
     this.verifyTypeOfSite(url, ideogramType);
 
     const chineseParser = new Parser();
+    const simplifiedParser = new Parser();
     const languageParser = new Parser();
 
-    const $: any = await this.downloadUrl(url);
-    let $chinese = $;
+    const $: CheerioStatic = await this.downloadUrl(url);
+    let $chinese: CheerioStatic | undefined = $;
     let $language;
 
     if (!this.isChinese) {
-      $chinese = await this.downloadChineseByLink($, ideogramType);
+      $chinese = await this.downloadChineseByLink(
+        $,
+        this.isTraditional ? 't' : 's',
+      );
       $language = $;
       language = String(url.replace('https://www.jw.org/', '')).split('/')[0];
     } else if (language) {
       $language = await this.downloadLanguage($, language);
     }
 
+    if (!$chinese) {
+      throw new Error('Site not found');
+    }
+
+    let promiseSimplified = new Promise(resolve => resolve());
+    let $simplified;
+    if (this.isTraditional) {
+      $simplified = await this.downloadChineseByLink($chinese, 's');
+      if ($simplified) {
+        promiseSimplified = simplifiedParser.parse($simplified, true);
+      }
+    }
+
     const promiseChinese = chineseParser.parse(
       $chinese,
       true,
-      this.isTraditional,
+      $simplified ? false : true,
     );
 
     let promiseLanguage = new Promise(resolve => resolve());
     if ($language) {
-      promiseLanguage = languageParser.parse(
-        $language,
-        false,
-        this.isTraditional,
-      );
+      promiseLanguage = languageParser.parse($language, false);
     }
 
     profiler('Parse Start');
-    const response = await Promise.all([promiseChinese, promiseLanguage]);
+    const response = await Promise.all([
+      promiseChinese,
+      promiseLanguage,
+      promiseSimplified,
+    ]);
     profiler('Parse End');
 
-    const parsedDownload = response[0];
+    let parsedDownload = response[0];
     const parsedDownloadLanguage = response[1];
+    const parsedDownloadSimplified = response[2];
 
     if (parsedDownload.links) {
       return this.parseLinks(
@@ -74,6 +92,21 @@ export class Downloader {
         language,
         ideogramType,
         convertPinyin,
+      );
+    }
+
+    let parsedDownloadTraditional = null;
+    if (parsedDownloadSimplified) {
+      parsedDownloadTraditional = parsedDownload;
+      parsedDownload = parsedDownloadSimplified;
+    }
+    let fillTraditionalPromise: Promise<any> = new Promise(resolve =>
+      resolve(),
+    );
+    if (parsedDownloadTraditional) {
+      fillTraditionalPromise = this.fillTraditional(
+        parsedDownloadTraditional,
+        parsedDownload,
       );
     }
 
@@ -85,13 +118,17 @@ export class Downloader {
     const pinyinPromise = this.pinyin(parsedDownload, convertPinyin);
 
     profiler('Process Language + Pinyin - Start');
-    await Promise.all([fillLanguagePromise, pinyinPromise]);
+    await Promise.all([
+      fillLanguagePromise,
+      fillTraditionalPromise,
+      pinyinPromise,
+    ]);
     profiler('Process Language + Pinyin End');
 
     return parsedDownload;
   }
 
-  protected verifyTypeOfSite(url, ideogramType) {
+  protected verifyTypeOfSite(url: string, ideogramType: string) {
     this.isChinese = false;
 
     const chineseSites = [
@@ -115,7 +152,7 @@ export class Downloader {
     }
   }
 
-  protected async downloadUrl(url) {
+  protected async downloadUrl(url: string): Promise<CheerioStatic> {
     let response;
     profiler(`Download JW Start - ${url}`);
     try {
@@ -136,25 +173,30 @@ export class Downloader {
     return cheerio.load(response);
   }
 
-  protected async downloadChineseByLink($, ideogramType) {
+  protected async downloadChineseByLink(
+    $: CheerioStatic,
+    ideogramType: string,
+  ): Promise<CheerioStatic | undefined> {
     const chineseLink = $(`link[hreflang="cmn-han${ideogramType}"]`);
-    if (chineseLink.length > 0) {
-      const link = `https://www.jw.org${chineseLink.attr('href')}`;
-      profiler(`Download JW Start - Chinese - ${this.encoder.encodeUrl(link)}`);
-      let response;
-      try {
-        response = await this.downloader.download(this.encoder.encodeUrl(link));
-      } catch (e) {
-        response = await this.downloader.download(link);
-      }
-
-      profiler('Download JW End - Chinese');
-
-      return cheerio.load(response);
+    if (chineseLink.length === 0) {
+      return;
     }
+
+    const link = `https://www.jw.org${chineseLink.attr('href')}`;
+    profiler(`Download JW Start - Chinese - ${this.encoder.encodeUrl(link)}`);
+    let response;
+    try {
+      response = await this.downloader.download(this.encoder.encodeUrl(link));
+    } catch (e) {
+      response = await this.downloader.download(link);
+    }
+
+    profiler('Download JW End - Chinese');
+
+    return cheerio.load(response);
   }
 
-  protected async downloadLanguage($, language) {
+  protected async downloadLanguage($: CheerioStatic, language: string) {
     const translateLink = $(`link[hreflang="${language}"]`);
     if (translateLink.length > 0) {
       const link = `https://www.jw.org${translateLink.attr('href')}`;
@@ -231,6 +273,65 @@ export class Downloader {
     });
   }
 
+  public async fillTraditional(parsedDownloadTraditional, parsedDownload) {
+    parsedDownload.text.forEach((item, i) => {
+      if (item.type === 'img') {
+        return;
+      }
+
+      if (item.type === 'box-img') {
+        return;
+      }
+
+      if (!parsedDownload.text[i]) {
+        parsedDownload.text[i] = {};
+      }
+
+      if (
+        !parsedDownloadTraditional.text ||
+        !parsedDownloadTraditional.text[i] ||
+        !parsedDownloadTraditional.text[i].text
+      ) {
+        return;
+      }
+
+      console.log(parsedDownloadTraditional.text[i].text);
+
+      const traditionalBlocks = parsedDownloadTraditional.text[i].text
+        .split(' ')
+        .filter(item => item)
+        .join('');
+
+      function replaceAt(str: string, index: number, chr: string) {
+        if (index > str.length - 1) return str;
+        return str.substr(0, index) + chr + str.substr(index + 1);
+      }
+
+      let traditionalCounter = 0;
+
+      let blockCounter = 0;
+      for (const simplifiedBlock of item.text) {
+        let characterCount = 0;
+
+        if (!simplifiedBlock.c) {
+          continue;
+        }
+
+        for (const simplifiedC of simplifiedBlock.c.split('')) {
+          parsedDownload.text[i].text[blockCounter].c = replaceAt(
+            simplifiedBlock.c,
+            characterCount,
+            traditionalBlocks[traditionalCounter],
+          );
+          traditionalCounter++;
+          characterCount++;
+        }
+
+        blockCounter++;
+      }
+    });
+  }
+
   public async pinyin(parsedDownload, convertPinyin) {
     if (!convertPinyin) {
       return;
@@ -252,6 +353,7 @@ export class Downloader {
           return;
         }
 
+        // Converted By PDF
         if (typeof item.text !== 'string') {
           return;
         }

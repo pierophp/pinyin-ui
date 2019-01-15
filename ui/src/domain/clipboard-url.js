@@ -125,7 +125,7 @@ async function parseSite(lines, audio, url) {
       row[0].line.type = line.type;
     }
 
-    if (line.trans !== undefined) {
+    if ((line.trans !== undefined) & row) {
       row[0].trans = line.trans;
     }
 
