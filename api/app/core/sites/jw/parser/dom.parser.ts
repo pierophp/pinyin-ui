@@ -11,7 +11,7 @@ interface GetTextResponseInterface {
 }
 
 export class DomParser {
-  protected promisesToExecute: TextInterface[];
+  protected items: TextInterface[];
   protected figcaptionsText: stringType[] = [];
   protected isChinese: boolean;
   public async parse(
@@ -19,12 +19,12 @@ export class DomParser {
     isChinese: boolean,
   ): Promise<TextInterface[]> {
     this.isChinese = isChinese;
-    this.promisesToExecute = [];
+    this.items = [];
     this.figcaptionsText = [];
 
     const mainImage = $('.lsrBannerImage');
     if (mainImage.length) {
-      this.promisesToExecute.push({
+      this.items.push({
         large: $(mainImage)
           .find('span')
           .attr('data-zoom'),
@@ -36,7 +36,7 @@ export class DomParser {
     }
 
     if ($('article header h1').length) {
-      this.promisesToExecute = this.promisesToExecute.concat(
+      this.items = this.items.concat(
         await this.parseResult($, $('article header h1'), 'h1'),
       );
     }
@@ -63,7 +63,7 @@ export class DomParser {
       if ($(children).hasClass('blockTeach')) {
         const boxH2 = $(children).find('aside h2');
         if (boxH2 && $(boxH2).text()) {
-          this.promisesToExecute = this.promisesToExecute.concat(
+          this.items = this.items.concat(
             await this.parseResult($, boxH2, 'h2'),
           );
         }
@@ -75,7 +75,7 @@ export class DomParser {
           .toArray()) {
           const boxH2 = $(subChildren).children('h2');
           if (boxH2 && $(boxH2).text()) {
-            this.promisesToExecute = this.promisesToExecute.concat(
+            this.items = this.items.concat(
               await this.parseResult($, boxH2, 'h2'),
             );
           }
@@ -99,7 +99,7 @@ export class DomParser {
               .children()
               .toArray()) {
               if ($(subChildren02).get(0).tagName === 'h2') {
-                this.promisesToExecute = this.promisesToExecute.concat(
+                this.items = this.items.concat(
                   await this.parseResult($, subChildren02, 'box-h2'),
                 );
               } else if ($(subChildren02).get(0).tagName === 'ul') {
@@ -121,7 +121,7 @@ export class DomParser {
       }
     }
 
-    return this.promisesToExecute;
+    return this.items;
   }
 
   public async parseBlock($: CheerioStatic, element) {
@@ -134,7 +134,7 @@ export class DomParser {
       //
       const boxFigure = $(element).find('.fullBleed figure');
       if (boxFigure.length) {
-        this.promisesToExecute.push({
+        this.items.push({
           type: 'box-img',
           large: $(boxFigure)
             .find('span')
@@ -147,7 +147,7 @@ export class DomParser {
 
       const boxH2 = $(element).find('h2');
       if (boxH2 && $(boxH2).text()) {
-        this.promisesToExecute = this.promisesToExecute.concat(
+        this.items = this.items.concat(
           await this.parseResult($, boxH2, 'box-h2'),
         );
       }
@@ -180,7 +180,7 @@ export class DomParser {
       } else {
         const subBoxH2 = $(element).find('table caption');
         if (subBoxH2 && $(subBoxH2).text()) {
-          this.promisesToExecute = this.promisesToExecute.concat(
+          this.items = this.items.concat(
             await this.parseResult($, subBoxH2, 'box'),
           );
         }
@@ -229,7 +229,7 @@ export class DomParser {
 
     await this.getImages($, figure, type);
 
-    return this.promisesToExecute;
+    return this.items;
   }
 
   public async getText($, element): Promise<GetTextResponseInterface[]> {
@@ -241,65 +241,61 @@ export class DomParser {
     let footNoteIds: any[] = [];
     let bibles: any[] = [];
 
-    if (this.withSpecials) {
-      // asterisk
-      const footNotes = $(element).find('.footnoteLink');
+    // asterisk
+    const footNotes = $(element).find('.footnoteLink');
 
-      if (footNotes.length > 0 && this.isChinese) {
-        footNotes.each((i, footNote) => {
-          const footNoteId = replaceall(
-            '#footnote',
-            '',
-            $(footNote).attr('data-anchor'),
-          ).trim();
+    if (footNotes.length > 0 && this.isChinese) {
+      footNotes.each((i, footNote) => {
+        const footNoteId = replaceall(
+          '#footnote',
+          '',
+          $(footNote).attr('data-anchor'),
+        ).trim();
 
-          footNoteIds.push(footNoteId);
+        footNoteIds.push(footNoteId);
 
-          text = replaceall(
-            $.html(footNote),
-            `#FOOTNOTE${footNoteId}${$(
-              footNote,
-            ).html()}#ENDFOOTNOTE${footNoteId}`,
-            text,
-          );
-        });
-      }
+        text = replaceall(
+          $.html(footNote),
+          `#FOOTNOTE${footNoteId}${$(
+            footNote,
+          ).html()}#ENDFOOTNOTE${footNoteId}`,
+          text,
+        );
+      });
+    }
 
-      // bible
-      bibles = $(element)
-        .find('.jsBibleLink')
-        .toArray();
+    // bible
+    bibles = $(element)
+      .find('.jsBibleLink')
+      .toArray();
 
-      const bibleLinks: any[] = [];
-      if (bibles.length > 0 && this.isChinese) {
-        for (const bible of bibles) {
-          const bibleLink = decodeURIComponent($(bible).attr('href')).split(
-            '/',
-          );
-          const bibleBook = bibleLink[6];
-          const bibleChapter = bibleLink[7];
-          const bibleVerses: any[] = [];
-          const bibleVersesLinks = bibleLink[8].split('-');
+    const bibleLinks: any[] = [];
+    if (bibles.length > 0 && this.isChinese) {
+      for (const bible of bibles) {
+        const bibleLink = decodeURIComponent($(bible).attr('href')).split('/');
+        const bibleBook = bibleLink[6];
+        const bibleChapter = bibleLink[7];
+        const bibleVerses: any[] = [];
+        const bibleVersesLinks = bibleLink[8].split('-');
 
-          for (const bibleVersesLink of bibleVersesLinks) {
-            bibleVerses.push(parseInt(bibleVersesLink.substr(-3), 10));
-          }
-
-          bibleLinks.push({
-            text: $(bible).text(),
-            link: `${bibleBooks[bibleBook]}:${bibleChapter}:${bibleVerses.join(
-              '-',
-            )}`,
-          });
-
-          text = replaceall(
-            $.html(bible),
-            `BI#[${bibleBooks[bibleBook]}:${bibleChapter}:${bibleVerses.join(
-              '-',
-            )}]#BI${$(bible).html()}]#ENDBI`,
-            text,
-          );
+        for (const bibleVersesLink of bibleVersesLinks) {
+          bibleVerses.push(parseInt(bibleVersesLink.substr(-3), 10));
         }
+
+        bibleLinks.push({
+          text: $(bible).text(),
+          link: `${bibleBooks[bibleBook]}:${bibleChapter}:${bibleVerses.join(
+            '-',
+          )}`,
+        });
+
+        text = replaceall(
+          $.html(bible),
+          `BI#[${bibleBooks[bibleBook]}:${bibleChapter}:${bibleVerses.join(
+            '-',
+          )}]#BI${$(bible).html()}]#ENDBI`,
+          text,
+        );
       }
     }
 
@@ -337,7 +333,7 @@ export class DomParser {
         const large = $(spanImage).attr('data-zoom');
 
         const small = $(spanImage).attr('data-img-size-lg');
-        this.promisesToExecute.push({
+        this.items.push({
           type: imgType,
           large,
           small,
@@ -352,7 +348,7 @@ export class DomParser {
           .find('img')
           .attr('src');
 
-        this.promisesToExecute.push({
+        this.items.push({
           type: imgType,
           large,
           small,
@@ -376,7 +372,7 @@ export class DomParser {
         }
       }
 
-      this.promisesToExecute = this.promisesToExecute.concat(result);
+      this.items = this.items.concat(result);
     }
   }
 

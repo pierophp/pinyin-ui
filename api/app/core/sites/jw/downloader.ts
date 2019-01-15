@@ -8,6 +8,7 @@ import * as bluebird from 'bluebird';
 import { orderBy } from 'lodash';
 import { Encoder } from '../encoder';
 import { Downloader as GenericDownloader } from '../downloader';
+import { ParserResponseInterface } from '../interfaces/parser.response.interface';
 
 export class Downloader {
   protected downloader: GenericDownloader;
@@ -54,7 +55,9 @@ export class Downloader {
       throw new Error('Site not found');
     }
 
-    let promiseSimplified = new Promise(resolve => resolve());
+    let promiseSimplified = new Promise<ParserResponseInterface>(resolve =>
+      resolve(),
+    );
     let $simplified;
     if (this.isTraditional) {
       $simplified = await this.downloadChineseByLink($chinese, 's');
@@ -69,7 +72,9 @@ export class Downloader {
       $simplified ? false : true,
     );
 
-    let promiseLanguage = new Promise(resolve => resolve());
+    let promiseLanguage = new Promise<ParserResponseInterface>(resolve =>
+      resolve(),
+    );
     if ($language) {
       promiseLanguage = languageParser.parse($language, false);
     }
@@ -82,9 +87,9 @@ export class Downloader {
     ]);
     profiler('Parse End');
 
-    let parsedDownload = response[0];
-    const parsedDownloadLanguage = response[1];
-    const parsedDownloadSimplified = response[2];
+    let parsedDownload: ParserResponseInterface = response[0];
+    const parsedDownloadLanguage: ParserResponseInterface = response[1];
+    const parsedDownloadSimplified: ParserResponseInterface = response[2];
 
     if (parsedDownload.links) {
       return this.parseLinks(
@@ -95,11 +100,12 @@ export class Downloader {
       );
     }
 
-    let parsedDownloadTraditional = null;
+    let parsedDownloadTraditional;
     if (parsedDownloadSimplified) {
       parsedDownloadTraditional = parsedDownload;
       parsedDownload = parsedDownloadSimplified;
     }
+
     let fillTraditionalPromise: Promise<any> = new Promise(resolve =>
       resolve(),
     );

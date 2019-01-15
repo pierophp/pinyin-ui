@@ -62,7 +62,7 @@ export class AbstractParser {
 
   protected explodeLines(text) {
     if (typeof text === 'string') {
-      return text.split('\r\n').map(s => this.trim(s));
+      return text.split('\r\n').map(s => s.trim());
     }
 
     return text;

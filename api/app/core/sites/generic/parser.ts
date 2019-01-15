@@ -1,6 +1,7 @@
 import * as replaceall from 'replaceall';
 import * as replaceIdeogramsToSpace from '../../../../../shared/helpers/special-ideograms-chars';
 import { AbstractParser } from '../abstract.parser';
+import { removeHtmlSpecialTags } from '../helpers/remove.html.special.tags';
 
 export class Parser extends AbstractParser {
   protected text: any[] = [];
@@ -127,7 +128,9 @@ export class Parser extends AbstractParser {
       }
     }
 
-    let text = this.trim($(element).text());
+    let text = $(element)
+      .text()
+      .trim();
     if (!text) {
       return;
     }
@@ -165,10 +168,10 @@ export class Parser extends AbstractParser {
       return '';
     }
 
-    text = this.removeHtmlSpecialTags($, text);
+    text = removeHtmlSpecialTags($, text);
 
     if (!this.isChinese) {
-      return this.trim(text);
+      return text.trim();
     }
 
     const lines = text.trim().split('\r\n');
@@ -289,7 +292,7 @@ export class Parser extends AbstractParser {
     }
 
     text = newText;
-    text = this.trim(text);
+    (text = text).trim();
     return text;
   }
 }
