@@ -120,7 +120,10 @@ async function parseSite(lines, audio, url) {
         row.push(item);
       });
     } else {
-      row = line.text;
+      row = line;
+      if (line.text) {
+        row = line.text;
+      }
     }
 
     if (line.type !== undefined) {

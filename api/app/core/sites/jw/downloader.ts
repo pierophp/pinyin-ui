@@ -70,9 +70,9 @@ export class Downloader {
 
     // const pinyinPromise = this.pinyin(parsedDownload, convertPinyin);
 
-    profiler('Process Language + Pinyin - Start');
-    // await Promise.all([pinyinPromise]);
-    profiler('Process Language + Pinyin End');
+    // profiler('Process Language + Pinyin - Start');
+    // // await Promise.all([pinyinPromise]);
+    // profiler('Process Language + Pinyin End');
 
     return parsedDownload;
   }

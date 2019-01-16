@@ -96,13 +96,24 @@ export class Parser {
 
     if (this.pdfParsedObjectPromise) {
       const withPdfParser = new WithPdfParser();
-      const parsedPdfResult = await withPdfParser.parse(
-        item,
-        this.pdfParsedObjectPromise,
-      );
 
-      if (parsedPdfResult) {
-        return parsedPdfResult;
+      try {
+        const parsedPdfResult = await withPdfParser.parse(
+          item,
+          this.pdfParsedObjectPromise,
+        );
+
+        if (parsedPdfResult) {
+          return parsedPdfResult;
+        }
+      } catch (e) {
+        console.error(
+          `Error on With Pdf Parser \n${e.message} \nLine: ${JSON.stringify(
+            item.chinese.text,
+          )}`,
+        );
+
+        throw e;
       }
     }
 

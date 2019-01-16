@@ -2,6 +2,7 @@ import * as pinyinParser from 'pdf-pinyin/src/core/pinyin.parser';
 import * as replaceall from 'replaceall';
 import * as isChinese from '../../../../../../shared/helpers/is-chinese';
 import { BlockInterface } from '../../../../core/interfaces/block.interface';
+import { replaceAt } from '../../../../core/sites/helpers/replace.at';
 import { parseBible } from '../helpers/parse.bible';
 import { ParseItemInterface } from '../interfaces/parse.item.interface';
 
@@ -23,15 +24,13 @@ export class WithPdfParser {
       return;
     }
 
-    let lineWithoutSpace = replaceall(
-      ' ',
-      '',
-      textSimplified ? textSimplified : text,
-    );
+    const line = textSimplified ? textSimplified : text;
 
-    const parsedResult = await this.pdfPinyin(pdfParsedObjectPromise!, [
-      lineWithoutSpace,
-    ]);
+    const parsedResult = await this.pdfPinyin(
+      pdfParsedObjectPromise!,
+      [line],
+      item,
+    );
 
     if (!parsedResult) {
       return;
@@ -41,41 +40,44 @@ export class WithPdfParser {
       return parsedResult;
     }
 
+    // return parsedResult;
+    return this.restoreTraditional(text, parsedResult);
+  }
+
+  protected restoreTraditional(
+    text: string,
+    parsedResult: BlockInterface[],
+  ): BlockInterface[] {
     const traditionalBlocks = text
       .split(' ')
       .filter(item => item)
       .join('');
 
-    function replaceAt(str: string, index: number, chr: string) {
-      if (index > str.length - 1) return str;
-      return str.substr(0, index) + chr + str.substr(index + 1);
-    }
-
     let traditionalCounter = 0;
     let blockCounter = 0;
-    let i = 0;
-    for (const parsedLine of parsedResult) {
-      for (const simplifiedBlock of parsedResult) {
-        let characterCount = 0;
 
-        if (!simplifiedBlock.c) {
-          continue;
-        }
+    for (const simplifiedBlock of parsedResult) {
+      let characterCount = 0;
 
-        for (const simplifiedC of simplifiedBlock.c.split('')) {
-          parsedResult[i][blockCounter].c = replaceAt(
-            simplifiedBlock.c,
-            characterCount,
-            traditionalBlocks[traditionalCounter],
-          );
-          traditionalCounter++;
-          characterCount++;
-        }
-
-        blockCounter++;
+      if (!simplifiedBlock.c) {
+        continue;
       }
 
-      i++;
+      if (!traditionalBlocks[traditionalCounter]) {
+        continue;
+      }
+
+      for (const simplifiedC of simplifiedBlock.c.split('')) {
+        parsedResult[blockCounter].c = replaceAt(
+          simplifiedBlock.c,
+          characterCount,
+          traditionalBlocks[traditionalCounter],
+        );
+        traditionalCounter++;
+        characterCount++;
+      }
+
+      blockCounter++;
     }
 
     return parsedResult;
@@ -84,6 +86,7 @@ export class WithPdfParser {
   public async pdfPinyin(
     pdfParsedObjectPromise: Promise<any>,
     lines: string[],
+    parsedItem: ParseItemInterface,
   ): Promise<BlockInterface[] | undefined> {
     const pdfParsedObject: any = await pdfParsedObjectPromise;
 
@@ -96,49 +99,61 @@ export class WithPdfParser {
 
     let bible: any = null;
 
-    return result.lines.map(
-      (item): BlockInterface[] => {
-        return item.map(
-          (item2): BlockInterface => {
-            const returnItem: BlockInterface = {
-              c: item2.c.join(''),
-              p: item2.p.join(String.fromCharCode(160)),
-            };
+    const item: any[] = result.lines[0];
 
-            if (item2.isBold) {
-              returnItem.isBold = 1;
-            }
+    const line = item.map(
+      (item2): BlockInterface => {
+        const returnItem: BlockInterface = {
+          c: item2.c.join(''),
+          p: item2.p.join(String.fromCharCode(160)),
+        };
 
-            if (item2.isItalic) {
-              returnItem.isItalic = 1;
-            }
+        if (item2.isBold) {
+          returnItem.isBold = 1;
+        }
 
-            const tempBible = parseBible(item2.tagsStart);
-            if (tempBible) {
-              bible = tempBible;
-            }
+        if (item2.isItalic) {
+          returnItem.isItalic = 1;
+        }
 
-            if (bible && !isChinese(returnItem.c, true)) {
-              returnItem.b = bible;
-              bible = null;
-            }
+        const tempBible = parseBible(item2.tagsStart);
+        if (tempBible) {
+          bible = tempBible;
+        }
 
-            let indexOfFootnote = -1;
+        if (bible && !isChinese(returnItem.c, true)) {
+          returnItem.b = bible;
+          bible = null;
+        }
 
-            if (item2.tagsStart) {
-              indexOfFootnote = item2.tagsStart.indexOf('<footnote');
-            }
+        let indexOfFootnote = -1;
 
-            if (indexOfFootnote >= 0) {
-              const footnote = item2.tagsStart.match(/\<footnote id="(.*?)"\>/);
+        if (item2.tagsStart) {
+          indexOfFootnote = item2.tagsStart.indexOf('<footnote');
+        }
 
-              returnItem.footnote = footnote[1];
-            }
+        if (indexOfFootnote >= 0) {
+          const footnote = item2.tagsStart.match(/\<footnote id="(.*?)"\>/);
 
-            return returnItem;
-          },
-        );
+          if (footnote) {
+            returnItem.footnote = footnote[1];
+          }
+        }
+
+        return returnItem;
       },
     );
+
+    if (parsedItem.chinese.type && line.length > 0) {
+      line[0].line = {
+        type: parsedItem.chinese.type,
+      };
+    }
+
+    if (parsedItem.language && parsedItem.language.text && line.length > 0) {
+      line[0].trans = parsedItem.language.text;
+    }
+
+    return line;
   }
 }
