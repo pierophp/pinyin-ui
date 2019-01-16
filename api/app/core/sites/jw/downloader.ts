@@ -2,8 +2,6 @@ import { http } from '../../../helpers/http';
 import { profiler } from '../../../helpers/profiler';
 import * as cheerio from 'cheerio';
 import { Parser } from './parser';
-// @ts-ignore
-import * as UnihanSearch from '../../../services/UnihanSearch';
 import * as bluebird from 'bluebird';
 import { orderBy } from 'lodash';
 import { Encoder } from '../encoder';
@@ -67,12 +65,6 @@ export class Downloader {
         convertPinyin,
       );
     }
-
-    // const pinyinPromise = this.pinyin(parsedDownload, convertPinyin);
-
-    // profiler('Process Language + Pinyin - Start');
-    // // await Promise.all([pinyinPromise]);
-    // profiler('Process Language + Pinyin End');
 
     return parsedDownload;
   }
@@ -198,49 +190,5 @@ export class Downloader {
     profiler('Getting links End');
 
     return responseLinks;
-  }
-
-  public async pinyin(parsedDownload, convertPinyin) {
-    if (!convertPinyin) {
-      return;
-    }
-    profiler('Pinyin Start');
-
-    await bluebird.map(
-      parsedDownload.text,
-      async (item: any, i) => {
-        if (!item) {
-          return;
-        }
-
-        if (item.type === 'img') {
-          return;
-        }
-
-        if (item.type === 'box-img') {
-          return;
-        }
-
-        // Converted By PDF
-        if (typeof item.text !== 'string') {
-          return;
-        }
-
-        if (!item.text) {
-          item.text = '';
-        }
-        const ideograms = item.text.split(' ');
-        const pinyin = await UnihanSearch.toPinyin(ideograms);
-        const pinynReturn: any[] = [];
-        pinyin.forEach(pinyinItem => {
-          pinynReturn.push(pinyinItem.pinyin);
-        });
-
-        parsedDownload.text[i].pinyin = pinynReturn;
-      },
-      { concurrency: 4 },
-    );
-
-    profiler('Pinyin End');
   }
 }

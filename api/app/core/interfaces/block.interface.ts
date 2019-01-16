@@ -1,6 +1,7 @@
 export interface BlockInterface {
   line?: {
     type?: string;
+    pinyin_source?: string;
   };
   c: string;
   p: string;

@@ -1,4 +1,5 @@
 import * as pinyinParser from 'pdf-pinyin/src/core/pinyin.parser';
+import * as striptags from 'striptags';
 import * as replaceall from 'replaceall';
 import * as isChinese from '../../../../../../shared/helpers/is-chinese';
 import { BlockInterface } from '../../../../core/interfaces/block.interface';
@@ -20,8 +21,14 @@ export class WithPdfParser {
      * If simplified and traditional paragraph does'n have the same size
      * don't use PDF for traditional
      */
-    if (textSimplified && textSimplified.length !== text.length) {
-      return;
+
+    if (textSimplified) {
+      const textSimplifiedVerification = replaceall(' ', '', textSimplified);
+      const textVerification = replaceall(' ', '', text);
+
+      if (textSimplifiedVerification.length !== textVerification.length) {
+        return;
+      }
     }
 
     const line = textSimplified ? textSimplified : text;
@@ -40,7 +47,6 @@ export class WithPdfParser {
       return parsedResult;
     }
 
-    // return parsedResult;
     return this.restoreTraditional(text, parsedResult);
   }
 
@@ -48,7 +54,7 @@ export class WithPdfParser {
     text: string,
     parsedResult: BlockInterface[],
   ): BlockInterface[] {
-    const traditionalBlocks = text
+    const traditionalBlocks = striptags(text)
       .split(' ')
       .filter(item => item)
       .join('');
@@ -89,6 +95,10 @@ export class WithPdfParser {
     parsedItem: ParseItemInterface,
   ): Promise<BlockInterface[] | undefined> {
     const pdfParsedObject: any = await pdfParsedObjectPromise;
+
+    if (!pdfParsedObject) {
+      return;
+    }
 
     // @ts-ignore
     let result = await pinyinParser(pdfParsedObject, lines);
@@ -144,10 +154,14 @@ export class WithPdfParser {
       },
     );
 
-    if (parsedItem.chinese.type && line.length > 0) {
+    if (line.length > 0) {
       line[0].line = {
-        type: parsedItem.chinese.type,
+        pinyin_source: 'pdf',
       };
+
+      if (parsedItem.chinese.type) {
+        line[0].line.type = parsedItem.chinese.type;
+      }
     }
 
     if (parsedItem.language && parsedItem.language.text && line.length > 0) {

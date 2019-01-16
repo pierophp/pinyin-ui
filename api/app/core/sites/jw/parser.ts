@@ -74,6 +74,14 @@ export class Parser {
 
     profiler('Parse End');
 
+    if (
+      downloadResponse.text[0] &&
+      downloadResponse.text[0][0] &&
+      downloadResponse.text[0][0].line
+    ) {
+      downloadResponse.text[0][0].line.pinyinSpaced = 1;
+    }
+
     return downloadResponse;
   }
 
@@ -108,7 +116,7 @@ export class Parser {
         }
       } catch (e) {
         console.error(
-          `Error on With Pdf Parser \n${e.message} \nLine: ${JSON.stringify(
+          `Error on WITH Pdf Parser \n${e.message} \nLine: ${JSON.stringify(
             item.chinese.text,
           )}`,
         );
@@ -117,8 +125,18 @@ export class Parser {
       }
     }
 
-    const withoutPdfParser = new WithoutPdfParser();
-    return await withoutPdfParser.parse(item);
+    try {
+      const withoutPdfParser = new WithoutPdfParser();
+      return await withoutPdfParser.parse(item);
+    } catch (e) {
+      console.error(
+        `Error on WITHOUT Pdf Parser \n${e.message} \nLine: ${JSON.stringify(
+          item.chinese.text,
+        )}`,
+      );
+
+      throw e;
+    }
   }
 
   public async fillLanguage(parsedDownloadLanguage, parsedDownload) {
