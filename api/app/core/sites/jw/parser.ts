@@ -1,343 +1,179 @@
 import * as bluebird from 'bluebird';
-import * as cheerio from 'cheerio';
-import * as moment from 'moment';
-import * as getPdfParsedObject from 'pdf-pinyin/src/core/get.pdf.parsed.object';
-import * as replaceall from 'replaceall';
-import * as replaceIdeogramsToSpace from '../../../../../shared/helpers/special-ideograms-chars';
-import * as env from '../../../../env';
+
 import { BlockInterface } from '../../../core/interfaces/block.interface';
 import { profiler } from '../../../helpers/profiler';
-import { AbstractParser } from '../abstract.parser';
-import { Downloader as GenericDownloader } from '../downloader';
 import { ParserResponseInterface } from '../interfaces/parser.response.interface';
+import { TextInterface } from '../interfaces/text.interface';
 import { AudioParser } from './parser/audio.parser';
-import { SummaryParser } from './parser/summary.parser';
-import { PdfParser } from './pdf.parser';
 import { DomParser } from './parser/dom.parser';
+import { PdfObjecyParser } from './parser/pdf.object.parser';
+import { SummaryParser } from './parser/summary.parser';
+import { ParseItemInterface } from './interfaces/parse.item.interface';
+import { WithPdfParser } from './parser/with.pdf.parser';
+import { WithoutPdfParser } from './parser/without.pdf.parser';
 
-export class Parser extends AbstractParser {
-  protected isChinese: boolean;
+export class Parser {
   protected pdfParsedObjectPromise?: Promise<any>;
 
-  protected profilePdfParseStart;
-  protected profilePdfParseEnd;
-  protected withSpecials;
-
   public async parse(
-    $: CheerioStatic,
-    isChinese: boolean,
-    withSpecials: boolean = true,
+    $chinese: CheerioStatic,
+    $language?: CheerioStatic,
+    $simplified?: CheerioStatic,
   ): Promise<ParserResponseInterface> {
-    this.isChinese = isChinese;
-    this.withSpecials = withSpecials;
-
-    $('.viewOptions').remove();
-    $('noscript').remove();
-    $('#docSubVideo').remove();
-    $('#docSubImg').remove();
-
-    if (
-      ($('.toc').length > 0 && $('article .docSubContent').length === 0) ||
-      $('#musicTOC').length > 0
-    ) {
+    if (this.isSummary($chinese)) {
       const summaryParser = new SummaryParser();
-      return await summaryParser.parse($);
+      return await summaryParser.parse($chinese);
     }
 
-    await this.getPinyinPdf($);
+    const pdfObjecyParser = new PdfObjecyParser();
+    this.pdfParsedObjectPromise = pdfObjecyParser.parse(
+      $simplified ? $simplified : $chinese,
+    );
 
     const downloadResponse: ParserResponseInterface = {
       text: [],
     };
 
-    if (this.isChinese) {
-      const audioParser = new AudioParser();
-      downloadResponse.audio = await audioParser.parse($);
+    const audioParser = new AudioParser();
+    downloadResponse.audio = await audioParser.parse($chinese);
+
+    const chineseDomParser = new DomParser();
+    const chinesePromise = chineseDomParser.parse($chinese, true);
+
+    const languageDomParser = new DomParser();
+    let languagePromise = new Promise<TextInterface[]>(resolve => resolve([]));
+    if ($language) {
+      languagePromise = languageDomParser.parse($language, false);
     }
 
-    const domParser = new DomParser();
-    const items = domParser.parse($, this.isChinese);
+    const simplifiedDomParser = new DomParser();
+    let simplifiedPromise = new Promise<TextInterface[]>(resolve =>
+      resolve([]),
+    );
+    if ($simplified) {
+      simplifiedPromise = simplifiedDomParser.parse($simplified, true);
+    }
 
-    profiler(
-      'Start Process promises ' + (this.isChinese ? 'CHINESE' : 'LANGUAGE'),
+    profiler('Start Dom Promises');
+
+    const items = await this.joinLanguages(
+      chinesePromise,
+      languagePromise,
+      simplifiedPromise,
     );
 
-    const result = await bluebird.map(
+    profiler('End Dom Promises');
+
+    downloadResponse.text = await bluebird.map(
       items,
       async item => {
-        console.log(item);
-
-        // return response;
+        return await this.parseItem(item);
       },
       { concurrency: 10 },
     );
 
-    if (this.profilePdfParseStart) {
-      profiler(
-        `Pdf Parse Time ${this.profilePdfParseStart} - ${
-          this.profilePdfParseEnd
-        }`,
-      );
-    }
-
-    let text: any[] = [];
-    for (const item of result) {
-      text = text.concat(item);
-    }
-
-    downloadResponse.text = text;
+    profiler('Parse End');
 
     return downloadResponse;
   }
 
-  public async parseWithPdf(
-    text,
-    footNoteIds: string[],
-  ): Promise<BlockInterface[] | undefined> {
-    const pdfParser = new PdfParser();
-
-    let lineJustIdeograms = replaceall(' ', '', text);
-
-    lineJustIdeograms = replaceall('BI#[', '<bible text="', lineJustIdeograms);
-    lineJustIdeograms = replaceall(']#BI', '">', lineJustIdeograms);
-    lineJustIdeograms = replaceall(']#ENDBI', '</bible>', lineJustIdeograms);
-
-    for (const footNoteId of footNoteIds) {
-      lineJustIdeograms = replaceall(
-        `#FOOTNOTE${footNoteId}`,
-        `<footnote id="${footNoteId}">`,
-        lineJustIdeograms,
-      );
-
-      lineJustIdeograms = replaceall(
-        `#ENDFOOTNOTE${footNoteId}`,
-        '</footnote>',
-        lineJustIdeograms,
-      );
+  protected async parseItem(
+    item: ParseItemInterface,
+  ): Promise<BlockInterface[]> {
+    if (['img', 'box-img'].includes(item.chinese.type || '')) {
+      return [
+        {
+          line: {
+            type: item.chinese.type,
+          },
+          c: '',
+          p: '',
+          large: item.chinese.large,
+          small: item.chinese.small,
+        },
+      ];
     }
 
-    const lines = lineJustIdeograms
-      .trim()
-      .split('\r\n')
-      .filter(item => item);
+    if (this.pdfParsedObjectPromise) {
+      const withPdfParser = new WithPdfParser();
+      const parsedPdfResult = await withPdfParser.parse(
+        item,
+        this.pdfParsedObjectPromise,
+      );
 
-    if (!this.profilePdfParseStart) {
-      this.profilePdfParseStart = moment().format('HH:mm:ss');
+      if (parsedPdfResult) {
+        return parsedPdfResult;
+      }
     }
 
-    const parsedResult = await pdfParser.parse(
-      this.pdfParsedObjectPromise!,
-      lines,
-    );
-
-    this.profilePdfParseEnd = moment().format('HH:mm:ss');
-
-    return parsedResult;
+    const withoutPdfParser = new WithoutPdfParser();
+    return await withoutPdfParser.parse(item);
   }
 
-  public async parseWithoutPdf(
-    text: string,
-    bibles,
-    footNoteIds: string[],
-  ): Promise<string> {
-    const numberRegex = new RegExp('^[0-9]+$');
-
-    if (this.withSpecials) {
-      text = replaceall(']#ENDBI', '', text);
-
-      for (const footNoteId of footNoteIds) {
-        text = replaceall(`#ENDFOOTNOTE${footNoteId}`, '', text);
-        text = replaceall(`#FOOTNOTE${footNoteId}`, '#FOOTNOTE', text);
-      }
-    }
-
-    let lineText = '';
-    lineText = this.segmentText(text);
-
-    const specialWord = 'JOIN_SPECIAL';
-
-    // separate by numbers
-    lineText = lineText
-      .split(/(\d+)/)
-      .map(item => {
-        if (numberRegex.test(item)) {
-          item = ` ${item}${specialWord} `;
-        }
-        return item;
-      })
-      .join('');
-
-    replaceIdeogramsToSpace.forEach(item => {
-      lineText = replaceall(item, ` ${item}${specialWord} `, lineText);
-    });
-
-    // remove double spaces
-    if (lineText) {
-      lineText = lineText.replace(/\s{2,}/g, ' ').trim();
-    }
-
-    // bold
-    lineText = replaceall('< b >', '<b>', lineText);
-    lineText = replaceall('< /b >', '</b>', lineText);
-
-    lineText = replaceall(`<${specialWord} b >${specialWord}`, '<b>', lineText);
-    lineText = replaceall(
-      `<${specialWord} /b >${specialWord}`,
-      '</b>',
-      lineText,
-    );
-    lineText = replaceall(
-      `<${specialWord} / b >${specialWord}`,
-      '</b>',
-      lineText,
-    );
-
-    lineText = replaceall('<b>', ' <b> ', lineText);
-    lineText = replaceall('</b>', ' </b> ', lineText);
-
-    // italic
-    lineText = replaceall('< i >', '<i>', lineText);
-    lineText = replaceall('< /i >', '</i>', lineText);
-
-    lineText = replaceall(`<${specialWord} i >${specialWord}`, '<i>', lineText);
-    lineText = replaceall(
-      `<${specialWord} / i >${specialWord}`,
-      '</i>',
-      lineText,
-    );
-    lineText = replaceall(
-      `<${specialWord} /i >${specialWord}`,
-      '</i>',
-      lineText,
-    );
-
-    lineText = replaceall('<i>', ' <i> ', lineText);
-    lineText = replaceall('</i>', ' </i> ', lineText);
-
-    if (!this.withSpecials) {
-      lineText = replaceall('<b>', '', lineText);
-      lineText = replaceall('</b>', '', lineText);
-      lineText = replaceall('<i>', '', lineText);
-      lineText = replaceall('</i>', '', lineText);
-    }
-    // remove double spaces
-    if (lineText) {
-      lineText = lineText.replace(/\s{2,}/g, ' ').trim();
-    }
-
-    const ideograms = lineText.split(' ');
-    const ideogramsFiltered: any[] = [];
-
-    let joinSpecial = '';
-
-    ideograms.forEach(ideogram => {
-      if (ideogram === specialWord) {
-        return;
-      }
-
-      if (
-        ideogram.substring(ideogram.length - specialWord.length) === specialWord
-      ) {
-        joinSpecial += ideogram.replace(specialWord, '');
-        return;
-      } else if (joinSpecial) {
-        ideogramsFiltered.push(joinSpecial);
-        joinSpecial = '';
-      }
-
-      ideogramsFiltered.push(ideogram);
-    });
-
-    if (joinSpecial) {
-      ideogramsFiltered.push(joinSpecial);
-    }
-
-    lineText = ` ${ideogramsFiltered.join(' ')} `;
-
-    lineText = this.replaceWords(lineText);
-
-    if (footNoteIds.length) {
-      const footNoteId = footNoteIds[0];
-
-      lineText = replaceall(
-        '# FOOTNOTE',
-        ` #FOOTNOTE-${footNoteId}-`,
-        lineText,
-      );
-
-      lineText = replaceall(
-        '# F O O T N O T E',
-        ` #FOOTNOTE-${footNoteId}-`,
-        lineText,
-      );
-
-      lineText = replaceall('- *', '-*', lineText);
-    }
-
-    if (bibles.length > 0 && this.isChinese) {
-      // separate ）from numbers
-      lineText = lineText.replace(/([1-9])(）)/g, '$1 $2');
-      lineText = replaceall('BI #[', ' BI#[', lineText);
-      lineText = replaceall(']# BI', ']#BI ', lineText);
-      lineText = replaceall('B I #[', 'BI#[', lineText);
-      lineText = replaceall(']# B I', ']#BI', lineText);
-      lineText = lineText.replace(/\s{2,}/g, ' ').trim();
-    }
-
-    return lineText.trim();
-  }
-
-  protected async getPinyinPdf($) {
-    if (!this.isChinese) {
+  public async fillLanguage(parsedDownloadLanguage, parsedDownload) {
+    if (!parsedDownloadLanguage) {
       return;
     }
 
-    const download = $('.digitalPubFormat .jsDownload');
-    let href = '';
-    download.each((i, children) => {
-      if (href) {
+    parsedDownloadLanguage.text.forEach((item, i) => {
+      if (item.type === 'img') {
         return;
       }
 
-      if (children.attribs.href.indexOf('PDF') !== -1) {
-        href = children.attribs.href;
+      if (item.type === 'box-img') {
+        return;
       }
+
+      if (!parsedDownload.text[i]) {
+        parsedDownload.text[i] = {};
+      }
+
+      parsedDownload.text[i].trans = item.text;
     });
+  }
 
-    if (href) {
-      const downloader = new GenericDownloader();
-      const content = await downloader.download(href);
+  protected async joinLanguages(
+    chinesePromise: Promise<TextInterface[]>,
+    languagePromise: Promise<TextInterface[]>,
+    simplifiedPromise: Promise<TextInterface[]>,
+  ): Promise<ParseItemInterface[]> {
+    const response = await Promise.all([
+      chinesePromise,
+      languagePromise,
+      simplifiedPromise,
+    ]);
 
-      let $pdf = cheerio.load(content);
+    const parsedDownload: TextInterface[] = response[0];
+    const parsedDownloadLanguage: TextInterface[] = response[1];
+    const parsedDownloadSimplified: TextInterface[] = response[2];
 
-      const links = $pdf('.standardDownloadResults a');
-      const pdfPinyinList: any[] = [];
-      links.each((i, children) => {
-        if (children.attribs.href.indexOf('.pdf') === -1) {
-          return;
-        }
+    const items: ParseItemInterface[] = [];
 
-        if (children.attribs.href.indexOf('-Pi_') === -1) {
-          return;
-        }
+    let i = 0;
+    for (const parsedItem of parsedDownload) {
+      const item: ParseItemInterface = {
+        chinese: parsedItem,
+      };
 
-        pdfPinyinList.push(children.attribs.href);
-      });
-
-      let dirname = `${__dirname.replace(
-        'dist/api/',
-        '',
-      )}/../../../../storage/`;
-      if (env.storage_path) {
-        dirname = `${env.storage_path}`;
+      if (parsedDownloadLanguage[i]) {
+        item.language = parsedDownloadLanguage[i];
       }
 
-      if (pdfPinyinList.length) {
-        const pdfPinyin = pdfPinyinList.join('|||');
-        this.pdfParsedObjectPromise = getPdfParsedObject(pdfPinyin, true, {
-          dirname,
-        });
+      if (parsedDownloadSimplified && parsedDownloadSimplified[i]) {
+        item.simplified = parsedDownloadSimplified[i];
       }
+
+      items.push(item);
+      i++;
     }
+
+    return items;
+  }
+
+  protected isSummary($: CheerioStatic): boolean {
+    return (
+      ($('.toc').length > 0 && $('article .docSubContent').length === 0) ||
+      $('#musicTOC').length > 0
+    );
   }
 }

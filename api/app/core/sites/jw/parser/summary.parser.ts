@@ -3,7 +3,7 @@ import * as isChinese from '../../../../../../shared/helpers/is-chinese';
 import * as separatePinyinInSyllables from '../../../../../../shared/helpers/separate-pinyin-in-syllables';
 import { ParserResponseInterface } from '../../../../core/sites/interfaces/parser.response.interface';
 // @ts-ignore
-import * as UnihanSearch from '../../../services/UnihanSearch';
+import * as UnihanSearch from '../../../../services/UnihanSearch';
 
 export class SummaryParser {
   public async parse($: CheerioStatic): Promise<ParserResponseInterface> {

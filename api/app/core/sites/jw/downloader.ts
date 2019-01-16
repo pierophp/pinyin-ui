@@ -8,7 +8,6 @@ import * as bluebird from 'bluebird';
 import { orderBy } from 'lodash';
 import { Encoder } from '../encoder';
 import { Downloader as GenericDownloader } from '../downloader';
-import { ParserResponseInterface } from '../interfaces/parser.response.interface';
 
 export class Downloader {
   protected downloader: GenericDownloader;
@@ -32,9 +31,7 @@ export class Downloader {
 
     this.verifyTypeOfSite(url, ideogramType);
 
-    const chineseParser = new Parser();
-    const simplifiedParser = new Parser();
-    const languageParser = new Parser();
+    const parser = new Parser();
 
     const $: CheerioStatic = await this.downloadUrl(url);
     let $chinese: CheerioStatic | undefined = $;
@@ -55,41 +52,12 @@ export class Downloader {
       throw new Error('Site not found');
     }
 
-    let promiseSimplified = new Promise<ParserResponseInterface>(resolve =>
-      resolve(),
-    );
     let $simplified;
     if (this.isTraditional) {
       $simplified = await this.downloadChineseByLink($chinese, 's');
-      if ($simplified) {
-        promiseSimplified = simplifiedParser.parse($simplified, true);
-      }
     }
 
-    const promiseChinese = chineseParser.parse(
-      $chinese,
-      true,
-      $simplified ? false : true,
-    );
-
-    let promiseLanguage = new Promise<ParserResponseInterface>(resolve =>
-      resolve(),
-    );
-    if ($language) {
-      promiseLanguage = languageParser.parse($language, false);
-    }
-
-    profiler('Parse Start');
-    const response = await Promise.all([
-      promiseChinese,
-      promiseLanguage,
-      promiseSimplified,
-    ]);
-    profiler('Parse End');
-
-    let parsedDownload: ParserResponseInterface = response[0];
-    const parsedDownloadLanguage: ParserResponseInterface = response[1];
-    const parsedDownloadSimplified: ParserResponseInterface = response[2];
+    const parsedDownload = await parser.parse($chinese, $language, $simplified);
 
     if (parsedDownload.links) {
       return this.parseLinks(
@@ -100,35 +68,10 @@ export class Downloader {
       );
     }
 
-    let parsedDownloadTraditional;
-    if (parsedDownloadSimplified) {
-      parsedDownloadTraditional = parsedDownload;
-      parsedDownload = parsedDownloadSimplified;
-    }
-
-    let fillTraditionalPromise: Promise<any> = new Promise(resolve =>
-      resolve(),
-    );
-    if (parsedDownloadTraditional) {
-      fillTraditionalPromise = this.fillTraditional(
-        parsedDownloadTraditional,
-        parsedDownload,
-      );
-    }
-
-    const fillLanguagePromise = this.fillLanguage(
-      parsedDownloadLanguage,
-      parsedDownload,
-    );
-
-    const pinyinPromise = this.pinyin(parsedDownload, convertPinyin);
+    // const pinyinPromise = this.pinyin(parsedDownload, convertPinyin);
 
     profiler('Process Language + Pinyin - Start');
-    await Promise.all([
-      fillLanguagePromise,
-      fillTraditionalPromise,
-      pinyinPromise,
-    ]);
+    // await Promise.all([pinyinPromise]);
     profiler('Process Language + Pinyin End');
 
     return parsedDownload;
@@ -255,87 +198,6 @@ export class Downloader {
     profiler('Getting links End');
 
     return responseLinks;
-  }
-
-  public async fillLanguage(parsedDownloadLanguage, parsedDownload) {
-    if (!parsedDownloadLanguage) {
-      return;
-    }
-
-    parsedDownloadLanguage.text.forEach((item, i) => {
-      if (item.type === 'img') {
-        return;
-      }
-
-      if (item.type === 'box-img') {
-        return;
-      }
-
-      if (!parsedDownload.text[i]) {
-        parsedDownload.text[i] = {};
-      }
-
-      parsedDownload.text[i].trans = item.text;
-    });
-  }
-
-  public async fillTraditional(parsedDownloadTraditional, parsedDownload) {
-    parsedDownload.text.forEach((item, i) => {
-      if (item.type === 'img') {
-        return;
-      }
-
-      if (item.type === 'box-img') {
-        return;
-      }
-
-      if (!parsedDownload.text[i]) {
-        parsedDownload.text[i] = {};
-      }
-
-      if (
-        !parsedDownloadTraditional.text ||
-        !parsedDownloadTraditional.text[i] ||
-        !parsedDownloadTraditional.text[i].text
-      ) {
-        return;
-      }
-
-      console.log(parsedDownloadTraditional.text[i].text);
-
-      const traditionalBlocks = parsedDownloadTraditional.text[i].text
-        .split(' ')
-        .filter(item => item)
-        .join('');
-
-      function replaceAt(str: string, index: number, chr: string) {
-        if (index > str.length - 1) return str;
-        return str.substr(0, index) + chr + str.substr(index + 1);
-      }
-
-      let traditionalCounter = 0;
-
-      let blockCounter = 0;
-      for (const simplifiedBlock of item.text) {
-        let characterCount = 0;
-
-        if (!simplifiedBlock.c) {
-          continue;
-        }
-
-        for (const simplifiedC of simplifiedBlock.c.split('')) {
-          parsedDownload.text[i].text[blockCounter].c = replaceAt(
-            simplifiedBlock.c,
-            characterCount,
-            traditionalBlocks[traditionalCounter],
-          );
-          traditionalCounter++;
-          characterCount++;
-        }
-
-        blockCounter++;
-      }
-    });
   }
 
   public async pinyin(parsedDownload, convertPinyin) {

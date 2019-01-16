@@ -1,18 +1,11 @@
-import { TextInterface } from '../../../../core/sites/interfaces/text.interface';
-import { stringType } from 'aws-sdk/clients/iam';
-import * as bibleBooks from '../../../../../../shared/data/bible/bible';
 import * as replaceall from 'replaceall';
+import * as bibleBooks from '../../../../../../shared/data/bible/bible';
 import { removeHtmlSpecialTags } from '../../../../core/sites/helpers/remove.html.special.tags';
-
-interface GetTextResponseInterface {
-  line: string;
-  bibles: any[];
-  footNoteIds: string[];
-}
+import { TextInterface } from '../../../../core/sites/interfaces/text.interface';
 
 export class DomParser {
   protected items: TextInterface[];
-  protected figcaptionsText: stringType[] = [];
+  protected figcaptionsText: string[] = [];
   protected isChinese: boolean;
   public async parse(
     $: CheerioStatic,
@@ -22,6 +15,14 @@ export class DomParser {
     this.items = [];
     this.figcaptionsText = [];
 
+    $('.viewOptions').remove();
+    $('noscript').remove();
+    $('#docSubVideo').remove();
+    $('#docSubImg').remove();
+
+    /**
+     * Main Image Article
+     */
     const mainImage = $('.lsrBannerImage');
     if (mainImage.length) {
       this.items.push({
@@ -35,12 +36,18 @@ export class DomParser {
       });
     }
 
+    /**
+     * Main Title Article
+     */
     if ($('article header h1').length) {
       this.items = this.items.concat(
         await this.parseResult($, $('article header h1'), 'h1'),
       );
     }
 
+    /**
+     * Main Elements Prioriry
+     */
     const mainElements = [
       'article > .docSubContent .textSizeIncrement > div[class=""]',
       'article > .docSubContent .textSizeIncrement',
@@ -207,7 +214,11 @@ export class DomParser {
     }
   }
 
-  public async parseContent($: CheerioStatic, element, type: string) {
+  public async parseContent(
+    $: CheerioStatic,
+    element,
+    type: string,
+  ): Promise<void> {
     if ($(element).hasClass('qu')) {
       type = 'qu';
     }
@@ -229,12 +240,27 @@ export class DomParser {
 
     await this.getImages($, figure, type);
 
-    return this.items;
+    let text = $(element)
+      .text()
+      .trim();
+    if (!text) {
+      return;
+    }
+
+    this.items = this.items.concat(
+      await this.parseResult($, element, type, footnote),
+    );
   }
 
-  public async getText($, element): Promise<GetTextResponseInterface[]> {
+  public async parseResult(
+    $: CheerioStatic,
+    element,
+    type?: string,
+    footnote?: string,
+  ): Promise<TextInterface[]> {
     let text = $(element).html();
-    if (text === null) {
+
+    if (!text) {
       return [];
     }
 
@@ -299,16 +325,42 @@ export class DomParser {
       }
     }
 
-    text = removeHtmlSpecialTags($, text);
+    text = removeHtmlSpecialTags($, text!);
 
-    const lines = text
+    text = replaceall('BI#[', '<bible text="', text);
+    text = replaceall(']#BI', '">', text);
+    text = replaceall(']#ENDBI', '</bible>', text);
+
+    if (footNoteIds) {
+      for (const footNoteId of footNoteIds) {
+        text = replaceall(
+          `#FOOTNOTE${footNoteId}`,
+          `<footnote id="${footNoteId}">`,
+          text,
+        );
+
+        text = replaceall(`#ENDFOOTNOTE${footNoteId}`, '</footnote>', text);
+      }
+    }
+
+    const lines = text!
       .trim()
       .split('\r\n')
       .filter(item => item);
 
-    const responseLines: GetTextResponseInterface[] = [];
+    const responseLines: TextInterface[] = [];
     for (const line of lines) {
-      responseLines.push({ line, bibles, footNoteIds });
+      if (this.figcaptionsText.indexOf(text || '') > -1) {
+        continue;
+      }
+
+      responseLines.push({
+        text: line,
+        bibles,
+        footNoteIds,
+        type,
+        footnote,
+      });
     }
 
     return responseLines;
@@ -374,20 +426,5 @@ export class DomParser {
 
       this.items = this.items.concat(result);
     }
-  }
-
-  protected async parseResult($, element, type): Promise<TextInterface[]> {
-    const result = await this.getText($, element);
-
-    const response: TextInterface[] = [];
-
-    for (const item of result) {
-      response.push({
-        text: item.line,
-        type,
-      });
-    }
-
-    return response;
   }
 }

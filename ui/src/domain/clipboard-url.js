@@ -28,6 +28,8 @@ async function parseSite(lines, audio, url) {
     }
 
     const row = [];
+
+    // @deprecated Backend should send value
     if (
       line.type !== undefined &&
       (line.type === 'img' || line.type === 'box-img')
@@ -45,6 +47,7 @@ async function parseSite(lines, audio, url) {
       continue;
     }
 
+    // @deprecated Backend should send value
     if (typeof line.text === 'string') {
       const ideograms = line.text.split(' ');
 
