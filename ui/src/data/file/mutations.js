@@ -137,6 +137,9 @@ export default {
 
       Vue.set(state.file, relativeIndex, line);
     }
+
+    state.fileChangeTimestamp = Date.now();
+    state.fullFileString = JSON.stringify(state.fullFile);
   },
 
   [types.FILE_MUTATION_SET_PINYIN_SPACED](state) {
