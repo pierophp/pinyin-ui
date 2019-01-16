@@ -512,10 +512,18 @@ export default {
       pinyin,
     });
 
+    try {
+      if (state.fullFile[lineIndex][0].line.pinyin_source === 'pdf') {
+        return;
+      }
+    } catch (e) {}
+
     await dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex });
   },
 
   async [types.FILE_ACTION_SEPARATE]({ commit, state, dispatch }, data) {
+    const pinyinList = separatePinyinInSyllables(data.pinyin);
+
     const separatedBlocks = data.separateCharacter
       .split(' ')
       .filter(character => character)
@@ -524,12 +532,25 @@ export default {
         p: '',
       }));
 
-    const lineIndex = parseInt(data.lineIndex, 10);
+    let i = 0;
+    let pinyinId = 0;
+    for (const separatedBlock of separatedBlocks) {
+      for (const ideogram of separatedBlock.c.split('')) {
+        separatedBlocks[i].p += pinyinList[pinyinId] + String.fromCharCode(160);
+        pinyinId++;
+      }
 
+      separatedBlocks[i].p = separatedBlocks[i].p.trim();
+      i++;
+    }
+
+    const lineIndex = parseInt(data.lineIndex, 10);
     const blockIndex = parseInt(data.blockIndex, 10);
 
     let blocks = state.fullFile[lineIndex];
+
     const lastBlocks = blocks.splice(blockIndex, blocks.length - blockIndex);
+
     lastBlocks.shift();
     blocks = blocks.concat(separatedBlocks);
     blocks = blocks.concat(lastBlocks);
@@ -538,6 +559,12 @@ export default {
       line: blocks,
       lineIndex,
     });
+
+    try {
+      if (state.fullFile[lineIndex][0].line.pinyin_source === 'pdf') {
+        return;
+      }
+    } catch (e) {}
 
     await dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex });
   },
