@@ -28,6 +28,8 @@ async function parseSite(lines, audio, url) {
     }
 
     const row = [];
+
+    // @deprecated Backend should send value
     if (
       line.type !== undefined &&
       (line.type === 'img' || line.type === 'box-img')
@@ -45,6 +47,7 @@ async function parseSite(lines, audio, url) {
       continue;
     }
 
+    // @deprecated Backend should send value
     if (typeof line.text === 'string') {
       const ideograms = line.text.split(' ');
 
@@ -117,7 +120,10 @@ async function parseSite(lines, audio, url) {
         row.push(item);
       });
     } else {
-      row = line.text;
+      row = line;
+      if (line.text) {
+        row = line.text;
+      }
     }
 
     if (line.type !== undefined) {
@@ -125,7 +131,7 @@ async function parseSite(lines, audio, url) {
       row[0].line.type = line.type;
     }
 
-    if (line.trans !== undefined) {
+    if ((line.trans !== undefined) & row) {
       row[0].trans = line.trans;
     }
 

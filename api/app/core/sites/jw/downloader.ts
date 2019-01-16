@@ -2,8 +2,6 @@ import { http } from '../../../helpers/http';
 import { profiler } from '../../../helpers/profiler';
 import * as cheerio from 'cheerio';
 import { Parser } from './parser';
-// @ts-ignore
-import * as UnihanSearch from '../../../services/UnihanSearch';
 import * as bluebird from 'bluebird';
 import { orderBy } from 'lodash';
 import { Encoder } from '../encoder';
@@ -31,42 +29,33 @@ export class Downloader {
 
     this.verifyTypeOfSite(url, ideogramType);
 
-    const chineseParser = new Parser();
-    const languageParser = new Parser();
+    const parser = new Parser();
 
-    const $: any = await this.downloadUrl(url);
-    let $chinese = $;
+    const $: CheerioStatic = await this.downloadUrl(url);
+    let $chinese: CheerioStatic | undefined = $;
     let $language;
 
     if (!this.isChinese) {
-      $chinese = await this.downloadChineseByLink($, ideogramType);
+      $chinese = await this.downloadChineseByLink(
+        $,
+        this.isTraditional ? 't' : 's',
+      );
       $language = $;
       language = String(url.replace('https://www.jw.org/', '')).split('/')[0];
     } else if (language) {
       $language = await this.downloadLanguage($, language);
     }
 
-    const promiseChinese = chineseParser.parse(
-      $chinese,
-      true,
-      this.isTraditional,
-    );
-
-    let promiseLanguage = new Promise(resolve => resolve());
-    if ($language) {
-      promiseLanguage = languageParser.parse(
-        $language,
-        false,
-        this.isTraditional,
-      );
+    if (!$chinese) {
+      throw new Error('Site not found');
     }
 
-    profiler('Parse Start');
-    const response = await Promise.all([promiseChinese, promiseLanguage]);
-    profiler('Parse End');
+    let $simplified;
+    if (this.isTraditional) {
+      $simplified = await this.downloadChineseByLink($chinese, 's');
+    }
 
-    const parsedDownload = response[0];
-    const parsedDownloadLanguage = response[1];
+    const parsedDownload = await parser.parse($chinese, $language, $simplified);
 
     if (parsedDownload.links) {
       return this.parseLinks(
@@ -77,21 +66,10 @@ export class Downloader {
       );
     }
 
-    const fillLanguagePromise = this.fillLanguage(
-      parsedDownloadLanguage,
-      parsedDownload,
-    );
-
-    const pinyinPromise = this.pinyin(parsedDownload, convertPinyin);
-
-    profiler('Process Language + Pinyin - Start');
-    await Promise.all([fillLanguagePromise, pinyinPromise]);
-    profiler('Process Language + Pinyin End');
-
     return parsedDownload;
   }
 
-  protected verifyTypeOfSite(url, ideogramType) {
+  protected verifyTypeOfSite(url: string, ideogramType: string) {
     this.isChinese = false;
 
     const chineseSites = [
@@ -115,7 +93,7 @@ export class Downloader {
     }
   }
 
-  protected async downloadUrl(url) {
+  protected async downloadUrl(url: string): Promise<CheerioStatic> {
     let response;
     profiler(`Download JW Start - ${url}`);
     try {
@@ -136,25 +114,30 @@ export class Downloader {
     return cheerio.load(response);
   }
 
-  protected async downloadChineseByLink($, ideogramType) {
+  protected async downloadChineseByLink(
+    $: CheerioStatic,
+    ideogramType: string,
+  ): Promise<CheerioStatic | undefined> {
     const chineseLink = $(`link[hreflang="cmn-han${ideogramType}"]`);
-    if (chineseLink.length > 0) {
-      const link = `https://www.jw.org${chineseLink.attr('href')}`;
-      profiler(`Download JW Start - Chinese - ${this.encoder.encodeUrl(link)}`);
-      let response;
-      try {
-        response = await this.downloader.download(this.encoder.encodeUrl(link));
-      } catch (e) {
-        response = await this.downloader.download(link);
-      }
-
-      profiler('Download JW End - Chinese');
-
-      return cheerio.load(response);
+    if (chineseLink.length === 0) {
+      return;
     }
+
+    const link = `https://www.jw.org${chineseLink.attr('href')}`;
+    profiler(`Download JW Start - Chinese - ${this.encoder.encodeUrl(link)}`);
+    let response;
+    try {
+      response = await this.downloader.download(this.encoder.encodeUrl(link));
+    } catch (e) {
+      response = await this.downloader.download(link);
+    }
+
+    profiler('Download JW End - Chinese');
+
+    return cheerio.load(response);
   }
 
-  protected async downloadLanguage($, language) {
+  protected async downloadLanguage($: CheerioStatic, language: string) {
     const translateLink = $(`link[hreflang="${language}"]`);
     if (translateLink.length > 0) {
       const link = `https://www.jw.org${translateLink.attr('href')}`;
@@ -207,70 +190,5 @@ export class Downloader {
     profiler('Getting links End');
 
     return responseLinks;
-  }
-
-  public async fillLanguage(parsedDownloadLanguage, parsedDownload) {
-    if (!parsedDownloadLanguage) {
-      return;
-    }
-
-    parsedDownloadLanguage.text.forEach((item, i) => {
-      if (item.type === 'img') {
-        return;
-      }
-
-      if (item.type === 'box-img') {
-        return;
-      }
-
-      if (!parsedDownload.text[i]) {
-        parsedDownload.text[i] = {};
-      }
-
-      parsedDownload.text[i].trans = item.text;
-    });
-  }
-
-  public async pinyin(parsedDownload, convertPinyin) {
-    if (!convertPinyin) {
-      return;
-    }
-    profiler('Pinyin Start');
-
-    await bluebird.map(
-      parsedDownload.text,
-      async (item: any, i) => {
-        if (!item) {
-          return;
-        }
-
-        if (item.type === 'img') {
-          return;
-        }
-
-        if (item.type === 'box-img') {
-          return;
-        }
-
-        if (typeof item.text !== 'string') {
-          return;
-        }
-
-        if (!item.text) {
-          item.text = '';
-        }
-        const ideograms = item.text.split(' ');
-        const pinyin = await UnihanSearch.toPinyin(ideograms);
-        const pinynReturn: any[] = [];
-        pinyin.forEach(pinyinItem => {
-          pinynReturn.push(pinyinItem.pinyin);
-        });
-
-        parsedDownload.text[i].pinyin = pinynReturn;
-      },
-      { concurrency: 4 },
-    );
-
-    profiler('Pinyin End');
   }
 }

@@ -76,6 +76,7 @@
     "yargs": "^10.0.3"
   },
   "devDependencies": {
+    "@types/cheerio": "^0.22.10",
     "chai": "^3.5.0",
     "eslint": "^3.6.1",
     "eslint-config-airbnb-base": "^8.0.0",

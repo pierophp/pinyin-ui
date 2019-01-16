@@ -19,8 +19,8 @@ export class ChineseToolsParser {
     );
 
     const $ = cheerio.load(response.data);
-    let defaultResponse = [];
-    let dictResponse = [];
+    let defaultResponse: string[] = [];
+    let dictResponse: string[] = [];
 
     pronunciation = replaceall(' ', '', pronunciation).toLowerCase();
 
@@ -32,6 +32,7 @@ export class ChineseToolsParser {
       let dictIdeogram = $(row)
         .find('.ctdico_char')
         .text();
+
       if (!dictIdeogram) {
         return;
       }
@@ -44,30 +45,34 @@ export class ChineseToolsParser {
 
       let dictPinyin = $(row)
         .find('.ctdico_pinyin')
-        .html()
+        .html()!
         .trim();
-      let dictDef = $(row)
-        .find('.ctdico_def')
-        .html();
+
+      let dictDef: string =
+        $(row)
+          .find('.ctdico_def')
+          .html() || '';
+
       dictDef = replaceall('</a>', '</a> ', dictDef);
       dictDef = $('<textarea />')
-        .html(dictDef)
+        .html(dictDef!)
         .text();
       dictDef = replaceall(' ;', ';', dictDef);
 
-      dictDef = dictDef
+      let dictDefList: string[] = dictDef!
         .split('\n')
         .map(item => item.trim())
         .filter(item => item);
-      if (dictDef.length === 1) {
-        dictDef = dictDef[0]
+
+      if (dictDefList.length === 1) {
+        dictDefList = dictDefList[0]
           .split('/')
           .map(item => item.trim())
           .filter(item => item);
       }
 
       if (defaultResponse.length === 0) {
-        defaultResponse = dictDef;
+        defaultResponse = dictDefList;
       }
 
       dictPinyin = $('<textarea />')
@@ -81,7 +86,7 @@ export class ChineseToolsParser {
       ).toLowerCase();
 
       if (dictPinyinWithoutSpace === pronunciation) {
-        dictResponse = dictDef;
+        dictResponse = dictDefList;
       }
     });
 

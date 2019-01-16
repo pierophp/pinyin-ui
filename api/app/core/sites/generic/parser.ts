@@ -1,8 +1,11 @@
 import * as replaceall from 'replaceall';
 import * as replaceIdeogramsToSpace from '../../../../../shared/helpers/special-ideograms-chars';
-import { AbstractParser } from '../abstract.parser';
+import { explodeLines } from '../helpers/explode.lines';
+import { removeHtmlSpecialTags } from '../helpers/remove.html.special.tags';
+import { replaceWords } from '../helpers/replace.words';
+import { segmentText } from '../helpers/segment.text';
 
-export class Parser extends AbstractParser {
+export class Parser {
   protected text: any[] = [];
   protected figcaptionsText: any[] = [];
   protected isChinese: boolean;
@@ -127,7 +130,9 @@ export class Parser extends AbstractParser {
       }
     }
 
-    let text = this.trim($(element).text());
+    let text = $(element)
+      .text()
+      .trim();
     if (!text) {
       return;
     }
@@ -138,7 +143,7 @@ export class Parser extends AbstractParser {
       return;
     }
 
-    this.explodeLines(text).forEach(line => {
+    explodeLines(text).forEach(line => {
       if (!line) {
         return;
       }
@@ -165,10 +170,10 @@ export class Parser extends AbstractParser {
       return '';
     }
 
-    text = this.removeHtmlSpecialTags($, text);
+    text = removeHtmlSpecialTags($, text);
 
     if (!this.isChinese) {
-      return this.trim(text);
+      return text.trim();
     }
 
     const lines = text.trim().split('\r\n');
@@ -178,7 +183,7 @@ export class Parser extends AbstractParser {
     let newText = '';
 
     for (const line of lines) {
-      let lineText = this.segmentText(line);
+      let lineText = segmentText(line);
 
       const specialWord = 'JOIN_SPECIAL';
 
@@ -283,13 +288,13 @@ export class Parser extends AbstractParser {
 
       lineText = ` ${ideogramsFiltered.join(' ')} `;
 
-      lineText = this.replaceWords(lineText);
+      lineText = replaceWords(lineText);
 
       newText += `${lineText}\r\n`;
     }
 
     text = newText;
-    text = this.trim(text);
+    (text = text).trim();
     return text;
   }
 }
