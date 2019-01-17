@@ -2,15 +2,14 @@ import * as replaceall from 'replaceall';
 import * as bibleBooks from '../../../../../../shared/data/bible/bible';
 import { removeHtmlSpecialTags } from '../../../../core/sites/helpers/remove.html.special.tags';
 import { TextInterface } from '../../../../core/sites/interfaces/text.interface';
+import { profiler } from '../../../../helpers/profiler';
 
 export class DomParser {
   protected items: TextInterface[];
   protected figcaptionsText: string[] = [];
   protected isChinese: boolean;
-  public async parse(
-    $: any,
-    isChinese: boolean,
-  ): Promise<TextInterface[]> {
+  protected debug: boolean = false;
+  public async parse($: any, isChinese: boolean): Promise<TextInterface[]> {
     this.isChinese = isChinese;
     this.items = [];
     this.figcaptionsText = [];
@@ -55,6 +54,7 @@ export class DomParser {
       'article #bibleText',
       'article .docSubContent',
       '#dailyText',
+      '#article article',
       '#article',
     ];
 
@@ -62,12 +62,20 @@ export class DomParser {
     for (const me of mainElements) {
       mainElement = $(me);
       if (mainElement.length) {
+        if (this.debug) {
+          profiler('Main element ' + me);
+        }
+
         break;
       }
     }
 
     for (const children of mainElement.children().toArray()) {
       if ($(children).hasClass('blockTeach')) {
+        if (this.debug) {
+          profiler('LEVEL 1 - .blockTeach');
+        }
+
         const boxH2 = $(children).find('aside h2');
         if (boxH2 && $(boxH2).text()) {
           this.items = this.items.concat(
@@ -77,11 +85,19 @@ export class DomParser {
 
         await this.parseBlock($, $(children).find('.boxContent'));
       } else if ($(children).hasClass('bodyTxt')) {
+        if (this.debug) {
+          profiler('LEVEL 1 - .bodyTxt');
+        }
+
         for (const subChildren of $(children)
           .children()
           .toArray()) {
           const boxH2 = $(subChildren).children('h2');
           if (boxH2 && $(boxH2).text()) {
+            if (this.debug) {
+              profiler('LEVEL 2 - H2');
+            }
+
             this.items = this.items.concat(
               await this.parseResult($, boxH2, 'h2'),
             );
@@ -90,7 +106,15 @@ export class DomParser {
           let bodyTxtChildren = $(subChildren).children('div.pGroup');
 
           if (bodyTxtChildren.length === 0) {
+            if (this.debug) {
+              profiler('LEVEL 2 - div');
+            }
+
             bodyTxtChildren = $(subChildren).children('div');
+          } else {
+            if (this.debug) {
+              profiler('LEVEL 2 - div.pGroup');
+            }
           }
 
           for (const subChildren02 of bodyTxtChildren.children().toArray()) {
@@ -98,6 +122,10 @@ export class DomParser {
           }
         }
       } else if ($(children).hasClass('article')) {
+        if (this.debug) {
+          profiler('LEVEL 1 - .article');
+        }
+
         for (const subChildren of $(children)
           .children()
           .toArray()) {
@@ -124,6 +152,10 @@ export class DomParser {
           }
         }
       } else {
+        if (this.debug) {
+          profiler('LEVEL 1 - Generic');
+        }
+
         await this.parseBlock($, children);
       }
     }
@@ -214,11 +246,7 @@ export class DomParser {
     }
   }
 
-  public async parseContent(
-    $: any,
-    element,
-    type: string,
-  ): Promise<void> {
+  public async parseContent($: any, element, type: string): Promise<void> {
     if ($(element).hasClass('qu')) {
       type = 'qu';
     }
@@ -229,7 +257,7 @@ export class DomParser {
 
     let footnote;
     if (type === 'foot') {
-      footnote = replaceall('footnote', '', $(element).attr('id'));
+      footnote = replaceall('footnote', '', $(element).attr('id') || '');
     }
 
     const figure = $(element).find('figure');
