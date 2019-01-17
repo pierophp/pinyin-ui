@@ -75,6 +75,8 @@ export class Downloader {
     const chineseSites = [
       'https://www.jw.org/cmn-hans',
       'https://www.jw.org/cmn-hant',
+      'https://wol.jw.org/cmn-Hans',
+      'https://wol.jw.org/cmn-Hant',
     ];
 
     for (const chineseSite of chineseSites) {

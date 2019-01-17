@@ -38,7 +38,7 @@ export class AudioParser {
       let fileUrl;
 
       responseAudio.data.files.CHS.MP3.some(file => {
-        let audioTitleWithoutSpaces = replaceall(' ', '', file.title);
+        let audioTitleWithoutSpaces = replaceall(' ', '', file.title || '');
         replaceIdeogramsToSpace.forEach(item => {
           audioTitleWithoutSpaces = replaceall(
             item,
@@ -47,7 +47,7 @@ export class AudioParser {
           );
         });
 
-        if (audioTitleWithoutSpaces.contains(titleWithoutSpaces)) {
+        if (audioTitleWithoutSpaces.indexOf(titleWithoutSpaces) !== -1) {
           fileUrl = file.file.url;
           return true;
         }
