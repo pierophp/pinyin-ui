@@ -16,9 +16,9 @@ export class Parser {
   protected pdfParsedObjectPromise?: Promise<any>;
 
   public async parse(
-    $chinese: CheerioStatic,
-    $language?: CheerioStatic,
-    $simplified?: CheerioStatic,
+    $chinese: any,
+    $language?: any,
+    $simplified?: any,
   ): Promise<ParserResponseInterface> {
     if (this.isSummary($chinese)) {
       const summaryParser = new SummaryParser();
@@ -199,7 +199,7 @@ export class Parser {
     return items;
   }
 
-  protected isSummary($: CheerioStatic): boolean {
+  protected isSummary($: any): boolean {
     return (
       ($('.toc').length > 0 && $('article .docSubContent').length === 0) ||
       $('#musicTOC').length > 0

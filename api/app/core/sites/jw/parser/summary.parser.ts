@@ -6,7 +6,7 @@ import { ParserResponseInterface } from '../../../../core/sites/interfaces/parse
 import * as UnihanSearch from '../../../../services/UnihanSearch';
 
 export class SummaryParser {
-  public async parse($: CheerioStatic): Promise<ParserResponseInterface> {
+  public async parse($: any): Promise<ParserResponseInterface> {
     const downloadResponse: ParserResponseInterface = { text: [] };
     downloadResponse.links = [];
 

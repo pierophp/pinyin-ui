@@ -31,8 +31,8 @@ export class Downloader {
 
     const parser = new Parser();
 
-    const $: CheerioStatic = await this.downloadUrl(url);
-    let $chinese: CheerioStatic | undefined = $;
+    const $: any = await this.downloadUrl(url);
+    let $chinese: any | undefined = $;
     let $language;
 
     if (!this.isChinese) {
@@ -95,7 +95,7 @@ export class Downloader {
     }
   }
 
-  protected async downloadUrl(url: string): Promise<CheerioStatic> {
+  protected async downloadUrl(url: string): Promise<any> {
     let response;
     profiler(`Download JW Start - ${url}`);
     try {
@@ -117,9 +117,9 @@ export class Downloader {
   }
 
   protected async downloadChineseByLink(
-    $: CheerioStatic,
+    $: any,
     ideogramType: string,
-  ): Promise<CheerioStatic | undefined> {
+  ): Promise<any | undefined> {
     const chineseLink = $(`link[hreflang="cmn-han${ideogramType}"]`);
     if (chineseLink.length === 0) {
       return;
@@ -139,7 +139,7 @@ export class Downloader {
     return cheerio.load(response);
   }
 
-  protected async downloadLanguage($: CheerioStatic, language: string) {
+  protected async downloadLanguage($: any, language: string) {
     const translateLink = $(`link[hreflang="${language}"]`);
     if (translateLink.length > 0) {
       const link = `https://www.jw.org${translateLink.attr('href')}`;

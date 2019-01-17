@@ -8,7 +8,7 @@ export class DomParser {
   protected figcaptionsText: string[] = [];
   protected isChinese: boolean;
   public async parse(
-    $: CheerioStatic,
+    $: any,
     isChinese: boolean,
   ): Promise<TextInterface[]> {
     this.isChinese = isChinese;
@@ -131,7 +131,7 @@ export class DomParser {
     return this.items;
   }
 
-  public async parseBlock($: CheerioStatic, element) {
+  public async parseBlock($: any, element) {
     if (
       $(element).attr('class') &&
       $(element)
@@ -215,7 +215,7 @@ export class DomParser {
   }
 
   public async parseContent(
-    $: CheerioStatic,
+    $: any,
     element,
     type: string,
   ): Promise<void> {
@@ -253,7 +253,7 @@ export class DomParser {
   }
 
   public async parseResult(
-    $: CheerioStatic,
+    $: any,
     element,
     type?: string,
     footnote?: string,

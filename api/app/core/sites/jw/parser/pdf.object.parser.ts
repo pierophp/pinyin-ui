@@ -5,7 +5,7 @@ import * as env from '../../../../../env';
 import { trimEnd } from 'lodash';
 
 export class PdfObjecyParser {
-  public async parse($: CheerioStatic): Promise<any> {
+  public async parse($: any): Promise<any> {
     const download = $('.digitalPubFormat .jsDownload');
     let href = '';
     download.each((i, children) => {

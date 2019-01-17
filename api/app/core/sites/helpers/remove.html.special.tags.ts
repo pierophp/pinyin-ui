@@ -1,6 +1,6 @@
 import * as replaceall from 'replaceall';
 
-export function removeHtmlSpecialTags($: CheerioStatic, text: string): string {
+export function removeHtmlSpecialTags($: any, text: string): string {
   text = replaceall('+', '', text);
   text = replaceall('<strong>', '//STRONG-OPEN//', text);
   text = replaceall('</strong>', '//STRONG-CLOSE//', text);

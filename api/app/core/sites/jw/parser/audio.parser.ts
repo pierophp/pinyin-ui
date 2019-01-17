@@ -4,7 +4,7 @@ import { http } from '../../../../helpers/http';
 import { Encoder } from '../../encoder';
 
 export class AudioParser {
-  public async parse($: CheerioStatic): Promise<string | undefined> {
+  public async parse($: any): Promise<string | undefined> {
     let media = $('.jsAudioPlayer a');
     if (media.length > 0) {
       return media.attr('href');
