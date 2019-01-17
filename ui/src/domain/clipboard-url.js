@@ -27,7 +27,7 @@ async function parseSite(lines, audio, url) {
       line = { text: line };
     }
 
-    const row = [];
+    let row = [];
 
     // @deprecated Backend should send value
     if (
