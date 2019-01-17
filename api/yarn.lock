@@ -298,9 +298,9 @@ asynckit@^0.4.0:
   integrity sha1-x57Zf380y48robyXkLzDZkdLS3k=
 
 aws-sdk@^2.166.0:
-  version "2.388.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.388.0.tgz#de3f8f5576ccaa3477fe66529bdd1546250e8325"
-  integrity sha512-2yycFVn90H61R3vbE+4Yqn8AEOS88oOE1wUsm6aUhsk+i/Y707a85C166gKuE3+if4y8IS5qqQJiX+HUtF0KNw==
+  version "2.389.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.389.0.tgz#d1460a44fb96be4f6cf33311f241ea1124080826"
+  integrity sha512-4KBH2o4f/ncTJfKzUsMNxxPNWkF7eFVZlYLRpeFAYEgw+r8xE//0YBReNnySS5Y5oQTOtg376bOlQSWtFhKv1g==
   dependencies:
     buffer "4.9.1"
     events "1.1.1"
@@ -978,9 +978,9 @@ error-ex@^1.2.0:
     is-arrayish "^0.2.1"
 
 es5-ext@^0.10.14, es5-ext@^0.10.35, es5-ext@^0.10.9, es5-ext@~0.10.14:
-  version "0.10.46"
-  resolved "https://registry.yarnpkg.com/es5-ext/-/es5-ext-0.10.46.tgz#efd99f67c5a7ec789baa3daa7f79870388f7f572"
-  integrity sha512-24XxRvJXNFwEMpJb3nOkiRJKRoupmjYmOPVlI65Qy2SrtxwOTB+g6ODjBKOtwEHbYrhWRty9xxOWLNdClT2djw==
+  version "0.10.47"
+  resolved "https://registry.yarnpkg.com/es5-ext/-/es5-ext-0.10.47.tgz#d24232e1380daad5449a817be19bde9729024a11"
+  integrity sha512-/1TItLfj+TTfWoeRcDn/0FbGV6SNo4R+On2GGVucPU/j3BWnXE2Co8h8CTo4Tu34gFJtnmwS9xiScKs4EjZhdw==
   dependencies:
     es6-iterator "~2.0.3"
     es6-symbol "~3.1.1"
@@ -2464,9 +2464,9 @@ map-stream@~0.1.0:
   integrity sha1-5WqpTEyAVaFkBKBnS3jyFffI4ZQ=
 
 math-random@^1.0.1:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.3.tgz#5843d8307f8d2fd83de240701eeb2dc7bc77a104"
-  integrity sha512-hULdrPg17lCyaJOrDwS4RSGQcc/MFyv1aujidohCsBq2zotkhIns8mMDQ7B8VnKG23xcpa+haU5MLDNyNzCesQ==
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.4.tgz#5dd6943c938548267016d4e34f057583080c514c"
+  integrity sha512-rUxjysqif/BZQH2yhd5Aaq7vXMSx9NdEsQcyA07uEzIvxgI7zIr33gGsh+RU0/XjmQpCW7RsVof1vlkvQVCK5A==
 
 md5@^2.2.1:
   version "2.2.1"
@@ -3148,9 +3148,9 @@ pause@0.0.1:
   integrity sha1-HUCLP9t2kjuVQ9lvtMnf1TXZy10=
 
 pdf-pinyin@^1.0.0:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/pdf-pinyin/-/pdf-pinyin-1.0.3.tgz#148e1667a9cb74362bb5fa56057c607ad571fa0b"
-  integrity sha512-f1OYk4/kytEkLOLPgoEELK6AjnLHdMBjT3Gf8mohfnlVvJXi2IX6lkv0JBIdlg6c+c4bSXrLkiqZdgQsSOLjwQ==
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/pdf-pinyin/-/pdf-pinyin-1.0.5.tgz#a1f4e68b9aa530778976a9550976a674d7972ff5"
+  integrity sha512-JJFEjwqC3EyRg17ka1hNs8jYRb9/g39rJ0HjZeKHNdEbOvlvVX/UZ8ZSuQaIVdOHzxJnDrOj02QIxmhJ5rswJw==
   dependencies:
     axios "^0.18.0"
     bluebird "^3.5.3"
