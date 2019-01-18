@@ -1,5 +1,5 @@
 <template>
-  <span class="songs-container">
+  <span class="song-container">
     <file-container
       :lines="lines"
       :fullLines="fullLines"
@@ -132,7 +132,7 @@ export default {
 </script>
 
 <style>
-.songs-container {
+.song-container {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
