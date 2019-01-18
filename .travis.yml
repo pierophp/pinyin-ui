@@ -73,7 +73,7 @@ before_install:
   # songs
   - rm public/index.html
   - cp public/index-${TRAVIS_BRANCH}.html public/index.html
-  - sed -i -e 's/favicon\//favicon-videos\//g' public/index.html
+  - sed -i -e 's/favicon\//favicon-songs\//g' public/index.html
   - yarn build-songs > /dev/null
   - cp -R static dist/static
   - zip -r /home/travis/songs.pinyin.dist.zip dist > /dev/null
