@@ -44,6 +44,16 @@ const postDeployCommands = [
     isProduction ? '/var/www/videos.pinyin' : '/var/www/videos.pinyin.staging'
   }`,
   'ln -sf /var/local/pinyin/bible /var/www/bible.pinyin/static/bible',
+  // Songs Editor UI
+  'rm -Rf dist/',
+  `unzip songs.pinyin.dist-${process.env.TRAVIS_BRANCH}.zip > /dev/null`,
+  `sudo rm -Rf ${
+    isProduction ? '/var/www/songs.pinyin' : '/var/www/songs.pinyin.staging'
+  }`,
+  `mv /home/ubuntu/dist ${
+    isProduction ? '/var/www/songs.pinyin' : '/var/www/songs.pinyin.staging'
+  }`,
+  'ln -sf /var/local/pinyin/songs /var/www/songs.pinyin/static/songs',
   // API
   `cd ${
     isProduction

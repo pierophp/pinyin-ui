@@ -12,5 +12,7 @@ export CMD="scp -o StrictHostKeyChecking=no /home/travis/dictionary.pinyin.dist.
 $CMD
 export CMD="scp -o StrictHostKeyChecking=no /home/travis/videos.pinyin.dist.zip ${SSH_USER}@${SSH_HOST}:~/videos.pinyin.dist-${TRAVIS_BRANCH}.zip"
 $CMD
+export CMD="scp -o StrictHostKeyChecking=no /home/travis/songs.pinyin.dist.zip ${SSH_USER}@${SSH_HOST}:~/songs.pinyin.dist-${TRAVIS_BRANCH}.zip"
+$CMD
 export CMD="pm2 deploy ecosystem.config.js $DEPLOY_ENV --force"
 $CMD
