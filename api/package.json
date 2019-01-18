@@ -13,7 +13,8 @@
     "lint-fix": "node node_modules/eslint/bin/eslint --fix --ext .js app",
     "test-node": "node node_modules/.bin/mocha --reporter spec tests/server",
     "console": "NODE_ENV=production ts-node ./app/console.ts",
-    "cli": "NODE_ENV=production ts-node ./app/console.ts"
+    "cli": "NODE_ENV=production ts-node ./app/console.ts",
+    "cli:dist": "node ./dist/api/app/console.js"
   },
   "engines": {
     "node": ">=8.0"

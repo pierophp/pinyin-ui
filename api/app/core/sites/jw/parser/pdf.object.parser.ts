@@ -2,7 +2,6 @@ import * as cheerio from 'cheerio';
 import * as getPdfParsedObject from 'pdf-pinyin/src/core/get.pdf.parsed.object';
 import { Downloader as GenericDownloader } from '../../downloader';
 import * as env from '../../../../../env';
-import { trimEnd } from 'lodash';
 
 export class PdfObjecyParser {
   public async parse($: any): Promise<any> {
@@ -50,7 +49,7 @@ export class PdfObjecyParser {
       if (pdfPinyinList.length) {
         const pdfPinyin = pdfPinyinList.join('|||');
         return getPdfParsedObject(pdfPinyin, true, {
-          dirname: trimEnd(dirname, '/'),
+          dirname: `${dirname}pdf-pinyin`,
         });
       }
     }

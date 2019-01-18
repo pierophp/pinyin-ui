@@ -1,37 +1,32 @@
 <template>
-  <div class="bible-chapters-container">
-    <div
-      v-for="(chapter, chapterId) in chapters"
-      v-bind:key="chapterId"
-      class="bible-chapter"
-      @click="goTo(chapter.c)"
-    >{{ chapter.c }}</div>
+  <div class="songs-container">
+    <div v-for="(song) in songs" v-bind:key="song" class="song" @click="goTo(song)">{{ song }}</div>
   </div>
 </template>
 
 <script>
-import chaptersData from 'shared/data/bible/chapters';
-
 export default {
-  name: 'bible-chapters',
+  name: 'songs',
   data() {
+    const songs = [];
+    for (let i = 1; i <= 151; i++) {
+      songs.push(i);
+    }
+
     return {
-      chapters: [],
+      songs,
     };
   },
   methods: {
     goTo(link) {
-      this.$router.push(`/bible/${this.$route.params.book}/${link}`);
+      this.$router.push(`/songs/${link}`);
     },
-  },
-  created() {
-    this.chapters = chaptersData[this.$route.params.book];
   },
 };
 </script>
 
 <style>
-.bible-chapters-container {
+.songs-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -41,7 +36,7 @@ export default {
   overflow: auto;
 }
 
-.bible-chapter {
+.song {
   color: #fff;
   line-height: 45px;
   height: 45px;
@@ -55,7 +50,7 @@ export default {
   user-select: none;
 }
 
-.bible-chapter:hover {
+.song:hover {
   background-color: #275197;
 }
 </style>

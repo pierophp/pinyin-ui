@@ -3,6 +3,7 @@ export default {
     my_files: 'My Files',
     dictionary: 'Dictionary',
     bible: 'Bible',
+    songs: 'Songs',
     my_ideograms: 'My Ideograms',
     browser: 'Browser',
     settings: 'Settings',
@@ -13,6 +14,7 @@ export default {
   app: {
     editor: '拼字 Pinzi  - Editor',
     bible: '拼字 Pinzi  - Bible',
+    songs: '拼字 Pinzi  - Songs',
     dictionary: '拼字 Pinzi  - Dictionary',
     videos: '拼字 Pinzi  - Videos',
   },
