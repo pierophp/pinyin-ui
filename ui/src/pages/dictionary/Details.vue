@@ -21,20 +21,17 @@
           </md-button>
         </div>
       </div>
-
-      <md-tabs>
-        <md-tab id="dict" :md-label="$t('definition')">
+      <tabs>
+        <tab :label="$t('definition')">
           <dictionary-details :dictionary="dictionary" :pinyin="dictionary.pronunciation"/>
-        </md-tab>
-
-        <md-tab id="stroke" :md-label="$t('stroke')">
+        </tab>
+        <tab :label="$t('stroke')">
           <dictionary-stroke-order :ideograms="dictionary.ideograms"/>
-        </md-tab>
-
-        <md-tab id="links" md-label="Links">
+        </tab>
+        <tab label="Links">
           <Links list="1" :character="dictionary.ideograms"/>
-        </md-tab>
-      </md-tabs>
+        </tab>
+      </tabs>
     </loadable-content>
 
     <forvo-modal ref="dialogForvo" :character="dictionary.ideograms"/>
@@ -58,6 +55,8 @@ import TraditionalSimplifiedShow from 'src/components/ideograms/TraditionalSimpl
 import ForvoModal from 'src/components/modals/Forvo';
 import Links from 'src/components/ideograms/Links';
 import OptionsManager from 'src/domain/options-manager';
+import Tabs from 'src/components/common/Tabs';
+import Tab from 'src/components/common/Tab';
 
 const options = OptionsManager.getOptions();
 
@@ -70,6 +69,8 @@ export default {
     TraditionalSimplifiedShow,
     ForvoModal,
     Links,
+    Tabs,
+    Tab,
   },
   data() {
     return {
@@ -140,10 +141,6 @@ export default {
   margin-bottom: 15px;
 }
 
-.dictionary-container .md-tabs .md-tab {
-  padding: 10px;
-}
-
 .dictionary-container .title-container {
   align-items: center;
   display: flex;
@@ -171,9 +168,5 @@ export default {
   width: 100%;
   height: 500px;
   border: 0;
-}
-
-.dictionary-container .md-tabs-content {
-  height: auto !important;
 }
 </style>

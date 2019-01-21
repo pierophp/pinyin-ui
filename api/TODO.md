@@ -1,7 +1,6 @@
 # Prioridade Alta
 
 - Dicionário editar parcial
-- Dicionário exibir longo sem mudar a aba
 
 # Prioridade Média
 

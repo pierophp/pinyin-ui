@@ -4,7 +4,6 @@ import MdDrawer from 'vue-material/dist/components/MdDrawer';
 import MdIcon from 'vue-material/dist/components/MdIcon';
 import MdProgress from 'vue-material/dist/components/MdProgress';
 import MdSnackbar from 'vue-material/dist/components/MdSnackbar';
-import MdTabs from 'vue-material/dist/components/MdTabs';
 import MdToolbar from 'vue-material/dist/components/MdToolbar';
 
 export default Vue => {
@@ -14,6 +13,5 @@ export default Vue => {
   Vue.use(MdIcon);
   Vue.use(MdProgress);
   Vue.use(MdSnackbar);
-  Vue.use(MdTabs);
   Vue.use(MdToolbar);
 };

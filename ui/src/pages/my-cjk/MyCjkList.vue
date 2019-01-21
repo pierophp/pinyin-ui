@@ -1,7 +1,7 @@
 <template>
   <div class="ideograms-container">
-    <md-tabs>
-      <md-tab id="ideograms" :md-label="$t('ideograms')">
+    <tabs>
+      <tab id="ideograms" :label="$t('ideograms')">
         <loadable-content :loading="loading">
           <h3 v-if="options.type !== '4'">{{ $t('my_total') }}: {{total}}</h3>
           <table class="spaced-table">
@@ -44,9 +44,9 @@
             </tbody>
           </table>
         </loadable-content>
-      </md-tab>
+      </tab>
 
-      <md-tab id="words" :md-label="$t('words')">
+      <tab id="words" :label="$t('words')">
         <loadable-content :loading="loading">
           <h3 v-if="options.type !== '4'">{{ $t('my_total') }}: {{totalWords}}</h3>
           <h3 v-if="options.type !== '4'">{{ $t('my_total_ideograms') }}: {{ideogramsKnownWords}}</h3>
@@ -86,8 +86,8 @@
             </tbody>
           </table>
         </loadable-content>
-      </md-tab>
-    </md-tabs>
+      </tab>
+    </tabs>
 
     <my-cjk-list-modal
       :active.sync="dialogUnknownOpen"
@@ -141,6 +141,9 @@ import LoadableContent from 'src/components/common/loading/LoadableContent';
 import MyCjkListModal from 'src/components/modals/MyCjkList';
 import OptionsManager from 'src/domain/options-manager';
 import MenuContent from 'src/components/common/MenuContent';
+import Tabs from 'src/components/common/Tabs';
+import Tab from 'src/components/common/Tab';
+
 const options = OptionsManager.getOptions();
 let type = 'known';
 if (options.type === '4') {
@@ -173,6 +176,8 @@ export default {
     LoadableContent,
     MyCjkListModal,
     MenuContent,
+    Tabs,
+    Tab,
   },
   methods: {
     async knownIdeograms(frequency) {
@@ -329,10 +334,6 @@ export default {
   font-family: 'Noto Sans SC', 'Noto Sans TC', sans-serif;
   font-size: 21px !important;
   font-weight: 300 !important;
-}
-
-.ideograms-container .md-tabs-content {
-  height: auto !important;
 }
 </style>
 

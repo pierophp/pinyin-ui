@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="bottom-bar" v-if="show">
-      <span class="ideogram-link" v-for="(data,index) in printData" @click.prevent="openModal(data.characterLink)" :key="index">
+      <span
+        class="ideogram-link"
+        v-for="(data,index) in printData"
+        @click.prevent="openModal(data.characterLink)"
+        :key="index"
+      >
         <ideograms-show :pinyin="data.pinyin" :character="data.character" ref="ideogram-show"/>
       </span>
 
@@ -20,49 +25,39 @@
 
         <div class="list-container">
           <div class="list-item" @click="close()">
-              <div class="icon">
-                <md-icon>clear</md-icon>
-              </div>
-              <div class="content">
-                {{ $t("close") }}
-              </div>
+            <div class="icon">
+              <md-icon>clear</md-icon>
             </div>
+            <div class="content">{{ $t("close") }}</div>
+          </div>
 
-            <div class="list-item" @click="joinLeft(block)">
-              <div class="icon">
-                <md-icon>arrow_back</md-icon>
-              </div>
-              <div class="content">
-                {{ $t("join_left") }}
-              </div>
+          <div class="list-item" @click="joinLeft(block)">
+            <div class="icon">
+              <md-icon>arrow_back</md-icon>
             </div>
+            <div class="content">{{ $t("join_left") }}</div>
+          </div>
 
-            <div class="list-item" @click="separate(block)">
-              <div class="icon">
-                <md-icon>swap_horiz</md-icon>
-              </div>
-              <div class="content">
-                {{ $t("split") }}
-              </div>
+          <div class="list-item" @click="separate(block)">
+            <div class="icon">
+              <md-icon>swap_horiz</md-icon>
             </div>
+            <div class="content">{{ $t("split") }}</div>
+          </div>
 
-            <div class="list-item" @click="edit(block)">
-              <div class="icon">
-                <md-icon>edit</md-icon>
-              </div>
-              <div class="content">
-                {{ $t("edit") }}
-              </div>
+          <div class="list-item" @click="edit(block)">
+            <div class="icon">
+              <md-icon>edit</md-icon>
             </div>
+            <div class="content">{{ $t("edit") }}</div>
+          </div>
 
-            <div class="list-item" @click="openLinkMenu()">
-              <div class="icon">
-                <md-icon>open_in_browser</md-icon>
-              </div>
-              <div class="content">
-                Links
-              </div>
+          <div class="list-item" @click="openLinkMenu()">
+            <div class="icon">
+              <md-icon>open_in_browser</md-icon>
             </div>
+            <div class="content">Links</div>
+          </div>
         </div>
       </menu-content>
       <Links list="0" :character="block.character" ref="links"/>
@@ -75,9 +70,16 @@
       id="dialog-dictionary"
     >
       <md-dialog-title>
-        <traditional-simplified-show :pinyin="block.pinyin" :ideograms="block.character" :variants="dictionary.variants"/>
+        <traditional-simplified-show
+          :pinyin="block.pinyin"
+          :ideograms="block.character"
+          :variants="dictionary.variants"
+        />
         - {{ block.pinyin }}
-        <md-button class="md-icon-button md-primary clipboard-btn" @click="clipboard(block.character)">
+        <md-button
+          class="md-icon-button md-primary clipboard-btn"
+          @click="clipboard(block.character)"
+        >
           <md-icon>content_copy</md-icon>
         </md-button>
 
@@ -87,31 +89,33 @@
       </md-dialog-title>
 
       <md-dialog-content>
-
-      <md-tabs>
-        <md-tab id="dict" :md-label="$t('definition')">
-          <div class="loadable-loader" v-show="modalDictionaryLoading">
-            <md-progress-spinner class="md-accent" md-mode="indeterminate" :visible="modalDictionaryLoading"></md-progress-spinner>
-          </div>
-          <dictionary-details
-            :dictionary="dictionary"
-            :pinyin="block.pinyin"
-            @change-show="changeShow"
-            ref="dictionaryDetails"
-            v-show="!modalDictionaryLoading"
+        <tabs>
+          <tab id="dict" :label="$t('definition')">
+            <div class="loadable-loader" v-show="modalDictionaryLoading">
+              <md-progress-spinner
+                class="md-accent"
+                md-mode="indeterminate"
+                :visible="modalDictionaryLoading"
+              ></md-progress-spinner>
+            </div>
+            <dictionary-details
+              :dictionary="dictionary"
+              :pinyin="block.pinyin"
+              @change-show="changeShow"
+              ref="dictionaryDetails"
+              v-show="!modalDictionaryLoading"
             />
-          <dictionary-list :list="dictionaryList" v-show="!modalDictionaryLoading"/>
-        </md-tab>
+            <dictionary-list :list="dictionaryList" v-show="!modalDictionaryLoading"/>
+          </tab>
 
-        <md-tab id="stroke" :md-label="$t('stroke')">
-          <dictionary-stroke-order :ideograms="block.character"/>
-        </md-tab>
+          <tab id="stroke" :label="$t('stroke')">
+            <dictionary-stroke-order :ideograms="block.character"/>
+          </tab>
 
-        <md-tab id="links" md-label="Links">
-            <Links list=1 :character="block.character"/>
-        </md-tab>
-      </md-tabs>
-
+          <tab id="links" label="Links">
+            <Links list="1" :character="block.character"/>
+          </tab>
+        </tabs>
       </md-dialog-content>
 
       <md-dialog-actions>
@@ -127,7 +131,7 @@
 
       <md-dialog-content>
         <div class="field-container">
-          <input type="text" v-model="separateCharacter"/>
+          <input type="text" v-model="separateCharacter">
         </div>
       </md-dialog-content>
 
@@ -144,7 +148,7 @@
 
       <md-dialog-content>
         <div class="field-container">
-          <input type="text" v-model="editPinyin"/>
+          <input type="text" v-model="editPinyin">
         </div>
       </md-dialog-content>
 
@@ -153,7 +157,7 @@
       </md-dialog-actions>
     </md-dialog>
 
-    <forvo-modal ref="dialogForvo" :character="block.character" />
+    <forvo-modal ref="dialogForvo" :character="block.character"/>
 
     <md-snackbar md-position="center" :md-duration="1300" :md-active.sync="clipboardOpen">
       <span>{{ $t('copied_to_clipboard') }}</span>
@@ -177,6 +181,8 @@ import TraditionalSimplifiedShow from 'src/components/ideograms/TraditionalSimpl
 import DictionaryStrokeOrder from 'src/components/dictionary/StrokeOrder';
 import MenuContent from 'src/components/common/MenuContent';
 import { mapActions, mapMutations, mapGetters } from 'vuex';
+import Tabs from 'src/components/common/Tabs';
+import Tab from 'src/components/common/Tab';
 
 import {
   FILE_ACTION_JOIN_LEFT,
@@ -229,6 +235,8 @@ export default {
     ForvoModal,
     TraditionalSimplifiedShow,
     MenuContent,
+    Tabs,
+    Tab,
   },
   computed: {
     ...mapGetters({
@@ -539,18 +547,6 @@ export default {
 
 #dialog-dictionary .md-dialog-content {
   padding: 0 15px 15px;
-}
-
-#dialog-dictionary .md-dialog-container .md-tabs-navigation {
-  padding: 0 !important;
-}
-
-#dialog-dictionary .md-dialog-container .md-tab {
-  padding: 10px 0 !important;
-}
-
-#dialog-dictionary .md-tabs-navigation .md-button {
-  height: 32px;
 }
 
 .bottom-bar-pinyin {
