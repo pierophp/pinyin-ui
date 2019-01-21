@@ -23,7 +23,7 @@ import LocalStorage from 'src/helpers/local-storage';
 
 let options = {};
 
-const CACHE_VERSION = 2;
+const CACHE_VERSION = 3;
 
 export default {
   name: 'song',
