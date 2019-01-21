@@ -67,6 +67,7 @@ export default {
   color: rgba(0, 0, 0, 0.7);
   padding: 10px 20px;
   text-transform: uppercase;
+  user-select: none;
 }
 
 .tab-header:hover {
