@@ -378,7 +378,7 @@ export class DomParser {
 
     const responseLines: TextInterface[] = [];
     for (const line of lines) {
-      if (this.figcaptionsText.indexOf(text || '') > -1) {
+      if (this.figcaptionsText.indexOf(line || '') > -1) {
         continue;
       }
 
