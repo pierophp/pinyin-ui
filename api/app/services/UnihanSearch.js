@@ -1,94 +1,10 @@
-const bluebird = require('bluebird');
-const { uniqBy, uniq } = require('lodash');
-const replaceall = require('replaceall');
-const knex = require('./knex');
-const isChinese = require('../../../shared/helpers/is-chinese');
-const { IdeogramsConverter } = require('../core/converter/ideograms.converter');
+const { uniq } = require('lodash');
 
+const knex = require('./knex');
+const { IdeogramsConverter } = require('../core/converter/ideograms.converter');
 const ideogramsConverter = new IdeogramsConverter();
 
 module.exports = class UnihanSearch {
-  static async searchToDictionaryList(search) {
-    search = replaceall(' ', '', search);
-    let cjkList = [];
-
-    if (isChinese(search)) {
-      const simplifiedIdeogram = await ideogramsConverter.traditionalToSimplified(
-        search,
-      );
-
-      cjkList = await knex('cjk')
-        .where({
-          ideogram: ideogramsConverter.convertIdeogramsToUtf16(
-            simplifiedIdeogram,
-          ),
-        })
-        .orderBy('main', 'DESC')
-        .orderBy('frequency', 'ASC')
-        .orderBy('hsk', 'ASC')
-        .orderBy('usage', 'DESC')
-        .select('id', 'pronunciation', 'ideogram');
-
-      const cjkListLike = await knex('cjk')
-        .where(
-          'ideogram',
-          'LIKE',
-          `${ideogramsConverter.convertIdeogramsToUtf16(simplifiedIdeogram)}%`,
-        )
-        .orderBy('main', 'DESC')
-        .orderBy('frequency', 'ASC')
-        .orderBy('hsk', 'ASC')
-        .orderBy('usage', 'DESC')
-        .orderBy('ideogram_length', 'ASC')
-        .limit(100)
-        .select(
-          knex.raw(
-            'id, pronunciation, ideogram, LENGTH(ideogram) ideogram_length',
-          ),
-        );
-
-      cjkList = uniqBy([].concat(cjkList, cjkListLike), 'id');
-    } else {
-      cjkList = await knex('cjk')
-        .where({
-          pronunciation_unaccented: search,
-        })
-        .orderBy('main', 'DESC')
-        .orderBy('frequency', 'ASC')
-        .orderBy('hsk', 'ASC')
-        .orderBy('usage', 'DESC')
-        .select('id', 'pronunciation', 'ideogram');
-
-      const cjkListLike = await knex('cjk')
-        .where('pronunciation_unaccented', 'LIKE', `${search}%`)
-        .orderBy('main', 'DESC')
-        .orderBy('frequency', 'ASC')
-        .orderBy('hsk', 'ASC')
-        .orderBy('usage', 'DESC')
-        .orderBy('ideogram_length', 'ASC')
-        .limit(100)
-        .select(
-          knex.raw(
-            'id, pronunciation, ideogram, LENGTH(ideogram) ideogram_length',
-          ),
-        );
-
-      cjkList = uniqBy([].concat(cjkList, cjkListLike), 'id');
-    }
-
-    await bluebird.mapSeries(cjkList, async entry => {
-      entry.ideogram = ideogramsConverter.convertUtf16ToIdeograms(
-        entry.ideogram,
-      );
-      entry.ideogramTraditional = await ideogramsConverter.simplifiedToTraditional(
-        entry.ideogram,
-      );
-      return entry;
-    });
-
-    return { search, entries: cjkList };
-  }
-
   static async searchToDictionaryPartial(ideograms) {
     let searchedIdeograms = '';
     let partialIdeograms = ideograms;
@@ -155,6 +71,7 @@ module.exports = class UnihanSearch {
 
     let cjkList = await knex('cjk')
       .where(where)
+      .orderBy('main', 'DESC')
       .orderBy('frequency', 'ASC')
       .orderBy('usage', 'DESC')
       .select(...fields);
@@ -169,6 +86,7 @@ module.exports = class UnihanSearch {
       );
       cjkListTraditional = await knex('cjk')
         .where(where)
+        .orderBy('main', 'DESC')
         .orderBy('frequency', 'ASC')
         .orderBy('usage', 'DESC')
         .select(...fields);
@@ -181,6 +99,7 @@ module.exports = class UnihanSearch {
       );
       cjkList = await knex('cjk')
         .where(where)
+        .orderBy('main', 'DESC')
         .orderBy('frequency', 'ASC')
         .orderBy('usage', 'DESC')
         .select(...fields);
@@ -198,6 +117,7 @@ module.exports = class UnihanSearch {
       );
       cjkListTraditional = await knex('cjk')
         .where(where)
+        .orderBy('main', 'DESC')
         .orderBy('frequency', 'ASC')
         .orderBy('usage', 'DESC')
         .select(...fields);

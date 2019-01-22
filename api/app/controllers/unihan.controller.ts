@@ -4,7 +4,7 @@ import * as express from 'express';
 import { ArrayCache } from '../cache/array.cache';
 import { RedisCache } from '../cache/redis.cache';
 import { IdeogramsConverter } from '../core/converter/ideograms.converter';
-import { Dictionary } from '../core/dictionary';
+import { DictionaryManager } from '../core/dictionary/dictionary.manager';
 import { PinyinConverter } from '../core/pinyin/pinyin.converter';
 import { CjkRepository } from '../repository/cjk.repository';
 import * as knex from '../services/knex';
@@ -67,8 +67,8 @@ router.post('/to_pinyin_all', (req, res) => {
 });
 
 router.get('/dictionary_search', async (req, res) => {
-  const dictionary = new Dictionary();
-  const result = await dictionary.search(
+  const dictionaryManager = new DictionaryManager();
+  const result = await dictionaryManager.search(
     req.query.search,
     req.query.debug ? true : false,
   );

@@ -1,9 +1,7 @@
-import * as env from '../../../env';
-import { AdapterInterface } from 'node-filesystem';
-import { LocalAdapter } from 'node-filesystem';
-import { S3Adapter } from 'node-filesystem';
 import * as AWS from 'aws-sdk';
+import { AdapterInterface, LocalAdapter, S3Adapter } from 'node-filesystem';
 import * as replaceall from 'replaceall';
+import * as env from '../../../env';
 
 let dirname = `${__dirname.replace('dist/api/', '')}/../../../../storage/`;
 if (env.storage_path) {

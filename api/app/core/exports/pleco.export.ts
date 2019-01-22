@@ -1,7 +1,5 @@
-import { exec } from 'child_process';
 import { remove as removeDiacritics } from 'diacritics';
 import { writeFile } from 'fs-extra';
-
 import * as separatePinyinInSyllables from '../../../../shared/helpers/separate-pinyin-in-syllables';
 import * as env from '../../../env';
 import extractPinyinTone from '../../helpers/extract-pinyin-tone';
