@@ -107,6 +107,10 @@ export class WithPdfParser {
       return;
     }
 
+    if (result.percentNotFound && Math.round(result.percentNotFound) > 5) {
+      return;
+    }
+
     let bible: any = null;
 
     const item: any[] = result.lines[0];
