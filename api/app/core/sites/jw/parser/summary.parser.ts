@@ -2,9 +2,9 @@ import { padStart } from 'lodash';
 import * as isChinese from '../../../../../../shared/helpers/is-chinese';
 import * as separatePinyinInSyllables from '../../../../../../shared/helpers/separate-pinyin-in-syllables';
 import { ParserResponseInterface } from '../../../../core/sites/interfaces/parser.response.interface';
-// @ts-ignore
-import * as UnihanSearch from '../../../../services/UnihanSearch';
 
+import { PinyinConverter } from '../../../../core/pinyin/pinyin.converter';
+const pinyinConverter = new PinyinConverter();
 export class SummaryParser {
   public async parse($: any): Promise<ParserResponseInterface> {
     const downloadResponse: ParserResponseInterface = { text: [] };
@@ -42,7 +42,7 @@ export class SummaryParser {
         link: $(link).attr('href'),
         number: padStart(String(i), 3, '0'),
         title,
-        title_pinyin: (await UnihanSearch.toPinyin(title.split(' ')))
+        title_pinyin: (await pinyinConverter.toPinyin(title.split(' ')))
           .map(item => {
             if (!isChinese(item.ideogram)) {
               return item.pinyin.split('').join(String.fromCharCode(160));

@@ -1,11 +1,12 @@
 import * as express from 'express';
+import * as env from '../../env';
+import { IdeogramsConverter } from '../core/converter/ideograms.converter';
 import * as knex from '../services/knex';
-// @ts-ignore
-import * as UnihanSearch from '../services/UnihanSearch';
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
-import * as env from '../../env';
+
+const ideogramConverter = new IdeogramsConverter();
 
 router.post('/my_words', async (req: any, res) => {
   try {
@@ -25,7 +26,7 @@ router.post('/my_words', async (req: any, res) => {
     const userId = user[0].id;
 
     for (const word of req.body.words_add) {
-      const ideogramConverted = UnihanSearch.convertIdeogramsToUtf16(word);
+      const ideogramConverted = ideogramConverter.convertIdeogramsToUtf16(word);
 
       let result = await knex('my_cjk')
         .where({
@@ -48,7 +49,7 @@ router.post('/my_words', async (req: any, res) => {
     }
 
     for (const word of req.body.words_delete) {
-      const ideogramConverted = UnihanSearch.convertIdeogramsToUtf16(word);
+      const ideogramConverted = ideogramConverter.convertIdeogramsToUtf16(word);
 
       await knex('my_cjk')
         .where({

@@ -1,8 +1,9 @@
 const Promise = require('bluebird');
 const axios = require('axios');
 const knex = require('./knex');
-const UnihanSearch = require('../services/UnihanSearch');
-
+const IdeogramsConverter = require('../core/converter/ideograms.converter')
+  .IdeogramsConverter;
+const ideogramConverter = new IdeogramsConverter();
 module.exports = class HSKImporter {
   static async import() {
     const totalHsk = 6;
@@ -32,7 +33,7 @@ module.exports = class HSKImporter {
         const items = await knex('cjk')
           .select('id', 'hsk')
           .where({
-            ideogram: UnihanSearch.convertIdeogramsToUtf16(word),
+            ideogram: ideogramConverter.convertIdeogramsToUtf16(word),
           });
 
         if (items.length === 0) {
@@ -41,7 +42,7 @@ module.exports = class HSKImporter {
           // eslint-disable-next-line
           console.log(word);
           // eslint-disable-next-line
-          console.log(UnihanSearch.convertIdeogramsToUtf16(word));
+          console.log(ideogramConverter.convertIdeogramsToUtf16(word));
         }
 
         await Promise.map(items, async item => {

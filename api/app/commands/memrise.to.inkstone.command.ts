@@ -1,13 +1,13 @@
-import { Argv, CommandModule } from 'yargs';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { IdeogramsConverter } from '../core/converter/ideograms.converter';
-// @ts-ignore
-import * as UnihanSearch from '../services/UnihanSearch';
+import { PinyinConverter } from 'core/pinyin/pinyin.converter';
 import * as fs from 'fs-extra';
+import { Argv, CommandModule } from 'yargs';
+import { IdeogramsConverter } from '../core/converter/ideograms.converter';
 import { pinyinAccentsToNumbers } from '../helpers/pinyin.accents.to.numbers';
 
 const ideogramsConverter = new IdeogramsConverter();
+const pinyinConverter = new PinyinConverter();
 
 export class MemriseToInkstoneCommand implements CommandModule {
   public command = 'memrisetoinkstone';
@@ -64,7 +64,7 @@ export class MemriseToInkstoneCommand implements CommandModule {
           )) + '\t';
         result += ideogram.ideogram + '\t';
 
-        const pinyin = (await UnihanSearch.toPinyin(ideogram.ideogram))
+        const pinyin = (await pinyinConverter.toPinyin(ideogram.ideogram))
           .map(item => {
             return pinyinAccentsToNumbers(item.pinyin);
           })

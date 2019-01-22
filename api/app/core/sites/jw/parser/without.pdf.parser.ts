@@ -3,16 +3,16 @@ import * as fillBoldItalic from 'pdf-pinyin/src/core/pinyin/fill.bold.italic';
 import * as replaceall from 'replaceall';
 import * as striptags from 'striptags';
 import * as isChinese from '../../../../../../shared/helpers/is-chinese';
+import * as separatePinyinInSyllables from '../../../../../../shared/helpers/separate-pinyin-in-syllables';
 import * as replaceIdeogramsToSpace from '../../../../../../shared/helpers/special-ideograms-chars';
 import { BlockInterface } from '../../../../core/interfaces/block.interface';
+import { PinyinConverter } from '../../../../core/pinyin/pinyin.converter';
 import { replaceWords } from '../../../../core/sites/helpers/replace.words';
 import { segmentText } from '../../../../core/sites/helpers/segment.text';
-// @ts-ignore
-import * as UnihanSearch from '../../../../services/UnihanSearch';
 import { parseBible } from '../helpers/parse.bible';
 import { ParseItemInterface } from '../interfaces/parse.item.interface';
-import * as separatePinyinInSyllables from '../../../../../../shared/helpers/separate-pinyin-in-syllables';
 
+const pinyinConverter = new PinyinConverter();
 export class WithoutPdfParser {
   public async parse(item: ParseItemInterface): Promise<BlockInterface[]> {
     const text = item.chinese.text!;
@@ -135,7 +135,7 @@ export class WithoutPdfParser {
 
     text = text.trim();
 
-    const pinyinList = await UnihanSearch.toPinyin(text.split(' '));
+    const pinyinList = await pinyinConverter.toPinyin(text.split(' '));
     let i = 0;
     for (const pinyinReturn of pinyinList) {
       blocks[i].p = separatePinyinInSyllables(pinyinReturn.pinyin).join(

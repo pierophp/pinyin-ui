@@ -1,12 +1,10 @@
-import * as AdmZip from 'adm-zip';
-import { createReadStream, statSync } from 'fs';
+import { createReadStream } from 'fs';
 import * as readline from 'readline';
 import * as replaceall from 'replaceall';
-import * as wget from 'wget';
-import { IdeogramsConverter } from '../converter/ideograms.converter';
-import { PinyinConverter } from '../converter/pinyin.converter';
 import * as env from '../../../env';
+import { pinyinNumbersToAccents } from '../../helpers/pinyin.numbers.to.accents';
 import * as knex from '../../services/knex';
+import { IdeogramsConverter } from '../converter/ideograms.converter';
 
 let storagePath = `${__dirname}/../../../../storage/`;
 if (env.storage_path) {
@@ -17,7 +15,6 @@ const filename = `${storagePath}English-Pinyin.txt`;
 const promises: Function[] = [];
 
 const ideogramsConverter = new IdeogramsConverter();
-const pinyinConverter = new PinyinConverter();
 
 export class ThreeLinesParser {
   protected words: any = {};
@@ -128,10 +125,8 @@ export class ThreeLinesParser {
       '',
     );
 
-    pronunciation = pinyinConverter.tonesNumbersToAccents(pronunciation);
-    pronunciationSpaced = pinyinConverter.tonesNumbersToAccents(
-      pronunciationSpaced,
-    );
+    pronunciation = pinyinNumbersToAccents(pronunciation);
+    pronunciationSpaced = pinyinNumbersToAccents(pronunciationSpaced);
 
     const importPromise = async () => {
       parts.shift();
@@ -255,7 +250,7 @@ export class ThreeLinesParser {
       UPDATE tmp_three_lines ts
       JOIN tmp_three_lines tt
         ON tt.ideogram = ts.ideogram
-      AND tt.pronunciation_case = ts.pronunciation_case 
+      AND tt.pronunciation_case = ts.pronunciation_case
       AND tt.definition = ts.definition
       AND tt.variants = ts.variants
       AND tt.simplified = 0
@@ -266,11 +261,11 @@ export class ThreeLinesParser {
     `);
 
     await knex.raw(`
-      DELETE tt 
+      DELETE tt
       FROM tmp_three_lines ts
       JOIN tmp_three_lines tt
         ON tt.ideogram = ts.ideogram
-      AND tt.pronunciation_case = ts.pronunciation_case 
+      AND tt.pronunciation_case = ts.pronunciation_case
       AND tt.definition = ts.definition
       AND tt.variants = ts.variants
       AND tt.simplified = 0

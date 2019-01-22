@@ -1,17 +1,18 @@
 import * as bluebird from 'bluebird';
+import { remove as removeDiacritics } from 'diacritics';
 import * as express from 'express';
-// @ts-ignore
-import * as UnihanSearch from '../services/UnihanSearch';
-import * as knex from '../services/knex';
 import { ArrayCache } from '../cache/array.cache';
 import { RedisCache } from '../cache/redis.cache';
-import { CjkRepository } from '../repository/cjk.repository';
-import { remove as removeDiacritics } from 'diacritics';
-import { Dictionary } from '../core/dictionary';
 import { IdeogramsConverter } from '../core/converter/ideograms.converter';
+import { Dictionary } from '../core/dictionary';
+import { PinyinConverter } from '../core/pinyin/pinyin.converter';
+import { CjkRepository } from '../repository/cjk.repository';
+import * as knex from '../services/knex';
+// @ts-ignore
+import * as UnihanSearch from '../services/UnihanSearch';
 
 const ideogramsConverter = new IdeogramsConverter();
-
+const pinyinConverter = new PinyinConverter();
 // eslint-disable-next-line new-cap
 const router = express.Router();
 router.get('/search', async (req, res) => {
@@ -44,17 +45,22 @@ router.get('/search', async (req, res) => {
   });
 });
 
-router.post('/to_pinyin', (req, res) => {
+router.post('/to_pinyin', async (req, res) => {
   const ideograms = req.body.ideograms;
-  UnihanSearch.toPinyin(ideograms).then(result => {
+  try {
+    const result = await pinyinConverter.toPinyin(ideograms);
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(result));
-  });
+  } catch (e) {
+    console.log(e);
+    res.setHeader('Content-Type', 'application/json');
+    res.status(500).send(JSON.stringify({}));
+  }
 });
 
 router.post('/to_pinyin_all', (req, res) => {
   const ideograms = req.body.ideograms;
-  UnihanSearch.toPinyin(ideograms, { pinyinAll: true }).then(result => {
+  pinyinConverter.toPinyin(ideograms, { pinyinAll: true }).then(result => {
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(result));
   });
@@ -109,7 +115,7 @@ router.post('/save', async (req: any, res) => {
     return;
   }
 
-  const ideogram = UnihanSearch.convertIdeogramsToUtf16(
+  const ideogram = ideogramsConverter.convertIdeogramsToUtf16(
     await ideogramsConverter.traditionalToSimplified(req.body.ideograms),
   );
 

@@ -1,7 +1,6 @@
 import * as replaceall from 'replaceall';
 import * as replaceIdeogramsToSpace from '../../../../../shared/helpers/special-ideograms-chars';
-// @ts-ignore
-import * as UnihanSearch from '../../../services/UnihanSearch';
+import { separateWords } from '../../../helpers/separate.words';
 
 export function segmentText(line: string): string {
   let verifyText = line;
@@ -19,7 +18,7 @@ export function segmentText(line: string): string {
   const minimunWords = replaceall(' ', '', verifyText).length / 2.5;
 
   if (verifyText.split(' ').length < minimunWords) {
-    return UnihanSearch.segment(line).join(' ');
+    return separateWords(line).join(' ');
   }
 
   return line;

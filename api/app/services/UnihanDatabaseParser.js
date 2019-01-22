@@ -4,11 +4,15 @@ const Promise = require('bluebird');
 const fs = require('fs');
 const xml2js = require('xml2js');
 const replaceall = require('replaceall');
-const UnihanSearch = require('../services/UnihanSearch');
+const IdeogramsConverter = require('../core/converter/ideograms.converter')
+  .IdeogramsConverter;
+const ideogramConverter = new IdeogramsConverter();
 
 module.exports = class UnihanDatabaseParser {
   static saveWord(pinyin, ideograms, definition = '') {
-    const ideogramsConverted = UnihanSearch.convertIdeogramsToUtf16(ideograms);
+    const ideogramsConverted = ideogramConverter.convertIdeogramsToUtf16(
+      ideograms,
+    );
 
     return new Promise(resolve => {
       knex('cjk')

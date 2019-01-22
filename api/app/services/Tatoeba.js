@@ -7,6 +7,7 @@ const isChinese = require('../../../shared/helpers/is-chinese');
 const { LanguageRepository } = require('../repository/language.repository');
 const { PhraseRepository } = require('../repository/phrase.repository');
 const UnihanSearch = require('../services/UnihanSearch');
+const separateWords = require('../helpers/separate.words');
 const profiler = require('../helpers/profiler').profiler;
 const { IdeogramsConverter } = require('../core/converter/ideograms.converter');
 
@@ -106,7 +107,7 @@ module.exports = class Tatoeba {
 
           if (languageCode === 'cmn') {
             phrase = await ideogramsConverter.traditionalToSimplified(phrase);
-            const ideograms = UnihanSearch.segment(phrase);
+            const ideograms = separateWords(phrase);
             const ideogramsList = [];
             let ideogramsTemp = '';
             ideograms.forEach(ideogram => {

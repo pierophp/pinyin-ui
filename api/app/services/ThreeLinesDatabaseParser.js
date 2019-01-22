@@ -1,10 +1,13 @@
 const knex = require('./knex');
 const removeDiacritics = require('diacritics').remove;
 const Promise = require('bluebird');
-const UnihanSearch = require('../services/UnihanSearch');
 const readline = require('readline');
 const fs = require('fs');
 const replaceall = require('replaceall');
+const IdeogramsConverter = require('../core/converter/ideograms.converter')
+  .IdeogramsConverter;
+const pinyinNumbersToAccents = require('../helpers/pinyin.numbers.to.accents')
+  .default;
 
 module.exports = class ThreeLinesDatabaseParser {
   static saveWord(pinyin, ideograms) {
@@ -81,9 +84,7 @@ module.exports = class ThreeLinesDatabaseParser {
           new RegExp('[12345]', 'g'),
           '',
         );
-        pronunciation = UnihanSearch.pinyinTonesNumbersToAccents(
-          pronunciation,
-        ).replace(new RegExp('5', 'g'), '');
+        pronunciation = pinyinNumbersToAccents(pronunciation);
 
         const key = ideogram + pronunciation;
 
@@ -103,7 +104,7 @@ module.exports = class ThreeLinesDatabaseParser {
               }
             }
 
-            ideogram = UnihanSearch.convertIdeogramsToUtf16(ideogram);
+            ideogram = IdeogramsConverter.convertIdeogramsToUtf16(ideogram);
 
             knex('cjk')
               .select('id')

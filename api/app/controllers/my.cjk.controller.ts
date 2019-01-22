@@ -1,9 +1,9 @@
 import * as express from 'express';
+import { IdeogramsConverter } from '../core/converter/ideograms.converter';
 import * as knex from '../services/knex';
-// @ts-ignore
-import * as UnihanSearch from '../services/UnihanSearch';
 
 // eslint-disable-next-line new-cap
+const ideogramConverter = new IdeogramsConverter();
 const router = express.Router();
 
 router.post('/get', async (req: any, res) => {
@@ -17,7 +17,7 @@ router.post('/get', async (req: any, res) => {
 
   const ideograms: any[] = [];
   result.forEach((item: any) => {
-    item.ideogram = UnihanSearch.convertUtf16ToIdeograms(item.ideogram);
+    item.ideogram = ideogramConverter.convertUtf16ToIdeograms(item.ideogram);
     ideograms.push(item);
   });
 
@@ -167,7 +167,7 @@ router.get('/report_unknown', async (req: any, res) => {
 
   const ideograms: any[] = [];
   result.forEach(item => {
-    item.ideogram = UnihanSearch.convertUtf16ToIdeograms(item.ideogram);
+    item.ideogram = ideogramConverter.convertUtf16ToIdeograms(item.ideogram);
     ideograms.push(item);
   });
 
@@ -212,7 +212,7 @@ router.get('/report_known', async (req: any, res) => {
 
   const ideograms: any[] = [];
   result.forEach(item => {
-    item.ideogram = UnihanSearch.convertUtf16ToIdeograms(item.ideogram);
+    item.ideogram = ideogramConverter.convertUtf16ToIdeograms(item.ideogram);
     ideograms.push(item);
   });
 
@@ -256,7 +256,7 @@ router.get('/report_unknown_words', async (req: any, res) => {
 
   const ideograms: any[] = [];
   result.forEach(item => {
-    item.ideogram = UnihanSearch.convertUtf16ToIdeograms(item.ideogram);
+    item.ideogram = ideogramConverter.convertUtf16ToIdeograms(item.ideogram);
     ideograms.push(item);
   });
 
@@ -299,7 +299,7 @@ router.get('/report_known_words', async (req: any, res) => {
 
   const ideograms: any[] = [];
   result.forEach(item => {
-    item.ideogram = UnihanSearch.convertUtf16ToIdeograms(item.ideogram);
+    item.ideogram = ideogramConverter.convertUtf16ToIdeograms(item.ideogram);
     ideograms.push(item);
   });
 
@@ -347,7 +347,7 @@ router.get('/ideograms_known_words', async (req: any, res) => {
 
 router.post('/', async (req: any, res) => {
   try {
-    const ideogramConverted = UnihanSearch.convertIdeogramsToUtf16(
+    const ideogramConverted = ideogramConverter.convertIdeogramsToUtf16(
       req.body.ideogram,
     );
 
@@ -382,7 +382,7 @@ router.post('/', async (req: any, res) => {
 
 router.delete('/', async (req: any, res) => {
   try {
-    const ideogramConverted = UnihanSearch.convertIdeogramsToUtf16(
+    const ideogramConverted = ideogramConverter.convertIdeogramsToUtf16(
       req.body.ideogram,
     );
 

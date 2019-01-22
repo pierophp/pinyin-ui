@@ -1,14 +1,12 @@
 import * as bluebird from 'bluebird';
 import * as replaceall from 'replaceall';
+import { IdeogramsConverter } from '../core/converter/ideograms.converter';
+import { ElasticsearchProvider } from '../core/search/elasticsearch.provider';
+import { profiler } from '../helpers/profiler';
+import * as knex from '../services/knex';
 import { BaseRepository } from './base.repository';
 import { LanguageRepository } from './language.repository';
 import { PhraseRepository } from './phrase.repository';
-import * as knex from '../services/knex';
-// @ts-ignore
-import * as UnihanSearch from '../services/UnihanSearch';
-import { profiler } from '../helpers/profiler';
-
-import { ElasticsearchProvider } from '../core/search/elasticsearch.provider';
 
 export class CjkRepository extends BaseRepository {
   static async findAll() {
@@ -80,7 +78,10 @@ export class CjkRepository extends BaseRepository {
   }
 
   static async searchPronunciationByWord(ideograms: string) {
-    const ideogramConverted = UnihanSearch.convertIdeogramsToUtf16(ideograms);
+    const ideogramsConverter = new IdeogramsConverter();
+    const ideogramConverted = ideogramsConverter.convertIdeogramsToUtf16(
+      ideograms,
+    );
     let response: any = null;
     if (ideograms.length === 1) {
       response = await knex('cjk')
@@ -88,6 +89,7 @@ export class CjkRepository extends BaseRepository {
           ideogram: ideogramConverted,
           type: 'C',
         })
+        .orderBy('main', 'DESC')
         .orderBy('frequency', 'ASC')
         .orderBy('usage', 'DESC')
         .select('id', 'pronunciation');
@@ -102,6 +104,7 @@ export class CjkRepository extends BaseRepository {
         ideogram: ideogramConverted,
         type: 'W',
       })
+      .orderBy('main', 'DESC')
       .orderBy('frequency', 'ASC')
       .orderBy('usage', 'DESC')
       .select('id', 'pronunciation');
@@ -111,6 +114,24 @@ export class CjkRepository extends BaseRepository {
     }
 
     return null;
+  }
+
+  static async searchByIdeograms(ideograms: string): Promise<any> {
+    const chars: string[] = [];
+    for (let i = 0; i < ideograms.length; i += 1) {
+      chars.push(ideograms[i].charCodeAt(0).toString(16));
+    }
+    return await bluebird.map(chars, async char => {
+      return await knex('cjk')
+        .where({
+          ideogram: char,
+          type: 'C',
+        })
+        .orderBy('main', 'DESC')
+        .orderBy('frequency', 'ASC')
+        .orderBy('usage', 'DESC')
+        .select('id', 'pronunciation');
+    });
   }
 
   static async save(params) {
@@ -135,7 +156,6 @@ export class CjkRepository extends BaseRepository {
     }))[0];
 
     const elasticsearchProvider = new ElasticsearchProvider();
-
     await elasticsearchProvider.saveMany([cjk]);
   }
 
@@ -157,8 +177,10 @@ export class CjkRepository extends BaseRepository {
 
     let i = 0;
 
+    const ideogramsConverter = new IdeogramsConverter();
+
     await bluebird.mapSeries(items, async (item: any) => {
-      let ideograms = UnihanSearch.convertUtf16ToIdeograms(item.ideogram);
+      let ideograms = ideogramsConverter.convertUtf16ToIdeograms(item.ideogram);
       ideograms = replaceall('%', '', ideograms);
       if (!ideograms) {
         return;

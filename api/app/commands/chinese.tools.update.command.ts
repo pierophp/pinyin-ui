@@ -1,10 +1,9 @@
 import { CommandModule } from 'yargs';
-
-import { CjkRepository } from '../repository/cjk.repository';
-// @ts-ignore
-import * as UnihanSearch from '../services/UnihanSearch';
+import { IdeogramsConverter } from '../core/converter/ideograms.converter';
 import { ChineseToolsParser } from '../core/parser/chinese.tools.parser';
+import { CjkRepository } from '../repository/cjk.repository';
 
+const ideogramsConverter = new IdeogramsConverter();
 export class ChineseToolsUpdateCommand implements CommandModule {
   public command = 'chinesetools:update';
   public describe = 'Update Chinese Tools';
@@ -28,7 +27,9 @@ export class ChineseToolsUpdateCommand implements CommandModule {
         console.log('\n', new Date(), language);
         const cjks = await CjkRepository.findChineseToolsNotNull(language);
         for (const cjk of cjks) {
-          const ideogram = UnihanSearch.convertUtf16ToIdeograms(cjk.ideogram);
+          const ideogram = ideogramsConverter.convertUtf16ToIdeograms(
+            cjk.ideogram,
+          );
           console.log(ideogram);
 
           try {

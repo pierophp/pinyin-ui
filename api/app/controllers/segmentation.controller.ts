@@ -1,12 +1,11 @@
 import * as express from 'express';
-// @ts-ignore
-import * as UnihanSearch from '../services/UnihanSearch';
+import { separateWords } from '../helpers/separate.words';
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
 router.post('/segment', (req, res) => {
-  const ideogramsCuted = UnihanSearch.segment(req.body.ideograms);
+  const ideogramsCuted = separateWords(req.body.ideograms);
   res.send({ ideograms: ideogramsCuted });
 });
 

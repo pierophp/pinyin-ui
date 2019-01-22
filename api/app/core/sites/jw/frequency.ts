@@ -1,11 +1,11 @@
+import { orderBy, trimEnd } from 'lodash';
+import * as replaceall from 'replaceall';
 import * as isChinese from '../../../../../shared/helpers/is-chinese';
 import * as replaceIdeogramsToSpace from '../../../../../shared/helpers/special-ideograms-chars';
-import * as replaceall from 'replaceall';
-import { orderBy, trimEnd } from 'lodash';
+import { IdeogramsConverter } from '../../../core/converter/ideograms.converter';
 import * as knex from '../../../services/knex';
-// @ts-ignore
-import * as UnihanSearch from '../../../services/UnihanSearch';
 
+const ideogramConverter = new IdeogramsConverter();
 export class Frequency {
   public async getFrequency(response, url) {
     const words: any = {};
@@ -43,7 +43,7 @@ export class Frequency {
     for (const word of wordsList) {
       const publicationFrequency = await knex('publication_frequency').where({
         code: publicationCode,
-        ideogram: UnihanSearch.convertIdeogramsToUtf16(word.ideogram),
+        ideogram: ideogramConverter.convertIdeogramsToUtf16(word.ideogram),
       });
 
       if (publicationFrequency.length) {
@@ -52,14 +52,14 @@ export class Frequency {
 
       await knex('publication_frequency').insert({
         code: publicationCode,
-        ideogram: UnihanSearch.convertIdeogramsToUtf16(word.ideogram),
+        ideogram: ideogramConverter.convertIdeogramsToUtf16(word.ideogram),
         total: word.total,
         created_at: new Date(),
       });
     }
 
     await knex.raw(`UPDATE (
-      SELECT ideogram, SUM(total) total  
+      SELECT ideogram, SUM(total) total
       FROM publication_frequency
       GROUP BY ideogram
     ) a

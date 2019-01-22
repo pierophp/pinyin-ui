@@ -1,10 +1,11 @@
-import { http } from '../../../helpers/http';
-import * as knex from '../../../services/knex';
-// @ts-ignore
-import * as UnihanSearch from '../../../services/UnihanSearch';
-import { Encoder } from '../encoder';
 import * as bluebird from 'bluebird';
+import { PinyinConverter } from '../../../core/pinyin/pinyin.converter';
+import { http } from '../../../helpers/http';
+import { separateWords } from '../../../helpers/separate.words';
+import * as knex from '../../../services/knex';
+import { Encoder } from '../encoder';
 
+const pinyinConverter = new PinyinConverter();
 export class Track {
   public async get(url: string, type: string, userId: number) {
     const encoder = new Encoder();
@@ -78,15 +79,15 @@ export class Track {
 
         if (i > 0) {
           if (line.trim()) {
-            const ideograms = UnihanSearch.segment(line);
-            const pinyinList = await UnihanSearch.toPinyin(ideograms);
+            const ideograms = separateWords(line);
+            const pinyinList = await pinyinConverter.toPinyin(ideograms);
             let newLine = '<ruby>';
             pinyinList.forEach(pinyin => {
               if (showIdeograms) {
                 newLine += `${pinyin.ideogram}`;
               }
               if (showPinyin) {
-                newLine += ` <rt>${pinyin.pinyin.trim()}</rt> `;
+                newLine += ` <rt>${pinyin.pinyin!.trim()}</rt> `;
               } else {
                 newLine += ' <rt> </rt> ';
               }

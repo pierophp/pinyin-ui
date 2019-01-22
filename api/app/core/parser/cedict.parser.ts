@@ -3,10 +3,10 @@ import { createReadStream, statSync } from 'fs';
 import * as readline from 'readline';
 import * as replaceall from 'replaceall';
 import * as wget from 'wget';
-import { IdeogramsConverter } from '../converter/ideograms.converter';
-import { PinyinConverter } from '../converter/pinyin.converter';
 import * as env from '../../../env';
+import { pinyinNumbersToAccents } from '../../helpers/pinyin.numbers.to.accents';
 import * as knex from '../../services/knex';
+import { IdeogramsConverter } from '../converter/ideograms.converter';
 
 let storagePath = `${__dirname}/../../../../storage/`;
 if (env.storage_path) {
@@ -18,7 +18,7 @@ const filenameZip = `${storagePath}cedict_1_0_ts_utf-8_mdbg.zip`;
 const promises: Function[] = [];
 
 const ideogramsConverter = new IdeogramsConverter();
-const pinyinConverter = new PinyinConverter();
+[];
 
 export class CedictParser {
   protected words: any = {};
@@ -174,10 +174,8 @@ export class CedictParser {
       '',
     );
 
-    pronunciation = pinyinConverter.tonesNumbersToAccents(pronunciation);
-    pronunciationSpaced = pinyinConverter.tonesNumbersToAccents(
-      pronunciationSpaced,
-    );
+    pronunciation = pinyinNumbersToAccents(pronunciation);
+    pronunciationSpaced = pinyinNumbersToAccents(pronunciationSpaced);
 
     const importPromise = async () => {
       parts.shift();
@@ -201,7 +199,7 @@ export class CedictParser {
           const twStart = 'Taiwan pr.';
 
           if (part.substr(0, twStart.length) === twStart) {
-            taiwanPr = pinyinConverter.tonesNumbersToAccents(
+            taiwanPr = pinyinNumbersToAccents(
               part
                 .split(']')[0]
                 .substr(twStart.length)
@@ -361,7 +359,7 @@ export class CedictParser {
       UPDATE tmp_cedict ts
       JOIN tmp_cedict tt
         ON tt.ideogram = ts.ideogram
-      AND tt.pronunciation_case = ts.pronunciation_case 
+      AND tt.pronunciation_case = ts.pronunciation_case
       AND tt.definition = ts.definition
       AND tt.variants = ts.variants
       AND tt.measure_words = ts.measure_words
@@ -373,11 +371,11 @@ export class CedictParser {
     `);
 
     await knex.raw(`
-      DELETE tt 
+      DELETE tt
       FROM tmp_cedict ts
       JOIN tmp_cedict tt
         ON tt.ideogram = ts.ideogram
-      AND tt.pronunciation_case = ts.pronunciation_case 
+      AND tt.pronunciation_case = ts.pronunciation_case
       AND tt.definition = ts.definition
       AND tt.variants = ts.variants
       AND tt.measure_words = ts.measure_words

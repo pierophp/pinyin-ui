@@ -1,4 +1,4 @@
-module.exports = function extractPinyinTone(pinyin) {
+export default function extractPinyinTone(pinyin) {
   if (pinyin === undefined) {
     return 0;
   }
@@ -33,4 +33,4 @@ module.exports = function extractPinyinTone(pinyin) {
   }
 
   return 0;
-};
+}

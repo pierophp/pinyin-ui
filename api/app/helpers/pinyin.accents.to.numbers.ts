@@ -1,4 +1,4 @@
-import * as extractPinyinTone from './extract-pinyin-tone';
+import extractPinyinTone from './extract-pinyin-tone';
 
 export function pinyinAccentsToNumbers(pinyin: string) {
   let tone = extractPinyinTone(pinyin);

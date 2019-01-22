@@ -4,7 +4,7 @@ import { writeFile } from 'fs-extra';
 
 import * as separatePinyinInSyllables from '../../../../shared/helpers/separate-pinyin-in-syllables';
 import * as env from '../../../env';
-import * as extractPinyinTone from '../../helpers/extract-pinyin-tone';
+import extractPinyinTone from '../../helpers/extract-pinyin-tone';
 import { CjkRepository } from '../../repository/cjk.repository';
 import { IdeogramsConverter } from '../converter/ideograms.converter';
 
