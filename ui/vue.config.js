@@ -50,9 +50,7 @@ module.exports = {
           },
         },
       ],
-      workboxOptions: {
-        skipWaiting: true,
-      },
+      skipWaiting: true,
     },
   },
   chainWebpack: config => {
