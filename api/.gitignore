@@ -1,6 +1,0 @@
-env.js
-node_modules/
-newrelic.js
-newrelic_agent.log
-storage/
-dist/
