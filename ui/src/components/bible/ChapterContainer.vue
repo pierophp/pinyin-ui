@@ -2,42 +2,56 @@
   <span class="bible-chapter-container">
     <div class="verses-container" v-show="showVerses && !versesShowAsModal">
       <div class="bible-verse special-action" @click="selectAll()">
-          <md-icon>done_all</md-icon>
+        <md-icon>done_all</md-icon>
       </div>
 
       <div class="bible-verse special-action" @click="clear()">
-          <md-icon>delete_sweep</md-icon>
+        <md-icon>delete_sweep</md-icon>
       </div>
 
-      <div v-for="(verse, verseId) in verses" v-bind:key="verseId" :class="['bible-verse', (selecteds.indexOf(verse) != -1) ? 'selected' : '']" @click="selectVerseClick(verse)">
-          {{ verse }}
-      </div>
+      <div
+        v-for="(verse, verseId) in verses"
+        v-bind:key="verseId"
+        :class="['bible-verse', (selecteds.indexOf(verse) != -1) ? 'selected' : '']"
+        @click="selectVerseClick(verse)"
+      >{{ verse }}</div>
     </div>
 
-    <file-container 
-      :lines="lines.concat(linesLanguage)" 
-      :fullLines="fullLines.concat(fullLinesLanguage)" 
-      filename="" 
-      :fileLoading="fileLoading" 
-      @open-bottom-bar="openBottomBar" 
-      :parent="parent" 
+    <file-container
+      :lines="lines.concat(linesLanguage)"
+      :fullLines="fullLines.concat(fullLinesLanguage)"
+      filename
+      :fileLoading="fileLoading"
+      @open-bottom-bar="openBottomBar"
+      :parent="parent"
       :showHighlight="false"
-      :useFullLines="false" />
+      :useFullLines="false"
+    />
 
-    <md-dialog ref="modal" class="dialog-bible-verses" :md-active.sync="versesModalOpenTemp" :md-fullscreen="false" :md-backdrop="true" v-if="versesShowAsModal && parent">
+    <md-dialog
+      ref="modal"
+      class="dialog-bible-verses"
+      :md-active.sync="versesModalOpenTemp"
+      :md-fullscreen="false"
+      :md-backdrop="true"
+      v-if="versesShowAsModal && parent"
+    >
       <md-dialog-content>
         <div class="verses-container" v-show="showVerses">
           <div class="bible-verse special-action" @click="selectAll()">
-              <md-icon>done_all</md-icon>
+            <md-icon>done_all</md-icon>
           </div>
 
           <div class="bible-verse special-action" @click="clear()">
-              <md-icon>delete_sweep</md-icon>
+            <md-icon>delete_sweep</md-icon>
           </div>
 
-          <div v-for="(verse, verseId) in verses" v-bind:key="verseId" :class="['bible-verse', (selecteds.indexOf(verse) != -1) ? 'selected' : '']" @click="selectVerseClick(verse)">
-              {{ verse }}
-          </div>
+          <div
+            v-for="(verse, verseId) in verses"
+            v-bind:key="verseId"
+            :class="['bible-verse', (selecteds.indexOf(verse) != -1) ? 'selected' : '']"
+            @click="selectVerseClick(verse)"
+          >{{ verse }}</div>
         </div>
       </md-dialog-content>
 
@@ -393,7 +407,7 @@ export default {
 
       axios
         .get(
-          `static/bible/${language}/${this.book}/${
+          `https://pinyin-bible.pinzi.org/${language}/${this.book}/${
             this.chapter
           }.json?v=${CACHE_VERSION}`,
         )
@@ -462,9 +476,9 @@ export default {
 
       axios
         .get(
-          `static/bible/${options.translationLanguage}/${this.book}/${
-            this.chapter
-          }.json?v=${CACHE_VERSION}`,
+          `https://pinyin-bible.pinzi.org/${options.translationLanguage}/${
+            this.book
+          }/${this.chapter}.json?v=${CACHE_VERSION}`,
         )
         .then(async content => {
           this.fullLinesLanguage = content.data.lines;

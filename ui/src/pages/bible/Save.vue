@@ -2,26 +2,32 @@
   <div class="bible-save-container">
     <table class="spaced-table">
       <thead>
-      <tr>
-        <th>{{ $t('language') }}</th>
-        <th></th>
-      </tr>
+        <tr>
+          <th>{{ $t('language') }}</th>
+          <th></th>
+        </tr>
       </thead>
       <tbody>
-      <tr v-for="(language, index) in languages" :key="index">
-        <td>
-          {{ language.language }}
-        </td>
-        <td class="cell-button">
-          <md-button class="md-icon-button md-raised" @click.native="openModalConfirm('download', language.code, index)" v-if="!language.downloaded">
-            <md-icon>cloud_download</md-icon>
-          </md-button>
+        <tr v-for="(language, index) in languages" :key="index">
+          <td>{{ language.language }}</td>
+          <td class="cell-button">
+            <md-button
+              class="md-icon-button md-raised"
+              @click.native="openModalConfirm('download', language.code, index)"
+              v-if="!language.downloaded"
+            >
+              <md-icon>cloud_download</md-icon>
+            </md-button>
 
-          <md-button class="md-icon-button md-raised downloaded" @click.native="openModalConfirm('delete', language.code, index)" v-if="language.downloaded">
-            <md-icon>cloud_download</md-icon>
-          </md-button>
-        </td>
-      </tr>
+            <md-button
+              class="md-icon-button md-raised downloaded"
+              @click.native="openModalConfirm('delete', language.code, index)"
+              v-if="language.downloaded"
+            >
+              <md-icon>cloud_download</md-icon>
+            </md-button>
+          </td>
+        </tr>
       </tbody>
     </table>
 
@@ -31,8 +37,13 @@
         <span v-if="modalType === 'download'">{{ $t('confirmation_download_bible') }}</span>
         <span v-if="modalType === 'delete'">{{ $t('confirmation_delete_bible') }}</span>
         <div style="text-align: center; width: 100%">
-          <br/>
-          <md-progress-bar class="md-accent" md-mode="determinate" :md-value="percent" v-if="downloading"></md-progress-bar>
+          <br>
+          <md-progress-bar
+            class="md-accent"
+            md-mode="determinate"
+            :md-value="percent"
+            v-if="downloading"
+          ></md-progress-bar>
         </div>
       </md-dialog-content>
 
@@ -124,7 +135,7 @@ export default {
           const chapter = chaptersData[book][chapterIndex].c;
 
           const text = await axios.get(
-            `static/bible/${language}/${book}/${chapter}.json?v=${CACHE_VERSION}`,
+            `https://pinyin-bible.pinzi.org/${language}/${book}/${chapter}.json?v=${CACHE_VERSION}`,
           );
 
           await window.frames['iframe-storage'].indexedDBPut('bible', {
