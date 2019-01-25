@@ -16,7 +16,7 @@ ID = "Your_Site_ID"
   publish = "ui/dist"
 
   # Default build command.
-  command = "rm public/index.html && cp public/index-master.html public/index.html && sed -i -e 's/favicon\\//favicon${$FAVICON_SUFFIX}\\//g' public/index.html && yarn && yarn build${$BUILD_SUFFIX} && cp -R static dist/static"
+  command = "rm public/index.html && cp public/index-master.html public/index.html && sed -i -e 's/favicon\\//favicon{$FAVICON_SUFFIX}\\//g' public/index.html && yarn && yarn build{$BUILD_SUFFIX} && cp -R static dist/static"
 
   # Directory with the lambda functions to deploy to AWS.
   functions = "project/functions/"
