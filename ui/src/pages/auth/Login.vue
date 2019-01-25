@@ -91,7 +91,7 @@ export default {
 <style>
 .btn-google,
 .btn-google svg {
-  background-color: #a32b1c !important;
+  background-color: #e04431 !important;
   color: #fff !important;
   fill: #fff !important;
 }
