@@ -30,9 +30,7 @@ ID = "Your_Site_ID"
 
 [[headers]]
   # Define which paths this specific [[headers]] block will cover.
-  for = "/*"
+  for = "/service.worker.js"
 
-  # [headers.values]
-  #   X-Frame-Options = "DENY"
-  #   X-XSS-Protection = "1; mode=block"
-  #   Content-Security-Policy = "frame-ancestors https://www.facebook.com"
+  [headers.values]
+      Cache-Control = 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0'
