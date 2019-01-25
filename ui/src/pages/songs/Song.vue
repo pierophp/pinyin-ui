@@ -97,7 +97,9 @@ export default {
       }
 
       axios
-        .get(`static/songs/${language}/${song}.json?v=${CACHE_VERSION}`)
+        .get(
+          `https://pinyin-songs.pinzi.org/${language}/${song}.json?v=${CACHE_VERSION}`,
+        )
         .then(async content => {
           this.fullLines = content.data.lines;
           this.loadFile(this.fullLines, 0);
