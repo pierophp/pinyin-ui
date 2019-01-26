@@ -360,6 +360,10 @@ export default {
 </script>
 
 <style>
+audio {
+  height: 50px;
+}
+
 ::selection {
   background: #a8d1ff !important;
   color: #000 !important;
