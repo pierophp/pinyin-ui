@@ -1,3 +1,4 @@
 - Export to Pleco
 - Remove Vue Material components
 - Fix menu position (File list)
+- Apagar arquivos que foram apagados em outro dispositivo

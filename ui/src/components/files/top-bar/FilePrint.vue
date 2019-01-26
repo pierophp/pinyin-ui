@@ -28,6 +28,7 @@ export default {
       this.$router.push({
         name: 'file',
         params: { filename: this.$route.params.filename },
+        query: { d: this.$route.query.d },
       });
     },
     copy() {
