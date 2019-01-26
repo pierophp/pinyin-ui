@@ -65,7 +65,7 @@ export default {
 .tab-header {
   cursor: pointer;
   color: rgba(0, 0, 0, 0.7);
-  padding: 10px 20px;
+  padding: 5px 10px;
   text-transform: uppercase;
   user-select: none;
 }
