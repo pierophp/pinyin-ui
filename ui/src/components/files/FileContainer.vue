@@ -361,7 +361,7 @@ export default {
 
 <style>
 audio {
-  height: 50px;
+  height: 50px !important;
 }
 
 ::selection {
