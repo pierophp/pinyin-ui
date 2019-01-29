@@ -1,7 +1,7 @@
 import OptionsManager from 'src/domain/options-manager';
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
 import extractPinyinTone from 'src/helpers/extract-pinyin-tone';
-import specialIdeograms from '../../../shared/helpers/special-ideograms-chars';
+import specialIdeograms from '../../shared/helpers/special-ideograms-chars';
 
 export default function(params) {
   if (!params.pinyin && !params.character) {
