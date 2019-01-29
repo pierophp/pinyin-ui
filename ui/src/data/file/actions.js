@@ -513,7 +513,11 @@ export default {
     });
 
     try {
-      if (state.fullFile[lineIndex][0].line.pinyin_source === 'pdf') {
+      if (
+        ['pdf', 'ruby'].includes(
+          state.fullFile[lineIndex][0].line.pinyin_source,
+        )
+      ) {
         return;
       }
     } catch (e) {}
@@ -561,7 +565,11 @@ export default {
     });
 
     try {
-      if (state.fullFile[lineIndex][0].line.pinyin_source === 'pdf') {
+      if (
+        ['pdf', 'ruby'].includes(
+          state.fullFile[lineIndex][0].line.pinyin_source,
+        )
+      ) {
         return;
       }
     } catch (e) {}
