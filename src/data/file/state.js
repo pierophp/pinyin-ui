@@ -19,6 +19,6 @@ export default {
   filePasteAction: '',
   myCjk,
   myCjkTemp: '',
-  perPage: 25 * 3,
+  perPage: 25 * 6,
   currentPage: 1,
 };
