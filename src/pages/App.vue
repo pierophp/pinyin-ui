@@ -5,6 +5,7 @@
     <div class="content">
       <router-view/>
     </div>
+    <portal-target name="portal"></portal-target>
   </div>
 </template>
 

@@ -4,9 +4,11 @@
       <slot name="click"></slot>
     </div>
 
-    <div class="menu" v-if="show" v-bind:style="menuStyle">
-      <slot></slot>
-    </div>
+    <portal to="portal">
+      <div class="menu" v-if="show" v-bind:style="menuStyle">
+        <slot></slot>
+      </div>
+    </portal>
   </div>
 </template>
 
@@ -76,7 +78,7 @@ export default {
   max-height: 200px;
   overflow-y: scroll;
   padding: 10px 0;
-  position: absolute;
+  position: fixed;
   width: 220px;
   z-index: 1000000;
 }

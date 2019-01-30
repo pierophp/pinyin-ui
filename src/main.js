@@ -24,6 +24,7 @@ import store from 'src/data/store';
 import localeEn from 'src/data/locale/en';
 import localePt from 'src/data/locale/pt';
 import ravenLoader from './raven.loader';
+import PortalVue from 'portal-vue';
 import './register.service.worker';
 
 export default async function loadMain(routes, app, globalLoader) {
@@ -50,6 +51,8 @@ export default async function loadMain(routes, app, globalLoader) {
       router,
     });
   }
+
+  Vue.use(PortalVue);
 
   const Main = Vue.extend(App);
 
