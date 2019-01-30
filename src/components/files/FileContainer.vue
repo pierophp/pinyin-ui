@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <div class="pages" v-if="totalPages > 1 && pagination">
+    <div class="pages no-print" v-if="totalPages > 1 && pagination">
       <span v-for="n in totalPages" class="page" :key="n" @click="changeCurrentPage(n)">{{n}}</span>
     </div>
 

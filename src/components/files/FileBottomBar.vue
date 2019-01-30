@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="bottom-bar" v-if="show">
+    <div class="bottom-bar no-print" v-if="show">
       <span
         class="ideogram-link"
         v-for="(data,index) in printData"
@@ -9,7 +9,7 @@
       >
         <ideograms-show :pinyin="data.pinyin" :character="data.character" ref="ideogram-show"/>
       </span>
-
+      
       <span class="bottom-bar-pinyin">{{ block.pinyin }}</span>
 
       <md-button class="md-icon-button md-primary" @click.native="loadDictionary()">
