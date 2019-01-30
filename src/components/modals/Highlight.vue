@@ -19,6 +19,8 @@ import {
   FILE_MUTATION_REMOVE_HIGHLIGHT,
 } from 'src/data/file/types';
 
+import isMobileChecker from 'src/helpers/is-mobile';
+
 let selectionIndex = 0;
 let currentSelectionIndex = 0;
 
@@ -125,7 +127,7 @@ export default {
       startBlock: 0,
       endBlock: 0,
       visible: false,
-      isMobile: false,
+      isMobile: isMobileChecker(),
     };
   },
   props: {
@@ -138,12 +140,6 @@ export default {
       this.selectionChangeEvent,
       false,
     );
-  },
-  async mounted() {
-    const MobileDetect = (await import(/* webpackChunkName: "mobile-detect" */ 'mobile-detect'))
-      .default;
-    const md = new MobileDetect(window.navigator.userAgent);
-    this.isMobile = md.mobile();
   },
 
   beforeDestroy() {

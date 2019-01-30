@@ -102,10 +102,10 @@
 
 <script>
 import http from 'src/helpers/http';
+import isPhone from 'src/helpers/is-phone';
 import LoadableContent from 'src/components/common/loading/LoadableContent';
 import webVTTParser from 'src/domain/webvtt-parser';
 import VideoSubtitle from 'src/components/video/Subtitle';
-
 import { mapGetters, mapMutations } from 'vuex';
 import {
   VIDEO_GETTER_VIDEO_URL,
@@ -132,10 +132,7 @@ export default {
       this.$refs.inputSearch.focus();
     }, 500);
 
-    const MobileDetect = (await import(/* webpackChunkName: "mobile-detect" */ 'mobile-detect'))
-      .default;
-    const md = new MobileDetect(window.navigator.userAgent);
-    this.isPhone = md.phone() !== null;
+    this.isPhone = isPhone();
 
     this.setOrientation();
     window.addEventListener('resize', this.setOrientation);

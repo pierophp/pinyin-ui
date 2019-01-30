@@ -9,7 +9,7 @@
       >
         <ideograms-show :pinyin="data.pinyin" :character="data.character" ref="ideogram-show"/>
       </span>
-      
+
       <span class="bottom-bar-pinyin">{{ block.pinyin }}</span>
 
       <md-button class="md-icon-button md-primary" @click.native="loadDictionary()">
@@ -176,6 +176,7 @@ import OptionsManager from 'src/domain/options-manager';
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
 import replaceall from 'replaceall';
 import pinyinHelper from 'src/helpers/pinyin';
+import isMobile from 'src/helpers/is-mobile';
 import ForvoModal from 'src/components/modals/Forvo';
 import TraditionalSimplifiedShow from 'src/components/ideograms/TraditionalSimplifiedShow';
 import DictionaryStrokeOrder from 'src/components/dictionary/StrokeOrder';
@@ -223,7 +224,7 @@ export default {
       baseDictionary,
       dictionary: baseDictionary,
       dictionaryList: [],
-      isMobile: false,
+      isMobile: isMobile(),
     };
   },
   components: {
@@ -248,13 +249,6 @@ export default {
     editPinyin() {
       this.changeEditPinyin(this.editPinyin);
     },
-  },
-
-  async mounted() {
-    const MobileDetect = (await import(/* webpackChunkName: "mobile-detect" */ 'mobile-detect'))
-      .default;
-    const md = new MobileDetect(window.navigator.userAgent);
-    this.isMobile = md.mobile();
   },
 
   methods: {
