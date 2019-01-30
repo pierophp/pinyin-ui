@@ -10,7 +10,11 @@ export default async function(content) {
   const rows = [];
   for (let line of lines) {
     // remove double spaces
-    line = line.replace(/\s{2,}/g, ' ');
+    line = line.replace(/\s{2,}/g, ' ').trim();
+
+    if (!line) {
+      continue;
+    }
 
     const response = await http.post('segmentation/segment', {
       ideograms: line,
