@@ -6,11 +6,11 @@ import isChinese from 'src/helpers/is-chinese';
 
 async function parseLink(link) {
   const options = OptionsManager.getOptions();
-  const response = await http.get(
-    `site/download?url=${link}&language=${
-      options.translationLanguage
-    }&ideogramType=${options.ideogramType}`,
-  );
+  const fullUrl = `site/download?language=${
+    options.translationLanguage
+  }&ideogramType=${options.ideogramType}&url=${encodeURI(link)}`;
+
+  const response = await http.get(fullUrl);
 
   return response.data;
 }
