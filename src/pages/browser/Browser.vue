@@ -1,12 +1,13 @@
 <template>
-  <file-container ref="fileContainer" 
-    :lines="lines" 
-    :fullLines="fullLines" 
-    filename="" 
-    :fileLoading="fileLoading" 
-    :parent="true" 
+  <file-container
+    ref="fileContainer"
+    :lines="lines"
+    :fullLines="fullLines"
+    filename
+    :fileLoading="fileLoading"
+    :parent="true"
     :showHighlight="false"
-    />
+  />
 </template>
 
 <script>

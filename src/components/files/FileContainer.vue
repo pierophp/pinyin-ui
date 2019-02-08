@@ -277,13 +277,23 @@ export default {
       );
     },
 
+    updateRender() {
+      if (!this.$refs.fileRowPrint) {
+        return;
+      }
+
+      for (const element of this.$refs.fileRowPrint) {
+        element.updateRender();
+      }
+    },
+
     updateByLineAndBlock(lineIndex, blockIndex) {
       const filteredElements = this.$refs.fileRowPrint.filter(item => {
         return Number(item.lineIndex) === Number(lineIndex);
       });
 
       for (const filteredElement of filteredElements) {
-        filteredElement.updateRender().then();
+        filteredElement.updateRender();
       }
     },
 

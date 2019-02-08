@@ -18,6 +18,7 @@
     </div>
 
     <file-container
+      ref="fileContainer"
       :lines="lines.concat(linesLanguage)"
       :fullLines="fullLines.concat(fullLinesLanguage)"
       filename
@@ -192,21 +193,31 @@ export default {
       this.selecteds.forEach(v => {
         const verseMap = this.versesMap[v];
 
-        if (!lineKeys[verseMap.line]) {
-          lineKeys[verseMap.line] = [];
-        }
+        for (const verseMapKey of Object.keys(verseMap)) {
+          const verseMapLine = verseMap[verseMapKey];
 
-        lineKeys[verseMap.line].push(v);
+          if (!lineKeys[verseMapLine.line]) {
+            lineKeys[verseMapLine.line] = [];
+          }
 
-        if (!lines[verseMap.line]) {
-          lines[verseMap.line] = {
-            line: verseMap.line,
-            blocks: [],
-          };
-        }
+          lineKeys[verseMapLine.line].push(`${v}-${verseMapLine.line}`);
 
-        for (let i = verseMap.blockStart; i <= verseMap.blockEnd; i += 1) {
-          lines[verseMap.line].blocks.push(this.fullLines[verseMap.line][i]);
+          if (!lines[verseMapLine.line]) {
+            lines[verseMapLine.line] = {
+              line: verseMapLine.line,
+              blocks: [],
+            };
+          }
+
+          for (
+            let i = verseMapLine.blockStart;
+            i <= verseMapLine.blockEnd;
+            i += 1
+          ) {
+            lines[verseMapLine.line].blocks.push(
+              this.fullLines[verseMapLine.line][i],
+            );
+          }
         }
       });
 
@@ -241,44 +252,54 @@ export default {
           return;
         }
 
-        if (!lineKeys[verseMap.line]) {
-          lineKeys[verseMap.line] = [];
-        }
+        for (const verseMapKey of Object.keys(verseMap)) {
+          const verseMapLine = verseMap[verseMapKey];
 
-        lineKeys[verseMap.line].push(v);
-
-        if (!lines[verseMap.line]) {
-          lines[verseMap.line] = {
-            line: verseMap.line,
-            blocks: [],
-          };
-        }
-
-        for (let i = verseMap.blockStart; i <= verseMap.blockEnd; i += 1) {
-          this.fullLinesLanguage[verseMap.line][i].p = replaceall(
-            String.fromCharCode(160),
-            ' ',
-            this.fullLinesLanguage[verseMap.line][i].p,
-          ); // Convert NO-BREAK SPACE to SPACE
-
-          this.fullLinesLanguage[verseMap.line][i].p = replaceall(
-            String.fromCharCode(8201),
-            ' ',
-            this.fullLinesLanguage[verseMap.line][i].p,
-          ); // Convert THIN SPACE to SPACE
-
-          let words = this.fullLinesLanguage[verseMap.line][i].p.split(' ');
-          if (options.translationLanguage === 'ja') {
-            words = this.fullLinesLanguage[verseMap.line][i].p.split('');
+          if (!lineKeys[verseMapLine.line]) {
+            lineKeys[verseMapLine.line] = [];
           }
 
-          words.forEach(word => {
-            const block = {};
-            block.c = ' ';
-            block.noIdeogram = true;
-            block.p = word;
-            lines[verseMap.line].blocks.push(block);
-          });
+          lineKeys[verseMapLine.line].push(`${v}-${verseMapLine.line}`);
+
+          if (!lines[verseMapLine.line]) {
+            lines[verseMapLine.line] = {
+              line: verseMapLine.line,
+              blocks: [],
+            };
+          }
+
+          for (
+            let i = verseMapLine.blockStart;
+            i <= verseMapLine.blockEnd;
+            i += 1
+          ) {
+            this.fullLinesLanguage[verseMapLine.line][i].p = replaceall(
+              String.fromCharCode(160),
+              ' ',
+              this.fullLinesLanguage[verseMapLine.line][i].p,
+            ); // Convert NO-BREAK SPACE to SPACE
+
+            this.fullLinesLanguage[verseMapLine.line][i].p = replaceall(
+              String.fromCharCode(8201),
+              ' ',
+              this.fullLinesLanguage[verseMapLine.line][i].p,
+            ); // Convert THIN SPACE to SPACE
+
+            let words = this.fullLinesLanguage[verseMapLine.line][i].p.split(
+              ' ',
+            );
+            if (options.translationLanguage === 'ja') {
+              words = this.fullLinesLanguage[verseMapLine.line][i].p.split('');
+            }
+
+            words.forEach(word => {
+              const block = {};
+              block.c = ' ';
+              block.noIdeogram = true;
+              block.p = word;
+              lines[verseMapLine.line].blocks.push(block);
+            });
+          }
         }
       });
 
@@ -300,10 +321,14 @@ export default {
         line.forEach((block, blockIndex) => {
           if (block.v) {
             if (blockIndex > 0) {
-              this.versesMap[block.v - 1].blockEnd = blockIndex - 1;
+              this.versesMap[block.v - 1][lineIndex].blockEnd = blockIndex - 1;
             }
 
-            this.versesMap[block.v] = {
+            if (!this.versesMap[block.v]) {
+              this.versesMap[block.v] = {};
+            }
+
+            this.versesMap[block.v][lineIndex] = {
               line: lineIndex,
               blockStart: blockIndex,
               blockEnd: null,
@@ -313,7 +338,7 @@ export default {
           }
         });
 
-        this.versesMap[verse].blockEnd = line.length - 1;
+        this.versesMap[verse][lineIndex].blockEnd = line.length - 1;
       });
     },
 
@@ -324,10 +349,15 @@ export default {
         line.forEach((block, blockIndex) => {
           if (block.v) {
             if (blockIndex > 0) {
-              this.versesMapLanguage[block.v - 1].blockEnd = blockIndex - 1;
+              this.versesMapLanguage[block.v - 1][lineIndex].blockEnd =
+                blockIndex - 1;
             }
 
-            this.versesMapLanguage[block.v] = {
+            if (!this.versesMapLanguage[block.v]) {
+              this.versesMapLanguage[block.v] = {};
+            }
+
+            this.versesMapLanguage[block.v][lineIndex] = {
               line: lineIndex,
               blockStart: blockIndex,
               blockEnd: null,
@@ -340,7 +370,7 @@ export default {
         if (!verse) {
           return;
         }
-        this.versesMapLanguage[verse].blockEnd = line.length - 1;
+        this.versesMapLanguage[verse][lineIndex].blockEnd = line.length - 1;
       });
     },
 
@@ -380,6 +410,7 @@ export default {
           'bible',
           `${language}_${this.book}_${this.chapter}`,
         );
+
         if (chapterCache) {
           this.fullLines = JSON.parse(chapterCache.text).lines;
           this.parseVerses(this.fullLines);
@@ -433,6 +464,8 @@ export default {
           } else if (this.openChapterOnLoad) {
             this.selectAll();
           }
+
+          this.$refs.fileContainer.updateRender();
 
           if (LocalStorage.get(`BIBLE_SAVE_${language}`)) {
             await window.frames['iframe-storage'].indexedDBPut('bible', {
@@ -500,6 +533,8 @@ export default {
               this.selectVerseLanguage(i);
             }
           }
+
+          this.$refs.fileContainer.updateRender();
 
           if (LocalStorage.get(`BIBLE_SAVE_${options.translationLanguage}`)) {
             await window.frames['iframe-storage'].indexedDBPut('bible', {
