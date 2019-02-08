@@ -191,6 +191,10 @@ export default {
       const lineKeys = {};
 
       this.selecteds.forEach(v => {
+        if (!this.versesMap) {
+          return;
+        }
+
         const verseMap = this.versesMap[v];
 
         for (const verseMapKey of Object.keys(verseMap)) {
@@ -247,6 +251,10 @@ export default {
       const lineKeys = {};
 
       this.selectedsLanguage.forEach(v => {
+        if (!this.versesMapLanguage) {
+          return;
+        }
+
         const verseMap = this.versesMapLanguage[v];
         if (!verseMap) {
           return;
