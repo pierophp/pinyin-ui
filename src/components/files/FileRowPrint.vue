@@ -244,6 +244,7 @@ export default {
         });
 
         generatedBlock.pinyinStyleObject = {};
+        generatedBlock.pinyinStyleObject.display = 'inline-block';
         generatedBlock.pinyinStyleObject.height = 'auto';
       }
 

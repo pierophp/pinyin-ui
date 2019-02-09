@@ -4,7 +4,7 @@
       <slot name="click"></slot>
     </div>
 
-    <portal to="portal">
+    <portal to="portal-menu">
       <div class="menu" v-if="show" v-bind:style="menuStyle">
         <slot></slot>
       </div>

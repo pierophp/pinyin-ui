@@ -1,9 +1,10 @@
 <template>
   <div class="loadable-content">
-    <div class="loadable-loader" v-show="loading">
-      <md-progress-spinner class="md-accent" md-mode="indeterminate" :visible="loading"></md-progress-spinner>
-    </div>
-
+    <portal to="portal-loadable">
+      <div class="loadable-loader" v-show="loading">
+        <md-progress-spinner class="md-accent" md-mode="indeterminate" :visible="loading"></md-progress-spinner>
+      </div>
+    </portal>
     <slot></slot>
   </div>
 </template>

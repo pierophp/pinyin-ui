@@ -4,8 +4,9 @@
 
     <div class="content">
       <router-view/>
+      <portal-target name="portal-loadable"></portal-target>
     </div>
-    <portal-target name="portal"></portal-target>
+    <portal-target name="portal-menu"></portal-target>
   </div>
 </template>
 
