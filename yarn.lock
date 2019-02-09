@@ -3070,7 +3070,7 @@ handle-thing@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/handle-thing/-/handle-thing-2.0.0.tgz#0e039695ff50c93fc288557d696f3c1dc6776754"
 
-hanzi-writer@^1.1.0:
+hanzi-writer@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/hanzi-writer/-/hanzi-writer-1.3.0.tgz#01881fd3b4dd420087a1675ff23e07a125b636be"
 
@@ -3970,7 +3970,7 @@ lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
-lodash@^4.0.0, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.5, lodash@~4.17.10:
+lodash@^4.0.0, lodash@^4.13.1, lodash@^4.17, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.3, lodash@^4.17.5, lodash@~4.17.10:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
 
@@ -6616,9 +6616,9 @@ vue-hot-reload-api@^2.3.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.1.tgz#b2d3d95402a811602380783ea4f566eb875569a2"
 
-vue-i18n@^5.0.0:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-5.0.3.tgz#b6d96cc832604237e6139de471e0d4c820aedbed"
+vue-i18n@^8.8.0:
+  version "8.8.0"
+  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.8.0.tgz#9454bd44cc5a75912478a641cb87c1feeed2e944"
 
 vue-loader@^15.6.2:
   version "15.6.2"
@@ -6634,7 +6634,7 @@ vue-material@1.0.0-beta-10.2:
   version "1.0.0-beta-10.2"
   resolved "https://registry.yarnpkg.com/vue-material/-/vue-material-1.0.0-beta-10.2.tgz#c3effea97e0c5a0c696b0051d5ef9c6e6cf2a5ed"
 
-vue-router@^3.0.1:
+vue-router@^3.0:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.2.tgz#dedc67afe6c4e2bc25682c8b1c2a8c0d7c7e56be"
 
@@ -6645,7 +6645,7 @@ vue-style-loader@^4.1.0:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
 
-vue-template-compiler@^2.5.13:
+vue-template-compiler@^2.6:
   version "2.6.4"
   resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.6.4.tgz#0feacfe35e3386033bf4fe31ab4ff1dc1a0c5dec"
   dependencies:

@@ -36,14 +36,7 @@ export default async function loadMain(routes, app, globalLoader) {
   globalLoader(Vue);
   ravenLoader(Vue).then();
 
-  Vue.use(VueI18n);
   Vue.use(VueClipboard);
-
-  Vue.locale('en', localeEn);
-  Vue.locale('pt', localePt);
-
-  Vue.config.lang = navigator.language.split('-')[0];
-  Vue.config.fallbackLang = 'en';
 
   if (process.env.NODE_ENV === 'production') {
     Vue.use(VueAnalytics, {
@@ -52,11 +45,22 @@ export default async function loadMain(routes, app, globalLoader) {
     });
   }
 
+  Vue.use(VueI18n);
   Vue.use(PortalVue);
 
   const Main = Vue.extend(App);
 
+  const i18n = new VueI18n({
+    locale: navigator.language.split('-')[0],
+    fallbackLocale: 'en',
+    messages: {
+      en: localeEn,
+      pt: localePt,
+    },
+  });
+
   new Main({
+    i18n,
     router,
     store: await store(),
   }).$mount('#app');
