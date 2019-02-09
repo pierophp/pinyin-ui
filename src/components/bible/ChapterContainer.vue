@@ -604,37 +604,42 @@ export default {
 
 <style>
 .bible-chapter-container {
+  align-content: flex-start;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  align-content: flex-start;
-  width: 100%;
   overflow: auto;
+  width: 100%;
+}
+
+.bible-chapter-container .print .line {
+  margin-bottom: 0 !important;
 }
 
 .verses-container {
+  align-content: flex-start;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  align-content: flex-start;
-  width: 100%;
   margin: 5px 5px 0 5px;
   max-height: 90px;
+  min-height: 35px;
   overflow: scroll;
+  width: 100%;
 }
 
 .bible-verse {
-  color: #fff;
-  line-height: 30px;
-  height: 30px;
-  width: 30px;
   background-color: #bab6b6;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  height: 30px;
   justify-content: flex-start;
+  line-height: 30px;
   margin: 2px;
   text-align: center;
-  font-size: 13px;
-  cursor: pointer;
   user-select: none;
+  width: 30px;
 }
 
 .special-action {
