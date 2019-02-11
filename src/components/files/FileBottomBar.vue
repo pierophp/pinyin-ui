@@ -9,10 +9,10 @@
       >
         <ideograms-show :pinyin="data.pinyin" :character="data.character" ref="ideogram-show"/>
       </span>
-      
+
       <span class="bottom-bar-pinyin">{{ block.pinyin }}</span>
 
-      <md-button class="md-icon-button md-primary" @click.native="loadDictionary()">
+      <md-button class="md-icon-button md-primary" @click.native="loadDictionary(block)">
         <md-icon>find_in_page</md-icon>
       </md-button>
 
@@ -63,7 +63,7 @@
       <Links list="0" :character="block.character" ref="links"/>
     </div>
 
-    <dictionary-modal :block="block" ref="dictionaryModal" @change-show="changeShow"/>
+    <dictionary-modal ref="dictionaryModal" @change-show="changeShow"/>
 
     <md-dialog ref="dialogSeparate" :md-active.sync="modalSeparateOpen" :md-fullscreen="false">
       <md-dialog-title>
@@ -103,16 +103,13 @@
 
 <script>
 import http from 'src/helpers/http';
-
 import IdeogramsShow from 'src/components/ideograms/Show';
 import Links from 'src/components/ideograms/Links';
 import OptionsManager from 'src/domain/options-manager';
-
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
 import replaceall from 'replaceall';
 import pinyinHelper from 'src/helpers/pinyin';
 import isMobile from 'src/helpers/is-mobile';
-
 import DictionaryModal from 'src/components/modals/Dictionary';
 import MenuContent from 'src/components/common/MenuContent';
 import { mapActions, mapMutations, mapGetters } from 'vuex';
@@ -251,6 +248,11 @@ export default {
       setTimeout(() => {
         this.tempDictCharacter = null;
       }, 2000);
+
+      if (block.openDictionary) {
+        this.loadDictionary(block);
+      }
+
       const chars = block.character.toString();
       const printData = [];
       const options = OptionsManager.getOptions();
@@ -274,10 +276,6 @@ export default {
 
       this.printData = printData;
 
-      if (block.openDictionary) {
-        this.loadDictionary();
-      }
-
       if (this.$refs['ideogram-show']) {
         this.$nextTick(() => {
           for (const ideogramShow of this.$refs['ideogram-show']) {
@@ -297,8 +295,8 @@ export default {
       this.$emit('open-modal', add);
     },
 
-    async loadDictionary() {
-      this.$refs.dictionaryModal.open();
+    async loadDictionary(block) {
+      this.$refs.dictionaryModal.open(block);
     },
 
     openPinyinList() {

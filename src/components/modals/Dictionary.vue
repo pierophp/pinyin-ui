@@ -138,6 +138,7 @@ export default {
     };
 
     return {
+      block: {},
       modalDictionaryOpen: false,
       dictionaryLoading: false,
       clipboardOpen: false,
@@ -148,9 +149,7 @@ export default {
       dictionaryList: [],
     };
   },
-  props: {
-    block: {},
-  },
+
   methods: {
     changeShow(e) {
       this.$emit('change-show', e);
@@ -162,7 +161,9 @@ export default {
       this.clipboardOpen = true;
     },
 
-    async open() {
+    async open(block) {
+      console.log(block);
+      this.block = block;
       this.loadDictionary();
       this.modalDictionaryOpen = true;
       this.clear();
@@ -178,9 +179,9 @@ export default {
 
     clear() {
       this.selectedIndexes = {};
+      this.dictionaryList = [];
       this.dictionary = this.baseDictionary;
       this.fullDictionary = this.baseDictionary;
-      this.dictionaryList = [];
     },
 
     goLeft() {
