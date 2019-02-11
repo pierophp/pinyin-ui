@@ -178,6 +178,9 @@ export default {
 
     clear() {
       this.selectedIndexes = {};
+      this.dictionary = this.baseDictionary;
+      this.fullDictionary = this.baseDictionary;
+      this.dictionaryList = [];
     },
 
     goLeft() {
@@ -292,9 +295,6 @@ export default {
     },
 
     async loadDictionary() {
-      this.dictionary = this.baseDictionary;
-      this.dictionaryList = [];
-
       this.dictionaryLoading = true;
 
       let character = this.block.character;
