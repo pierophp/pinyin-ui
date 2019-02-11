@@ -1,13 +1,11 @@
 <template>
   <md-dialog ref="modal" id="image-zoom-modal" :md-active.sync="modalOpen" :md-fullscreen="false">
     <md-dialog-title>
-      <div class="top-actions">
-
-      </div>
+      <div class="top-actions"></div>
     </md-dialog-title>
 
     <md-dialog-content>
-      <img :src="src" class="img-zoom" referrerpolicy="no-referrer"/>
+      <vue-pinch-zoom :src="src" :min-zoom="1" :max-zoom="2.5"/>
     </md-dialog-content>
 
     <md-dialog-actions>
@@ -17,32 +15,34 @@
 </template>
 
 <script>
-  export default {
-    name: 'image-zoom',
-    props: {
-      src: '',
+import VuePinchZoom from 'src/components/common/VuePinchZoom';
+export default {
+  name: 'image-zoom',
+  props: {
+    src: '',
+  },
+  components: { VuePinchZoom },
+  data() {
+    return {
+      modalOpen: false,
+    };
+  },
+  methods: {
+    confirm() {
+      this.modalOpen = false;
     },
-    data() {
-      return {
-        modalOpen: false,
-      };
+    openDialog() {
+      this.modalOpen = true;
     },
-    methods: {
-      confirm() {
-        this.modalOpen = false;
-      },
-      openDialog() {
-        this.modalOpen = true;
-      },
-      closeDialog() {
-        this.modalOpen = false;
-      },
+    closeDialog() {
+      this.modalOpen = false;
     },
-  };
+  },
+};
 </script>
 
 <style>
-.top-actions{
+.top-actions {
   width: 100%;
   height: 40px;
   background-color: #777;

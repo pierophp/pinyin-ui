@@ -208,7 +208,7 @@ export default {
       await this.changePage();
     },
     openImage(image) {
-      this.imageZoom = image.src;
+      this.imageZoom = image;
       this.$refs.imageZoom.openDialog();
     },
 
