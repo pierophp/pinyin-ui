@@ -6,6 +6,9 @@
     <md-button class="md-icon-button" @click.native="copy">
       <md-icon>content_copy</md-icon>
     </md-button>
+    <md-button class="md-icon-button" @click.native="print">
+      <md-icon>print</md-icon>
+    </md-button>
     <md-snackbar md-position="center" :md-duration="1300" :md-active.sync="clipboardOpen">
       <span>{{ $t('copied_to_clipboard') }}</span>
     </md-snackbar>
@@ -30,6 +33,9 @@ export default {
         params: { filename: this.$route.params.filename },
         query: { d: this.$route.query.d },
       });
+    },
+    print() {
+      window.print();
     },
     copy() {
       const fileCopy = [];
