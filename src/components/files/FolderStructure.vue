@@ -1,13 +1,11 @@
 <template>
-  <div class="folders-container" v-if="dirs.length">
-      <span v-for="(dir, index) in dirs" v-bind:key="index">
-        <span v-if="index < dirs.length - 1 || showLast">
-            <a href="javascript:void(0)" @click="goToDir(dir.path)">{{ dir.title }}</a> / 
-        </span>
-        <span v-if="index == dirs.length - 1 && !showLast">
-            {{ dir.title }}
-        </span>
+  <div class="folders-container no-print" v-if="dirs.length">
+    <span v-for="(dir, index) in dirs" v-bind:key="index">
+      <span v-if="index < dirs.length - 1 || showLast">
+        <a href="javascript:void(0)" @click="goToDir(dir.path)">{{ dir.title }}</a> /
       </span>
+      <span v-if="index == dirs.length - 1 && !showLast">{{ dir.title }}</span>
+    </span>
   </div>
 </template>
 
