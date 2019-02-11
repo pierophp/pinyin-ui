@@ -34,8 +34,14 @@ export default {
     const translationLanguage = options.translationLanguage;
 
     const languagesPt = ['pt', 'chinese_tools_pt', 'glosbe_pt'];
-    const languagesEs = ['chinese_tools_es', 'glosbe_es'];
-    const languagesEn = ['unihan', 'cedict', 'chinese_tools_en', 'glosbe_en'];
+    const languagesEs = ['chinese_tools_es', 'glosbe_es', 'es'];
+    const languagesEn = [
+      'unihan',
+      'cedict',
+      'chinese_tools_en',
+      'glosbe_en',
+      'es',
+    ];
 
     let types = [];
     if (translationLanguage === 'pt') {

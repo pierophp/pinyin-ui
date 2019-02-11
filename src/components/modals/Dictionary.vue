@@ -36,6 +36,7 @@
                 :visible="dictionaryLoading"
               ></md-progress-spinner>
             </div>
+
             <dictionary-details
               :dictionary="dictionary"
               :pinyin="block.pinyin"
@@ -162,7 +163,6 @@ export default {
     },
 
     async open(block) {
-      console.log(block);
       this.block = block;
       this.loadDictionary();
       this.modalDictionaryOpen = true;

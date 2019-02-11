@@ -138,6 +138,20 @@
         <div v-for="(glosbe_en, dictId) in dictionary.glosbe_en" v-bind:key="dictId">{{ glosbe_en }}</div>
       </div>
     </div>
+
+    <div v-if="type === 'en' && dictionary.en && dictionary.en.length">
+      <div class="dict-title">EN</div>
+      <div class="dict-block">
+        <div v-for="(en, dictId) in dictionary.en" v-bind:key="dictId">{{ en }}</div>
+      </div>
+    </div>
+
+    <div v-if="type === 'es' && dictionary.es && dictionary.es.length">
+      <div class="dict-title">ES</div>
+      <div class="dict-block">
+        <div v-for="(es, dictId) in dictionary.es" v-bind:key="dictId">{{ es }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -188,7 +202,7 @@ export default {
     save() {
       const dictionatyList = this.dictionaryEntry
         .split('\n')
-        .filter(item => item);
+        .filter(item => item.trim());
 
       http
         .post('unihan/save', {
