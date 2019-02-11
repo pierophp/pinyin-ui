@@ -40,7 +40,7 @@ export default {
       'cedict',
       'chinese_tools_en',
       'glosbe_en',
-      'es',
+      'en',
     ];
 
     let types = [];
