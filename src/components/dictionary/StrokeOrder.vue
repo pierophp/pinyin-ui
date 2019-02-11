@@ -1,7 +1,12 @@
 <template>
   <div class="hanzi-container">
     <div id="hanzi-controls">
-      <span v-for="(item, itemId) in items" v-bind:key="itemId" @click="changeIdeogram(itemId)" :class="item.classActive"></span>
+      <span
+        v-for="(item, itemId) in items"
+        v-bind:key="itemId"
+        @click="changeIdeogram(itemId)"
+        :class="item.classActive"
+      ></span>
     </div>
 
     <div id="hanzi-writer" v-show="!partial"></div>
@@ -75,6 +80,7 @@ export default {
     const HanziWriter = (await import(/* webpackChunkName: "hanzi-writer" */ 'hanzi-writer'))
       .default;
     this.hanziWriterClass = HanziWriter;
+
     this.writer = new HanziWriter('hanzi-writer', '', {
       onLoadCharDataSuccess: charData => {
         this.charData = charData;
@@ -220,8 +226,8 @@ export default {
 }
 
 #hanzi-controls span {
-  width: 12px;
-  height: 12px;
+  width: 20px;
+  height: 20px;
   border-radius: 100%;
   background: #007aff;
   display: block;

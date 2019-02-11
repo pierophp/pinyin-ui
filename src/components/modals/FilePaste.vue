@@ -1,5 +1,12 @@
 <template>
-  <md-dialog md-open-from="#filePasteModal" md-close-to="#filePasteModal" ref="modal" @open="onOpen" :md-active.sync="modalOpen" :md-fullscreen="true">
+  <md-dialog
+    md-open-from="#filePasteModal"
+    md-close-to="#filePasteModal"
+    ref="modal"
+    @open="onOpen"
+    :md-active.sync="modalOpen"
+    :md-fullscreen="true"
+  >
     <md-dialog-title>{{ $t('paste') }}</md-dialog-title>
 
     <md-dialog-content>

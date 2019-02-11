@@ -1,8 +1,15 @@
 <template>
-    <div class="ideogram-show">
-      <ideograms-show :pinyin="pinyin" :character="ideograms" ref="first-ideogram-show"/>
-      <template v-if="secondOnlyDiff">[<ideograms-show :pinyin="pinyin" :character="secondOnlyDiff" ref="second-ideogram-show"/>]</template>
-    </div>
+  <div class="ideogram-show">
+    <ideograms-show
+      :pinyin="pinyin"
+      :character="ideograms"
+      :highlights="highlights"
+      ref="first-ideogram-show"
+    />
+    <template v-if="secondOnlyDiff">[
+      <ideograms-show :pinyin="pinyin" :character="secondOnlyDiff" ref="second-ideogram-show"/>]
+    </template>
+  </div>
 </template>
 
 <script>
@@ -16,6 +23,7 @@ export default {
   props: {
     pinyin: '',
     ideograms: '',
+    highlights: {},
     variants: Array,
   },
   watch: {

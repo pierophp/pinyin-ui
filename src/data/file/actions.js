@@ -209,7 +209,7 @@ export default {
   [types.FILE_ACTION_FETCH]({ commit, state }, filename) {
     const fileKey = `file_${filename}`;
     let lines = [];
-    if (LocalStorage.has(fileKey)) {
+    if (!navigator.onLine && LocalStorage.has(fileKey)) {
       lines = parseLines(LocalStorage.get(fileKey));
     }
 

@@ -1,10 +1,12 @@
 <template>
-    <div class="ideogram-show">
-      <span v-for="(data, index) in printData"
-            :class="[data.ideogramClass]"
-            :style="{ color: data.toneColor }"
-            v-bind:key="index">{{data.character}}</span>
-    </div>
+  <div class="ideogram-show">
+    <span
+      v-for="(data, index) in printData"
+      :class="[data.ideogramClass, highlights && highlights[index] ? 'highlight' : '']"
+      :style="{ color: data.toneColor }"
+      v-bind:key="index"
+    >{{data.character}}</span>
+  </div>
 </template>
 
 <script>
@@ -20,6 +22,7 @@ export default {
     useSpaces: false,
     pinyin: '',
     character: '',
+    highlights: {},
   },
   created() {
     this.updateRender();
@@ -38,5 +41,9 @@ export default {
 
 .no-ideogram {
   width: auto !important;
+}
+
+.highlight {
+  background: rgb(5, 205, 255);
 }
 </style>

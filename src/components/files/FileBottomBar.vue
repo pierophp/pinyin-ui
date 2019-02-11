@@ -9,7 +9,7 @@
       >
         <ideograms-show :pinyin="data.pinyin" :character="data.character" ref="ideogram-show"/>
       </span>
-
+      
       <span class="bottom-bar-pinyin">{{ block.pinyin }}</span>
 
       <md-button class="md-icon-button md-primary" @click.native="loadDictionary()">
@@ -63,65 +63,7 @@
       <Links list="0" :character="block.character" ref="links"/>
     </div>
 
-    <md-dialog
-      ref="dialogDictionary"
-      :md-active.sync="modalDictionaryOpen"
-      :md-fullscreen="false"
-      id="dialog-dictionary"
-    >
-      <md-dialog-title>
-        <traditional-simplified-show
-          :pinyin="block.pinyin"
-          :ideograms="block.character"
-          :variants="dictionary.variants"
-        />
-        - {{ block.pinyin }}
-        <md-button
-          class="md-icon-button md-primary clipboard-btn"
-          @click="clipboard(block.character)"
-        >
-          <md-icon>content_copy</md-icon>
-        </md-button>
-
-        <md-button class="md-icon-button md-accent sound-btn" @click.native="openSound">
-          <md-icon>volume_up</md-icon>
-        </md-button>
-      </md-dialog-title>
-
-      <md-dialog-content>
-        <tabs>
-          <tab id="dict" :label="$t('definition')">
-            <div class="loadable-loader" v-show="modalDictionaryLoading">
-              <md-progress-spinner
-                class="md-accent"
-                md-mode="indeterminate"
-                :visible="modalDictionaryLoading"
-              ></md-progress-spinner>
-            </div>
-            <dictionary-details
-              :dictionary="dictionary"
-              :pinyin="block.pinyin"
-              @change-show="changeShow"
-              ref="dictionaryDetails"
-              v-show="!modalDictionaryLoading"
-            />
-            <dictionary-list :list="dictionaryList" v-show="!modalDictionaryLoading"/>
-          </tab>
-
-          <tab id="stroke" :label="$t('stroke')">
-            <dictionary-stroke-order :ideograms="block.character"/>
-          </tab>
-
-          <tab id="links" label="Links">
-            <Links list="1" :character="block.character"/>
-          </tab>
-        </tabs>
-      </md-dialog-content>
-
-      <md-dialog-actions>
-        <md-button class="md-primary" @click.native="modalDictionaryOpen = false">OK</md-button>
-      </md-dialog-actions>
-    </md-dialog>
+    <dictionary-modal :block="block" ref="dictionaryModal" @change-show="changeShow"/>
 
     <md-dialog ref="dialogSeparate" :md-active.sync="modalSeparateOpen" :md-fullscreen="false">
       <md-dialog-title>
@@ -156,19 +98,12 @@
         <md-button class="md-primary" @click.native="confirmEdit">OK</md-button>
       </md-dialog-actions>
     </md-dialog>
-
-    <forvo-modal ref="dialogForvo" :character="block.character"/>
-
-    <md-snackbar md-position="center" :md-duration="1300" :md-active.sync="clipboardOpen">
-      <span>{{ $t('copied_to_clipboard') }}</span>
-    </md-snackbar>
   </div>
 </template>
 
 <script>
 import http from 'src/helpers/http';
-import DictionaryDetails from 'src/components/dictionary/Details';
-import DictionaryList from 'src/components/dictionary/List';
+
 import IdeogramsShow from 'src/components/ideograms/Show';
 import Links from 'src/components/ideograms/Links';
 import OptionsManager from 'src/domain/options-manager';
@@ -177,13 +112,10 @@ import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables'
 import replaceall from 'replaceall';
 import pinyinHelper from 'src/helpers/pinyin';
 import isMobile from 'src/helpers/is-mobile';
-import ForvoModal from 'src/components/modals/Forvo';
-import TraditionalSimplifiedShow from 'src/components/ideograms/TraditionalSimplifiedShow';
-import DictionaryStrokeOrder from 'src/components/dictionary/StrokeOrder';
+
+import DictionaryModal from 'src/components/modals/Dictionary';
 import MenuContent from 'src/components/common/MenuContent';
 import { mapActions, mapMutations, mapGetters } from 'vuex';
-import Tabs from 'src/components/common/Tabs';
-import Tab from 'src/components/common/Tab';
 
 import {
   FILE_ACTION_JOIN_LEFT,
@@ -193,22 +125,9 @@ import {
   FILE_GETTER_MY_CJK,
 } from 'src/data/file/types';
 
-let memoryDictionary = {};
-const loadingDictionary = {};
-
 export default {
   name: 'file-bottom-bar',
   data() {
-    const baseDictionary = {
-      pt: null,
-      variants: null,
-      unihan: null,
-      cedict: null,
-      chinese_tools_pt: null,
-      chinese_tools_es: null,
-      chinese_tools_en: null,
-    };
-
     return {
       editPinyin: '',
       separateCharacter: '',
@@ -216,28 +135,16 @@ export default {
       tempDictCharacter: null,
       block: {},
       printData: {},
-      modalDictionaryOpen: false,
-      modalDictionaryLoading: false,
       modalSeparateOpen: false,
       modalEditOpen: false,
-      clipboardOpen: false,
-      baseDictionary,
-      dictionary: baseDictionary,
-      dictionaryList: [],
       isMobile: isMobile(),
     };
   },
   components: {
-    DictionaryDetails,
-    DictionaryList,
-    DictionaryStrokeOrder,
     IdeogramsShow,
     Links,
-    ForvoModal,
-    TraditionalSimplifiedShow,
+    DictionaryModal,
     MenuContent,
-    Tabs,
-    Tab,
   },
   computed: {
     ...mapGetters({
@@ -269,7 +176,6 @@ export default {
       this.show = !show;
       const action = show ? 'remove' : 'add';
       document.body.classList[action]('has-bottom-bar');
-      memoryDictionary = {};
     },
 
     separate() {
@@ -279,6 +185,7 @@ export default {
 
     async confirmSeparate() {
       this.modalSeparateOpen = false;
+
       await this.separateAction({
         ...this.block,
         separateCharacter: this.separateCharacter,
@@ -316,52 +223,6 @@ export default {
       this.show = false;
     },
 
-    async requestDictionary(character, pinyin) {
-      const cacheKey = `${character}_${pinyin}`;
-
-      if (memoryDictionary[cacheKey]) {
-        return memoryDictionary[cacheKey];
-      }
-
-      if (loadingDictionary[cacheKey] === true) {
-        const awaitedResult = await new Promise(resolve => {
-          function verifyLoadDictionary() {
-            if (memoryDictionary[cacheKey]) {
-              return resolve(memoryDictionary[cacheKey]);
-            }
-
-            if (!loadingDictionary[cacheKey]) {
-              return resolve(null);
-            }
-
-            setTimeout(() => {
-              verifyLoadDictionary();
-            }, 50);
-          }
-          verifyLoadDictionary();
-        });
-
-        if (awaitedResult) {
-          return awaitedResult;
-        }
-      }
-
-      loadingDictionary[cacheKey] = true;
-
-      setTimeout(() => {
-        loadingDictionary[cacheKey] = false;
-      }, 5000);
-
-      memoryDictionary[cacheKey] = (await http.get('unihan/dictionary', {
-        params: {
-          ideograms: character,
-          pinyin: pinyin,
-        },
-      })).data;
-
-      return memoryDictionary[cacheKey];
-    },
-
     open(block) {
       document.body.classList.add('has-bottom-bar');
       this.show = true;
@@ -371,13 +232,18 @@ export default {
       }
 
       this.block = block;
+      block.originalPinyin = block.pinyin;
       block.pinyin = replaceall(
         String.fromCharCode(160),
         '',
         block.pinyin || '',
       );
 
-      this.requestDictionary(block.character, block.pinyin).then();
+      this.$refs.dictionaryModal.requestDictionary(
+        block.character,
+        block.pinyin,
+      );
+
       this.tempDictCharacter = block.character;
       const pinyin = separatePinyinInSyllables(block.pinyin);
 
@@ -432,34 +298,7 @@ export default {
     },
 
     async loadDictionary() {
-      this.dictionary = this.baseDictionary;
-      this.dictionaryList = [];
-      this.modalDictionaryOpen = true;
-      this.modalDictionaryLoading = true;
-      const response = await this.requestDictionary(
-        this.block.character,
-        this.block.pinyin,
-      );
-
-      this.dictionary = this.baseDictionary;
-      this.dictionaryList = [];
-
-      if (response.list) {
-        this.dictionaryList = response.list;
-        this.modalDictionaryLoading = false;
-        return;
-      }
-
-      const isSimplifiedEquals = response.ideograms === this.block.character;
-
-      const isTraditionalEquals =
-        response.search_ideograms === this.block.character;
-
-      if (!isSimplifiedEquals && !isTraditionalEquals) {
-        return;
-      }
-      this.dictionary = response;
-      this.modalDictionaryLoading = false;
+      this.$refs.dictionaryModal.open();
     },
 
     openPinyinList() {
@@ -471,15 +310,6 @@ export default {
           // eslint-disable-next-line
           console.log(response.data);
         });
-    },
-
-    clipboard(ideogram) {
-      this.$clipboard(ideogram);
-      this.clipboardOpen = true;
-    },
-
-    openSound() {
-      this.openDialog('dialogForvo');
     },
 
     openDialog(ref) {
@@ -545,25 +375,6 @@ export default {
 
 .bottom-bar-pinyin {
   font-size: 15px;
-}
-
-.sound-btn,
-.clipboard-btn {
-  padding: 0 !important;
-  margin: 0 !important;
-  width: 30px !important;
-  min-width: 30px !important;
-  height: 30px !important;
-  min-height: 30px !important;
-}
-
-.sound-btn i,
-.clipboard-btn i {
-  width: 20px !important;
-  min-width: 20px !important;
-  height: 20px !important;
-  min-height: 20px !important;
-  font-size: 20px !important;
 }
 
 .bottom-bar .ideogram-link {
