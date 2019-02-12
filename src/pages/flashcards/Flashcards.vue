@@ -53,43 +53,47 @@ export default {
 }
 
 .card .ideogram {
-  padding: 25px 0;
   width: 100%;
   font-size: 50px;
-  height: 50%;
-  text-align: center;
   flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .card .img-container {
   width: 100%;
   text-align: center;
   flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .card .img-container img {
-  height: 130px;
+  max-width: 100%;
+  max-height: 100%;
+  height: 95px;
 }
 
 .card .pinyin {
-  padding-top: 5px;
   width: 100%;
   font-size: 30px;
-  height: 50px;
   text-align: center;
   flex-grow: 1;
-  background: red;
-  justify-content: center;
+  display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .card .translation {
-  padding-top: 5px;
   width: 100%;
   font-size: 30px;
-  height: 50px;
   text-align: center;
   flex-grow: 1;
-  background: blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #706c6c;
 }
 </style>
