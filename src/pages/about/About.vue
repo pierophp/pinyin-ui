@@ -1,60 +1,58 @@
 <template>
   <div class="about-container">
-    <p class="about-text">
-      {{ $t('about_text') }}
-    </p>
+    <p class="about-text">{{ $t('about_text') }}</p>
 
     <div v-if="hasShare">
-        <h2>{{ $t('share') }}</h2>
-        <md-button @click.native="share" class="md-icon-button md-raised md-accent">
-          <md-icon>share</md-icon>
-        </md-button>
+      <h2>{{ $t('share') }}</h2>
+      <md-button @click.native="share" class="md-icon-button md-raised md-accent">
+        <md-icon>share</md-icon>
+      </md-button>
     </div>
 
     <div v-if="tutorialsLink">
       <h2>{{ $t('tutorials') }}</h2>
       <a :href="tutorialsLink" target="_blank">
-        <img src="/static/youtube.png"/>
+        <img src="/img/youtube.png">
       </a>
     </div>
     <h2>{{ $t('other_apps') }}</h2>
     <div class="other-apps-container">
       <div class="other-apps-item" v-if="showEditor">
         <a href="https://editor.pinzi.org" target="_blank">
-          <img src="/static/favicon/android-icon-72x72.png"/>
+          <img src="/favicon/android-icon-72x72.png">
         </a>
-        <a href="https://editor.pinzi.org" target="_blank">
-          {{ $t('app.editor').split('-')[1].trim() }}
-        </a>
+        <a
+          href="https://editor.pinzi.org"
+          target="_blank"
+        >{{ $t('app.editor').split('-')[1].trim() }}</a>
       </div>
 
       <div class="other-apps-item" v-if="showVideos">
         <a href="https://videos.pinzi.org" target="_blank">
-          <img src="/static/favicon-videos/android-icon-72x72.png"/>
+          <img src="/favicon-videos/android-icon-72x72.png">
         </a>
-        <a href="https://videos.pinzi.org" target="_blank">
-          {{ $t('app.videos').split('-')[1].trim() }}
-        </a>
+        <a
+          href="https://videos.pinzi.org"
+          target="_blank"
+        >{{ $t('app.videos').split('-')[1].trim() }}</a>
       </div>
 
       <div class="other-apps-item" v-if="showDictionary">
         <a href="https://dic.pinzi.org" target="_blank">
-          <img src="/static/favicon-dictionary/android-icon-72x72.png"/>
+          <img src="/favicon-dictionary/android-icon-72x72.png">
         </a>
-        <a href="https://dic.pinzi.org" target="_blank">
-        {{ $t('app.dictionary').split('-')[1].trim() }}
-        </a>
+        <a
+          href="https://dic.pinzi.org"
+          target="_blank"
+        >{{ $t('app.dictionary').split('-')[1].trim() }}</a>
       </div>
 
       <div class="other-apps-item">
         <a href="http://2pinyin.net" target="_blank">
-          <img src="/static/favicon-2pinyin/android-icon-72x72.png"/>
+          <img src="/favicon-2pinyin/android-icon-72x72.png">
         </a>
-        <a href="http://2pinyin.net" target="_blank">
-          2pinyin.net
-        </a>
+        <a href="http://2pinyin.net" target="_blank">2pinyin.net</a>
       </div>
-
     </div>
   </div>
 </template>
