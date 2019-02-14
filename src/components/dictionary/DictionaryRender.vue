@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="type === 'pt' &&  ((dictionary.pt && dictionary.pt.length) || user.admin)">
-      <div class="dict-title">PT</div>
+      <div class="dict-title">Português</div>
       <div class="dict-block">
         <div v-if="!editing">
           <div v-for="(pt, dictId) in dictionary.pt" v-bind:key="dictId">{{ pt }}</div>
@@ -34,7 +34,7 @@
         <input type="hidden" name="dico" :value="dictionary.ideograms">
       </form>
       <div class="dict-title">
-        <a href="javascript:void(0)" @click="openChineseTools('pt')">Chinese Tools - PT</a>
+        <a href="javascript:void(0)" @click="openChineseTools('pt')">Chinese Tools - Português</a>
       </div>
       <div class="dict-block">
         <div
@@ -46,7 +46,10 @@
 
     <div v-if="type === 'glosbe_pt' && dictionary.glosbe_pt && dictionary.glosbe_pt.length">
       <div class="dict-title">
-        <a :href="'https://glosbe.com/zh/pt/' + dictionary.ideograms" target="_blank">GLOSBE - PT</a>
+        <a
+          :href="'https://glosbe.com/zh/pt/' + dictionary.ideograms"
+          target="_blank"
+        >GLOSBE - Português</a>
       </div>
       <div class="dict-block">
         <div v-for="(glosbe_pt, dictId) in dictionary.glosbe_pt" v-bind:key="dictId">{{ glosbe_pt }}</div>
@@ -65,7 +68,7 @@
         <input type="hidden" name="dico" :value="dictionary.ideograms">
       </form>
       <div class="dict-title">
-        <a href="javascript:void(0)" @click="openChineseTools('es')">Chinese Tools - ES</a>
+        <a href="javascript:void(0)" @click="openChineseTools('es')">Chinese Tools - Español</a>
       </div>
       <div class="dict-block">
         <div
@@ -77,7 +80,10 @@
 
     <div v-if="type === 'glosbe_es' && dictionary.glosbe_es && dictionary.glosbe_es.length">
       <div class="dict-title">
-        <a :href="'https://glosbe.com/zh/es/' + dictionary.ideograms" target="_blank">GLOSBE - ES</a>
+        <a
+          :href="'https://glosbe.com/zh/es/' + dictionary.ideograms"
+          target="_blank"
+        >GLOSBE - Español</a>
       </div>
       <div class="dict-block">
         <div v-for="(glosbe_es, dictId) in dictionary.glosbe_es" v-bind:key="dictId">{{ glosbe_es }}</div>
@@ -89,7 +95,7 @@
         <a
           :href="'https://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=' + dictionary.ideograms"
           target="_blank"
-        >Unihan</a>
+        >Unihan - English</a>
       </div>
       <div class="dict-block">
         <div v-for="(unihan, dictId) in dictionary.unihan" v-bind:key="dictId">{{ unihan }}</div>
@@ -101,7 +107,7 @@
         <a
           :href="'https://cc-cedict.org/editor/editor.php?handler=QueryDictionary&amp;querydictionary_search=' + dictionary.ideograms"
           target="_blank"
-        >CC-CEDICT</a>
+        >CC-CEDICT - English</a>
       </div>
       <div class="dict-block">
         <div v-for="(cedict, dictId) in dictionary.cedict" v-bind:key="dictId">{{ cedict }}</div>
@@ -120,7 +126,7 @@
         <input type="hidden" name="dico" :value="dictionary.ideograms">
       </form>
       <div class="dict-title">
-        <a href="javascript:void(0)" @click="openChineseTools('en')">Chinese Tools - EN</a>
+        <a href="javascript:void(0)" @click="openChineseTools('en')">Chinese Tools - English</a>
       </div>
       <div class="dict-block">
         <div
@@ -132,7 +138,10 @@
 
     <div v-if="type === 'glosbe_en' && dictionary.glosbe_en && dictionary.glosbe_en.length">
       <div class="dict-title">
-        <a :href="'https://glosbe.com/zh/en/' + dictionary.ideograms" target="_blank">GLOSBE - EN</a>
+        <a
+          :href="'https://glosbe.com/zh/en/' + dictionary.ideograms"
+          target="_blank"
+        >GLOSBE - English</a>
       </div>
       <div class="dict-block">
         <div v-for="(glosbe_en, dictId) in dictionary.glosbe_en" v-bind:key="dictId">{{ glosbe_en }}</div>
@@ -140,14 +149,14 @@
     </div>
 
     <div v-if="type === 'en' && dictionary.en && dictionary.en.length">
-      <div class="dict-title">EN</div>
+      <div class="dict-title">English</div>
       <div class="dict-block">
         <div v-for="(en, dictId) in dictionary.en" v-bind:key="dictId">{{ en }}</div>
       </div>
     </div>
 
     <div v-if="type === 'es' && dictionary.es && dictionary.es.length">
-      <div class="dict-title">ES</div>
+      <div class="dict-title">Español</div>
       <div class="dict-block">
         <div v-for="(es, dictId) in dictionary.es" v-bind:key="dictId">{{ es }}</div>
       </div>
