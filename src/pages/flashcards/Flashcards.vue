@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flashcards-container">
     <div class="frontside">
       <div class="card" v-for="(card, cardId) in cards" v-bind:key="cardId">
         <span class="ideogram">{{card.ideogram}}</span>
@@ -10,9 +10,9 @@
     </div>
 
     <div class="backside">
-      <div class="card" v-for="(card, cardId) in cards" v-bind:key="cardId">
+      <div class="card reversed" v-for="(card, cardId) in cards" v-bind:key="cardId">
         <span class="pinyin">{{card.pinyin}}</span>
-        <span class="translation">{{card.translation}}</span>
+        <span class="definition">{{card.translation}}</span>
       </div>
     </div>
   </div>
@@ -25,11 +25,33 @@ export default {
     return {
       cards: [
         {
-          ideogram: '鱷魚',
-          pinyin: 'Èyú',
+          ideogram: '鱷魚 / 鳄鱼',
+          pinyin: 'èyú',
           image:
             'https://img.chinatimes.com/newsphoto/2017-12-08/656/20171208003441.jpg',
           translation: 'Jacaré',
+        },
+        {
+          ideogram: '獅子 / 狮子',
+          pinyin: 'shīzi',
+          image:
+            'https://www.infoescola.com/wp-content/uploads/2017/04/leao-126767138.jpg',
+          translation: 'Leão',
+        },
+        {
+          ideogram: '長頸鹿 / 长颈鹿',
+          pinyin: 'chángjǐnglù',
+          image:
+            'https://www.stickdecor.com.br/wp-content/uploads/2017/05/painel-fotografico-girafa-an-003-1.jpg',
+          translation: 'Girafa',
+        },
+
+        {
+          ideogram: '中間',
+          pinyin: 'chángjǐnglù',
+          image:
+            'https://www.stickdecor.com.br/wp-content/uploads/2017/05/painel-fotografico-girafa-an-003-1.jpg',
+          translation: 'Girafa',
         },
       ],
     };
@@ -37,7 +59,28 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+@font-face {
+  font-family: 'SentyWen';
+  src: url('/fonts/senty_wen.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'GentrlGracefulCuteTraditional';
+  src: url('/fonts/gentle-graceful-cute-traditional.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'GentrlGracefulCuteSimplified';
+  src: url('/fonts/gentle-graceful-cute-simplified.woff2') format('woff2');
+}
+
+.flashcards-container {
+  width: 900px;
+  padding-bottom: 65px;
+  display: block;
+}
+
 .frontside,
 .backside {
   display: flex;
@@ -45,20 +88,22 @@ export default {
 
 .card {
   display: flex;
-  width: 300px;
-  height: 200px;
-  border: 1px solid #000;
+  width: 320px;
+  height: 194px;
+  border: 1px dotted #cfcfcf;
   flex-direction: column;
   align-items: center;
+  background: #fff;
 }
 
 .card .ideogram {
   width: 100%;
-  font-size: 50px;
+  font-size: 30px;
   flex-grow: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: 'GentrlGracefulCuteSimplified';
 }
 
 .card .img-container {
@@ -86,7 +131,7 @@ export default {
   justify-content: center;
 }
 
-.card .translation {
+.card .definition {
   width: 100%;
   font-size: 30px;
   text-align: center;
@@ -95,5 +140,9 @@ export default {
   align-items: center;
   justify-content: center;
   color: #706c6c;
+}
+
+.reversed {
+  /* transform: rotate(180deg); */
 }
 </style>

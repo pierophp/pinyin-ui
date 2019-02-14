@@ -27,6 +27,7 @@ body {
   .translation {
     display: none !important;
   }
+
   #container,
   .content,
   .print-container {
@@ -34,6 +35,7 @@ body {
     overflow: initial !important;
     will-change: initial !important;
   }
+
   .no-print {
     display: none !important;
   }
