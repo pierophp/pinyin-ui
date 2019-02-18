@@ -241,7 +241,7 @@ export default {
 
 .dict-title {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .dict-title a {
