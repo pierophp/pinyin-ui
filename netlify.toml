@@ -16,7 +16,7 @@ ID = "Your_Site_ID"
   publish = "dist"
 
   # Default build command.
-  command = "cd ui-storage && yarn && yarn build && cp index.html dist/ && mv dist/ ../static/storage/ && cd .. && rm public/index.html && rm src/.config.js && cp src/.config-master.js src/.config.js && cp public/index-master.html public/index.html && sed -i -e \"s/favicon\\//favicon${FAVICON_SUFFIX}\\//g\" public/index.html && yarn && yarn build$BUILD_SUFFIX"
+  command = "cd ui-storage && yarn && yarn build && cp index.html dist/ && mkdir -p ../static/storage && mv dist/ ../static/storage/ && cd .. && rm public/index.html && rm src/.config.js && cp src/.config-master.js src/.config.js && cp public/index-master.html public/index.html && sed -i -e \"s/favicon\\//favicon${FAVICON_SUFFIX}\\//g\" public/index.html && yarn && yarn build$BUILD_SUFFIX"
 
   # Directory with the lambda functions to deploy to AWS.
   functions = "project/functions/"
