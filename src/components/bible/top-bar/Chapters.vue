@@ -23,7 +23,8 @@ export default {
     },
   },
   created() {
-    this.options = OptionsManager.getOptions();
+    const optionsManager = new OptionsManager(this.$i18n);
+    this.options = optionsManager.getOptions();
   },
   methods: {
     booksName,
@@ -39,6 +40,6 @@ export default {
   cursor: pointer;
   font-size: 18px;
   font-family: 'Noto Sans SC', 'Noto Sans TC', sans-serif;
-  color:#fff;
+  color: #fff;
 }
 </style>

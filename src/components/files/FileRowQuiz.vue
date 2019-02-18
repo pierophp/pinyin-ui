@@ -1,5 +1,5 @@
 <template>
-  <div class="line" :class=[type] v-if="!loading">
+  <div class="line" :class="[type]" v-if="!loading">
     <template v-for="(block, blockIndex) in blocks">
       <!-- @click is on FilePrint because performance  -->
       <div
@@ -7,23 +7,31 @@
         class="block"
         :data-line="lineIndex"
         :data-block="blockIndex"
-        ref="block">
-        <div class="character"
+        ref="block"
+      >
+        <div
+          class="character"
           :data-line="lineIndex"
           :data-block="blockIndex"
           :class="[block.classBold, block.classItalic]"
-          v-if="!block.small && !block.footnote && !block.noIdeogram">
-          <template v-for="(data) in block.printDataCharacters" v-if="!ideogramsToLearn[block.character]">
+          v-if="!block.small && !block.footnote && !block.noIdeogram"
+        >
+          <template
+            v-for="(data) in block.printDataCharacters"
+            v-if="!ideogramsToLearn[block.character]"
+          >
             <template>{{ data.character }}</template>
           </template>
 
-          <template v-for="(data) in block.printDataCharacters" v-if="ideogramsToLearn[block.character]">
-            &nbsp;&nbsp;&nbsp;&nbsp;
-          </template>
+          <template
+            v-for="(data) in block.printDataCharacters"
+            v-if="ideogramsToLearn[block.character]"
+          >&nbsp;&nbsp;&nbsp;&nbsp;</template>
 
-          <span class="tip-pinyin" v-if="ideogramsToLearn[block.character] && block.pinyin">
-            ({{ block.pinyin }})
-          </span>
+          <span
+            class="tip-pinyin"
+            v-if="ideogramsToLearn[block.character] && block.pinyin"
+          >({{ block.pinyin }})</span>
         </div>
       </div>
     </template>
@@ -51,7 +59,7 @@ export default {
         快樂: 1,
         回答: 1,
         考驗: 1,
-        不過: 1
+        不過: 1,
       },
     };
   },
@@ -99,7 +107,8 @@ export default {
       generatedBlock.large = block.large;
       generatedBlock.noIdeogram = block.noIdeogram;
 
-      const options = OptionsManager.getOptions();
+      const optionsManager = new OptionsManager(this.$i18n);
+      const options = optionsManager.getOptions();
       generatedBlock.classBold = '';
       if (block.isBold === 1) {
         generatedBlock.classBold = 'bold';

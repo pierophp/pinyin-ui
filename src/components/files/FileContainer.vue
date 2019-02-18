@@ -157,7 +157,8 @@ export default {
   },
 
   created() {
-    this.options = OptionsManager.getOptions();
+    const optionsManager = new OptionsManager(this.$i18n);
+    this.options = optionsManager.getOptions();
     this.worker = new PinyinWorker();
 
     this.worker.addEventListener('message', async e => {

@@ -1,6 +1,12 @@
 <template>
   <div>
-    <md-dialog md-open-from="#addCharacterModal" md-close-to="#addCharacterModal" ref="modal" :md-active.sync="modalOpen" :md-fullscreen="false">
+    <md-dialog
+      md-open-from="#addCharacterModal"
+      md-close-to="#addCharacterModal"
+      ref="modal"
+      :md-active.sync="modalOpen"
+      :md-fullscreen="false"
+    >
       <md-dialog-title v-if="add">{{ $t('add_ideogram') }}</md-dialog-title>
       <md-dialog-title v-if="!add">{{ $t('remove_ideogram') }}</md-dialog-title>
       <md-dialog-content>
@@ -16,12 +22,13 @@
 
     <md-dialog :md-active.sync="modalMessage2Pinyin" :md-fullscreen="false">
       <md-dialog-title>{{ $t('warning') }}</md-dialog-title>
-      <md-dialog-content>
-        {{ $t('2pinyin_add_remove_warning') }}
-      </md-dialog-content>
+      <md-dialog-content>{{ $t('2pinyin_add_remove_warning') }}</md-dialog-content>
 
       <md-dialog-actions>
-        <md-button class="md-primary" @click.native.prevent="modalMessage2Pinyin = false">{{ $t('ok') }}</md-button>
+        <md-button
+          class="md-primary"
+          @click.native.prevent="modalMessage2Pinyin = false"
+        >{{ $t('ok') }}</md-button>
       </md-dialog-actions>
     </md-dialog>
   </div>
@@ -52,7 +59,8 @@ export default {
     };
   },
   created() {
-    this.options = OptionsManager.getOptions();
+    const optionsManager = new OptionsManager(this.$i18n);
+    this.options = optionsManager.getOptions();
   },
   methods: {
     confirm() {

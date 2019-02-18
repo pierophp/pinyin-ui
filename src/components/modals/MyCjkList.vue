@@ -1,6 +1,6 @@
 <template>
-<div>
-  <md-dialog ref="dialogKnownWords" :md-active.sync="this.active">
+  <div>
+    <md-dialog ref="dialogKnownWords" :md-active.sync="this.active">
       <md-dialog-title>
         {{ $t(action) }}
         <span v-if="type === 'words' && hsk !== 999">- HSK {{hsk}}</span>
@@ -16,30 +16,46 @@
             </tr>
           </thead>
           <tbody>
-          <tr v-for="(item, index) in renderItems" :key="item.ideogram + item.pronunciation">
-            <td class="ideogram">
-              <ideograms-show :pinyin="item.pronunciation" :character="item.ideogram"/>
-            </td>
-            <td>{{item.pronunciation}}</td>
+            <tr v-for="(item, index) in renderItems" :key="item.ideogram + item.pronunciation">
+              <td class="ideogram">
+                <ideograms-show :pinyin="item.pronunciation" :character="item.ideogram"/>
+              </td>
+              <td>{{item.pronunciation}}</td>
 
-            <td v-if="action === 'unknown'" class="cell-button">
-              <md-button v-if="options.type !== '4'" class="md-icon-button md-raised" @click.native="openModal(true, item.ideogram, index)">
-                <md-icon>add</md-icon>
-              </md-button>
-              <md-button v-if="options.type === '4'" class="md-icon-button md-raised" @click.native="openModal(false, item.ideogram, index)">
-                <md-icon>remove</md-icon>
-              </md-button>
-            </td>
+              <td v-if="action === 'unknown'" class="cell-button">
+                <md-button
+                  v-if="options.type !== '4'"
+                  class="md-icon-button md-raised"
+                  @click.native="openModal(true, item.ideogram, index)"
+                >
+                  <md-icon>add</md-icon>
+                </md-button>
+                <md-button
+                  v-if="options.type === '4'"
+                  class="md-icon-button md-raised"
+                  @click.native="openModal(false, item.ideogram, index)"
+                >
+                  <md-icon>remove</md-icon>
+                </md-button>
+              </td>
 
-            <td v-if="action === 'known'" class="cell-button">
-              <md-button v-if="options.type !== '4'" class="md-icon-button md-raised" @click.native="openModal(false, item.ideogram, index)">
-                <md-icon>remove</md-icon>
-              </md-button>
-              <md-button v-if="options.type === '4'" class="md-icon-button md-raised" @click.native="openModal(true, item.ideogram, index)">
-                <md-icon>add</md-icon>
-              </md-button>
-            </td>
-          </tr>
+              <td v-if="action === 'known'" class="cell-button">
+                <md-button
+                  v-if="options.type !== '4'"
+                  class="md-icon-button md-raised"
+                  @click.native="openModal(false, item.ideogram, index)"
+                >
+                  <md-icon>remove</md-icon>
+                </md-button>
+                <md-button
+                  v-if="options.type === '4'"
+                  class="md-icon-button md-raised"
+                  @click.native="openModal(true, item.ideogram, index)"
+                >
+                  <md-icon>add</md-icon>
+                </md-button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </md-dialog-content>
@@ -50,10 +66,11 @@
     </md-dialog>
 
     <add-remove-character-modal
-          @add-character="addRemoveCharacter"
-          @remove-character="addRemoveCharacter"
-          ref="addRemoveCharacterModal"/>
-</div>
+      @add-character="addRemoveCharacter"
+      @remove-character="addRemoveCharacter"
+      ref="addRemoveCharacterModal"
+    />
+  </div>
 </template>
 
 <script>
@@ -65,7 +82,8 @@ import { mapMutations } from 'vuex';
 
 import { FILE_MUTATION_SET_MY_CJK_TEMP } from 'src/data/file/types';
 
-const options = OptionsManager.getOptions();
+const optionsManager = new OptionsManager(undefined);
+const options = optionsManager.getOptions();
 
 export default {
   name: 'modal-my-cjk',

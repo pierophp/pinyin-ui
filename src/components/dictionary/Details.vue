@@ -30,7 +30,8 @@ export default {
     DictionaryRender,
   },
   data() {
-    const options = OptionsManager.getOptions();
+    const optionsManager = new OptionsManager(this.$i18n);
+    const options = optionsManager.getOptions();
     const translationLanguage = options.translationLanguage;
 
     const languagesPt = ['pt', 'chinese_tools_pt', 'glosbe_pt'];

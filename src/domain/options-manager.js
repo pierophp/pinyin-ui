@@ -14,12 +14,21 @@ const languageCodes = {
 };
 
 class OptionsManager {
-  static options;
+  options;
 
-  static getDefaultOptions() {
+  i18n;
+
+  constructor(i18n) {
+    this.i18n = i18n;
+  }
+
+  getDefaultOptions() {
     let translationLanguage = 'en';
-    if (languageCodes[Vue.config.lang]) {
-      translationLanguage = Vue.config.lang;
+
+    const locale = Vue.prototype.$locale;
+
+    if (languageCodes[locale]) {
+      translationLanguage = locale;
     }
 
     return {
@@ -41,29 +50,30 @@ class OptionsManager {
     };
   }
 
-  static getLanguages(chinese) {
+  getLanguages(chinese) {
     const languages = [];
+
     for (const languageCode of Object.keys(languageCodes)) {
       languages.push({
         code: languageCode,
-        language: Vue.t(languageCodes[languageCode]),
+        language: this.i18n.t(languageCodes[languageCode]),
       });
     }
 
     if (chinese) {
       languages.push({
         code: 'cmn-hans',
-        language: Vue.t('chinese.simplified'),
+        language: this.i18n.t('chinese.simplified'),
       });
       languages.push({
         code: 'cmn-hant',
-        language: Vue.t('chinese.traditional'),
+        language: this.i18n.t('chinese.traditional'),
       });
     }
     return orderBy(languages, ['language']);
   }
 
-  static getOptions() {
+  getOptions() {
     if (this.options) {
       return this.options;
     }
@@ -86,7 +96,7 @@ class OptionsManager {
     return this.options;
   }
 
-  static save(newOptions) {
+  save(newOptions) {
     if (!this.options) {
       this.getOptions();
     }

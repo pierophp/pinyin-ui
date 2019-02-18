@@ -78,7 +78,8 @@ export default {
     },
   },
   created() {
-    this.options = OptionsManager.getOptions();
+    const optionsManager = new OptionsManager(undefined);
+    this.options = optionsManager.getOptions();
   },
   mounted() {},
 };

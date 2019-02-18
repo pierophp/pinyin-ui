@@ -58,7 +58,8 @@ import OptionsManager from 'src/domain/options-manager';
 import Tabs from 'src/components/common/Tabs';
 import Tab from 'src/components/common/Tab';
 
-const options = OptionsManager.getOptions();
+const optionsManager = new OptionsManager(undefined);
+const options = optionsManager.getOptions();
 
 export default {
   name: 'dicionary-search',

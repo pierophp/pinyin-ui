@@ -9,7 +9,8 @@ export default function(params) {
   }
 
   const printData = [];
-  const options = OptionsManager.getOptions();
+  const optionsManager = new OptionsManager(undefined);
+  const options = optionsManager.getOptions();
   const colors = {};
   colors[1] = options.color1;
   colors[2] = options.color2;

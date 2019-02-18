@@ -66,7 +66,8 @@ const CACHE_VERSION = 1;
 export default {
   name: 'bible-save',
   data() {
-    const languages = OptionsManager.getLanguages(true);
+    const optionsManager = new OptionsManager(undefined);
+    const languages = optionsManager.getLanguages(true);
     languages.forEach((language, languageIndex) => {
       languages[languageIndex].downloaded = LocalStorage.has(
         `BIBLE_SAVE_${language.code}`,

@@ -9,7 +9,7 @@
       >
         <ideograms-show :pinyin="data.pinyin" :character="data.character" ref="ideogram-show"/>
       </span>
-
+      
       <span class="bottom-bar-pinyin">{{ block.pinyin }}</span>
 
       <md-button class="md-icon-button md-primary" @click.native="loadDictionary(block)">
@@ -255,7 +255,8 @@ export default {
 
       const chars = block.character.toString();
       const printData = [];
-      const options = OptionsManager.getOptions();
+      const optionsManager = new OptionsManager(this.$i18n);
+      const options = optionsManager.getOptions();
       for (let i = 0; i < chars.length; i += 1) {
         let characterLink = chars[i];
         if (options.pinyinHide === '2') {

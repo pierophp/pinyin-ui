@@ -116,7 +116,8 @@ export default {
     },
   },
   created() {
-    options = OptionsManager.getOptions();
+    const optionsManager = new OptionsManager(this.$i18n);
+    options = optionsManager.getOptions();
   },
   async mounted() {
     const language = `cmn-han${options.ideogramType}`;

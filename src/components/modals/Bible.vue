@@ -1,7 +1,19 @@
 <template>
-  <md-dialog ref="modal" class="dialog-bible" :md-active.sync="modalOpen" :md-fullscreen="false" :md-backdrop="true">
+  <md-dialog
+    ref="modal"
+    class="dialog-bible"
+    :md-active.sync="modalOpen"
+    :md-fullscreen="false"
+    :md-backdrop="true"
+  >
     <md-dialog-content>
-      <chapter-container v-if="book" :book="book" :chapter="chapter" :verse="verse" @open-bottom-bar="openBottomBar"/>
+      <chapter-container
+        v-if="book"
+        :book="book"
+        :chapter="chapter"
+        :verse="verse"
+        @open-bottom-bar="openBottomBar"
+      />
     </md-dialog-content>
 
     <md-dialog-actions>
@@ -47,7 +59,8 @@ export default {
     ChapterContainer,
   },
   created() {
-    this.options = OptionsManager.getOptions();
+    const optionsManager = new OptionsManager(this.$i18n);
+    this.options = optionsManager.getOptions();
   },
   methods: {
     booksName,

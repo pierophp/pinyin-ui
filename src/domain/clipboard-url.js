@@ -5,7 +5,8 @@ import OptionsManager from 'src/domain/options-manager';
 import isChinese from 'src/helpers/is-chinese';
 
 async function parseLink(link) {
-  const options = OptionsManager.getOptions();
+  const optionsManager = new OptionsManager(undefined);
+  const options = optionsManager.getOptions();
   const fullUrl = `site/download?language=${
     options.translationLanguage
   }&ideogramType=${options.ideogramType}&url=${encodeURI(link)}`;

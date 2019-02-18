@@ -157,7 +157,8 @@ export default {
       generatedBlock.footnote = block.footnote;
       generatedBlock.noIdeogram = block.noIdeogram;
 
-      const options = OptionsManager.getOptions();
+      const optionsManager = new OptionsManager(this.$i18n);
+      const options = optionsManager.getOptions();
       generatedBlock.classHighlight = `highlight-${block.h ? block.h : ''}`;
       generatedBlock.classBold = '';
       if (block.isBold === 1) {

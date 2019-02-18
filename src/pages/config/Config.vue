@@ -188,9 +188,14 @@
 import LocalStorage from 'src/helpers/local-storage';
 import OptionsManager from 'src/domain/options-manager';
 
+let optionsManager;
+
 export default {
   data() {
-    const dataDefault = OptionsManager.getDefaultOptions();
+    if (!optionsManager) {
+      optionsManager = new OptionsManager(this.$i18n);
+    }
+    const dataDefault = optionsManager.getDefaultOptions();
 
     const data = {};
     for (const prop in dataDefault) {
@@ -200,12 +205,16 @@ export default {
     }
 
     data.dataDefault = dataDefault;
-    data.languages = OptionsManager.getLanguages(false);
+    data.languages = optionsManager.getLanguages(false);
     data.saveNotify = false;
 
     return data;
   },
   created() {
+    if (!optionsManager) {
+      optionsManager = new OptionsManager(this.$i18n);
+    }
+
     const options = LocalStorage.get('options');
     if (!options) {
       return;
@@ -219,7 +228,7 @@ export default {
   },
   methods: {
     save() {
-      OptionsManager.save(this);
+      optionsManager.save(this);
       this.saveNotify = true;
     },
     restoreDefault() {

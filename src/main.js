@@ -50,8 +50,12 @@ export default async function loadMain(routes, app, globalLoader) {
 
   const Main = Vue.extend(App);
 
+  const locale = navigator.language.split('-')[0];
+
+  Vue.prototype.$locale = locale;
+
   const i18n = new VueI18n({
-    locale: navigator.language.split('-')[0],
+    locale,
     fallbackLocale: 'en',
     messages: {
       en: localeEn,

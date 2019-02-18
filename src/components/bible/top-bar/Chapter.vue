@@ -13,23 +13,29 @@
     </div>
 
     <div class="right">
-      <md-button class="md-icon-button" @click="openDialog()" >
+      <md-button class="md-icon-button" @click="openDialog()">
         <md-icon>more_vert</md-icon>
       </md-button>
     </div>
 
-    <md-dialog ref="modal" class="dialog-chapter-options" :md-active.sync="modalOpen" :md-fullscreen="false" :md-backdrop="true" :md-click-outside-to-close="true">
+    <md-dialog
+      ref="modal"
+      class="dialog-chapter-options"
+      :md-active.sync="modalOpen"
+      :md-fullscreen="false"
+      :md-backdrop="true"
+      :md-click-outside-to-close="true"
+    >
       <md-dialog-content>
-
         <div class="checkbox-container">
-          <input type="checkbox" id="open-verses-as-popup" v-model="versesShowAsModalInput"/>
+          <input type="checkbox" id="open-verses-as-popup" v-model="versesShowAsModalInput">
           <label for="open-verses-as-popup">{{ $t('open_verses_as_popup') }}</label>
         </div>
 
-        <br/>
+        <br>
 
         <div class="checkbox-container">
-          <input type="checkbox" id="open-chapter-on-load-input" v-model="openChapterOnLoadInput"/>
+          <input type="checkbox" id="open-chapter-on-load-input" v-model="openChapterOnLoadInput">
           <label for="open-chapter-on-load-input">{{ $t('open_chapter_on_load') }}</label>
         </div>
       </md-dialog-content>
@@ -82,7 +88,8 @@ export default {
     },
   },
   created() {
-    this.options = OptionsManager.getOptions();
+    const optionsManager = new OptionsManager(this.$i18n);
+    this.options = optionsManager.getOptions();
     if (this.versesShowAsModal && !this.openChapterOnLoad) {
       this.setVersesModalVisible(true);
     }

@@ -144,7 +144,8 @@ import MenuContent from 'src/components/common/MenuContent';
 import Tabs from 'src/components/common/Tabs';
 import Tab from 'src/components/common/Tab';
 
-const options = OptionsManager.getOptions();
+const optionsManager = new OptionsManager(undefined);
+const options = optionsManager.getOptions();
 let type = 'known';
 if (options.type === '4') {
   type = 'unknown';
