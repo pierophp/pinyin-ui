@@ -1,10 +1,15 @@
 <template>
   <div class="loadable-content">
-    <portal to="portal-loadable">
+    <portal to="portal-loadable" v-if="portal">
       <div class="loadable-loader" v-show="loading">
         <md-progress-spinner class="md-accent" md-mode="indeterminate" :visible="loading"></md-progress-spinner>
       </div>
     </portal>
+
+    <div class="loadable-loader" v-show="loading" v-if="!portal">
+      <md-progress-spinner class="md-accent" md-mode="indeterminate" :visible="loading"></md-progress-spinner>
+    </div>
+
     <slot></slot>
   </div>
 </template>
@@ -17,6 +22,10 @@ export default {
     loading: {
       type: Boolean,
       default: false,
+    },
+    portal: {
+      type: Boolean,
+      default: true,
     },
   },
 };

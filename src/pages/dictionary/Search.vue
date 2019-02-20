@@ -23,7 +23,7 @@
     </form>
 
     <div>
-      <loadable-content :loading="loading">
+      <loadable-content :loading="loading" :portal="false">
         <div
           class="list-item"
           v-for="entry in entries"
