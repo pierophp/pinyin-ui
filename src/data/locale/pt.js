@@ -150,4 +150,5 @@ export default {
   separable_verb: 'Verbo separável',
   my_total_ideograms: 'Total de Ideogramas',
   Pinyin: 'Pinyin',
+  translate: 'traduzir',
 };
