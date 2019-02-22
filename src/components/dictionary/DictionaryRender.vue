@@ -110,7 +110,15 @@
         >CC-CEDICT - English</a>
       </div>
       <div class="dict-block">
-        <div v-for="(cedict, dictId) in dictionary.cedict" v-bind:key="dictId">{{ cedict }}</div>
+        <div v-for="(cedict, dictId) in dictionary.cedict" v-bind:key="dictId">
+          {{ cedict }}
+          <google-translate-link
+            ref="dialogGoogleTranslate"
+            :word="cedict"
+            sourceLanguage="en"
+            targetLanguage="pt"
+          />
+        </div>
       </div>
     </div>
 
@@ -151,7 +159,15 @@
     <div v-if="type === 'en' && dictionary.en && dictionary.en.length">
       <div class="dict-title">English</div>
       <div class="dict-block">
-        <div v-for="(en, dictId) in dictionary.en" v-bind:key="dictId">{{ en }}</div>
+        <div v-for="(en, dictId) in dictionary.en" v-bind:key="dictId">
+          {{ en }}
+          <google-translate-link
+            ref="dialogGoogleTranslate"
+            :word="en"
+            sourceLanguage="en"
+            targetLanguage="pt"
+          />
+        </div>
       </div>
     </div>
 
@@ -187,9 +203,13 @@ import http from 'src/helpers/http';
 import User from 'src/domain/user';
 import OptionsManager from 'src/domain/options-manager';
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
+import GoogleTranslateLink from 'src/components/dictionary/GoogleTranslateLink';
 
 export default {
   name: 'dictionary-render',
+  components: {
+    GoogleTranslateLink,
+  },
   watch: {
     dictionary() {
       this.dictionaryEntry = this.getDictionaryEntry();

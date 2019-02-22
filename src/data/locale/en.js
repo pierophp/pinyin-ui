@@ -152,4 +152,5 @@ export default {
   separable_verb: 'Separable verb',
   my_total_ideograms: 'Ideograms Total',
   Pinyin: 'Pinyin',
+  translate: 'translate',
 };
