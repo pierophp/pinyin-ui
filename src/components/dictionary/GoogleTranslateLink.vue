@@ -1,5 +1,8 @@
 <template>
-  <a :href="url" target="_blank" class="translate">{{$t('translate')}}</a>
+  <span v-if="sourceLanguage !== targetLanguage">
+    &nbsp;
+    <a :href="url" target="_blank" class="translate">{{$t('translate')}}</a>
+  </span>
 </template>
 
 <script>
@@ -18,15 +21,15 @@ export default {
         '&tl=' +
         this.targetLanguage +
         '&text=' +
-        this.word,
+        encodeURIComponent(this.word),
     };
   },
 };
 </script>
 
 <style>
-a.translate {
-  color: #a7a6a6 !important;
-  font-size: 13px;
+span a.translate {
+  color: #757575 !important;
+  font-size: 11px;
 }
 </style>
