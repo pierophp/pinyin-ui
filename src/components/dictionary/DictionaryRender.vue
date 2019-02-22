@@ -341,7 +341,9 @@ export default {
 
     this.translationLanguage = translationLanguage;
 
-    this.loadMoedict();
+    if (this.type === 'moedict') {
+      this.loadMoedict();
+    }
   },
   methods: {
     openChineseTools(language) {
@@ -370,11 +372,24 @@ export default {
       this.$emit('change-show', this.editing);
     },
 
-    loadMoedict() {
+    async loadMoedict() {
+      if (!this.dictionary.ideograms) {
+        setTimeout(() => {
+          this.loadMoedict();
+        }, 500);
+
+        return;
+      }
+
       const optionsManager = new OptionsManager(this.$i18n);
       const options = optionsManager.getOptions();
 
-      const moedictResponse = {};
+      const moedictResponse = (await http.get('dictionary/moedict', {
+        params: {
+          ideogram: this.dictionary.ideograms,
+          pronunciation: this.pinyin,
+        },
+      })).data.definition;
 
       const definitions =
         options.ideogramType === 't'
