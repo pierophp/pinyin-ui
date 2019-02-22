@@ -4,7 +4,7 @@
     <image-zoom :src="imageZoom" ref="imageZoom"/>
     <div class="print-scroll" ref="fileScroll">
       <div class="print" :class="[sizeClass, typeClass, ideogramSpacedClass]">
-        <folder-structure :show-last="true" v-if="parent"/>
+        <folder-structure :show-last="true" v-if="parent && showMenuNavigation"/>
         <h2 v-if="filename && filename.split('|||').length != 3" class="file-title">{{filename}}</h2>
 
         <div
@@ -112,6 +112,7 @@ export default {
     filename: '',
     fileLoading: false,
     parent: false,
+    showMenuNavigation: true,
     pagination: false,
     useFullLines: true,
     showHighlight: {

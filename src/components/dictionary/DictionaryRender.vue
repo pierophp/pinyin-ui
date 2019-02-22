@@ -298,6 +298,7 @@
             :lines="[definition.def]"
             :fullLines="[definition.def]"
             :parent="true"
+            :showMenuNavigation="false"
             :showHighlight="false"
             :useFullLines="false"
           />
