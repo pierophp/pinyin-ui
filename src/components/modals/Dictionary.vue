@@ -2,8 +2,9 @@
   <div>
     <md-dialog
       ref="dialogDictionary"
-      :md-active="modalDictionaryOpen"
+      :md-active.sync="modalDictionaryOpen"
       :md-fullscreen="false"
+      :md-close-on-esc="true"
       id="dialog-dictionary"
     >
       <md-dialog-title>
