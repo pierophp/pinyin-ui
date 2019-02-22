@@ -289,7 +289,12 @@
     </div>
 
     <div v-if="type === 'moedict' && moedict">
-      <div class="dict-title">Moedict - Chinese</div>
+      <div class="dict-title">
+        <a
+          :href="'https://www.moedict.tw/' + dictionary.ideograms"
+          target="_blank"
+        >Moedict - Chinese</a>
+      </div>
       <div class="dict-block">
         <div v-for="(definition, definitionId) in moedict.definitions" v-bind:key="definitionId">
           <span class="dict-definition-title">{{ $t('definition') + ' ' + (definitionId + 1)}}:</span>
