@@ -156,7 +156,9 @@ export default {
       this.items[itemId].classActive = 'active';
       this.currentStroke = 0;
       this.partial = false;
-      this.writer.setCharacter(this.items[itemId].ideogram);
+      if (this.writer) {
+        this.writer.setCharacter(this.items[itemId].ideogram);
+      }
     },
     async loadIdeogram(char) {
       if (this.hanziWriterCache[char]) {
