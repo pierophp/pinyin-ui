@@ -62,6 +62,8 @@ export default {
         .concat(languagesPt);
     }
 
+    types.push('moedict');
+
     return {
       types: types,
     };

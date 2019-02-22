@@ -161,12 +161,32 @@
         <div v-for="(es, dictId) in dictionary.es" v-bind:key="dictId">{{ es }}</div>
       </div>
     </div>
+
+    <div v-if="type === 'moedict' && moedict">
+      <div class="dict-title">Moedict - Chinese</div>
+      <div class="dict-block">
+        <div v-for="(definition, definitionId) in moedict.definitions" v-bind:key="definitionId">
+          <span class="dict-definition-title">{{ $t('definition') + ' ' + (definitionId + 1)}}:</span>
+          <file-container
+            ref="fileContainer"
+            :lines="[definition.def]"
+            :fullLines="[definition.def]"
+            :parent="true"
+            :showHighlight="false"
+            :useFullLines="false"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import replaceall from 'replaceall';
 import http from 'src/helpers/http';
 import User from 'src/domain/user';
+import OptionsManager from 'src/domain/options-manager';
+import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
 
 export default {
   name: 'dictionary-render',
@@ -180,7 +200,18 @@ export default {
       editing: false,
       dictionaryEntry: this.getDictionaryEntry(),
       user: User.getUser(),
+      moedict: null,
+      translationLanguage: null,
     };
+  },
+  created() {
+    const optionsManager = new OptionsManager(this.$i18n);
+    const options = optionsManager.getOptions();
+    const translationLanguage = options.translationLanguage;
+
+    this.translationLanguage = translationLanguage;
+
+    this.loadMoedict();
   },
   methods: {
     openChineseTools(language) {
@@ -207,6 +238,64 @@ export default {
     edit() {
       this.editing = true;
       this.$emit('change-show', this.editing);
+    },
+
+    loadMoedict() {
+      const optionsManager = new OptionsManager(this.$i18n);
+      const options = optionsManager.getOptions();
+
+      const moedictResponse = {};
+
+      const definitions =
+        options.ideogramType === 't'
+          ? moedictResponse.traditionalDefinitions
+          : moedictResponse.simplifiedDefinitions;
+
+      const newDefinitions = [];
+
+      let i = 0;
+      for (const definition of definitions) {
+        let blockCount = 0;
+        let characterCounter = 0;
+
+        const line = [];
+
+        for (const pinyinDef of moedictResponse.pinyinDefinitions[i].def) {
+          const pinyinList = separatePinyinInSyllables(
+            replaceall(' ', String.fromCharCode(160), pinyinDef),
+            false,
+          )
+            .join(String.fromCharCode(160))
+            .split(String.fromCharCode(160));
+
+          for (const pinyin of pinyinList) {
+            if (!line[blockCount]) {
+              line[blockCount] = { c: '', p: '' };
+
+              if (blockCount === 0) {
+                line[blockCount].pinyinSpaced = 1;
+              }
+            }
+
+            line[blockCount].c += definition.def[characterCounter];
+            line[blockCount].p += pinyin + String.fromCharCode(160);
+
+            characterCounter++;
+          }
+
+          blockCount++;
+        }
+
+        newDefinitions.push({ def: line });
+
+        i++;
+      }
+
+      const moedict = {
+        definitions: newDefinitions,
+      };
+
+      this.$set(this, 'moedict', moedict);
     },
     save() {
       const dictionatyList = this.dictionaryEntry
@@ -250,6 +339,10 @@ export default {
 
 .dict-block .md-input-container {
   margin-top: 0 !important;
+}
+
+.dict-block .dict-definition-title {
+  font-weight: bold;
 }
 
 .dict-block textarea {
