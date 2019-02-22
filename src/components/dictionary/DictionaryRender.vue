@@ -39,7 +39,7 @@
       v-if="type === 'chinese_tools_pt' && dictionary.chinese_tools_pt && dictionary.chinese_tools_pt.length"
     >
       <form
-        action="http://www.chinese-tools.com/tools/chinese-portuguese-dictionary.html"
+        action="https://www.chinese-tools.com/tools/chinese-portuguese-dictionary.html"
         method="POST"
         target="_blank"
         id="form-ct-pt"
@@ -94,7 +94,7 @@
       v-if="type === 'chinese_tools_es' && dictionary.chinese_tools_es && dictionary.chinese_tools_es.length"
     >
       <form
-        action="http://www.chinese-tools.com/tools/chinese-spanish-dictionary.html"
+        action="https://www.chinese-tools.com/tools/chinese-spanish-dictionary.html"
         method="POST"
         target="_blank"
         id="form-ct-es"
@@ -197,7 +197,7 @@
       v-if="type === 'chinese_tools_en' && dictionary.chinese_tools_en && dictionary.chinese_tools_en.length"
     >
       <form
-        action="http://www.chinese-tools.com/tools/dictionary.html"
+        action="https://www.chinese-tools.com/tools/dictionary.html"
         method="POST"
         target="_blank"
         id="form-ct-en"
