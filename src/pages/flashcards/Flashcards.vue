@@ -66,13 +66,8 @@ export default {
 }
 
 @font-face {
-  font-family: 'GentrlGracefulCuteTraditional';
-  src: url('/fonts/gentle-graceful-cute-traditional.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'GentrlGracefulCuteSimplified';
-  src: url('/fonts/gentle-graceful-cute-simplified.woff2') format('woff2');
+  font-family: 'HuaKangBaoFengTraditional';
+  src: url('/fonts/hua_kang_bao_feng_traditional.woff2') format('woff2');
 }
 
 .flashcards-container {
@@ -99,11 +94,12 @@ export default {
 .card .ideogram {
   width: 100%;
   font-size: 30px;
+  line-height: 30px;
   flex-grow: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'GentrlGracefulCuteSimplified';
+  font-family: 'HuaKangBaoFengTraditional';
 }
 
 .card .img-container {

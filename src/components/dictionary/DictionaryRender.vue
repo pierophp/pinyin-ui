@@ -289,26 +289,56 @@
     </div>
 
     <div v-if="type === 'moedict' && moedict">
-      <div class="dict-title">
-        <a
-          :href="'https://www.moedict.tw/' + dictionary.ideograms"
-          target="_blank"
-        >Moedict - Chinese</a>
-      </div>
-      <div class="dict-block">
-        <div v-for="(definition, definitionId) in moedict.definitions" v-bind:key="definitionId">
-          <span class="dict-definition-title">{{ $t('definition') + ' ' + (definitionId + 1)}}:</span>
-          <file-container
-            ref="fileContainer"
-            :lines="[definition.def]"
-            :fullLines="[definition.def]"
-            :parent="true"
-            :showMenuNavigation="false"
-            :showHighlight="false"
-            :useFullLines="false"
-          />
+      <loadable-content :loading="moedictLoading" :portal="false">
+        <div class="dict-title">
+          <a
+            :href="'https://www.moedict.tw/' + dictionary.ideograms"
+            target="_blank"
+          >Moedict - Chinese</a>
         </div>
-      </div>
+        <div class="dict-block">
+          <div v-for="(definition, definitionId) in moedict.definitions" v-bind:key="definitionId">
+            <div class="moedict-container">
+              <span class="dict-definition-title">{{ $t('definition') + ' ' + (definitionId + 1)}}:</span>
+              <file-container
+                ref="fileContainer"
+                :lines="[definition.def]"
+                :fullLines="[definition.def]"
+                :parent="true"
+                :showMenuNavigation="false"
+                :showHighlight="false"
+                :useFullLines="false"
+              />
+
+              <div v-if="definition.synonyms">
+                <span class="dict-definition-title">{{$t('synonyms')}}</span>
+                <file-container
+                  ref="fileContainer"
+                  :lines="[definition.synonyms]"
+                  :fullLines="[definition.synonyms]"
+                  :parent="true"
+                  :showMenuNavigation="false"
+                  :showHighlight="false"
+                  :useFullLines="false"
+                />
+              </div>
+
+              <div v-if="definition.antonyms">
+                <span class="dict-definition-title">{{$t('antonyms')}}</span>
+                <file-container
+                  ref="fileContainer"
+                  :lines="[definition.antonyms]"
+                  :fullLines="[definition.antonyms]"
+                  :parent="true"
+                  :showMenuNavigation="false"
+                  :showHighlight="false"
+                  :useFullLines="false"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </loadable-content>
     </div>
   </div>
 </template>
@@ -320,11 +350,12 @@ import User from 'src/domain/user';
 import OptionsManager from 'src/domain/options-manager';
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
 import GoogleTranslateLink from 'src/components/dictionary/GoogleTranslateLink';
-
+import LoadableContent from 'src/components/common/loading/LoadableContent';
 export default {
   name: 'dictionary-render',
   components: {
     GoogleTranslateLink,
+    LoadableContent,
   },
   watch: {
     dictionary() {
@@ -334,6 +365,7 @@ export default {
   data() {
     return {
       editing: false,
+      moedictLoading: false,
       dictionaryEntry: this.getDictionaryEntry(),
       user: User.getUser(),
       moedict: null,
@@ -387,6 +419,8 @@ export default {
         return;
       }
 
+      this.moedictLoading = true;
+
       const optionsManager = new OptionsManager(this.$i18n);
       const options = optionsManager.getOptions();
 
@@ -404,16 +438,19 @@ export default {
 
       const newDefinitions = [];
 
-      let i = 0;
-      for (const definition of definitions) {
+      function parsePinyin(pinyinObject, ideogramsObject, parseKey) {
+        if (!pinyinObject[parseKey]) {
+          return;
+        }
+
         let blockCount = 0;
         let characterCounter = 0;
 
         const line = [];
 
-        for (const pinyinDef of moedictResponse.pinyinDefinitions[i].def) {
+        for (const pinyinDef of pinyinObject[parseKey]) {
           const pinyinList = separatePinyinInSyllables(
-            replaceall(' ', String.fromCharCode(160), pinyinDef),
+            replaceall(' ', String.fromCharCode(160), pinyinDef || ''),
             false,
           )
             .join(String.fromCharCode(160))
@@ -428,7 +465,7 @@ export default {
               }
             }
 
-            line[blockCount].c += definition.def[characterCounter];
+            line[blockCount].c += ideogramsObject[parseKey][characterCounter];
             line[blockCount].p += pinyin + String.fromCharCode(160);
 
             characterCounter++;
@@ -437,8 +474,28 @@ export default {
           blockCount++;
         }
 
-        newDefinitions.push({ def: line });
+        return line;
+      }
 
+      let i = 0;
+      for (const definition of definitions) {
+        newDefinitions.push({
+          def: parsePinyin(
+            moedictResponse.pinyinDefinitions[i],
+            definition,
+            'def',
+          ),
+          antonyms: parsePinyin(
+            moedictResponse.pinyinDefinitions[i],
+            definition,
+            'antonyms',
+          ),
+          synonyms: parsePinyin(
+            moedictResponse.pinyinDefinitions[i],
+            definition,
+            'synonyms',
+          ),
+        });
         i++;
       }
 
@@ -447,6 +504,8 @@ export default {
       };
 
       this.$set(this, 'moedict', moedict);
+
+      this.moedictLoading = false;
     },
     save() {
       const dictionatyList = this.dictionaryEntry
@@ -498,5 +557,20 @@ export default {
 
 .dict-block textarea {
   height: 250px !important;
+}
+
+.moedict-container {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+}
+
+.moedict-container .print {
+  margin: 0 !important;
+}
+
+.moedict-container .print-scroll {
+  padding: 0 !important;
 }
 </style>

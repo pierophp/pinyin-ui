@@ -153,4 +153,6 @@ export default {
   my_total_ideograms: 'Ideograms Total',
   Pinyin: 'Pinyin',
   translate: 'translate',
+  antonyms: 'Antonyms',
+  synonyms: 'Synonyms',
 };
