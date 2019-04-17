@@ -610,6 +610,7 @@ export default {
   flex-direction: column;
   flex-wrap: wrap;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   width: 100%;
 }
 
@@ -626,6 +627,7 @@ export default {
   max-height: 90px;
   min-height: 35px;
   overflow: scroll;
+  -webkit-overflow-scrolling: touch;
   width: 100%;
 }
 

@@ -385,6 +385,7 @@ export default {
 .video-exibition-container {
   display: flex;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   flex-grow: 1;
 }
 
@@ -420,6 +421,7 @@ export default {
   flex: 1;
   will-change: transform;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 0 10px;
 }
 

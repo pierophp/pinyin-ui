@@ -136,6 +136,7 @@ export default {
   flex: 1;
   padding: 0 10px;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* REMOVE THIS */

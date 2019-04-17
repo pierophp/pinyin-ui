@@ -247,6 +247,7 @@ export default {
   flex: 1;
   padding: 0 10px 20px;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .config-container .size-container {

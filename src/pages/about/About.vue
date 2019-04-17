@@ -104,6 +104,7 @@ export default {
   flex: 1;
   padding: 10px 10px;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .about-text {

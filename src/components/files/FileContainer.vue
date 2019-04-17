@@ -396,6 +396,7 @@ audio {
   flex: 1;
   will-change: transform;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 0 10px;
 }
 

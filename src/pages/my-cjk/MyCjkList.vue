@@ -309,6 +309,7 @@ export default {
   padding: 0 10px;
   overflow: auto;
   margin-top: 20px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .ideograms-container h3 {

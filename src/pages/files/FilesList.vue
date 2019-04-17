@@ -236,6 +236,7 @@ export default {
 .files-wrapper {
   flex: 1;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .files-container {

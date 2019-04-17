@@ -1,19 +1,26 @@
 <template>
   <div class="login-container">
-  <loadable-content :loading="loading">
-      <br/>
+    <loadable-content :loading="loading">
+      <br>
 
-      <md-button class="md-dense md-raised md-primary btn-google"  @click="goToAuth(authGoogleUrl)" v-if="!loading">
-        <md-icon md-src="https://unpkg.com/simple-icons@latest/icons/google.svg" />
+      <md-button
+        class="md-dense md-raised md-primary btn-google"
+        @click="goToAuth(authGoogleUrl)"
+        v-if="!loading"
+      >
+        <md-icon md-src="https://unpkg.com/simple-icons@latest/icons/google.svg"/>
         {{ $t("sign_in_google") }}
       </md-button>
 
-      <md-button class="md-dense md-raised md-primary btn-baidu"  @click="goToAuth(authBaiduUrl)" v-if="!loading">
-        <md-icon md-src="https://unpkg.com/simple-icons@latest/icons/baidu.svg" />
+      <md-button
+        class="md-dense md-raised md-primary btn-baidu"
+        @click="goToAuth(authBaiduUrl)"
+        v-if="!loading"
+      >
+        <md-icon md-src="https://unpkg.com/simple-icons@latest/icons/baidu.svg"/>
         {{ $t("sign_in_baidu") }}
       </md-button>
-
-  </loadable-content>
+    </loadable-content>
   </div>
 </template>
 
@@ -113,5 +120,6 @@ export default {
   flex: 1;
   padding: 0 10px;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 </style>

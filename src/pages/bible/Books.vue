@@ -89,6 +89,7 @@ export default {
 .bible-books-container {
   margin: 10px;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .books-container-columns {

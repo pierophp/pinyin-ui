@@ -142,5 +142,6 @@ export default {
   align-content: flex-start;
   width: 100%;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 </style>

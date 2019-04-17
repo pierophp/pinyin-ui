@@ -34,6 +34,7 @@ export default {
   width: 100%;
   margin: 15px;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .song {

@@ -77,6 +77,7 @@ export default {
   color: #000000;
   max-height: 200px;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
   padding: 10px 0;
   position: fixed;
   width: 220px;
