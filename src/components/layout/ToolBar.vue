@@ -74,7 +74,7 @@ export default {
         this.goTo(param);
       } else if (action === 'logout') {
         this.logout();
-      } else if (action === 'reloas') {
+      } else if (action === 'reload') {
         window.location.href = window.location.href;
       }
     },
