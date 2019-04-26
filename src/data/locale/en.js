@@ -10,6 +10,7 @@ export default {
     video: 'Video',
     about: 'About',
     logout: 'Logout',
+    reload: 'Reload',
   },
   app: {
     editor: '拼字 Pinzi  - Editor',

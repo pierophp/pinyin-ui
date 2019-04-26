@@ -1,4 +1,3 @@
-
 export default {
   showMenu: true,
   title: 'app.bible',
@@ -31,6 +30,12 @@ export default {
       icon: 'power_settings_new',
       title: 'menu.logout',
       action: 'logout',
+      link: '',
+    },
+    {
+      icon: 'autorenew',
+      title: 'menu.reload',
+      action: 'reload',
       link: '',
     },
   ],

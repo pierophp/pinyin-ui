@@ -1,7 +1,11 @@
 <template>
   <div>
     <md-toolbar class="md-primary md-dense">
-      <md-button v-if="!hideTopBar && showMenu" class="md-icon-button" @click="showNavigation = true">
+      <md-button
+        v-if="!hideTopBar && showMenu"
+        class="md-icon-button"
+        @click="showNavigation = true"
+      >
         <md-icon>menu</md-icon>
       </md-button>
 
@@ -17,16 +21,19 @@
       </md-toolbar>
 
       <div class="list-container">
-          <div class="list-item"  @click="doAction(menuItem.action, menuItem.link)" v-for="(menuItem, menuItemId) in menu" v-bind:key="menuItemId">
-            <div class="icon">
-              <md-icon>{{ menuItem.icon }}</md-icon>
-            </div>
-
-            <div class="content">
-              {{ $t(menuItem.title) }}
-            </div>
+        <div
+          class="list-item"
+          @click="doAction(menuItem.action, menuItem.link)"
+          v-for="(menuItem, menuItemId) in menu"
+          v-bind:key="menuItemId"
+        >
+          <div class="icon">
+            <md-icon>{{ menuItem.icon }}</md-icon>
           </div>
+
+          <div class="content">{{ $t(menuItem.title) }}</div>
         </div>
+      </div>
     </md-drawer>
   </div>
 </template>
@@ -67,6 +74,8 @@ export default {
         this.goTo(param);
       } else if (action === 'logout') {
         this.logout();
+      } else if (action === 'reloas') {
+        window.location.href = window.location.href;
       }
     },
     goTo(link) {

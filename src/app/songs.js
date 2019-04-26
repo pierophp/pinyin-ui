@@ -32,5 +32,11 @@ export default {
       action: 'logout',
       link: '',
     },
+    {
+      icon: 'autorenew',
+      title: 'menu.reload',
+      action: 'reload',
+      link: '',
+    },
   ],
 };
