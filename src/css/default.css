@@ -243,3 +243,7 @@ select,
 textarea {
   font-size: 16px;
 }
+
+.md-dialog-content {
+  -webkit-overflow-scrolling: touch;
+}
