@@ -197,6 +197,7 @@ body {
 .list-item .content {
   flex: 1 100%;
   padding: 10px 10px;
+  user-select: none;
 }
 
 .list-item .icon {
