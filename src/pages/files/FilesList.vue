@@ -240,7 +240,7 @@ export default {
 }
 
 .files-container {
-  padding-bottom: 65px;
+  padding-bottom: 90px;
   will-change: transform;
 }
 </style>
