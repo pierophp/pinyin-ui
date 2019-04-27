@@ -12,10 +12,21 @@ function isIos() {
 class LocalStorage {
   static get(key) {
     if (isIos()) {
-      const value = localStorage.getItem(key);
+      let value = localStorage.getItem(key);
 
       if (!value) {
-        return null;
+        if (!window.frames['iframe-storage'].get) {
+          // eslint-disable-next-line
+          console.log('Iframe not loaded yet - GET');
+          return '';
+        }
+
+        value = window.frames['iframe-storage'].get(key);
+        if (value) {
+          LocalStorage.save(key, value);
+        }
+
+        return value;
       }
 
       if (/(\[|{)/.test(value.charAt(0))) {
@@ -45,8 +56,6 @@ class LocalStorage {
       } else {
         localStorage.setItem(key, value);
       }
-
-      return;
     }
 
     window.frames['iframe-storage'].save(key, value);
@@ -55,14 +64,16 @@ class LocalStorage {
   static remove(key) {
     if (isIos()) {
       localStorage.removeItem(key);
-      return;
     }
+
     window.frames['iframe-storage'].remove(key);
   }
 
   static has(key) {
     if (isIos()) {
-      return !!LocalStorage.get(key);
+      if (LocalStorage.get(key)) {
+        return true;
+      }
     }
 
     if (!window.frames['iframe-storage'].has) {
