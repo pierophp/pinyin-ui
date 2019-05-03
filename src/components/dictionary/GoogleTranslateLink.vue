@@ -1,7 +1,7 @@
 <template>
   <span v-if="sourceLanguage !== targetLanguage">
     &nbsp;
-    <a :href="url" target="_blank" class="translate">{{$t('translate')}}</a>
+    <a :href="url" target="google_translate" class="translate">{{$t('translate')}}</a>
   </span>
 </template>
 
