@@ -6,7 +6,11 @@
       </md-button>
     </span>
 
-    <file-row-translation :line="line"/>
+    <file-row-translation
+      :line="line"
+      :show="showTranslation"
+      @toogleTranslation="toogleTranslation"
+    />
 
     <template v-for="(block, blockIndex) in blocks">
       <!-- @click is on FilePrint because performance  -->
@@ -94,6 +98,7 @@ export default {
       type: '',
       startTime: '',
       loading: true,
+      showTranslation: false,
     };
   },
   props: {
@@ -133,6 +138,11 @@ export default {
     openFootnote(footnote) {
       this.$emit('open-footnote', footnote);
     },
+
+    toogleTranslation() {
+      this.showTranslation = !this.showTranslation;
+    },
+
     async updateBlockRender(blockIndex) {
       const newBlock = await this.generateBlock(this.line[blockIndex]);
       this.blocks[blockIndex] = newBlock;
