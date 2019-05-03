@@ -1,7 +1,8 @@
 <template>
   <div>
     <div v-if="type === 'pt' &&  ((dictionary.pt && dictionary.pt.length) || user.admin)">
-      <div class="dict-title">Português
+      <div class="dict-title">
+        Português
         <google-translate-link
           :word="dictionary.pt ? dictionary.pt.join('\n') : ''"
           sourceLanguage="pt"
@@ -27,7 +28,7 @@
         </div>
         <div v-if="editing">
           <div class="field-container">
-            <textarea v-model="dictionaryEntry" autocapitalize="none"></textarea>
+            <textarea v-model="dictionaryEntry" autocapitalize="none" :cols="isMobile ? 30 : 50"></textarea>
           </div>
           <md-button class="md-raised md-primary" @click.native="save()">{{$t('save')}}</md-button>
           <md-button class="md-raised md-accent" @click.native="cancelEdit()">{{$t('cancel')}}</md-button>
@@ -249,7 +250,8 @@
     </div>
 
     <div v-if="type === 'en' && dictionary.en && dictionary.en.length">
-      <div class="dict-title">English
+      <div class="dict-title">
+        English
         <google-translate-link
           :word="dictionary.en.join('\n')"
           sourceLanguage="en"
@@ -269,7 +271,8 @@
     </div>
 
     <div v-if="type === 'es' && dictionary.es && dictionary.es.length">
-      <div class="dict-title">Español
+      <div class="dict-title">
+        Español
         <google-translate-link
           :word="dictionary.es.join('\n')"
           sourceLanguage="es"
@@ -351,6 +354,8 @@ import OptionsManager from 'src/domain/options-manager';
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
 import GoogleTranslateLink from 'src/components/dictionary/GoogleTranslateLink';
 import LoadableContent from 'src/components/common/loading/LoadableContent';
+import isMobile from 'src/helpers/is-mobile';
+
 export default {
   name: 'dictionary-render',
   components: {
@@ -370,6 +375,7 @@ export default {
       user: User.getUser(),
       moedict: null,
       translationLanguage: null,
+      isMobile: isMobile(),
     };
   },
   created() {
