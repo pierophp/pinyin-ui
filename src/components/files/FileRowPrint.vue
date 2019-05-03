@@ -9,7 +9,7 @@
     <file-row-translation
       :line="line"
       :show="showTranslation"
-      @toogleTranslation="toogleTranslation"
+      @toogle-translation="toogleTranslation"
     />
 
     <template v-for="(block, blockIndex) in blocks">
