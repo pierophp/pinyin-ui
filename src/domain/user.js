@@ -46,8 +46,19 @@ class User {
     return !!Cookies.get('token');
   }
 
+  static async loadUser() {
+    response = await http.get(`${apiUrl}is_logged_in`);
+    LocalStorage.save('user', response.data.user);
+  }
+
   static getUser() {
-    return LocalStorage.get('user') || {};
+    if (LocalStorage.get('user')) {
+      return LocalStorage.get('user');
+    }
+
+    User.loadUser();
+
+    return {};
   }
 
   static getDomain() {
