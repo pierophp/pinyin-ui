@@ -47,7 +47,7 @@ class User {
   }
 
   static async loadUser() {
-    response = await http.get(`${apiUrl}auth/is_logged_in`);
+    const response = await http.get(`${apiUrl}auth/is_logged_in`);
     console.log('response.data.user', response.data.user);
     console.log('response', response);
     LocalStorage.save('user', response.data.user);
