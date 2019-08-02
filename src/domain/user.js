@@ -47,7 +47,7 @@ class User {
   }
 
   static async loadUser() {
-    response = await http.get(`${apiUrl}is_logged_in`);
+    response = await http.get(`${apiUrl}auth/is_logged_in`);
     LocalStorage.save('user', response.data.user);
   }
 
