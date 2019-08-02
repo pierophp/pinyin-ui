@@ -64,7 +64,7 @@ export default {
         },
         {
           title: 'Baidu Dictionary',
-          href: `http://dict.baidu.com/s?wd=${this.character}`,
+          href: `https://dict.baidu.com/s?wd=${this.character}`,
         },
 
         {
@@ -91,7 +91,7 @@ export default {
         },
         {
           title: 'Baidu Translate',
-          href: `http://fanyi.baidu.com/#zh/en/${this.character}`,
+          href: `https://fanyi.baidu.com/#zh/en/${this.character}`,
         },
         {
           title: 'Chinese Pod Sentences',
