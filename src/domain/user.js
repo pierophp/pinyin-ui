@@ -52,13 +52,21 @@ class User {
   }
 
   static getUser() {
-    if (LocalStorage.get('user')) {
-      return LocalStorage.get('user');
+    let user = LocalStorage.get('user');
+
+    if (user) {
+      return user;
     }
 
     User.loadUser();
 
-    return {};
+    const token = Cookies.get('token');
+
+    user = JSON.parse(
+      Buffer.from(token.split('.')[1], 'base64').toString('ascii'),
+    );
+
+    return user;
   }
 
   static getDomain() {
