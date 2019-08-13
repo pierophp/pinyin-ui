@@ -2,7 +2,7 @@
   <div class="print-container">
     <footnote-modal :line="footnoteLine" :lineIndex="footnoteLineIndex" ref="footnote" />
     <image-zoom :src="imageZoom" ref="imageZoom" />
-    <portal-target name="portal-file-container-header"></portal-target>
+    <portal-target name="portal-file-container-header" v-if="parent"></portal-target>
     <div class="print-scroll" ref="fileScroll">
       <div class="print" :class="[sizeClass, typeClass, ideogramSpacedClass]">
         <folder-structure :show-last="true" v-if="parent && showMenuNavigation" />
