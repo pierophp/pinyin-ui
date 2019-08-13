@@ -1,8 +1,9 @@
 <template>
-  <file-print 
-    :askToReload="false" 
+  <file-print
+    :askToReload="false"
     :showHighlight="false"
     @go-to-video-time="(time) => $emit('go-to-video-time', time)"
+    v-bind:key="url"
   />
 </template>
 
