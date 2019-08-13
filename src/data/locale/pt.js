@@ -155,4 +155,5 @@ export default {
   translate: 'traduzir',
   antonyms: 'Antônimos',
   synonyms: 'Sinônimos',
+  clear: 'Limpar',
 };

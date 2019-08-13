@@ -1,8 +1,11 @@
 <template>
-  <div>
-    <form>
-      <textarea v-model="reader" />
-    </form>
+  <div class="reader-container">
+    <portal to="portal-file-container-header">
+      <div class="textareaContainer">
+        <textarea v-model="reader" autofocus />
+      </div>
+      <md-button class="md-primary" @click.native="clear()">{{ $t('clear') }}</md-button>
+    </portal>
     <file-container
       ref="fileContainer"
       :lines="lines"
@@ -19,7 +22,7 @@
 import clipboardUrl from 'src/domain/clipboard-url';
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
 import clipboard04 from 'src/domain/clipboard-04';
-import { mapGetters } from 'vuex';
+import http from 'src/helpers/http';
 
 export default {
   name: 'reader',
@@ -34,41 +37,66 @@ export default {
   },
 
   watch: {
-    reader() {
-      console.log('Reader changed');
-      clipboard04(this.reader);
-    },
-  },
-
-  methods: {
-    async loadUrl(url) {
-      this.fullLines = [];
-      this.lines = [];
-
-      if (!url) {
-        this.fileLoading = false;
-        return;
-      }
-
+    async reader() {
       this.fileLoading = true;
-      const lines = await clipboardUrl(url);
-      for (const line of lines) {
-        for (const block of line) {
-          const pinyinList = separatePinyinInSyllables(block.p);
-          block.p = pinyinList.join(String.fromCharCode(160));
-        }
+      const rows = await clipboard04(this.reader);
+
+      this.lines = [];
+      this.fullLines = [];
+
+      const lines = [];
+      const ideograms = [];
+      for (const row of rows) {
+        row.forEach(block => {
+          ideograms.push(block.c);
+        });
+
+        const response = await http.post('unihan/to_pinyin', {
+          ideograms,
+        });
+
+        lines.push(
+          response.data.map(item => {
+            return {
+              c: item.ideogram,
+              p: separatePinyinInSyllables(item.pinyin).join(
+                String.fromCharCode(160),
+              ),
+            };
+          }),
+        );
       }
 
-      this.fullLines = lines;
       this.lines = lines;
+      this.fullLines = lines;
 
       this.fileLoading = false;
     },
   },
-  mounted() {
-    if (this.url) {
-      this.loadUrl(this.url);
-    }
+  methods: {
+    clear() {
+      this.reader = '';
+      this.lines = [];
+      this.fullLines = [];
+    },
   },
 };
 </script>
+<style scoped>
+.reader-container {
+  display: flex;
+  flex: 1;
+}
+
+.textareaContainer {
+  display: block;
+  width: 100%;
+  margin: 5px 0;
+  padding: 3px;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+}
+</style>

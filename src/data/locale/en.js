@@ -157,4 +157,5 @@ export default {
   translate: 'translate',
   antonyms: 'Antonyms',
   synonyms: 'Synonyms',
+  clear: 'Clear',
 };
