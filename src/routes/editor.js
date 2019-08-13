@@ -132,12 +132,18 @@ export default [
       topBar: 'browser',
     },
   },
-
   {
     path: '/flashcards',
     name: 'flashcards',
     component: () =>
       import(/* webpackChunkName: "flashcards" */ 'src/pages/flashcards/Flashcards'),
+    meta: {},
+  },
+  {
+    path: '/reader',
+    name: 'reader',
+    component: () =>
+      import(/* webpackChunkName: "reader" */ 'src/pages/reader/Reader'),
     meta: {},
   },
   {
