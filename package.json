@@ -5,7 +5,7 @@
   "author": "Piero Giusti <pierophp@gmail.com>",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --host 127.0.0.1",
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --modern --report",
     "build-editor": "export BUILD_ENTRYPOINT=main.editor; yarn build",
     "dev": "export BUILD_ENTRYPOINT=main.editor; yarn serve",

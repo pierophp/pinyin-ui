@@ -1,6 +1,7 @@
 export default {
   menu: {
     my_files: 'My Files',
+    reader: 'Reader',
     dictionary: 'Dictionary',
     bible: 'Bible',
     songs: 'Songs',

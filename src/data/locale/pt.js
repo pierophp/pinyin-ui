@@ -1,6 +1,7 @@
 export default {
   menu: {
     my_files: 'Meus Arquivos',
+    reader: 'Leitor',
     dictionary: 'Dicionário',
     bible: 'Bíblia',
     songs: 'Cânticos',
