@@ -13,6 +13,7 @@
       filename
       :fileLoading="fileLoading"
       :parent="true"
+      :portal="true"
       :showHighlight="false"
     />
   </div>
