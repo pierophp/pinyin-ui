@@ -43,10 +43,9 @@ export default {
 
       this.lines = [];
       this.fullLines = [];
-
       const lines = [];
-      const ideograms = [];
       for (const row of rows) {
+        const ideograms = [];
         row.forEach(block => {
           ideograms.push(block.c);
         });
