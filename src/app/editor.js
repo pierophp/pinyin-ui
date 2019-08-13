@@ -9,6 +9,12 @@ export default {
       link: '/files',
     },
     {
+      icon: 'chrome_reader_mode',
+      title: 'menu.reader',
+      action: 'goTo',
+      link: '/reader',
+    },
+    {
       icon: 'pageview',
       title: 'menu.dictionary',
       action: 'goTo',

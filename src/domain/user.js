@@ -61,6 +61,9 @@ class User {
     User.loadUser();
 
     const token = Cookies.get('token');
+    if (!token) {
+      return {};
+    }
 
     user = JSON.parse(
       Buffer.from(token.split('.')[1], 'base64').toString('ascii'),

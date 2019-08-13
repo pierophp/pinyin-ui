@@ -1,16 +1,17 @@
 <template>
   <div class="print-container">
-    <footnote-modal :line="footnoteLine" :lineIndex="footnoteLineIndex" ref="footnote"/>
-    <image-zoom :src="imageZoom" ref="imageZoom"/>
+    <footnote-modal :line="footnoteLine" :lineIndex="footnoteLineIndex" ref="footnote" />
+    <image-zoom :src="imageZoom" ref="imageZoom" />
+    <portal-target name="portal-file-container-header" v-if="portal"></portal-target>
     <div class="print-scroll" ref="fileScroll">
       <div class="print" :class="[sizeClass, typeClass, ideogramSpacedClass]">
-        <folder-structure :show-last="true" v-if="parent && showMenuNavigation"/>
+        <folder-structure :show-last="true" v-if="parent && showMenuNavigation" />
         <h2 v-if="filename && filename.split('|||').length != 3" class="file-title">{{filename}}</h2>
 
         <div
           v-if="fullLines && fullLines[0] && fullLines[0][0] && fullLines[0][0].line !== undefined && fullLines[0][0].line.audio !== undefined"
         >
-          <audio :src="fullLines[0][0].line.audio" controls/>
+          <audio :src="fullLines[0][0].line.audio" controls />
         </div>
 
         <template v-for="(line, lineIndex) in lines">
@@ -36,7 +37,7 @@
           ref="addRemoveCharacterModal"
         />
 
-        <highlight-modal v-if="showHighlight" :worker="worker"/>
+        <highlight-modal v-if="showHighlight" :worker="worker" />
 
         <bible-modal
           ref="bibleModal"
@@ -112,6 +113,7 @@ export default {
     filename: '',
     fileLoading: false,
     parent: false,
+    portal: false,
     showMenuNavigation: true,
     pagination: false,
     useFullLines: true,

@@ -1,6 +1,7 @@
 export default {
   menu: {
     my_files: 'Meus Arquivos',
+    reader: 'Leitor',
     dictionary: 'Dicionário',
     bible: 'Bíblia',
     songs: 'Cânticos',
@@ -154,4 +155,5 @@ export default {
   translate: 'traduzir',
   antonyms: 'Antônimos',
   synonyms: 'Sinônimos',
+  text: 'Texto',
 };
