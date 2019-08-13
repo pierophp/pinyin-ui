@@ -7,6 +7,7 @@ import MdProgress from 'vue-material/dist/components/MdProgress';
 import MdRipple from 'vue-material/dist/components/MdRipple';
 import MdSnackbar from 'vue-material/dist/components/MdSnackbar';
 import MdToolbar from 'vue-material/dist/components/MdToolbar';
+import MdField from 'vue-material/dist/components/MdField';
 import FileContainer from 'src/components/files/FileContainer';
 
 export default Vue => {
@@ -19,5 +20,6 @@ export default Vue => {
   Vue.use(MdRipple);
   Vue.use(MdSnackbar);
   Vue.use(MdToolbar);
+  Vue.use(MdField);
   Vue.component('file-container', FileContainer);
 };

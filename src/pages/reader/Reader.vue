@@ -2,9 +2,11 @@
   <div class="reader-container">
     <portal to="portal-file-container-header">
       <div class="textareaContainer">
-        <textarea v-model="reader" autofocus />
+        <md-field md-clearable>
+          <label>{{ $t('text') }}</label>
+          <md-textarea v-model="reader" autofocus />
+        </md-field>
       </div>
-      <md-button class="md-primary" @click.native="clear()">{{ $t('clear') }}</md-button>
     </portal>
     <file-container
       ref="fileContainer"
@@ -93,6 +95,7 @@ export default {
   width: 100%;
   margin: 5px 0;
   padding: 3px;
+  height: 110px;
 }
 
 textarea {
