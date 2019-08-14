@@ -25,7 +25,7 @@
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
 import http from 'src/helpers/http';
 import bluebird from 'bluebird';
-
+import isChinese from 'src/helpers/is-chinese';
 export default {
   name: 'reader',
 
@@ -54,35 +54,47 @@ export default {
             return;
           }
 
-          const response = await http.post('segmentation/segment', {
-            ideograms: line,
-          });
+          let hasChinese = false;
+          for (let i = 0; i <= 20; i++) {
+            if (isChinese(line[i])) {
+              hasChinese = true;
+              break;
+            }
+          }
 
-          const row = [];
-          response.data.ideograms.forEach(char => {
-            row.push({
-              p: '',
-              c: char,
+          if (hasChinese) {
+            const response = await http.post('segmentation/segment', {
+              ideograms: line,
             });
-          });
 
-          const ideograms = [];
-          row.forEach(block => {
-            ideograms.push(block.c);
-          });
+            const row = [];
+            response.data.ideograms.forEach(char => {
+              row.push({
+                p: '',
+                c: char,
+              });
+            });
 
-          const pinyinResponse = await http.post('unihan/to_pinyin', {
-            ideograms,
-          });
+            const ideograms = [];
+            row.forEach(block => {
+              ideograms.push(block.c);
+            });
 
-          return pinyinResponse.data.map(item => {
-            return {
-              c: item.ideogram,
-              p: separatePinyinInSyllables(item.pinyin).join(
-                String.fromCharCode(160),
-              ),
-            };
-          });
+            const pinyinResponse = await http.post('unihan/to_pinyin', {
+              ideograms,
+            });
+
+            return pinyinResponse.data.map(item => {
+              return {
+                c: item.ideogram,
+                p: separatePinyinInSyllables(item.pinyin).join(
+                  String.fromCharCode(160),
+                ),
+              };
+            });
+          } else {
+            return [{ p: line, c: ' ', noIdeogram: true }];
+          }
         },
         { concurrency: 10 },
       );
