@@ -56,7 +56,7 @@ export default {
 
           let hasChinese = false;
           for (let i = 0; i <= 20; i++) {
-            if (isChinese(line[i])) {
+            if (line[i] && isChinese(line[i])) {
               hasChinese = true;
               break;
             }
