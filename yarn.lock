@@ -5645,9 +5645,9 @@ pkg-up@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-portal-vue@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/portal-vue/-/portal-vue-1.5.1.tgz#6bed79ef168d9676bb79f41d43c5cd4cedf54dbc"
+portal-vue@^2.1:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/portal-vue/-/portal-vue-2.1.6.tgz#a7d4790b14a79af7fd159a60ec88c30cddc6c639"
 
 portfinder@^1.0.20, portfinder@^1.0.21:
   version "1.0.21"
