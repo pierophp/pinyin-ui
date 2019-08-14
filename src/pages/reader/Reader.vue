@@ -22,10 +22,9 @@
 </template>
 
 <script>
-import clipboardUrl from 'src/domain/clipboard-url';
 import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
-import clipboard04 from 'src/domain/clipboard-04';
 import http from 'src/helpers/http';
+import bluebird from 'bluebird';
 
 export default {
   name: 'reader',
@@ -42,32 +41,51 @@ export default {
   watch: {
     async reader() {
       this.fileLoading = true;
-      const rows = await clipboard04(this.reader);
 
       this.lines = [];
       this.fullLines = [];
-      const lines = [];
-      for (const row of rows) {
-        const ideograms = [];
-        row.forEach(block => {
-          ideograms.push(block.c);
-        });
 
-        const response = await http.post('unihan/to_pinyin', {
-          ideograms,
-        });
+      const readerLines = this.reader.split('\n').filter(item => item);
+      const lines = await bluebird.map(
+        readerLines,
+        async line => {
+          line = line.replace(/\s{2,}/g, ' ').trim();
+          if (!line) {
+            return;
+          }
 
-        lines.push(
-          response.data.map(item => {
+          const response = await http.post('segmentation/segment', {
+            ideograms: line,
+          });
+
+          const row = [];
+          response.data.ideograms.forEach(char => {
+            row.push({
+              p: '',
+              c: char,
+            });
+          });
+
+          const ideograms = [];
+          row.forEach(block => {
+            ideograms.push(block.c);
+          });
+
+          const pinyinResponse = await http.post('unihan/to_pinyin', {
+            ideograms,
+          });
+
+          return pinyinResponse.data.map(item => {
             return {
               c: item.ideogram,
               p: separatePinyinInSyllables(item.pinyin).join(
                 String.fromCharCode(160),
               ),
             };
-          }),
-        );
-      }
+          });
+        },
+        { concurrency: 10 },
+      );
 
       this.lines = lines;
       this.fullLines = lines;
