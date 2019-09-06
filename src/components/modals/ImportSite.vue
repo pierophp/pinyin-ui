@@ -5,7 +5,7 @@
     <md-dialog-content>
       <div class="field-container">
         <label>{{ $t("url") }}</label>
-        <input type="text" ref="inputUrl" v-model="siteUrl"/>
+        <md-input type="text" ref="inputUrl" v-model="siteUrl"/>
       </div>
     </md-dialog-content>
 
