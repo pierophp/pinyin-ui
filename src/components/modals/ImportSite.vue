@@ -5,7 +5,7 @@
     <md-dialog-content>
       <div class="field-container">
         <label>{{ $t("url") }}</label>
-        <input type="text" ref="inputUrl" v-model="siteUrl"/>
+        <input type="text" ref="inputUrl" v-model="siteUrl" />
       </div>
     </md-dialog-content>
 
@@ -20,6 +20,14 @@
 import { mapActions } from 'vuex';
 
 import { FILE_ACTION_IMPORT_FILE } from 'src/data/file/types';
+
+function isIos() {
+  if (verificationIos === null) {
+    verificationIos = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  }
+
+  return verificationIos;
+}
 
 export default {
   name: 'modal-import-site',
@@ -42,6 +50,10 @@ export default {
       this.siteUrl = '';
     },
     onOpen() {
+      if (isIos()) {
+        return;
+      }
+
       setTimeout(() => {
         this.$refs.inputUrl.focus();
       }, 500);
