@@ -1,10 +1,10 @@
 <template>
   <div>
-    <md-dialog ref="modal" :md-active.sync="showMenu" :md-fullscreen="false" v-if="list == 0" >
+    <md-dialog ref="modal" :md-active.sync="showMenu" :md-fullscreen="false" v-if="list == 0">
       <md-dialog-content>
         <div v-for="(link, index) in links" v-bind:key="index">
           <a :href="link.href" target="_blank">
-              <md-button class="link-button md-primary">{{ link.title }}</md-button>
+            <md-button class="link-button md-primary">{{ link.title }}</md-button>
           </a>
         </div>
       </md-dialog-content>
@@ -46,21 +46,15 @@ export default {
       return [
         {
           title: 'YellowBridge',
-          href: `https://www.yellowbridge.com/chinese/dictionary.php?word=${
-            this.character
-          }&amp;characterMode=s`,
+          href: `https://www.yellowbridge.com/chinese/dictionary.php?word=${this.character}&amp;characterMode=s`,
         },
         {
           title: 'StackExchange',
-          href: `https://chinese.stackexchange.com/search?q=${
-            this.character
-          }&amp;characterMode=s`,
+          href: `https://chinese.stackexchange.com/search?q=${this.character}&amp;characterMode=s`,
         },
         {
           title: 'Bing Dictionary',
-          href: `http://www.bing.com/dict/search?q=${
-            this.character
-          }&mkt=zh-CN&setlang=ZH`,
+          href: `http://www.bing.com/dict/search?q=${this.character}&mkt=zh-CN&setlang=ZH`,
         },
         {
           title: 'Baidu Dictionary',
@@ -69,9 +63,7 @@ export default {
 
         {
           title: 'Chinese Grammar Wiki',
-          href: `https://resources.allsetlearning.com/chinese/grammar/${
-            this.character
-          }`,
+          href: `https://resources.allsetlearning.com/chinese/grammar/${this.character}`,
         },
         {
           title: 'Google Images',
@@ -79,15 +71,11 @@ export default {
         },
         {
           title: 'Baidu Images',
-          href: `https://image.baidu.com/search/index?tn=baiduimage&word=${
-            this.character
-          }`,
+          href: `https://image.baidu.com/search/index?tn=baiduimage&word=${this.character}`,
         },
         {
           title: 'Google Translate',
-          href: `https://translate.google.com/translate#zh-CN|en|${
-            this.character
-          }`,
+          href: `https://translate.google.com.br/#view=home&op=translate&sl=zh-CN&tl=en&text=${this.character}`,
         },
         {
           title: 'Baidu Translate',
@@ -99,15 +87,11 @@ export default {
         },
         {
           title: 'Tatoeba (sentences)',
-          href: `http://tatoeba.org/eng/sentences/search?from=cmn&to=eng&query=${
-            this.character
-          }`,
+          href: `http://tatoeba.org/eng/sentences/search?from=cmn&to=eng&query=${this.character}`,
         },
         {
           title: 'YellowBridge (sentences)',
-          href: `https://www.yellowbridge.com/chinese/sentsearch.php?word=${
-            this.character
-          }&amp;characterMode=s`,
+          href: `https://www.yellowbridge.com/chinese/sentsearch.php?word=${this.character}&amp;characterMode=s`,
         },
         {
           title: 'Wiktionary',
@@ -115,15 +99,11 @@ export default {
         },
         {
           title: 'Line',
-          href: `http://linedictionary.naver.com/dict.html#/cnen/search?query=${
-            this.character
-          }`,
+          href: `http://linedictionary.naver.com/dict.html#/cnen/search?query=${this.character}`,
         },
         {
           title: 'Line (sentences)',
-          href: `http://linedictionary.naver.com/dict.html#/cnen/example?query=${
-            this.character
-          }`,
+          href: `http://linedictionary.naver.com/dict.html#/cnen/example?query=${this.character}`,
         },
         {
           title: 'WordReference',
@@ -161,9 +141,7 @@ export default {
 
         {
           title: 'MDBG Word Dict',
-          href: `https://www.mdbg.net/chinese/dictionary?page=worddict&wdrst=0&wdqb=${
-            this.character
-          }`,
+          href: `https://www.mdbg.net/chinese/dictionary?page=worddict&wdrst=0&wdqb=${this.character}`,
         },
         {
           title: 'Popup Chinese',
@@ -171,9 +149,7 @@ export default {
         },
         {
           title: 'MDBG Character Dict',
-          href: `https://www.mdbg.net/chinese/dictionary?page=chardict&cdqchi=${
-            this.character
-          }`,
+          href: `https://www.mdbg.net/chinese/dictionary?page=chardict&cdqchi=${this.character}`,
         },
         {
           title: 'JuKuu (sentences)',
@@ -181,9 +157,7 @@ export default {
         },
         {
           title: 'CantoDict',
-          href: `http://www.cantonese.sheik.co.uk/dictionary/search/?searchtype=1&text=${
-            this.character
-          }`,
+          href: `http://www.cantonese.sheik.co.uk/dictionary/search/?searchtype=1&text=${this.character}`,
         },
         {
           title: 'Youdao Dictionary',
@@ -195,15 +169,11 @@ export default {
         },
         {
           title: 'Leiden Weibo (corpus)',
-          href: `http://lwc.daanvanesch.nl/messages.php?word1=${
-            this.character
-          }`,
+          href: `http://lwc.daanvanesch.nl/messages.php?word1=${this.character}`,
         },
         {
           title: 'Lancaster (corpus)',
-          href: `http://corpus.leeds.ac.uk/cgi-bin/cqp.pl?searchstring=${
-            this.character
-          }&corpuslist=LCMC&searchtype=conc&contextsize=60c&sort1=word&sort2=right&terminate=100&llstat=on&cleft=0&cright=1&cfilter=`,
+          href: `http://corpus.leeds.ac.uk/cgi-bin/cqp.pl?searchstring=${this.character}&corpuslist=LCMC&searchtype=conc&contextsize=60c&sort1=word&sort2=right&terminate=100&llstat=on&cleft=0&cright=1&cfilter=`,
         },
       ];
     },

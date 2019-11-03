@@ -21,14 +21,6 @@ import { mapActions } from 'vuex';
 
 import { FILE_ACTION_IMPORT_FILE } from 'src/data/file/types';
 
-function isIos() {
-  if (verificationIos === null) {
-    verificationIos = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  }
-
-  return verificationIos;
-}
-
 export default {
   name: 'modal-import-site',
   data() {
@@ -50,10 +42,6 @@ export default {
       this.siteUrl = '';
     },
     onOpen() {
-      if (isIos()) {
-        return;
-      }
-
       setTimeout(() => {
         this.$refs.inputUrl.focus();
       }, 500);

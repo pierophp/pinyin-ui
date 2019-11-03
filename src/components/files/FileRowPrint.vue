@@ -24,7 +24,7 @@
       >
         <div class="image" v-if="block.small">
           <a href="javascript:void(0)" @click="openImage(block.large)">
-            <img :src="block.small" referrerpolicy="no-referrer">
+            <img :src="block.small" referrerpolicy="no-referrer" />
           </a>
         </div>
 
@@ -186,6 +186,10 @@ export default {
         if (block.v === 1) {
           generatedBlock.classExtra = 'chapter';
         }
+      }
+
+      if (block.noIdeogram) {
+        generatedBlock.classExtra += ' noIdeogram';
       }
 
       const printData = [];

@@ -652,4 +652,7 @@ audio {
 .pages .page:hover {
   opacity: 0.8;
 }
+.noIdeogram {
+  text-align: left;
+}
 </style>
