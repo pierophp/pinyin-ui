@@ -13,6 +13,5 @@ export default Vue => {
   Vue.use(MdIcon);
   Vue.use(MdProgress);
   Vue.use(MdSnackbar);
-  Vue.use(MdToolbar);
   Vue.component('file-container', FileContainer);
 };
