@@ -60,9 +60,7 @@ export default {
   },
   mounted() {
     if (this.askToReload) {
-      if (!webpackHotUpdate) {
-        window.onbeforeunload = () => '';
-      }
+      window.onbeforeunload = () => '';
     }
 
     this.filename = this.$route.params.filename;
