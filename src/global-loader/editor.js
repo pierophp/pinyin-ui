@@ -6,7 +6,6 @@ import MdIcon from 'vue-material/dist/components/MdIcon';
 import MdProgress from 'vue-material/dist/components/MdProgress';
 import MdRipple from 'vue-material/dist/components/MdRipple';
 import MdSnackbar from 'vue-material/dist/components/MdSnackbar';
-import MdToolbar from 'vue-material/dist/components/MdToolbar';
 import MdField from 'vue-material/dist/components/MdField';
 import FileContainer from 'src/components/files/FileContainer';
 

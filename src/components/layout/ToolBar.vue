@@ -1,40 +1,44 @@
 <template>
   <div>
-    <md-toolbar class="md-primary md-dense">
-      <md-button
+    <v-navigation-drawer v-model="showNavigation" fixed temporary app>
+      <v-list dense>
+        <v-list-item-group color="primary">
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="title">{{user.name}}</v-list-item-title>
+              <v-list-item-subtitle>{{user.email}}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+
+        <v-list-item-group color="primary">
+          <v-list-item
+            @click="doAction(menuItem.action, menuItem.link)"
+            v-for="(menuItem, menuItemId) in menu"
+            v-bind:key="menuItemId"
+          >
+            <v-list-item-icon>
+              <v-icon v-text="menuItem.icon"></v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>{{$t(menuItem.title)}}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-toolbar color="indigo" dark>
+      <v-app-bar-nav-icon
         v-if="!hideTopBar && showMenu"
-        class="md-icon-button"
-        @click="showNavigation = true"
-      >
-        <md-icon>menu</md-icon>
-      </md-button>
+        @click.stop="showNavigation = !showNavigation"
+      ></v-app-bar-nav-icon>
 
-      <span class="md-title" v-if="!hideTitle">{{ $t($router.options.appOptions.title) }}</span>
+      <v-toolbar-title v-if="!hideTitle">{{ $t($router.options.appOptions.title) }}</v-toolbar-title>
+      <v-spacer></v-spacer>
 
-      <dynamic :options="topBar"/>
-    </md-toolbar>
-
-    <md-drawer :md-active.sync="showNavigation">
-      <md-toolbar :md-elevation="1" v-if="user">
-        <span class="md-title">{{user.name}}</span>
-        <span>{{user.email}}</span>
-      </md-toolbar>
-
-      <div class="list-container">
-        <div
-          class="list-item"
-          @click="doAction(menuItem.action, menuItem.link)"
-          v-for="(menuItem, menuItemId) in menu"
-          v-bind:key="menuItemId"
-        >
-          <div class="icon">
-            <md-icon>{{ menuItem.icon }}</md-icon>
-          </div>
-
-          <div class="content">{{ $t(menuItem.title) }}</div>
-        </div>
-      </div>
-    </md-drawer>
+      <dynamic :options="topBar" />
+    </v-toolbar>
   </div>
 </template>
 <script>
@@ -89,10 +93,6 @@ export default {
 };
 </script>
 <style>
-.md-toolbar .md-title {
-  margin-left: 0 !important;
-}
-
 .md-drawer {
   width: 240px !important;
 }
