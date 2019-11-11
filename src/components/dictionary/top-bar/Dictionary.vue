@@ -2,15 +2,15 @@
   <div>
     <menu-content>
       <template slot="click">
-        <md-button class="md-icon-button">
-          <md-icon>more_vert</md-icon>
-        </md-button>
+        <v-btn icon slot="activator">
+          <v-icon color="#fff">more_vert</v-icon>
+        </v-btn>
       </template>
 
       <div class="list-container">
         <div class="list-item" @click="downloadPleco()">
           <div class="icon">
-            <md-icon>arrow_downward</md-icon>
+            <v-icon>arrow_downward</v-icon>
           </div>
           <div class="content">{{ $t("download_pleco_dictionary") }}</div>
         </div>

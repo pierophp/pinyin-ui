@@ -1,17 +1,23 @@
 <template>
   <div>
-    <md-button class="md-icon-button" @click.native="editionMode">
-      <md-icon>create</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" @click.native="copy">
-      <md-icon>content_copy</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" @click.native="print">
-      <md-icon>print</md-icon>
-    </md-button>
-    <md-snackbar md-position="center" :md-duration="1300" :md-active.sync="clipboardOpen">
-      <span>{{ $t('copied_to_clipboard') }}</span>
-    </md-snackbar>
+    <v-btn icon @click.native="editionMode">
+      <v-icon color="#fff">create</v-icon>
+    </v-btn>
+    <v-btn icon @click.native="copy">
+      <v-icon color="#fff">content_copy</v-icon>
+    </v-btn>
+    <v-btn icon @click.native="print">
+      <v-icon color="#fff">print</v-icon>
+    </v-btn>
+
+    <portal to="portal-menu">
+      <v-snackbar
+        v-model="clipboardOpen"
+        :timeout="1300"
+        :absolute="true"
+        :bottom="true"
+      >{{ $t('copied_to_clipboard') }}</v-snackbar>
+    </portal>
   </div>
 </template>
 <script>

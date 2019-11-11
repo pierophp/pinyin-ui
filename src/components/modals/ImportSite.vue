@@ -1,19 +1,24 @@
 <template>
-  <md-dialog ref="modal" :md-active.sync="modalOpen" :md-fullscreen="true">
-    <md-dialog-title>{{ $t('import_site') }}</md-dialog-title>
+  <v-dialog v-model="modalOpen" width="500">
+    <v-card>
+      <v-card-title class="headline grey lighten-2" primary-title>{{ $t('import_site') }}</v-card-title>
 
-    <md-dialog-content>
-      <div class="field-container">
-        <label>{{ $t("url") }}</label>
-        <input type="text" ref="inputUrl" v-model="siteUrl" />
-      </div>
-    </md-dialog-content>
+      <v-card-text>
+        <div class="field-container">
+          <label>{{ $t("url") }}</label>
+          <input type="text" ref="inputUrl" v-model="siteUrl" />
+        </div>
+      </v-card-text>
 
-    <md-dialog-actions>
-      <md-button class="md-primary" @click.native="closeDialog()">{{ $t('cancel') }}</md-button>
-      <md-button class="md-primary" @click.native.prevent="confirm">{{ $t('import') }}</md-button>
-    </md-dialog-actions>
-  </md-dialog>
+      <v-divider></v-divider>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn flat @click="closeDialog()">{{ $t('cancel') }}</v-btn>
+        <v-btn flat color="primary" @click="confirm()">{{ $t('import') }}</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>

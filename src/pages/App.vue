@@ -1,12 +1,14 @@
 <template>
   <div id="container">
-    <tool-bar :showMenu="showMenu"></tool-bar>
+    <v-app>
+      <tool-bar :showMenu="showMenu"></tool-bar>
 
-    <div class="content">
-      <router-view/>
-      <portal-target name="portal-loadable"></portal-target>
-    </div>
-    <portal-target name="portal-menu"></portal-target>
+      <div class="content">
+        <router-view />
+        <portal-target name="portal-loadable"></portal-target>
+      </div>
+      <portal-target name="portal-menu"></portal-target>
+    </v-app>
   </div>
 </template>
 

@@ -3,6 +3,7 @@
 // import offlinePlugin from 'offline-plugin/runtime';
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
+import vuetify from './plugins/vuetify';
 
 import VueAnalytics from 'vue-analytics';
 import VueClipboard from 'v-clipboard';
@@ -11,6 +12,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import 'src/css/vue-material/vue-material.min.css';
 import 'src/css/vue-material/default.css';
 
+import 'vuetify/dist/vuetify.min.css';
 import 'src/css/default.css';
 import 'src/css/bootstrap-callout.css';
 import 'src/css/fonts/material-icons.css';
@@ -28,8 +30,9 @@ import PortalVue from 'portal-vue';
 import './register.service.worker';
 
 export default async function loadMain(routes, app, globalLoader) {
-  const routerMethod = (await import(/* webpackChunkName: "router" */ 'src/router'))
-    .default;
+  const routerMethod = (
+    await import(/* webpackChunkName: "router" */ 'src/router')
+  ).default;
 
   const router = routerMethod(routes, app);
 
@@ -66,6 +69,7 @@ export default async function loadMain(routes, app, globalLoader) {
   new Main({
     i18n,
     router,
+    vuetify,
     store: await store(),
   }).$mount('#app');
 }
