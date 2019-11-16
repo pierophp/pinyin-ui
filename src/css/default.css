@@ -47,6 +47,10 @@ body {
   height: 100%;
 }
 
+.v-application {
+  height: 100vh;
+}
+
 #container {
   height: 100%;
   display: flex;
