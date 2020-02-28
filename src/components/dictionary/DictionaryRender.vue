@@ -1,5 +1,11 @@
 <template>
   <div>
+    <a
+      :href="'plecoapi://x-callback-url/s?hw='+ dictionary.ideograms + '&mode=df&py=' + this.pinyin"
+      target="_blank"
+      v-if="isMobile"
+    >Open Pleco</a>
+
     <div v-if="type === 'pt' &&  ((dictionary.pt && dictionary.pt.length) || user.admin)">
       <div class="dict-title">
         Português
@@ -45,7 +51,7 @@
         target="_blank"
         id="form-ct-pt"
       >
-        <input type="hidden" name="dico" :value="dictionary.ideograms">
+        <input type="hidden" name="dico" :value="dictionary.ideograms" />
       </form>
       <div class="dict-title">
         <a href="javascript:void(0)" @click="openChineseTools('pt')">Chinese Tools - Português</a>
@@ -100,7 +106,7 @@
         target="_blank"
         id="form-ct-es"
       >
-        <input type="hidden" name="dico" :value="dictionary.ideograms">
+        <input type="hidden" name="dico" :value="dictionary.ideograms" />
       </form>
       <div class="dict-title">
         <a href="javascript:void(0)" @click="openChineseTools('es')">Chinese Tools - Español</a>
@@ -203,7 +209,7 @@
         target="_blank"
         id="form-ct-en"
       >
-        <input type="hidden" name="dico" :value="dictionary.ideograms">
+        <input type="hidden" name="dico" :value="dictionary.ideograms" />
       </form>
       <div class="dict-title">
         <a href="javascript:void(0)" @click="openChineseTools('en')">Chinese Tools - English</a>
@@ -430,12 +436,14 @@ export default {
       const optionsManager = new OptionsManager(this.$i18n);
       const options = optionsManager.getOptions();
 
-      const moedictResponse = (await http.get('dictionary/moedict', {
-        params: {
-          ideogram: this.dictionary.ideograms,
-          pronunciation: this.pinyin,
-        },
-      })).data.definition;
+      const moedictResponse = (
+        await http.get('dictionary/moedict', {
+          params: {
+            ideogram: this.dictionary.ideograms,
+            pronunciation: this.pinyin,
+          },
+        })
+      ).data.definition;
 
       const definitions =
         options.ideogramType === 't'
