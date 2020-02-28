@@ -158,4 +158,5 @@ export default {
   antonyms: 'Antonyms',
   synonyms: 'Synonyms',
   text: 'Text',
+  open_pleco: 'Open Pleco',
 };

@@ -156,4 +156,5 @@ export default {
   antonyms: 'Antônimos',
   synonyms: 'Sinônimos',
   text: 'Texto',
+  open_pleco: 'Abrir Pleco',
 };
