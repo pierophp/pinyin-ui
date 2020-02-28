@@ -1,5 +1,11 @@
 <template>
   <div>
+    <a
+      :href="'plecoapi://x-callback-url/s?hw='+ dictionary.ideograms + '&mode=df&py=' + this.pinyin"
+      target="_blank"
+      v-if="isMobile"
+    >Open Pleco</a>
+
     <div v-if="dictionary.measure_words && dictionary.measure_words.length">
       <b>{{$t('measure_words')}}:</b>
       {{ dictionary.measure_words.join(', ')}}
@@ -23,6 +29,7 @@
 <script>
 import DictionaryRender from 'src/components/dictionary/DictionaryRender';
 import OptionsManager from 'src/domain/options-manager';
+import isMobile from 'src/helpers/is-mobile';
 
 export default {
   name: 'dictionary-details',
@@ -66,6 +73,7 @@ export default {
 
     return {
       types: types,
+      isMobile: isMobile(),
     };
   },
   methods: {},

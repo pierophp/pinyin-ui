@@ -1,11 +1,5 @@
 <template>
   <div>
-    <a
-      :href="'plecoapi://x-callback-url/s?hw='+ dictionary.ideograms + '&mode=df&py=' + this.pinyin"
-      target="_blank"
-      v-if="isMobile"
-    >Open Pleco</a>
-
     <div v-if="type === 'pt' &&  ((dictionary.pt && dictionary.pt.length) || user.admin)">
       <div class="dict-title">
         Português
