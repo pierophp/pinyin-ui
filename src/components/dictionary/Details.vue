@@ -1,17 +1,20 @@
 <template>
   <div>
-    <a :href="plecoUrl" v-if="isMobile">Open Pleco</a>
-
-    <v-btn :href="plecoUrl" v-if="isMobile">{{$t('open.pleco')}}</v-btn>
-
+    <div v-if="isMobile" class="pleco-container">
+      <v-btn :href="plecoUrl" small class="purple">{{
+        $t('open_pleco')
+      }}</v-btn>
+    </div>
     <div v-if="dictionary.measure_words && dictionary.measure_words.length">
-      <b>{{$t('measure_words')}}:</b>
-      {{ dictionary.measure_words.join(', ')}}
+      <b>{{ $t('measure_words') }}:</b>
+      {{ dictionary.measure_words.join(', ') }}
     </div>
 
     <div class="labels">
       <span v-if="dictionary.is_separable">{{ $t('separable_verb') }}</span>
-      <span v-if="dictionary.hsk && dictionary.hsk < 999">HSK{{dictionary.hsk}}</span>
+      <span v-if="dictionary.hsk && dictionary.hsk < 999"
+        >HSK{{ dictionary.hsk }}</span
+      >
     </div>
 
     <dictionary-render
@@ -71,8 +74,9 @@ export default {
 
     return {
       types: types,
-      isMobile: isMobile(),
-      plecoUrl: `plecoapi://x-callback-url/s?hw=${dictionary.ideograms}&mode=df&py=${this.pinyin}`,
+      // isMobile: isMobile(),
+      isMobile: true,
+      plecoUrl: `plecoapi://x-callback-url/s?hw=${this.dictionary.ideograms}&mode=df&py=${this.pinyin}`,
     };
   },
   methods: {},
@@ -91,5 +95,9 @@ export default {
   font-size: 11px;
   margin: 0 2px 2px 0;
   padding: 2px 5px;
+}
+
+.pleco-container {
+  padding: 10px 0px;
 }
 </style>
