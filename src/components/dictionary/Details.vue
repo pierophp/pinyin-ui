@@ -3,7 +3,7 @@
     <div v-if="isMobile" class="pleco-container">
       <v-btn
         :href="
-          `plecoapi://x-callback-url/s?hw=${dictionary.ideograms}&mode=df&py=${this.pinyin}`
+          `plecoapi://x-callback-url/s?hw=${dictionary.ideograms}&mode=df&py=${pinyinNumbers}`
         "
         small
         class="purple"
@@ -36,6 +36,8 @@
 import DictionaryRender from 'src/components/dictionary/DictionaryRender';
 import OptionsManager from 'src/domain/options-manager';
 import isMobile from 'src/helpers/is-mobile';
+import pinyinAccentsToNumbers from 'src/helpers/pinyin.accents.to.numbers';
+import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
 
 export default {
   name: 'dictionary-details',
@@ -86,6 +88,17 @@ export default {
   props: {
     pinyin: {},
     dictionary: {},
+  },
+  computed: {
+    pinyinNumbers() {
+      if (!this.pinyin) {
+        return '';
+      }
+
+      return separatePinyinInSyllables(this.pinyin)
+        .map(item => pinyinAccentsToNumbers(item))
+        .join(String.fromCharCode(160));
+    },
   },
 };
 </script>

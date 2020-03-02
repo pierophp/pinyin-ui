@@ -1,14 +1,32 @@
 <template>
   <div>
-    <div v-if="list" class="dict-list" v-for="(dictionary, dictionaryId) in list" v-bind:key="dictionaryId">
+    <div
+      v-if="list"
+      class="dict-list"
+      v-for="(dictionary, dictionaryId) in list"
+      v-bind:key="dictionaryId"
+    >
       <a href="javascript:void(0)" @click="changeShowDictionary(dictionaryId)">
-        <traditional-simplified-show :pinyin="dictionary.pronunciation" :ideograms="dictionary.ideograms" :variants="[]"/>
+        <traditional-simplified-show
+          :pinyin="dictionary.pronunciation"
+          :ideograms="dictionary.ideograms"
+          :variants="[]"
+        />
       </a>
 
-      <a href="javascript:void(0)" @click="changeShowDictionary(dictionaryId)">{{ dictionary.pronunciation }}</a>
-      
+      <a
+        href="javascript:void(0)"
+        @click="changeShowDictionary(dictionaryId)"
+        >{{ dictionary.pronunciation }}</a
+      >
+
       <div v-show="showDictionary === dictionaryId">
-        <dictionary-details v-if="dictionary" :dictionary="dictionary" :pinyin="dictionary.pinyin" @change-show="changeShow"/>
+        <dictionary-details
+          v-if="dictionary"
+          :dictionary="dictionary"
+          :pinyin="dictionary.pinyin"
+          @change-show="changeShow"
+        />
       </div>
     </div>
   </div>
