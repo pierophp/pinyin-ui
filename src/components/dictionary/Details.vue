@@ -1,9 +1,14 @@
 <template>
   <div>
     <div v-if="isMobile" class="pleco-container">
-      <v-btn :href="plecoUrl" small class="purple">{{
-        $t('open_pleco')
-      }}</v-btn>
+      <v-btn
+        :href="
+          `plecoapi://x-callback-url/s?hw=${dictionary.ideograms}&mode=df&py=${this.pinyin}`
+        "
+        small
+        class="purple"
+        >{{ $t('open_pleco') }}</v-btn
+      >
     </div>
     <div v-if="dictionary.measure_words && dictionary.measure_words.length">
       <b>{{ $t('measure_words') }}:</b>
@@ -74,9 +79,7 @@ export default {
 
     return {
       types: types,
-      // isMobile: isMobile(),
-      isMobile: true,
-      plecoUrl: `plecoapi://x-callback-url/s?hw=${this.dictionary.ideograms}&mode=df&py=${this.pinyin}`,
+      isMobile: isMobile(),
     };
   },
   methods: {},
