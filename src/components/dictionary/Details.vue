@@ -97,7 +97,7 @@ export default {
 
       return separatePinyinInSyllables(this.pinyin)
         .map(item => pinyinAccentsToNumbers(item))
-        .join();
+        .join('');
     },
   },
 };
