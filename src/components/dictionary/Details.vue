@@ -5,10 +5,10 @@
         :href="
           `plecoapi://x-callback-url/s?hw=${dictionary.ideograms}&mode=df&py=${pinyinNumbers}`
         "
+        target="_blank"
         small
         class="purple"
-        >{{ $t('open_pleco') }}</v-btn
-      >
+      >{{ $t('open_pleco') }}</v-btn>
     </div>
     <div v-if="dictionary.measure_words && dictionary.measure_words.length">
       <b>{{ $t('measure_words') }}:</b>
@@ -17,9 +17,7 @@
 
     <div class="labels">
       <span v-if="dictionary.is_separable">{{ $t('separable_verb') }}</span>
-      <span v-if="dictionary.hsk && dictionary.hsk < 999"
-        >HSK{{ dictionary.hsk }}</span
-      >
+      <span v-if="dictionary.hsk && dictionary.hsk < 999">HSK{{ dictionary.hsk }}</span>
     </div>
 
     <dictionary-render
