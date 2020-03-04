@@ -45,6 +45,10 @@ export default {
     links: function links() {
       return [
         {
+          title: 'Chinese Pod Sentences',
+          href: `https://chinesepod.com/tools/glossary/entry/${this.character}`,
+        },
+        {
           title: 'YellowBridge',
           href: `https://www.yellowbridge.com/chinese/dictionary.php?word=${this.character}&amp;characterMode=s`,
         },
@@ -81,10 +85,7 @@ export default {
           title: 'Baidu Translate',
           href: `https://fanyi.baidu.com/#zh/en/${this.character}`,
         },
-        {
-          title: 'Chinese Pod Sentences',
-          href: `https://chinesepod.com/tools/glossary/entry/${this.character}`,
-        },
+
         {
           title: 'Tatoeba (sentences)',
           href: `http://tatoeba.org/eng/sentences/search?from=cmn&to=eng&query=${this.character}`,
