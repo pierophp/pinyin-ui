@@ -7,7 +7,6 @@
         "
         target="_blank"
         small
-        class="purple"
       >{{ $t('open_pleco') }}</v-btn>
     </div>
     <div v-if="dictionary.measure_words && dictionary.measure_words.length">
@@ -79,7 +78,8 @@ export default {
 
     return {
       types: types,
-      isMobile: isMobile(),
+      // isMobile: isMobile(),
+      isMobile: true,
     };
   },
   methods: {},
