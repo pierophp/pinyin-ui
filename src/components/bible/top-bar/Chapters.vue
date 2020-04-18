@@ -42,4 +42,8 @@ export default {
   font-family: 'Noto Sans SC', 'Noto Sans TC', sans-serif;
   color: #fff;
 }
+
+.top-bar-container .bible-title i {
+  color: #fff !important;
+}
 </style>

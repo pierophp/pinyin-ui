@@ -28,14 +28,14 @@
     >
       <md-dialog-content>
         <div class="checkbox-container">
-          <input type="checkbox" id="open-verses-as-popup" v-model="versesShowAsModalInput">
+          <input type="checkbox" id="open-verses-as-popup" v-model="versesShowAsModalInput" />
           <label for="open-verses-as-popup">{{ $t('open_verses_as_popup') }}</label>
         </div>
 
-        <br>
+        <br />
 
         <div class="checkbox-container">
-          <input type="checkbox" id="open-chapter-on-load-input" v-model="openChapterOnLoadInput">
+          <input type="checkbox" id="open-chapter-on-load-input" v-model="openChapterOnLoadInput" />
           <label for="open-chapter-on-load-input">{{ $t('open_chapter_on_load') }}</label>
         </div>
       </md-dialog-content>
@@ -144,5 +144,9 @@ export default {
 .chapter-top-bar-container .right {
   display: flex;
   align-items: center;
+}
+
+.top-bar-container .md-title i {
+  color: #fff !important;
 }
 </style>

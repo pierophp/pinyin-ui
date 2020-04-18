@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="books-top-bar-container">
-
       <md-button class="md-icon-button" @click="setShowPinyin(showPinyin ? 0 : 1)">
         <md-icon>translate</md-icon>
       </md-button>
@@ -52,11 +51,19 @@ div[options='bible-books'] {
   text-align: right;
 }
 
+.books-top-bar-container {
+  display: flex;
+}
+
 .books-top-bar-container span {
   cursor: pointer;
 }
 
 .books-top-bar-container .md-icon-button {
   margin: 0;
+}
+
+.books-top-bar-container .md-button i {
+  color: #fff !important;
 }
 </style>
