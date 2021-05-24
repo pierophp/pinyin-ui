@@ -11,6 +11,7 @@ import VueClipboard from 'v-clipboard';
 import 'font-awesome/css/font-awesome.min.css';
 import 'src/css/vue-material/vue-material.min.css';
 import 'src/css/vue-material/default.css';
+import 'src/css/tailwind.css';
 
 import 'vuetify/dist/vuetify.min.css';
 import 'src/css/default.css';
