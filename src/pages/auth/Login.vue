@@ -1,25 +1,35 @@
 <template>
   <div class="login-container">
     <loadable-content :loading="loading">
-      <br>
+      <br />
 
-      <md-button
-        class="md-dense md-raised md-primary btn-google"
+      <button
+        class="btn text-white bg-red-500 group mr-4"
         @click="goToAuth(authGoogleUrl)"
         v-if="!loading"
       >
-        <md-icon md-src="https://unpkg.com/simple-icons@latest/icons/google.svg"/>
-        {{ $t("sign_in_google") }}
-      </md-button>
+        <svg-loader
+          src="https://unpkg.com/simple-icons@latest/icons/google.svg"
+          width="24"
+          height="24"
+        />
 
-      <md-button
-        class="md-dense md-raised md-primary btn-baidu"
+        {{ $t('sign_in_google') }}
+      </button>
+
+      <button
+        class="btn text-white bg-blue-800 group mr-4"
         @click="goToAuth(authBaiduUrl)"
         v-if="!loading"
       >
-        <md-icon md-src="https://unpkg.com/simple-icons@latest/icons/baidu.svg"/>
-        {{ $t("sign_in_baidu") }}
-      </md-button>
+        <svg-loader
+          src="https://unpkg.com/simple-icons@latest/icons/baidu.svg"
+          width="24"
+          height="24"
+        />
+
+        {{ $t('sign_in_baidu') }}
+      </button>
     </loadable-content>
   </div>
 </template>
@@ -30,11 +40,13 @@ import Config from 'src/helpers/config';
 import QueryString from 'query-string';
 import LoadableContent from 'src/components/common/loading/LoadableContent';
 import LocalStorage from 'src/helpers/local-storage';
+import SvgLoader from '@/components/layout/SvgLoader.vue';
 
 export default {
   name: 'login',
   components: {
     LoadableContent,
+    SvgLoader,
   },
   data() {
     return {
@@ -96,24 +108,9 @@ export default {
 </script>
 
 <style>
-.btn-google,
-.btn-google svg {
-  background-color: #e04431 !important;
-  color: #fff !important;
-  fill: #fff !important;
-}
-
-.btn-baidu,
-.btn-baidu svg {
-  background-color: #2529d8 !important;
-  color: #fff !important;
-  fill: #fff !important;
-}
-
-.btn-google .md-icon,
-.btn-baidu .md-icon {
-  display: inline-block;
-  margin-right: 5px;
+.btn svg {
+  @apply w-5 h-5 stroke-current text-white inline-block mr-1 group-hover:opacity-70;
+  fill: #fff;
 }
 
 .login-container {
