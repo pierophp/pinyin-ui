@@ -1,7 +1,7 @@
 export default {
   development: {
-    //apiUrl: 'http://pinyin.service.consul:9090/',
-    apiUrl: 'https://api.pinzi.org/',
+    apiUrl: 'http://127.0.0.1:9090/',
+    // apiUrl: 'https://api.pinzi.org/',
   },
 
   production: {
