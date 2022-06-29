@@ -22,7 +22,7 @@ ID = "Your_Site_ID"
   functions = "project/functions/"
   
 [build.environment]
-  NODE_VERSION  = "12"
+  NODE_VERSION  = "16"
 
 # The following redirect is intended for use with most SPAs that handle
 # routing internally.
