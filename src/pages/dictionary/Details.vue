@@ -16,9 +16,11 @@
             <md-icon>content_copy</md-icon>
           </md-button>
 
-          <md-button class="md-icon-button md-accent sound-btn" @click.native="openSound">
-            <md-icon>volume_up</md-icon>
-          </md-button>
+          <a :href="'https://pt.forvo.com/word/' + dictionary.ideograms + '#zh'" target="_blank">
+            <md-button class="md-icon-button md-accent sound-btn">
+              <md-icon>volume_up</md-icon>
+            </md-button>
+          </a>
         </div>
       </div>
       <tabs>
@@ -33,8 +35,6 @@
         </tab>
       </tabs>
     </loadable-content>
-
-    <forvo-modal ref="dialogForvo" :character="dictionary.ideograms"/>
 
     <md-snackbar md-position="center" :md-duration="1300" :md-active.sync="clipboardOpen">
       <span>{{ $t('copied_to_clipboard') }}</span>
@@ -52,7 +52,6 @@ import LoadableContent from 'src/components/common/loading/LoadableContent';
 import DictionaryDetails from 'src/components/dictionary/Details';
 import DictionaryStrokeOrder from 'src/components/dictionary/StrokeOrder';
 import TraditionalSimplifiedShow from 'src/components/ideograms/TraditionalSimplifiedShow';
-import ForvoModal from 'src/components/modals/Forvo';
 import Links from 'src/components/ideograms/Links';
 import OptionsManager from 'src/domain/options-manager';
 import Tabs from 'src/components/common/Tabs';
@@ -68,14 +67,12 @@ export default {
     DictionaryDetails,
     DictionaryStrokeOrder,
     TraditionalSimplifiedShow,
-    ForvoModal,
     Links,
     Tabs,
     Tab,
   },
   data() {
     return {
-      forvoUrl: null,
       dictionary: {},
       loading: false,
       clipboardOpen: false,
@@ -114,9 +111,7 @@ export default {
         },
       });
     },
-    openSound() {
-      this.openDialog('dialogForvo');
-    },
+    
     openDialog(ref) {
       this.$refs[ref].open();
     },
@@ -166,9 +161,4 @@ export default {
   cursor: pointer;
 }
 
-#forvo {
-  width: 100%;
-  height: 500px;
-  border: 0;
-}
 </style>
