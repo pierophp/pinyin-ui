@@ -2,17 +2,23 @@
   <div class="flashcards-container">
     <div class="frontside">
       <div class="card" v-for="(card, cardId) in cards" v-bind:key="cardId">
-        <span class="ideogram">{{card.ideogram}}</span>
+        <span class="ideogram">{{ card.ideogram }}</span>
+
         <span class="img-container">
-          <img :src="card.image" referrerpolicy="no-referrer">
+          <img :src="card.image" referrerpolicy="no-referrer" />
         </span>
       </div>
     </div>
 
     <div class="backside">
-      <div class="card reversed" v-for="(card, cardId) in cards" v-bind:key="cardId">
-        <span class="pinyin">{{card.pinyin}}</span>
-        <span class="definition">{{card.translation}}</span>
+      <div
+        class="card reversed"
+        v-for="(card, cardId) in cards"
+        v-bind:key="cardId"
+      >
+        <span class="pinyin">{{ card.pinyin }}</span>
+
+        <span class="definition">{{ card.translation }}</span>
       </div>
     </div>
   </div>
@@ -62,12 +68,12 @@ export default {
 <style scoped>
 @font-face {
   font-family: 'SentyWen';
-  src: url('/fonts/senty_wen.woff2') format('woff2');
+  src: url('/public/fonts/senty_wen.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'HuaKangBaoFengTraditional';
-  src: url('/fonts/hua_kang_bao_feng_traditional.woff2') format('woff2');
+  src: url('/public/fonts/hua_kang_bao_feng_traditional.woff2') format('woff2');
 }
 
 .flashcards-container {
