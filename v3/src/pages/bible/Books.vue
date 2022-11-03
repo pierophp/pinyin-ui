@@ -64,12 +64,12 @@ import booksData from "@/data/bible/books";
 import booksName from "@/data/bible/names";
 import OptionsManager from "@/domain/options-manager";
 
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
 
-import {
-  BIBLE_GETTER_BOOKS_SHOW_PINIYN,
-  BIBLE_GETTER_BOOKS_EXHIBITION_TYPE,
-} from "@/data/bible/types";
+// import {
+//   BIBLE_GETTER_BOOKS_SHOW_PINIYN,
+//   BIBLE_GETTER_BOOKS_EXHIBITION_TYPE,
+// } from "@/data/bible/types";
 
 export default {
   name: "bible-books",
@@ -86,10 +86,17 @@ export default {
     },
   },
   computed: {
-    ...mapGetters({
-      booksExhibitionType: BIBLE_GETTER_BOOKS_EXHIBITION_TYPE,
-      showPinyin: BIBLE_GETTER_BOOKS_SHOW_PINIYN,
-    }),
+    // ...mapGetters({
+    //   booksExhibitionType: BIBLE_GETTER_BOOKS_EXHIBITION_TYPE,
+    //   showPinyin: BIBLE_GETTER_BOOKS_SHOW_PINIYN,
+    // }),
+    booksExhibitionType() {
+      return "2";
+    },
+    // @todo change to vuex
+    showPinyin() {
+      return false;
+    },
     exhibitionType() {
       return `cmn-han${this.options.ideogramType}`;
     },

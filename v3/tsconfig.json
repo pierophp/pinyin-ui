@@ -16,7 +16,7 @@
     "types": ["vuetify"],
     "paths": {
       "@/*": ["src/*"]
-    },
+    }
   },
   "include": [
     "src/**/*.ts",
