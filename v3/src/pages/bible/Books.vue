@@ -91,7 +91,7 @@ export default {
     //   showPinyin: BIBLE_GETTER_BOOKS_SHOW_PINIYN,
     // }),
     booksExhibitionType() {
-      return "2";
+      return "1";
     },
     // @todo change to vuex
     showPinyin() {
