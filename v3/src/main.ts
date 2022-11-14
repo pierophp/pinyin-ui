@@ -1,31 +1,55 @@
-/**
- * main.ts
- *
- * Bootstraps Vuetify and other plugins then mounts the App`
- */
-
-// Components
 import App from "./App.vue";
 
-// Composables
 import { createApp } from "vue";
+import { createI18n } from "vue-i18n";
+
+import localeEn from "@/data/locale/en";
+import localePt from "@/data/locale/pt";
 
 // Plugins
 import { registerPlugins } from "@/plugins";
 import vuetify from "./plugins/vuetify";
 import routes from "./routes/bible";
 import { createRouter, createWebHashHistory } from "vue-router";
-import store from "src/data/store";
+import store from "@/data/store";
+
+import "vue-router";
+
+declare module "vue-router" {
+  interface RouteMeta {
+    topBar: string;
+    protected: boolean;
+    showMenu: boolean;
+    title: string;
+    menu: {
+      icon: string;
+      title: string;
+      action: string;
+      link: string;
+    }[];
+  }
+}
+
+const locale = navigator.language.split("-")[0];
+
+const i18n = createI18n({
+  locale,
+  fallbackLocale: "en",
+  messages: {
+    en: localeEn,
+    pt: localePt,
+  },
+});
 
 const router = createRouter({
-  // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
   history: createWebHashHistory(),
-  routes, // short for `routes: routes`
+  routes,
 });
 
 const app = createApp(App);
 
 app.use(router);
+app.use(i18n);
 
 registerPlugins();
 

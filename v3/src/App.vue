@@ -1,10 +1,5 @@
 <template>
   <v-app>
-    <tool-bar :showMenu="true"></tool-bar>
-    <v-main><router-view /></v-main>
+    <router-view />
   </v-app>
 </template>
-
-<script setup lang="ts">
-import ToolBar from "@/components/layout/ToolBar";
-</script>

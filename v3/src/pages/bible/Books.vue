@@ -1,69 +1,73 @@
 <template>
-  <div
-    class="bible-books-container"
-    :class="[exhibitionClass, exhibitionClassPinyin]"
-  >
-    <div class="bible-half">
-      <div
-        v-for="(book, bookId) in books.hebrew"
-        v-bind:key="bookId"
-        class="bible-book"
-      >
+  <tool-bar></tool-bar>
+  <v-main>
+    <div
+      class="bible-books-container"
+      :class="[exhibitionClass, exhibitionClassPinyin]"
+    >
+      <div class="bible-half">
         <div
-          :class="['bible-content', 'fullName', 'color-' + book.color]"
-          @click="goTo(book.name)"
+          v-for="(book, bookId) in books.hebrew"
+          v-bind:key="bookId"
+          class="bible-book"
         >
-          <div v-if="showPinyin" class="pinyin-bible">
-            {{ booksName(book.name, "pinyin") }}
+          <div
+            :class="['bible-content', 'fullName', 'color-' + book.color]"
+            @click="goTo(book.name)"
+          >
+            <div v-if="showPinyin" class="pinyin-bible">
+              {{ booksName(book.name, "pinyin") }}
+            </div>
+            {{ booksName(book.name, exhibitionType) }}
           </div>
-          {{ booksName(book.name, exhibitionType) }}
-        </div>
-        <div
-          :class="['bible-content', 'abbrName', 'color-' + book.color]"
-          @click="goTo(book.name)"
-        >
-          <div v-if="showPinyin" class="pinyin-bible">
-            {{ booksName(book.name, "pinyin-abbr") }}
+          <div
+            :class="['bible-content', 'abbrName', 'color-' + book.color]"
+            @click="goTo(book.name)"
+          >
+            <div v-if="showPinyin" class="pinyin-bible">
+              {{ booksName(book.name, "pinyin-abbr") }}
+            </div>
+            {{ booksName(book.name, exhibitionType + "-abbr") }}
           </div>
-          {{ booksName(book.name, exhibitionType + "-abbr") }}
         </div>
       </div>
-    </div>
 
-    <div class="bible-half">
-      <div
-        v-for="(book, bookId) in books.greek"
-        v-bind:key="bookId"
-        class="bible-book"
-      >
+      <div class="bible-half">
         <div
-          :class="['bible-content', 'fullName', 'color-' + book.color]"
-          @click="goTo(book.name)"
+          v-for="(book, bookId) in books.greek"
+          v-bind:key="bookId"
+          class="bible-book"
         >
-          <div v-if="showPinyin" class="pinyin-bible">
-            {{ booksName(book.name, "pinyin") }}
+          <div
+            :class="['bible-content', 'fullName', 'color-' + book.color]"
+            @click="goTo(book.name)"
+          >
+            <div v-if="showPinyin" class="pinyin-bible">
+              {{ booksName(book.name, "pinyin") }}
+            </div>
+            {{ booksName(book.name, exhibitionType) }}
           </div>
-          {{ booksName(book.name, exhibitionType) }}
-        </div>
-        <div
-          :class="['bible-content', 'abbrName', 'color-' + book.color]"
-          @click="goTo(book.name)"
-        >
-          <div v-if="showPinyin" class="pinyin-bible">
-            {{ booksName(book.name, "pinyin-abbr") }}
+          <div
+            :class="['bible-content', 'abbrName', 'color-' + book.color]"
+            @click="goTo(book.name)"
+          >
+            <div v-if="showPinyin" class="pinyin-bible">
+              {{ booksName(book.name, "pinyin-abbr") }}
+            </div>
+            {{ booksName(book.name, exhibitionType + "-abbr") }}
           </div>
-          {{ booksName(book.name, exhibitionType + "-abbr") }}
         </div>
       </div>
     </div>
-  </div>
+  </v-main>
 </template>
 
 <script lang="ts">
 import booksData from "@/data/bible/books";
 import booksName from "@/data/bible/names";
 import OptionsManager from "@/domain/options-manager";
-
+import { useRoute } from "vue-router";
+import ToolBar from "@/components/layout/ToolBar";
 // import { mapGetters } from "vuex";
 
 // import {
@@ -73,6 +77,16 @@ import OptionsManager from "@/domain/options-manager";
 
 export default {
   name: "bible-books",
+  components: {
+    ToolBar,
+  },
+  setup() {
+    const route = useRoute();
+
+    console.log("b topBar", route.meta.topBar);
+
+    return {};
+  },
   data() {
     return {
       options: {},
