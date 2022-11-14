@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div v-if="type === 'pt' &&  ((dictionary.pt && dictionary.pt.length) || user.admin)">
+    <div
+      v-if="
+        type === 'pt' && ((dictionary.pt && dictionary.pt.length) || user.admin)
+      "
+    >
       <div class="dict-title">
         Português
         <google-translate-link
@@ -24,20 +28,33 @@
             v-if="user.admin"
             class="md-raised md-primary"
             @click.native="edit()"
-          >{{$t('edit')}}</md-button>
+            >{{ $t("edit") }}</md-button
+          >
         </div>
         <div v-if="editing">
           <div class="field-container">
-            <textarea v-model="dictionaryEntry" autocapitalize="none" :cols="isMobile ? 30 : 50"></textarea>
+            <textarea
+              v-model="dictionaryEntry"
+              autocapitalize="none"
+              :cols="isMobile ? 30 : 50"
+            ></textarea>
           </div>
-          <md-button class="md-raised md-primary" @click.native="save()">{{$t('save')}}</md-button>
-          <md-button class="md-raised md-accent" @click.native="cancelEdit()">{{$t('cancel')}}</md-button>
+          <md-button class="md-raised md-primary" @click.native="save()">{{
+            $t("save")
+          }}</md-button>
+          <md-button class="md-raised md-accent" @click.native="cancelEdit()">{{
+            $t("cancel")
+          }}</md-button>
         </div>
       </div>
     </div>
 
     <div
-      v-if="type === 'chinese_tools_pt' && dictionary.chinese_tools_pt && dictionary.chinese_tools_pt.length"
+      v-if="
+        type === 'chinese_tools_pt' &&
+        dictionary.chinese_tools_pt &&
+        dictionary.chinese_tools_pt.length
+      "
     >
       <form
         action="https://www.chinese-tools.com/tools/chinese-portuguese-dictionary.html"
@@ -48,7 +65,9 @@
         <input type="hidden" name="dico" :value="dictionary.ideograms" />
       </form>
       <div class="dict-title">
-        <a href="javascript:void(0)" @click="openChineseTools('pt')">Chinese Tools - Português</a>
+        <a href="javascript:void(0)" @click="openChineseTools('pt')"
+          >Chinese Tools - Português</a
+        >
         <google-translate-link
           :word="dictionary.chinese_tools_pt.join('\n')"
           sourceLanguage="pt"
@@ -56,7 +75,10 @@
         />
       </div>
       <div class="dict-block">
-        <div v-for="(chinese_tools_pt, dictId) in dictionary.chinese_tools_pt" v-bind:key="dictId">
+        <div
+          v-for="(chinese_tools_pt, dictId) in dictionary.chinese_tools_pt"
+          v-bind:key="dictId"
+        >
           {{ chinese_tools_pt }}
           <google-translate-link
             :word="chinese_tools_pt"
@@ -67,12 +89,19 @@
       </div>
     </div>
 
-    <div v-if="type === 'glosbe_pt' && dictionary.glosbe_pt && dictionary.glosbe_pt.length">
+    <div
+      v-if="
+        type === 'glosbe_pt' &&
+        dictionary.glosbe_pt &&
+        dictionary.glosbe_pt.length
+      "
+    >
       <div class="dict-title">
         <a
           :href="'https://glosbe.com/zh/pt/' + dictionary.ideograms"
           target="_blank"
-        >GLOSBE - Português</a>
+          >GLOSBE - Português</a
+        >
         <google-translate-link
           :word="dictionary.glosbe_pt.join('\n')"
           sourceLanguage="pt"
@@ -80,7 +109,10 @@
         />
       </div>
       <div class="dict-block">
-        <div v-for="(glosbe_pt, dictId) in dictionary.glosbe_pt" v-bind:key="dictId">
+        <div
+          v-for="(glosbe_pt, dictId) in dictionary.glosbe_pt"
+          v-bind:key="dictId"
+        >
           {{ glosbe_pt }}
           <google-translate-link
             :word="glosbe_pt"
@@ -92,7 +124,11 @@
     </div>
 
     <div
-      v-if="type === 'chinese_tools_es' && dictionary.chinese_tools_es && dictionary.chinese_tools_es.length"
+      v-if="
+        type === 'chinese_tools_es' &&
+        dictionary.chinese_tools_es &&
+        dictionary.chinese_tools_es.length
+      "
     >
       <form
         action="https://www.chinese-tools.com/tools/chinese-spanish-dictionary.html"
@@ -103,7 +139,9 @@
         <input type="hidden" name="dico" :value="dictionary.ideograms" />
       </form>
       <div class="dict-title">
-        <a href="javascript:void(0)" @click="openChineseTools('es')">Chinese Tools - Español</a>
+        <a href="javascript:void(0)" @click="openChineseTools('es')"
+          >Chinese Tools - Español</a
+        >
         <google-translate-link
           :word="dictionary.chinese_tools_es.join('\n')"
           sourceLanguage="es"
@@ -111,7 +149,10 @@
         />
       </div>
       <div class="dict-block">
-        <div v-for="(chinese_tools_es, dictId) in dictionary.chinese_tools_es" v-bind:key="dictId">
+        <div
+          v-for="(chinese_tools_es, dictId) in dictionary.chinese_tools_es"
+          v-bind:key="dictId"
+        >
           {{ chinese_tools_es }}
           <google-translate-link
             :word="chinese_tools_es"
@@ -122,12 +163,19 @@
       </div>
     </div>
 
-    <div v-if="type === 'glosbe_es' && dictionary.glosbe_es && dictionary.glosbe_es.length">
+    <div
+      v-if="
+        type === 'glosbe_es' &&
+        dictionary.glosbe_es &&
+        dictionary.glosbe_es.length
+      "
+    >
       <div class="dict-title">
         <a
           :href="'https://glosbe.com/zh/es/' + dictionary.ideograms"
           target="_blank"
-        >GLOSBE - Español</a>
+          >GLOSBE - Español</a
+        >
         <google-translate-link
           :word="dictionary.glosbe_es.join('\n')"
           sourceLanguage="es"
@@ -135,7 +183,10 @@
         />
       </div>
       <div class="dict-block">
-        <div v-for="(glosbe_es, dictId) in dictionary.glosbe_es" v-bind:key="dictId">
+        <div
+          v-for="(glosbe_es, dictId) in dictionary.glosbe_es"
+          v-bind:key="dictId"
+        >
           {{ glosbe_es }}
           <google-translate-link
             :word="glosbe_es"
@@ -149,9 +200,13 @@
     <div v-if="type === 'unihan' && dictionary.unihan">
       <div class="dict-title">
         <a
-          :href="'https://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=' + dictionary.ideograms"
+          :href="
+            'https://www.unicode.org/cgi-bin/GetUnihanData.pl?codepoint=' +
+            dictionary.ideograms
+          "
           target="_blank"
-        >Unihan - English</a>
+          >Unihan - English</a
+        >
         <google-translate-link
           :word="dictionary.unihan.join('\n')"
           sourceLanguage="en"
@@ -173,9 +228,13 @@
     <div v-if="type === 'cedict' && dictionary.cedict">
       <div class="dict-title">
         <a
-          :href="'https://cc-cedict.org/editor/editor.php?handler=QueryDictionary&amp;querydictionary_search=' + dictionary.ideograms"
+          :href="
+            'https://cc-cedict.org/editor/editor.php?handler=QueryDictionary&amp;querydictionary_search=' +
+            dictionary.ideograms
+          "
           target="_blank"
-        >CC-CEDICT - English</a>
+          >CC-CEDICT - English</a
+        >
         <google-translate-link
           :word="dictionary.cedict.join('\n')"
           sourceLanguage="en"
@@ -195,7 +254,11 @@
     </div>
 
     <div
-      v-if="type === 'chinese_tools_en' && dictionary.chinese_tools_en && dictionary.chinese_tools_en.length"
+      v-if="
+        type === 'chinese_tools_en' &&
+        dictionary.chinese_tools_en &&
+        dictionary.chinese_tools_en.length
+      "
     >
       <form
         action="https://www.chinese-tools.com/tools/dictionary.html"
@@ -206,7 +269,9 @@
         <input type="hidden" name="dico" :value="dictionary.ideograms" />
       </form>
       <div class="dict-title">
-        <a href="javascript:void(0)" @click="openChineseTools('en')">Chinese Tools - English</a>
+        <a href="javascript:void(0)" @click="openChineseTools('en')"
+          >Chinese Tools - English</a
+        >
         <google-translate-link
           :word="dictionary.chinese_tools_en.join('\n')"
           sourceLanguage="en"
@@ -214,7 +279,10 @@
         />
       </div>
       <div class="dict-block">
-        <div v-for="(chinese_tools_en, dictId) in dictionary.chinese_tools_en" v-bind:key="dictId">
+        <div
+          v-for="(chinese_tools_en, dictId) in dictionary.chinese_tools_en"
+          v-bind:key="dictId"
+        >
           {{ chinese_tools_en }}
           <google-translate-link
             :word="chinese_tools_en"
@@ -225,12 +293,19 @@
       </div>
     </div>
 
-    <div v-if="type === 'glosbe_en' && dictionary.glosbe_en && dictionary.glosbe_en.length">
+    <div
+      v-if="
+        type === 'glosbe_en' &&
+        dictionary.glosbe_en &&
+        dictionary.glosbe_en.length
+      "
+    >
       <div class="dict-title">
         <a
           :href="'https://glosbe.com/zh/en/' + dictionary.ideograms"
           target="_blank"
-        >GLOSBE - English</a>
+          >GLOSBE - English</a
+        >
         <google-translate-link
           :word="dictionary.glosbe_en.join('\n')"
           sourceLanguage="en"
@@ -238,7 +313,10 @@
         />
       </div>
       <div class="dict-block">
-        <div v-for="(glosbe_en, dictId) in dictionary.glosbe_en" v-bind:key="dictId">
+        <div
+          v-for="(glosbe_en, dictId) in dictionary.glosbe_en"
+          v-bind:key="dictId"
+        >
           {{ glosbe_en }}
           <google-translate-link
             :word="glosbe_en"
@@ -297,12 +375,18 @@
           <a
             :href="'https://www.moedict.tw/' + dictionary.ideograms"
             target="_blank"
-          >Moedict - Chinese</a>
+            >Moedict - Chinese</a
+          >
         </div>
         <div class="dict-block">
-          <div v-for="(definition, definitionId) in moedict.definitions" v-bind:key="definitionId">
+          <div
+            v-for="(definition, definitionId) in moedict.definitions"
+            v-bind:key="definitionId"
+          >
             <div class="moedict-container">
-              <span class="dict-definition-title">{{ $t('definition') + ' ' + (definitionId + 1)}}:</span>
+              <span class="dict-definition-title"
+                >{{ $t("definition") + " " + (definitionId + 1) }}:</span
+              >
               <file-container
                 ref="fileContainer"
                 :lines="[definition.def]"
@@ -314,7 +398,7 @@
               />
 
               <div v-if="definition.synonyms">
-                <span class="dict-definition-title">{{$t('synonyms')}}</span>
+                <span class="dict-definition-title">{{ $t("synonyms") }}</span>
                 <file-container
                   ref="fileContainer"
                   :lines="[definition.synonyms]"
@@ -327,7 +411,7 @@
               </div>
 
               <div v-if="definition.antonyms">
-                <span class="dict-definition-title">{{$t('antonyms')}}</span>
+                <span class="dict-definition-title">{{ $t("antonyms") }}</span>
                 <file-container
                   ref="fileContainer"
                   :lines="[definition.antonyms]"
@@ -347,17 +431,17 @@
 </template>
 
 <script>
-import replaceall from 'replaceall';
-import http from 'src/helpers/http';
-import User from 'src/domain/user';
-import OptionsManager from 'src/domain/options-manager';
-import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
-import GoogleTranslateLink from 'src/components/dictionary/GoogleTranslateLink';
-import LoadableContent from 'src/components/common/loading/LoadableContent';
-import isMobile from 'src/helpers/is-mobile';
+import replaceall from "replaceall";
+import http from "@/helpers/http";
+import User from "src/domain/user";
+import OptionsManager from "src/domain/options-manager";
+import separatePinyinInSyllables from "src/helpers/separate-pinyin-in-syllables";
+import GoogleTranslateLink from "src/components/dictionary/GoogleTranslateLink";
+import LoadableContent from "src/components/common/loading/LoadableContent";
+import isMobile from "src/helpers/is-mobile";
 
 export default {
-  name: 'dictionary-render',
+  name: "dictionary-render",
   components: {
     GoogleTranslateLink,
     LoadableContent,
@@ -385,7 +469,7 @@ export default {
 
     this.translationLanguage = translationLanguage;
 
-    if (this.type === 'moedict') {
+    if (this.type === "moedict") {
       this.loadMoedict();
     }
   },
@@ -394,26 +478,26 @@ export default {
       document.getElementById(`form-ct-${language}`).submit();
     },
     getDictionaryEntry() {
-      let dictionaryEntry = '';
+      let dictionaryEntry = "";
       if (!this.dictionary.pt) {
         this.dictionary.pt = [];
       }
 
-      this.dictionary.pt.forEach(entry => {
+      this.dictionary.pt.forEach((entry) => {
         dictionaryEntry += `${entry}\n`;
       });
 
-      dictionaryEntry = dictionaryEntry.trim('\n');
+      dictionaryEntry = dictionaryEntry.trim("\n");
 
       return dictionaryEntry;
     },
     cancelEdit() {
       this.editing = false;
-      this.$emit('change-show', this.editing);
+      this.$emit("change-show", this.editing);
     },
     edit() {
       this.editing = true;
-      this.$emit('change-show', this.editing);
+      this.$emit("change-show", this.editing);
     },
 
     async loadMoedict() {
@@ -431,7 +515,7 @@ export default {
       const options = optionsManager.getOptions();
 
       const moedictResponse = (
-        await http.get('dictionary/moedict', {
+        await http.get("dictionary/moedict", {
           params: {
             ideogram: this.dictionary.ideograms,
             pronunciation: this.pinyin,
@@ -440,7 +524,7 @@ export default {
       ).data.definition;
 
       const definitions =
-        options.ideogramType === 't'
+        options.ideogramType === "t"
           ? moedictResponse.traditionalDefinitions
           : moedictResponse.simplifiedDefinitions;
 
@@ -458,15 +542,15 @@ export default {
 
         for (const pinyinDef of pinyinObject[parseKey]) {
           const pinyinList = separatePinyinInSyllables(
-            replaceall(' ', String.fromCharCode(160), pinyinDef || ''),
-            false,
+            replaceall(" ", String.fromCharCode(160), pinyinDef || ""),
+            false
           )
             .join(String.fromCharCode(160))
             .split(String.fromCharCode(160));
 
           for (const pinyin of pinyinList) {
             if (!line[blockCount]) {
-              line[blockCount] = { c: '', p: '' };
+              line[blockCount] = { c: "", p: "" };
 
               if (blockCount === 0) {
                 line[blockCount].pinyinSpaced = 1;
@@ -491,17 +575,17 @@ export default {
           def: parsePinyin(
             moedictResponse.pinyinDefinitions[i],
             definition,
-            'def',
+            "def"
           ),
           antonyms: parsePinyin(
             moedictResponse.pinyinDefinitions[i],
             definition,
-            'antonyms',
+            "antonyms"
           ),
           synonyms: parsePinyin(
             moedictResponse.pinyinDefinitions[i],
             definition,
-            'synonyms',
+            "synonyms"
           ),
         });
         i++;
@@ -511,17 +595,17 @@ export default {
         definitions: newDefinitions,
       };
 
-      this.$set(this, 'moedict', moedict);
+      this.$set(this, "moedict", moedict);
 
       this.moedictLoading = false;
     },
     save() {
       const dictionatyList = this.dictionaryEntry
-        .split('\n')
-        .filter(item => item.trim());
+        .split("\n")
+        .filter((item) => item.trim());
 
       http
-        .post('unihan/save', {
+        .post("unihan/save", {
           pinyin: this.pinyin,
           ideograms: this.dictionary.ideograms,
           dictionary: dictionatyList,
@@ -529,14 +613,14 @@ export default {
         .then(() => {
           this.dictionary.pt = dictionatyList;
           this.editing = false;
-          this.$emit('change-show', this.editing);
+          this.$emit("change-show", this.editing);
         });
     },
   },
   props: {
     pinyin: {},
     dictionary: {},
-    type: '',
+    type: "",
   },
 };
 </script>

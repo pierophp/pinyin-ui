@@ -8,22 +8,22 @@
 </template>
 
 <script>
-import http from 'src/helpers/http';
-import webVTTParser from 'src/domain/webvtt-parser';
-import replaceall from 'replaceall';
-import FilePrint from 'src/pages/files/FilePrint';
-import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
+import http from "@/helpers/http";
+import webVTTParser from "src/domain/webvtt-parser";
+import replaceall from "replaceall";
+import FilePrint from "src/pages/files/FilePrint";
+import separatePinyinInSyllables from "src/helpers/separate-pinyin-in-syllables";
 
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from "vuex";
 
-import { FILE_MUTATION_SET } from 'src/data/file/types';
+import { FILE_MUTATION_SET } from "src/data/file/types";
 import {
   VIDEO_GETTER_SUBTITLE,
   VIDEO_MUTATION_SET_FULL_FILE,
-} from 'src/data/video/types';
+} from "src/data/video/types";
 
 export default {
-  name: 'video-subtitle',
+  name: "video-subtitle",
   components: {
     FilePrint,
   },
@@ -55,21 +55,21 @@ export default {
       this.setVideoFullFile([]);
       const tracks = webVTTParser(subtitle);
       const lines = [];
-      tracks.forEach(trackItem => {
+      tracks.forEach((trackItem) => {
         trackItem.message.forEach((message, messageIndex) => {
           let content = message;
-          content = replaceall('<ruby>', '', content);
-          content = replaceall('</ruby>', '', content);
+          content = replaceall("<ruby>", "", content);
+          content = replaceall("</ruby>", "", content);
           const line = [];
-          content.split('</rt>').forEach(item => {
-            const blockItem = item.split('<rt>');
+          content.split("</rt>").forEach((item) => {
+            const blockItem = item.split("<rt>");
             if (blockItem.length === 1) {
               return;
             }
             const block = {
               c: blockItem[0].trim(),
               p: separatePinyinInSyllables(blockItem[1].trim()).join(
-                String.fromCharCode(160),
+                String.fromCharCode(160)
               ),
             };
             if (messageIndex === 0) {

@@ -1,36 +1,36 @@
 <template>
   <div>
     <div class="books-top-bar-container">
-      <md-button
-        class="md-icon-button"
+      <v-btn
+        icon="mdi-translate"
+        variant="text"
         @click="setShowPinyin(showPinyin ? 0 : 1)"
-      >
-        <md-icon>translate</md-icon>
-      </md-button>
+      ></v-btn>
 
-      <md-button
-        class="md-icon-button"
+      <v-btn
+        icon="mdi-view-compact"
+        variant="text"
         v-if="booksExhibitionType === '1'"
         @click="setType('2')"
-      >
-        <md-icon>view_compact</md-icon>
-      </md-button>
+      ></v-btn>
 
-      <md-button
-        class="md-icon-button"
+      <v-btn
+        icon="mdi-view-module"
+        variant="text"
         v-if="booksExhibitionType === '2'"
         @click="setType('1')"
-      >
-        <md-icon>view_module</md-icon>
-      </md-button>
+      ></v-btn>
 
-      <md-button class="md-icon-button" @click="$router.push('/bible/save')">
-        <md-icon>cloud_download</md-icon>
-      </md-button>
+      <v-btn
+        icon="mdi-cloud-download"
+        variant="text"
+        @click="$router.push('/bible/save')"
+      ></v-btn>
     </div>
   </div>
 </template>
-<script>
+
+<script type="ts">
 import { mapMutations, mapGetters } from "vuex";
 
 import {
@@ -49,10 +49,10 @@ export default {
     }),
   },
   computed: {
-    ...mapGetters({
-      booksExhibitionType: BIBLE_GETTER_BOOKS_EXHIBITION_TYPE,
-      showPinyin: BIBLE_GETTER_BOOKS_SHOW_PINIYN,
-    }),
+    // ...mapGetters({
+    //   booksExhibitionType: BIBLE_GETTER_BOOKS_EXHIBITION_TYPE,
+    //   showPinyin: BIBLE_GETTER_BOOKS_SHOW_PINIYN,
+    // }),
   },
 };
 </script>

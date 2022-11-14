@@ -5,37 +5,37 @@ const appOptions = {
   title: "app.bible",
   menu: [
     {
-      icon: "import_contacts",
+      icon: "mdi-book-open",
       title: "menu.bible",
       action: "goTo",
       link: "/bible",
     },
     {
-      icon: "translate",
+      icon: "mdi-translate",
       title: "menu.my_ideograms",
       action: "goTo",
       link: "/my-cjk",
     },
     {
-      icon: "settings",
+      icon: "mdi-cog",
       title: "menu.settings",
       action: "goTo",
       link: "/config",
     },
     {
-      icon: "help",
+      icon: "mdi-help",
       title: "menu.about",
       action: "goTo",
       link: "/about",
     },
     {
-      icon: "power_settings_new",
+      icon: "mdi-power",
       title: "menu.logout",
       action: "logout",
       link: "",
     },
     {
-      icon: "autorenew",
+      icon: "mdi-autorenew",
       title: "menu.reload",
       action: "reload",
       link: "",

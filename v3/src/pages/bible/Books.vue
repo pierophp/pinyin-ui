@@ -67,7 +67,7 @@ import booksData from "@/data/bible/books";
 import booksName from "@/data/bible/names";
 import OptionsManager from "@/domain/options-manager";
 import { useRoute } from "vue-router";
-import ToolBar from "@/components/layout/ToolBar";
+import ToolBar from "@/components/layout/ToolBar.vue";
 // import { mapGetters } from "vuex";
 
 // import {
@@ -80,13 +80,6 @@ export default {
   components: {
     ToolBar,
   },
-  setup() {
-    const route = useRoute();
-
-    console.log("b topBar", route.meta.topBar);
-
-    return {};
-  },
   data() {
     return {
       options: {},
@@ -95,7 +88,7 @@ export default {
   },
   methods: {
     booksName,
-    goTo(link) {
+    goTo(link: string) {
       this.$router.push(`/bible/${link}`);
     },
   },

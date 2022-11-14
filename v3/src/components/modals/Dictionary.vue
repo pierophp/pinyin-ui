@@ -22,7 +22,10 @@
           <md-icon>content_copy</md-icon>
         </md-button>
 
-        <a :href="'https://pt.forvo.com/word/' + block.character + '#zh'" target="_blank">
+        <a
+          :href="'https://pt.forvo.com/word/' + block.character + '#zh'"
+          target="_blank"
+        >
           <md-button class="md-icon-button md-accent sound-btn">
             <md-icon>volume_up</md-icon>
           </md-button>
@@ -48,15 +51,18 @@
               v-show="!dictionaryLoading"
             />
 
-            <dictionary-list :list="dictionaryList" v-show="!dictionaryLoading"/>
+            <dictionary-list
+              :list="dictionaryList"
+              v-show="!dictionaryLoading"
+            />
           </tab>
 
           <tab id="stroke" :label="$t('stroke')">
-            <dictionary-stroke-order :ideograms="block.character"/>
+            <dictionary-stroke-order :ideograms="block.character" />
           </tab>
 
           <tab id="links" label="Links">
-            <Links list="1" :character="block.character"/>
+            <Links list="1" :character="block.character" />
           </tab>
         </tabs>
       </md-dialog-content>
@@ -92,31 +98,39 @@
           </md-button>
         </div>
 
-        <md-button class="md-primary" @click.native="modalDictionaryOpen = false">OK</md-button>
+        <md-button
+          class="md-primary"
+          @click.native="modalDictionaryOpen = false"
+          >OK</md-button
+        >
       </md-dialog-actions>
     </md-dialog>
 
-    <md-snackbar md-position="center" :md-duration="1300" :md-active.sync="clipboardOpen">
-      <span>{{ $t('copied_to_clipboard') }}</span>
+    <md-snackbar
+      md-position="center"
+      :md-duration="1300"
+      :md-active.sync="clipboardOpen"
+    >
+      <span>{{ $t("copied_to_clipboard") }}</span>
     </md-snackbar>
   </div>
 </template>
 
 <script>
-import http from 'src/helpers/http';
-import Tabs from 'src/components/common/Tabs';
-import Tab from 'src/components/common/Tab';
-import TraditionalSimplifiedShow from 'src/components/ideograms/TraditionalSimplifiedShow';
-import Links from 'src/components/ideograms/Links';
-import DictionaryStrokeOrder from 'src/components/dictionary/StrokeOrder';
-import DictionaryList from 'src/components/dictionary/List';
-import DictionaryDetails from 'src/components/dictionary/Details';
+import http from "@/helpers/http";
+import Tabs from "src/components/common/Tabs";
+import Tab from "src/components/common/Tab";
+import TraditionalSimplifiedShow from "src/components/ideograms/TraditionalSimplifiedShow";
+import Links from "src/components/ideograms/Links";
+import DictionaryStrokeOrder from "src/components/dictionary/StrokeOrder";
+import DictionaryList from "src/components/dictionary/List";
+import DictionaryDetails from "src/components/dictionary/Details";
 
 let memoryDictionary = {};
 const loadingDictionary = {};
 
 export default {
-  name: 'modal-dictionary',
+  name: "modal-dictionary",
   components: {
     DictionaryStrokeOrder,
     DictionaryDetails,
@@ -152,7 +166,7 @@ export default {
 
   methods: {
     changeShow(e) {
-      this.$emit('change-show', e);
+      this.$emit("change-show", e);
       memoryDictionary = {};
     },
 
@@ -184,7 +198,7 @@ export default {
         this.$set(this.selectedIndexes, 0, true);
       } else {
         const lastIndex = Object.keys(this.selectedIndexes)
-          .map(item => parseInt(item, 10))
+          .map((item) => parseInt(item, 10))
           .sort()
           .slice(-1)[0];
 
@@ -199,7 +213,7 @@ export default {
         this.$set(this.selectedIndexes, 0, true);
       } else {
         const lastIndex = Object.keys(this.selectedIndexes)
-          .map(item => parseInt(item, 10))
+          .map((item) => parseInt(item, 10))
           .sort()
           .slice(-1)[0];
 
@@ -217,7 +231,7 @@ export default {
         this.$set(this.selectedIndexes, 0, true);
       } else {
         const firstIndex = Object.keys(this.selectedIndexes)
-          .map(item => parseInt(item, 10))
+          .map((item) => parseInt(item, 10))
           .sort()[0];
 
         this.selectedIndexes = {};
@@ -232,7 +246,7 @@ export default {
         this.$set(this.selectedIndexes, 0, true);
       } else {
         const lastIndex = Object.keys(this.selectedIndexes)
-          .map(item => parseInt(item, 10))
+          .map((item) => parseInt(item, 10))
           .sort()
           .slice(-1)[0];
 
@@ -252,7 +266,7 @@ export default {
       }
 
       if (loadingDictionary[cacheKey] === true) {
-        const awaitedResult = await new Promise(resolve => {
+        const awaitedResult = await new Promise((resolve) => {
           function verifyLoadDictionary() {
             if (memoryDictionary[cacheKey]) {
               return resolve(memoryDictionary[cacheKey]);
@@ -280,12 +294,14 @@ export default {
         loadingDictionary[cacheKey] = false;
       }, 5000);
 
-      memoryDictionary[cacheKey] = (await http.get('unihan/dictionary', {
-        params: {
-          ideograms: character,
-          pinyin: pinyin,
-        },
-      })).data;
+      memoryDictionary[cacheKey] = (
+        await http.get("unihan/dictionary", {
+          params: {
+            ideograms: character,
+            pinyin: pinyin,
+          },
+        })
+      ).data;
 
       return memoryDictionary[cacheKey];
     },
@@ -297,10 +313,10 @@ export default {
       let pinyin = this.block.pinyin;
 
       if (Object.keys(this.selectedIndexes).length > 0) {
-        character = '';
-        pinyin = '';
+        character = "";
+        pinyin = "";
         const pinyinList = this.block.originalPinyin.split(
-          String.fromCharCode(160),
+          String.fromCharCode(160)
         );
         for (const key of Object.keys(this.selectedIndexes)) {
           character += this.block.character[key];

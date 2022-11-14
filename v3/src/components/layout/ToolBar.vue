@@ -4,12 +4,25 @@
       <v-list dense>
         <v-list color="primary">
           <v-list-item>
+            <v-list-item-title class="title">{{
+              user?.name ?? ""
+            }}</v-list-item-title>
+            <v-list-item-subtitle>{{ user?.email ?? "" }}</v-list-item-subtitle>
+          </v-list-item>
+        </v-list>
+
+        <v-list color="primary">
+          <v-list-item
+            href="javascritp:void(0)"
+            @click="doAction(menuItem.action, menuItem.link)"
+            v-for="(menuItem, menuItemId) in menu"
+            v-bind:key="menuItemId"
+          >
             <template v-slot:prepend>
-              <v-icon icon="mdi-clock"></v-icon>
+              <v-icon :icon="menuItem.icon"></v-icon>
             </template>
 
-            <v-list-item-title class="title">Teste</v-list-item-title>
-            <v-list-item-subtitle>Teste</v-list-item-subtitle>
+            <v-list-item-title>{{ $t(menuItem.title) }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-list>
@@ -21,46 +34,14 @@
         @click.stop="showNavigation = !showNavigation"
       ></v-app-bar-nav-icon>
 
-      <v-toolbar-title>My files</v-toolbar-title>
+      <v-toolbar-title v-if="!hideTitle">{{ $t(title) }}</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn variant="text" icon="mdi-magnify"></v-btn>
-
-      <v-btn variant="text" icon="mdi-filter"></v-btn>
-
-      <v-btn variant="text" icon="mdi-dots-vertical"></v-btn>
+      <dynamic :options="topBar" />
     </v-app-bar>
 
-    <!-- <v-navigation-drawer v-model="showNavigation" fixed temporary app>
-      <v-list dense>
-        <v-list color="primary">
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title class="title">{{
-                user.name
-              }}</v-list-item-title>
-              <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-
-        <v-list color="primary">
-          <v-list-item
-            @click="doAction(menuItem.action, menuItem.link)"
-            v-for="(menuItem, menuItemId) in menu"
-            v-bind:key="menuItemId"
-          >
-            <v-list-item-icon>
-              <v-icon v-text="menuItem.icon"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>{{ $t(menuItem.title) }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-list>
-    </v-navigation-drawer>
+    <!--
 
     <v-toolbar color="indigo" dark>
       <v-app-bar-nav-icon
@@ -78,13 +59,12 @@
   </div>
 </template>
 <script lang="ts">
-// import Dynamic from "@/components/layout/Dynamic";
+import Dynamic from "@/components/layout/Dynamic.vue";
 import User from "@/domain/user";
-import { useRoute } from "vue-router";
 
 export default {
   components: {
-    // Dynamic,
+    Dynamic,
   },
   props: {
     showMenu: { type: Boolean, value: true },
@@ -108,10 +88,11 @@ export default {
       hideTitle: this.$route.meta.hideTitle,
       user: User.getUser(),
       menu: this.$route.meta.menu,
+      title: this.$route.meta.title,
     };
   },
   methods: {
-    doAction(action, param) {
+    doAction(action: string, param: string) {
       if (action === "goTo") {
         this.goTo(param);
       } else if (action === "logout") {
@@ -120,7 +101,7 @@ export default {
         window.location.reload(true);
       }
     },
-    goTo(link) {
+    goTo(link: string) {
       this.showNavigation = false;
       this.$router.push(link);
     },

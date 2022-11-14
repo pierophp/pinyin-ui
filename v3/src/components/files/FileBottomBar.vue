@@ -3,16 +3,23 @@
     <div class="bottom-bar no-print" v-if="show">
       <span
         class="ideogram-link"
-        v-for="(data,index) in printData"
+        v-for="(data, index) in printData"
         @click.prevent="openModal(data.characterLink)"
         :key="index"
       >
-        <ideograms-show :pinyin="data.pinyin" :character="data.character" ref="ideogram-show"/>
+        <ideograms-show
+          :pinyin="data.pinyin"
+          :character="data.character"
+          ref="ideogram-show"
+        />
       </span>
-      
+
       <span class="bottom-bar-pinyin">{{ block.pinyin }}</span>
 
-      <md-button class="md-icon-button md-primary" @click.native="loadDictionary(block)">
+      <md-button
+        class="md-icon-button md-primary"
+        @click.native="loadDictionary(block)"
+      >
         <md-icon>find_in_page</md-icon>
       </md-button>
 
@@ -60,37 +67,47 @@
           </div>
         </div>
       </menu-content>
-      <Links list="0" :character="block.character" ref="links"/>
+      <Links list="0" :character="block.character" ref="links" />
     </div>
 
-    <dictionary-modal ref="dictionaryModal" @change-show="changeShow"/>
+    <dictionary-modal ref="dictionaryModal" @change-show="changeShow" />
 
-    <md-dialog ref="dialogSeparate" :md-active.sync="modalSeparateOpen" :md-fullscreen="false">
+    <md-dialog
+      ref="dialogSeparate"
+      :md-active.sync="modalSeparateOpen"
+      :md-fullscreen="false"
+    >
       <md-dialog-title>
-        <ideograms-show :pinyin="block.pinyin" :character="block.character"/>
+        <ideograms-show :pinyin="block.pinyin" :character="block.character" />
         - {{ block.pinyin }}
       </md-dialog-title>
 
       <md-dialog-content>
         <div class="field-container">
-          <input type="text" v-model="separateCharacter">
+          <input type="text" v-model="separateCharacter" />
         </div>
       </md-dialog-content>
 
       <md-dialog-actions>
-        <md-button class="md-primary" @click.native="confirmSeparate">OK</md-button>
+        <md-button class="md-primary" @click.native="confirmSeparate"
+          >OK</md-button
+        >
       </md-dialog-actions>
     </md-dialog>
 
-    <md-dialog ref="dialogEdit" :md-active.sync="modalEditOpen" :md-fullscreen="false">
+    <md-dialog
+      ref="dialogEdit"
+      :md-active.sync="modalEditOpen"
+      :md-fullscreen="false"
+    >
       <md-dialog-title>
-        <ideograms-show :pinyin="block.pinyin" :character="block.character"/>
+        <ideograms-show :pinyin="block.pinyin" :character="block.character" />
         - {{ block.pinyin }}
       </md-dialog-title>
 
       <md-dialog-content>
         <div class="field-container">
-          <input type="text" v-model="editPinyin">
+          <input type="text" v-model="editPinyin" />
         </div>
       </md-dialog-content>
 
@@ -102,17 +119,17 @@
 </template>
 
 <script>
-import http from 'src/helpers/http';
-import IdeogramsShow from 'src/components/ideograms/Show';
-import Links from 'src/components/ideograms/Links';
-import OptionsManager from 'src/domain/options-manager';
-import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
-import replaceall from 'replaceall';
-import pinyinHelper from 'src/helpers/pinyin';
-import isMobile from 'src/helpers/is-mobile';
-import DictionaryModal from 'src/components/modals/Dictionary';
-import MenuContent from 'src/components/common/MenuContent';
-import { mapActions, mapMutations, mapGetters } from 'vuex';
+import http from "@/helpers/http";
+import IdeogramsShow from "src/components/ideograms/Show";
+import Links from "src/components/ideograms/Links";
+import OptionsManager from "src/domain/options-manager";
+import separatePinyinInSyllables from "src/helpers/separate-pinyin-in-syllables";
+import replaceall from "replaceall";
+import pinyinHelper from "src/helpers/pinyin";
+import isMobile from "src/helpers/is-mobile";
+import DictionaryModal from "src/components/modals/Dictionary";
+import MenuContent from "src/components/common/MenuContent";
+import { mapActions, mapMutations, mapGetters } from "vuex";
 
 import {
   FILE_ACTION_JOIN_LEFT,
@@ -120,14 +137,14 @@ import {
   FILE_MUTATION_SET_MY_CJK_TEMP,
   FILE_MUTATION_UPDATE_PINYIN,
   FILE_GETTER_MY_CJK,
-} from 'src/data/file/types';
+} from "src/data/file/types";
 
 export default {
-  name: 'file-bottom-bar',
+  name: "file-bottom-bar",
   data() {
     return {
-      editPinyin: '',
-      separateCharacter: '',
+      editPinyin: "",
+      separateCharacter: "",
       show: false,
       tempDictCharacter: null,
       block: {},
@@ -171,8 +188,8 @@ export default {
 
     changeShow(show) {
       this.show = !show;
-      const action = show ? 'remove' : 'add';
-      document.body.classList[action]('has-bottom-bar');
+      const action = show ? "remove" : "add";
+      document.body.classList[action]("has-bottom-bar");
     },
 
     separate() {
@@ -189,14 +206,14 @@ export default {
       });
 
       setTimeout(() => {
-        this.$emit('reopen', this.block.lineIndex, this.block.blockIndex);
+        this.$emit("reopen", this.block.lineIndex, this.block.blockIndex);
       }, 1000);
     },
 
     async joinLeft(block) {
       await this.joinLeftAction(block);
       setTimeout(() => {
-        this.$emit('reopen', this.block.lineIndex, this.block.blockIndex - 1);
+        this.$emit("reopen", this.block.lineIndex, this.block.blockIndex - 1);
       }, 1000);
     },
 
@@ -208,7 +225,7 @@ export default {
     confirmEdit() {
       this.updatePinyin({ ...this.block, pinyin: this.editPinyin });
       this.modalEditOpen = false;
-      this.$emit('reopen', this.block.lineIndex, this.block.blockIndex);
+      this.$emit("reopen", this.block.lineIndex, this.block.blockIndex);
     },
 
     changeEditPinyin(pinyin) {
@@ -216,12 +233,12 @@ export default {
     },
 
     close() {
-      document.body.classList.remove('has-bottom-bar');
+      document.body.classList.remove("has-bottom-bar");
       this.show = false;
     },
 
     open(block) {
-      document.body.classList.add('has-bottom-bar');
+      document.body.classList.add("has-bottom-bar");
       this.show = true;
 
       if (this.isMobile && this.tempDictCharacter === block.character) {
@@ -232,13 +249,13 @@ export default {
       block.originalPinyin = block.pinyin;
       block.pinyin = replaceall(
         String.fromCharCode(160),
-        '',
-        block.pinyin || '',
+        "",
+        block.pinyin || ""
       );
 
       this.$refs.dictionaryModal.requestDictionary(
         block.character,
-        block.pinyin,
+        block.pinyin
       );
 
       this.tempDictCharacter = block.character;
@@ -259,11 +276,11 @@ export default {
       const options = optionsManager.getOptions();
       for (let i = 0; i < chars.length; i += 1) {
         let characterLink = chars[i];
-        if (options.pinyinHide === '2') {
+        if (options.pinyinHide === "2") {
           characterLink = chars;
         }
 
-        let pinyinSeparated = '';
+        let pinyinSeparated = "";
         if (pinyin[i]) {
           pinyinSeparated = pinyin[i].trim();
         }
@@ -277,9 +294,9 @@ export default {
 
       this.printData = printData;
 
-      if (this.$refs['ideogram-show']) {
+      if (this.$refs["ideogram-show"]) {
         this.$nextTick(() => {
-          for (const ideogramShow of this.$refs['ideogram-show']) {
+          for (const ideogramShow of this.$refs["ideogram-show"]) {
             ideogramShow.updateRender();
           }
         });
@@ -293,7 +310,7 @@ export default {
       }
 
       this.setMyCjkTemp(character);
-      this.$emit('open-modal', add);
+      this.$emit("open-modal", add);
     },
 
     async loadDictionary(block) {
@@ -302,10 +319,10 @@ export default {
 
     openPinyinList() {
       http
-        .post('unihan/to_pinyin_all', {
+        .post("unihan/to_pinyin_all", {
           ideograms: [this.block.character],
         })
-        .then(response => {
+        .then((response) => {
           // eslint-disable-next-line
           console.log(response.data);
         });
@@ -321,12 +338,12 @@ export default {
     },
     onOpen() {
       // eslint-disable-next-line
-      console.log('Opened');
+      console.log("Opened");
     },
 
     onClose(type) {
       // eslint-disable-next-line
-      console.log('Closed', type);
+      console.log("Closed", type);
     },
   },
 };

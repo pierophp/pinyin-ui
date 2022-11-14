@@ -12,7 +12,7 @@
   </div>
 </template>
 
-<script>
+<script type="ts">
 import DictionaryTopBar from "@/components/dictionary/top-bar/Dictionary";
 import VideoTopBar from "@/components/video/top-bar/Video";
 import FileDetailsTopBar from "@/components/files/top-bar/FileDetails";
