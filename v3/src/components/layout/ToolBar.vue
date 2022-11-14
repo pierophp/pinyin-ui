@@ -29,33 +29,20 @@
     </v-navigation-drawer>
 
     <v-app-bar color="primary" prominent>
-      <v-app-bar-nav-icon
-        variant="text"
-        @click.stop="showNavigation = !showNavigation"
-      ></v-app-bar-nav-icon>
+      <template v-slot:prepend>
+        <v-app-bar-nav-icon
+          variant="text"
+          v-if="!hideTopBar && showMenu"
+          @click.stop="showNavigation = !showNavigation"
+        ></v-app-bar-nav-icon>
+      </template>
 
       <v-toolbar-title v-if="!hideTitle">{{ $t(title) }}</v-toolbar-title>
 
-      <v-spacer></v-spacer>
-
-      <dynamic :options="topBar" />
+      <template v-slot:append>
+        <dynamic :options="topBar" />
+      </template>
     </v-app-bar>
-
-    <!--
-
-    <v-toolbar color="indigo" dark>
-      <v-app-bar-nav-icon
-        v-if="!hideTopBar && showMenu"
-        @click.stop="showNavigation = !showNavigation"
-      ></v-app-bar-nav-icon>
-
-      <v-toolbar-title v-if="!hideTitle">{{
-        $t($router.options.appOptions.title)
-      }}</v-toolbar-title>
-      <v-spacer></v-spacer>
-
-      <dynamic :options="topBar" />
-    </v-toolbar> -->
   </div>
 </template>
 <script lang="ts">
@@ -65,9 +52,6 @@ import User from "@/domain/user";
 export default {
   components: {
     Dynamic,
-  },
-  props: {
-    showMenu: { type: Boolean, value: true },
   },
 
   watch: {
@@ -89,6 +73,7 @@ export default {
       user: User.getUser(),
       menu: this.$route.meta.menu,
       title: this.$route.meta.title,
+      showMenu: this.$route.meta.showMenu,
     };
   },
   methods: {
@@ -111,8 +96,4 @@ export default {
   },
 };
 </script>
-<style>
-.md-drawer {
-  width: 240px !important;
-}
-</style>
+<style></style>

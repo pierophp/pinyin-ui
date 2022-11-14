@@ -1,6 +1,7 @@
 import { RouteRecordRaw } from "vue-router";
 
 const appOptions = {
+  // @todo chante that
   showMenu: true,
   title: "app.bible",
   menu: [
