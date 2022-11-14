@@ -6,7 +6,6 @@ import { createI18n } from "vue-i18n";
 import localeEn from "@/data/locale/en";
 import localePt from "@/data/locale/pt";
 
-// Plugins
 import { registerPlugins } from "@/plugins";
 import vuetify from "./plugins/vuetify";
 import routes from "./routes/bible";

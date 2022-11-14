@@ -12,10 +12,9 @@
       @toogle-translation="toogleTranslation"
     />
 
-    <template v-for="(block, blockIndex) in blocks">
+    <template v-for="(block, blockIndex) in blocks" :key="blockIndex">
       <!-- @click is on FilePrint because performance  -->
       <div
-        :key="blockIndex"
         class="block"
         :data-line="lineIndex"
         :data-block="blockIndex"
@@ -39,7 +38,9 @@
                 v-bind:key="dataIndex"
               ></span>
             </template>
-            <template v-if="!block.pinyinStyleObject">{{ data.pinyin }}</template>
+            <template v-if="!block.pinyinStyleObject">{{
+              data.pinyin
+            }}</template>
           </template>
         </template>
 
@@ -51,18 +52,24 @@
           :class="[block.classBold, block.classItalic]"
           v-if="!block.small && !block.footnote && !block.noIdeogram"
           :style="{
-            color: block.printDataCharacters.length && block.printDataCharacters[0].sameTone ?
-            block.printDataCharacters[0].toneColor : ''
+            color:
+              block.printDataCharacters.length &&
+              block.printDataCharacters[0].sameTone
+                ? block.printDataCharacters[0].toneColor
+                : '',
           }"
         >
           <template v-for="(data, index) in block.printDataCharacters">
-            <template v-if="!data.toneColor || data.sameTone">{{ data.character }}</template>
+            <template v-if="!data.toneColor || data.sameTone">{{
+              data.character
+            }}</template>
             <span
               v-if="data.toneColor && !data.sameTone"
               :class="[data.ideogramClass]"
               :style="{ color: data.toneColor }"
               v-bind:key="index"
-            >{{ data.character }}</span>
+              >{{ data.character }}</span
+            >
           </template>
         </div>
 
@@ -71,7 +78,9 @@
           v-if="block.footnote"
           @click.prevent="openFootnote(block.footnote)"
         >
-          <template v-for="(data) in block.printDataCharacters">{{ data.character }}</template>
+          <template v-for="data in block.printDataCharacters">{{
+            data.character
+          }}</template>
         </div>
       </div>
     </template>
@@ -80,23 +89,23 @@
 </template>
 
 <script>
-import FileRowTranslation from 'src/components/files/FileRowTranslation';
-import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
-import ideogramsShow from 'src/helpers/ideograms.show';
-import OptionsManager from 'src/domain/options-manager';
-import { mapActions } from 'vuex';
+import FileRowTranslation from "@/components/files/FileRowTranslation";
+import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
+import ideogramsShow from "@/helpers/ideograms.show";
+import OptionsManager from "@/domain/options-manager";
+import { mapActions } from "vuex";
 
-import { FILE_ACTION_CAN_HIDE_PINYIN } from 'src/data/file/types';
+import { FILE_ACTION_CAN_HIDE_PINYIN } from "@/data/file/types";
 
 export default {
-  name: 'file-row',
+  name: "file-row",
   components: {
     FileRowTranslation,
   },
   data() {
     return {
-      type: '',
-      startTime: '',
+      type: "",
+      startTime: "",
       loading: true,
       showTranslation: false,
     };
@@ -111,7 +120,7 @@ export default {
     },
   },
   async created() {
-    this.type = '';
+    this.type = "";
     if (this.line[0] !== undefined && this.line[0].line !== undefined) {
       const type = this.line[0].line.type;
       this.type = `type-${type}`;
@@ -130,13 +139,13 @@ export default {
       canHidePinyin: FILE_ACTION_CAN_HIDE_PINYIN,
     }),
     goToVideoTime() {
-      this.$emit('go-to-video-time', this.startTime);
+      this.$emit("go-to-video-time", this.startTime);
     },
     openImage(image) {
-      this.$emit('open-image', image);
+      this.$emit("open-image", image);
     },
     openFootnote(footnote) {
-      this.$emit('open-footnote', footnote);
+      this.$emit("open-footnote", footnote);
     },
 
     toogleTranslation() {
@@ -169,27 +178,27 @@ export default {
 
       const optionsManager = new OptionsManager(this.$i18n);
       const options = optionsManager.getOptions();
-      generatedBlock.classHighlight = `highlight-${block.h ? block.h : ''}`;
-      generatedBlock.classBold = '';
+      generatedBlock.classHighlight = `highlight-${block.h ? block.h : ""}`;
+      generatedBlock.classBold = "";
       if (block.isBold === 1) {
-        generatedBlock.classBold = 'bold';
+        generatedBlock.classBold = "bold";
       }
 
-      generatedBlock.classItalic = '';
+      generatedBlock.classItalic = "";
       if (block.isItalic === 1) {
-        generatedBlock.classItalic = 'italic';
+        generatedBlock.classItalic = "italic";
       }
 
-      generatedBlock.classExtra = '';
+      generatedBlock.classExtra = "";
       if (block.v) {
-        generatedBlock.classExtra = 'verse';
+        generatedBlock.classExtra = "verse";
         if (block.v === 1) {
-          generatedBlock.classExtra = 'chapter';
+          generatedBlock.classExtra = "chapter";
         }
       }
 
       if (block.noIdeogram) {
-        generatedBlock.classExtra += ' noIdeogram';
+        generatedBlock.classExtra += " noIdeogram";
       }
 
       const printData = [];
@@ -205,42 +214,42 @@ export default {
       const chars = block.c.toString();
 
       for (let i = 0; i < chars.length; i += 1) {
-        let newPinyin = '';
-        let pinyinClass = '';
+        let newPinyin = "";
+        let pinyinClass = "";
         let hidePinyin = false;
 
         // 1 = pinyin_ideograms_without_knew,
-        if (options.pinyinHide === '1') {
+        if (options.pinyinHide === "1") {
           // eslint-disable-next-line
           hidePinyin =
             (await this.canHidePinyin(chars[i])) ||
             pinyin[i] === undefined ||
-            pinyin[i] === '';
+            pinyin[i] === "";
           // 2 = ideograms_only,
-        } else if (options.pinyinHide === '2') {
+        } else if (options.pinyinHide === "2") {
           // eslint-disable-next-line
           hidePinyin =
             (await this.canHidePinyin(chars)) ||
             pinyin[i] === undefined ||
-            pinyin[i] === '';
+            pinyin[i] === "";
         }
 
         // 4 = pinyin_ideograms
-        if (options.type === '4' && !hidePinyin && chars[i].trim()) {
-          pinyinClass = 'hide-pinyin';
-          newPinyin = '&nbsp;';
+        if (options.type === "4" && !hidePinyin && chars[i].trim()) {
+          pinyinClass = "hide-pinyin";
+          newPinyin = "&nbsp;";
         } else if (
-          (options.type === '1' || options.type === '2') &&
+          (options.type === "1" || options.type === "2") &&
           hidePinyin
         ) {
-          pinyinClass = 'hide-pinyin';
-          newPinyin = '&nbsp;';
+          pinyinClass = "hide-pinyin";
+          newPinyin = "&nbsp;";
         } else if (pinyin[i]) {
           withoutPinyn = false;
           newPinyin = pinyin[i];
         } else {
           withoutPinyn = false;
-          newPinyin = ' ';
+          newPinyin = " ";
         }
 
         printData.push({
@@ -254,19 +263,19 @@ export default {
 
       if (withoutPinyn) {
         printData.forEach((item, i) => {
-          printData[i].pinyinClass = '';
-          printData[i].pinyin = '';
+          printData[i].pinyinClass = "";
+          printData[i].pinyin = "";
         });
 
         generatedBlock.pinyinStyleObject = {};
-        generatedBlock.pinyinStyleObject.display = 'inline-block';
-        generatedBlock.pinyinStyleObject.height = 'auto';
+        generatedBlock.pinyinStyleObject.display = "inline-block";
+        generatedBlock.pinyinStyleObject.height = "auto";
       }
 
       if (chars.length === 0) {
         printData.push({
-          pinyinClass: '',
-          character: '',
+          pinyinClass: "",
+          character: "",
           pinyin: `${block.p}&nbsp;`,
         });
       }

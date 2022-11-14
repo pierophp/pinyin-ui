@@ -64,9 +64,20 @@ const routes: RouteRecordRaw[] = [
   //     hideTopBar: true,
   //   },
   // },
+  // @todo remove thatr after login
   {
     path: "/",
-    // path: "/bible",
+    name: "login",
+    component: () =>
+      import(/* webpackChunkName: "bible" */ "@/pages/bible/Books"),
+    meta: {
+      protected: true,
+      topBar: "bible-books",
+      ...appOptions,
+    },
+  },
+  {
+    path: "/bible",
     name: "bible",
     component: () =>
       import(/* webpackChunkName: "bible" */ "@/pages/bible/Books"),
@@ -77,42 +88,45 @@ const routes: RouteRecordRaw[] = [
     },
   },
 
-  // {
-  //   path: "/bible/save",
-  //   name: "bible-save",
-  //   component: () =>
-  //     import(/* webpackChunkName: "bible" */ "src/pages/bible/Save"),
-  //   meta: {
-  //     protected: true,
-  //     hideTitle: true,
-  //     topBar: "bible-save",
-  //     topBarLeft: true,
-  //   },
-  // },
-  // {
-  //   path: "/bible/:book",
-  //   name: "bible-chapters",
-  //   component: () =>
-  //     import(/* webpackChunkName: "bible" */ "src/pages/bible/Chapters"),
-  //   meta: {
-  //     protected: true,
-  //     hideTitle: true,
-  //     topBar: "bible-chapters",
-  //     topBarLeft: true,
-  //   },
-  // },
-  // {
-  //   path: "/bible/:book/:chapter",
-  //   name: "bible-chapter",
-  //   component: () =>
-  //     import(/* webpackChunkName: "bible" */ "src/pages/bible/Chapter"),
-  //   meta: {
-  //     protected: true,
-  //     hideTitle: true,
-  //     topBar: "bible-chapter",
-  //     topBarLeft: true,
-  //   },
-  // },
+  {
+    path: "/bible/save",
+    name: "bible-save",
+    component: () =>
+      import(/* webpackChunkName: "bible" */ "@/pages/bible/Save"),
+    meta: {
+      protected: true,
+      hideTitle: true,
+      topBar: "bible-save",
+      topBarLeft: true,
+      ...appOptions,
+    },
+  },
+  {
+    path: "/bible/:book",
+    name: "bible-chapters",
+    component: () =>
+      import(/* webpackChunkName: "bible" */ "@/pages/bible/Chapters"),
+    meta: {
+      protected: true,
+      hideTitle: true,
+      topBar: "bible-chapters",
+      topBarLeft: true,
+      ...appOptions,
+    },
+  },
+  {
+    path: "/bible/:book/:chapter",
+    name: "bible-chapter",
+    component: () =>
+      import(/* webpackChunkName: "bible" */ "@/pages/bible/Chapter"),
+    meta: {
+      protected: true,
+      hideTitle: true,
+      topBar: "bible-chapter",
+      topBarLeft: true,
+      ...appOptions,
+    },
+  },
   // {
   //   path: "/my-cjk",
   //   name: "my-cjk",

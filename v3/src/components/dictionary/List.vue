@@ -32,19 +32,19 @@
   </div>
 </template>
 
-<script>
-import TraditionalSimplifiedShow from 'src/components/ideograms/TraditionalSimplifiedShow';
-import DictionaryDetails from 'src/components/dictionary/Details';
+<script lang="ts">
+import TraditionalSimplifiedShow from "@/components/ideograms/TraditionalSimplifiedShow";
+import DictionaryDetails from "@/components/dictionary/Details";
 
 export default {
-  name: 'dictionary-list',
+  name: "dictionary-list",
   components: {
     DictionaryDetails,
     TraditionalSimplifiedShow,
   },
   data() {
     return {
-      showDictionary: '',
+      showDictionary: "",
     };
   },
   props: {
@@ -52,11 +52,11 @@ export default {
   },
   methods: {
     changeShow(editing) {
-      this.$emit('change-show', editing);
+      this.$emit("change-show", editing);
     },
     changeShowDictionary(dictionaryId) {
       if (this.showDictionary === dictionaryId) {
-        this.showDictionary = '';
+        this.showDictionary = "";
         return;
       }
       this.showDictionary = dictionaryId;

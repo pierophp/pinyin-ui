@@ -433,12 +433,12 @@
 <script>
 import replaceall from "replaceall";
 import http from "@/helpers/http";
-import User from "src/domain/user";
-import OptionsManager from "src/domain/options-manager";
-import separatePinyinInSyllables from "src/helpers/separate-pinyin-in-syllables";
-import GoogleTranslateLink from "src/components/dictionary/GoogleTranslateLink";
-import LoadableContent from "src/components/common/loading/LoadableContent";
-import isMobile from "src/helpers/is-mobile";
+import User from "@/domain/user";
+import OptionsManager from "@/domain/options-manager";
+import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
+import GoogleTranslateLink from "@/components/dictionary/GoogleTranslateLink";
+import LoadableContent from "@/components/common/loading/LoadableContent";
+import isMobile from "@/helpers/is-mobile";
 
 export default {
   name: "dictionary-render",

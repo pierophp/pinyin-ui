@@ -1,34 +1,71 @@
 <template>
   <div class="print-container">
-    <footnote-modal :line="footnoteLine" :lineIndex="footnoteLineIndex" ref="footnote" />
+    <footnote-modal
+      :line="footnoteLine"
+      :lineIndex="footnoteLineIndex"
+      ref="footnote"
+    />
     <image-zoom :src="imageZoom" ref="imageZoom" />
-    <portal-target name="portal-file-container-header" v-if="portal"></portal-target>
+    <portal-target
+      name="portal-file-container-header"
+      v-if="portal"
+    ></portal-target>
     <div class="print-scroll" ref="fileScroll">
       <div class="print" :class="[sizeClass, typeClass, ideogramSpacedClass]">
-        <folder-structure :show-last="true" v-if="parent && showMenuNavigation" />
-        <h2 v-if="filename && filename.split('|||').length != 3" class="file-title">{{filename}}</h2>
+        <folder-structure
+          :show-last="true"
+          v-if="parent && showMenuNavigation"
+        />
+        <h2
+          v-if="filename && filename.split('|||').length != 3"
+          class="file-title"
+        >
+          {{ filename }}
+        </h2>
 
         <div
-          v-if="fullLines && fullLines[0] && fullLines[0][0] && fullLines[0][0].line !== undefined && fullLines[0][0].line.audio !== undefined"
+          v-if="
+            fullLines &&
+            fullLines[0] &&
+            fullLines[0][0] &&
+            fullLines[0][0].line !== undefined &&
+            fullLines[0][0].line.audio !== undefined
+          "
         >
           <audio :src="fullLines[0][0].line.audio" controls />
         </div>
 
-        <template v-for="(line, lineIndex) in lines">
+        <template
+          v-for="(line, lineIndex) in lines"
+          :key="
+            'file-row-' +
+            (line[0] && line[0].key
+              ? `key-${line[0].key}`
+              : `no-key-${
+                  line[0] && line[0].lineIndex
+                    ? line[0].lineIndex
+                    : 'loop-' + lineIndex
+                }`)
+          "
+        >
           <file-row-print
             :line="line"
-            :lineIndex="line[0] && line[0].lineIndex ? line[0].lineIndex : lineIndex"
+            :lineIndex="
+              line[0] && line[0].lineIndex ? line[0].lineIndex : lineIndex
+            "
             @click.native="openBottomBarClick"
             @open-image="openImage"
             @open-footnote="openFootnote"
             @go-to-video-time="(time) => $emit('go-to-video-time', time)"
             ref="fileRowPrint"
-            :key="'file-row-' + (line[0] && line[0].key ? `key-${line[0].key}` : `no-key-${line[0] && line[0].lineIndex ? line[0].lineIndex : 'loop-' + lineIndex}`)"
           />
         </template>
 
         <div class="loading-container">
-          <md-progress-spinner md-mode="indeterminate" v-if="fileLoading"></md-progress-spinner>
+          <md-progress-spinner
+            md-mode="indeterminate"
+            v-if="fileLoading"
+          ></md-progress-spinner>
         </div>
 
         <add-remove-character-modal
@@ -51,29 +88,38 @@
     </div>
 
     <div class="pages no-print" v-if="totalPages > 1 && pagination">
-      <span v-for="n in totalPages" class="page" :key="n" @click="changeCurrentPage(n)">{{n}}</span>
+      <span
+        v-for="n in totalPages"
+        class="page"
+        :key="n"
+        @click="changeCurrentPage(n)"
+        >{{ n }}</span
+      >
     </div>
 
     <file-bottom-bar
       ref="fileBottomBar"
       @open-modal="openModal"
-      @reopen="(lineIndex, blockIndex) => reopenBottomBarByLineAndBlock(lineIndex, blockIndex)"
+      @reopen="
+        (lineIndex, blockIndex) =>
+          reopenBottomBarByLineAndBlock(lineIndex, blockIndex)
+      "
     />
   </div>
 </template>
 
-<script>
-import FileRowPrint from 'src/components/files/FileRowPrint';
-import FileBottomBar from 'src/components/files/FileBottomBar';
-import AddRemoveCharacterModal from 'src/components/modals/AddRemoveCharacter';
-import FootnoteModal from 'src/components/modals/Footnote';
-import HighlightModal from 'src/components/modals/Highlight';
-import BibleModal from 'src/components/modals/Bible';
-import OptionsManager from 'src/domain/options-manager';
-import ImageZoom from 'src/components/common/ImageZoom';
-import FolderStructure from 'src/components/files/FolderStructure';
+<script lang="ts">
+import FileRowPrint from "@/components/files/FileRowPrint";
+import FileBottomBar from "@/components/files/FileBottomBar";
+import AddRemoveCharacterModal from "@/components/modals/AddRemoveCharacter";
+import FootnoteModal from "@/components/modals/Footnote";
+import HighlightModal from "@/components/modals/Highlight";
+import BibleModal from "@/components/modals/Bible";
+import OptionsManager from "@/domain/options-manager";
+import ImageZoom from "@/components/common/ImageZoom";
+import FolderStructure from "@/components/files/FolderStructure";
 
-import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from "vuex";
 
 import {
   FILE_ACTION_FETCH_MY_CJK,
@@ -82,14 +128,13 @@ import {
   FILE_GETTER_FULL_FILE_TOTAL_PAGES,
   FILE_GETTER_CURRENT_PAGE,
   FILE_MUTATION_SET_CURRENT_PAGE,
-} from 'src/data/file/types';
+} from "@/data/file/types";
 
 // eslint-disable-next-line
-const PinyinWorker = require('worker-loader!src/workers/pinyin.js');
+import PinyinWorker from "@/workers/pinyin.js?worker";
 
 export default {
-  name: 'file-container',
-
+  name: "file-container",
   components: {
     FileRowPrint,
     AddRemoveCharacterModal,
@@ -110,7 +155,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    filename: '',
+    filename: "",
     fileLoading: false,
     parent: false,
     portal: false,
@@ -125,16 +170,16 @@ export default {
 
   data() {
     return {
-      imageZoom: '',
-      sizeClass: '',
-      typeClass: '',
-      ideogramSpacedClass: '',
+      imageZoom: "",
+      sizeClass: "",
+      typeClass: "",
+      ideogramSpacedClass: "",
       footnoteLine: null,
       footnoteLineIndex: null,
       bible: {
         bookIndex: 0,
-        chapter: '',
-        verse: '',
+        chapter: "",
+        verse: "",
       },
     };
   },
@@ -164,17 +209,17 @@ export default {
     this.options = optionsManager.getOptions();
     this.worker = new PinyinWorker();
 
-    this.worker.addEventListener('message', async e => {
-      if (e.data.type === 'changeCharacter') {
+    this.worker.addEventListener("message", async (e) => {
+      if (e.data.type === "changeCharacter") {
         this.updateByLineAndBlock(e.data.lineIndex, e.data.blockIndex);
       }
     });
 
     this.updateCss();
 
-    let type = 'known';
-    if (this.options.type === '4') {
-      type = 'unknown';
+    let type = "known";
+    if (this.options.type === "4") {
+      type = "unknown";
     }
 
     const source = this.options.hidePinyinSource;
@@ -232,30 +277,30 @@ export default {
 
     openBottomBarClick(e) {
       let element = e.target.parentNode;
-      if (!element.classList.contains('character')) {
+      if (!element.classList.contains("character")) {
         element = e.target;
       }
 
-      if (!element.classList.contains('character')) {
+      if (!element.classList.contains("character")) {
         return;
       }
 
       if (
-        element.getAttribute('data-line') === null &&
-        element.getAttribute('data-block') === null
+        element.getAttribute("data-line") === null &&
+        element.getAttribute("data-block") === null
       ) {
         return;
       }
 
-      const lineIndex = element.getAttribute('data-line');
-      const blockIndex = element.getAttribute('data-block');
+      const lineIndex = element.getAttribute("data-line");
+      const blockIndex = element.getAttribute("data-block");
 
       if (
         this.fullLines[lineIndex] &&
         this.fullLines[lineIndex][blockIndex] &&
         this.fullLines[lineIndex][blockIndex].b
       ) {
-        const bible = this.fullLines[lineIndex][blockIndex].b.split(':');
+        const bible = this.fullLines[lineIndex][blockIndex].b.split(":");
         this.bible.bookIndex = bible[0];
         this.bible.chapter = bible[1];
         this.bible.verse = bible[2];
@@ -264,7 +309,7 @@ export default {
       }
 
       if (!this.parent) {
-        this.$emit('open-bottom-bar', {
+        this.$emit("open-bottom-bar", {
           pinyin: this.lines[lineIndex][blockIndex].p,
           character: this.lines[lineIndex][blockIndex].c,
           lineIndex,
@@ -277,7 +322,7 @@ export default {
       this.openBottomBarByLineAndBlock(
         lineIndex,
         blockIndex,
-        e.ctrlKey || e.metaKey,
+        e.ctrlKey || e.metaKey
       );
     },
 
@@ -292,7 +337,7 @@ export default {
     },
 
     updateByLineAndBlock(lineIndex, blockIndex) {
-      const filteredElements = this.$refs.fileRowPrint.filter(item => {
+      const filteredElements = this.$refs.fileRowPrint.filter((item) => {
         return Number(item.lineIndex) === Number(lineIndex);
       });
 
@@ -319,28 +364,28 @@ export default {
 
     updateCss() {
       document.body.style.setProperty(
-        '--character-font-size',
-        this.options.ideogramSize,
+        "--character-font-size",
+        this.options.ideogramSize
       );
 
       document.body.style.setProperty(
-        '--pinyin-font-size',
-        this.options.pinyinSize,
+        "--pinyin-font-size",
+        this.options.pinyinSize
       );
 
       document.body.style.setProperty(
-        '--block-margin-bottom',
-        this.options.blockMarginBottom,
+        "--block-margin-bottom",
+        this.options.blockMarginBottom
       );
 
-      this.typeClass = '';
-      if (this.options.type === '2') {
-        this.typeClass = 'character-only';
+      this.typeClass = "";
+      if (this.options.type === "2") {
+        this.typeClass = "character-only";
       }
 
-      this.ideogramSpacedClass = 'ideogram-spaced';
-      if (this.options.ideogramSpaced === '0') {
-        this.ideogramSpacedClass = '';
+      this.ideogramSpacedClass = "ideogram-spaced";
+      if (this.options.ideogramSpaced === "0") {
+        this.ideogramSpacedClass = "";
       }
     },
 
@@ -354,7 +399,7 @@ export default {
 
     addCharacter(character) {
       this.worker.postMessage({
-        type: 'addCharacter',
+        type: "addCharacter",
         character,
         lines: this.lines,
         options: this.options,
@@ -363,7 +408,7 @@ export default {
 
     removeCharacter(character) {
       this.worker.postMessage({
-        type: 'removeCharacter',
+        type: "removeCharacter",
         character,
         lines: this.lines,
         options: this.options,
@@ -433,7 +478,7 @@ audio {
 .print .character,
 .print .character span {
   min-width: 0;
-  font-family: 'Noto Sans SC', 'Noto Sans TC', sans-serif;
+  font-family: "Noto Sans SC", "Noto Sans TC", sans-serif;
   font-weight: lighter;
   font-weight: 300;
 }

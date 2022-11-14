@@ -6,7 +6,7 @@
     </span>
   </div>
 </template>
-<script>
+<script lang="ts">
 import booksName from "@/data/bible/names";
 import OptionsManager from "@/domain/options-manager";
 

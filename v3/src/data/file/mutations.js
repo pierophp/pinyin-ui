@@ -1,7 +1,7 @@
-import Vue from 'vue';
-import pinyin from 'src/helpers/pinyin';
-import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
-import * as types from './types';
+import Vue from "vue";
+import pinyin from "@/helpers/pinyin";
+import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
+import * as types from "./types";
 
 function addHighlight(state, data) {
   for (
@@ -24,13 +24,13 @@ function addHighlight(state, data) {
       j <= parseInt(endBlock, 10);
       j += 1
     ) {
-      state.file.find(item => Number(item[0].lineIndex) === Number(i))[j].h =
+      state.file.find((item) => Number(item[0].lineIndex) === Number(i))[j].h =
         data.type;
       state.fullFile[i][j].h = data.type;
 
       if (data.worker) {
         data.worker.postMessage({
-          type: 'changeCharacter',
+          type: "changeCharacter",
           lineIndex: i,
           blockIndex: j,
         });
@@ -104,15 +104,15 @@ export default {
     file.forEach((line, lineIndex) => {
       line.forEach((block, blockIndex) => {
         if (block.h === undefined) {
-          file[lineIndex][blockIndex].h = '';
+          file[lineIndex][blockIndex].h = "";
         }
 
         if (block.p === undefined) {
-          file[lineIndex][blockIndex].p = '';
+          file[lineIndex][blockIndex].p = "";
         }
 
         if (block.c === undefined) {
-          file[lineIndex][blockIndex].c = '';
+          file[lineIndex][blockIndex].c = "";
         }
       });
     });
@@ -127,7 +127,7 @@ export default {
   [types.FILE_MUTATION_SET_LINE_AND_SAVE](state, { line, lineIndex }) {
     Vue.set(state.fullFile, lineIndex, line);
     const relativeIndex = state.file.findIndex(
-      blocks => blocks[0] && Number(blocks[0].lineIndex) === Number(lineIndex),
+      (blocks) => blocks[0] && Number(blocks[0].lineIndex) === Number(lineIndex)
     );
 
     if (relativeIndex >= 0) {
@@ -170,12 +170,12 @@ export default {
 
   [types.FILE_MUTATION_UPDATE_PINYIN](state, data) {
     const newPinyin = separatePinyinInSyllables(pinyin(data.pinyin)).join(
-      String.fromCharCode(160),
+      String.fromCharCode(160)
     );
 
     const relativeIndex = state.file.findIndex(
-      blocks =>
-        blocks[0] && Number(blocks[0].lineIndex) === Number(data.lineIndex),
+      (blocks) =>
+        blocks[0] && Number(blocks[0].lineIndex) === Number(data.lineIndex)
     );
 
     if (relativeIndex >= 0) {
@@ -188,7 +188,7 @@ export default {
   },
 
   [types.FILE_MUTATION_UPDATE_CHARACTER](state, data) {
-    const line = state.file.find(item => {
+    const line = state.file.find((item) => {
       return Number(item[0].lineIndex) === Number(data.lineIndex);
     });
 
@@ -231,7 +231,7 @@ export default {
       startBlock,
       endLine,
       endBlock,
-      type: '',
+      type: "",
       worker: data.worker,
     });
   },
@@ -247,7 +247,7 @@ export default {
   },
 
   [types.FILE_MUTATION_CONCATENATE_LINE](state, data) {
-    data.content.forEach(newBlock => {
+    data.content.forEach((newBlock) => {
       state.fullFile[data.lineIndex].push(newBlock);
     });
     state.fileChangeTimestamp = Date.now();
@@ -265,8 +265,8 @@ export default {
     }
 
     state.fullFile[data.lineIndex].push({
-      p: '',
-      c: '',
+      p: "",
+      c: "",
     });
     state.fileChangeTimestamp = Date.now();
     state.fullFileString = JSON.stringify(state.fullFile);
@@ -282,13 +282,13 @@ export default {
     const lineIndex = parseInt(data.lineIndex, 10);
     const blockIndex = parseInt(data.blockIndex, 10);
     const line = state.fullFile[data.lineIndex].filter(
-      (block, index) => index !== blockIndex,
+      (block, index) => index !== blockIndex
     );
 
     Vue.set(state.fullFile, lineIndex, line);
 
     const fileIndex = state.file.findIndex(
-      item => Number(item[0].lineIndex) === Number(data.lineIndex),
+      (item) => Number(item[0].lineIndex) === Number(data.lineIndex)
     );
 
     if (fileIndex >= 0) {
@@ -351,7 +351,7 @@ export default {
     for (const [lineIndex, line] of lines.entries()) {
       if (line && line[0] !== undefined && line[0].line !== undefined) {
         const type = line[0].line.type;
-        if (type === 'foot') {
+        if (type === "foot") {
           footnotes.push(lineIndex);
         }
       }

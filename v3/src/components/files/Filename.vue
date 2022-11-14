@@ -1,27 +1,23 @@
 <template>
-<span class="filename-container no-print">
+  <span class="filename-container no-print">
     <span v-if="filenameRender">{{ filenameRender }}</span>
-    <file-row-print
-      v-if="!filenameRender"
-      :line="line"
-      :lineIndex="0"
-      >
+    <file-row-print v-if="!filenameRender" :line="line" :lineIndex="0">
     </file-row-print>
-</span>
+  </span>
 </template>
 
-<script>
-import FileRowPrint from 'src/components/files/FileRowPrint';
+<script lang="ts">
+import FileRowPrint from "@/components/files/FileRowPrint";
 
 export default {
-  name: 'filename',
+  name: "filename",
   components: {
     FileRowPrint,
   },
 
   data() {
     return {
-      filenameRender: '',
+      filenameRender: "",
       line: [],
     };
   },
@@ -32,7 +28,7 @@ export default {
     },
   },
   props: {
-    filename: '',
+    filename: "",
   },
 
   created() {
@@ -41,15 +37,15 @@ export default {
 
   methods: {
     update() {
-      const fileSplit = this.filename.split('|||');
+      const fileSplit = this.filename.split("|||");
       this.filenameRender = this.filename;
 
       this.line = [];
       if (fileSplit.length === 3) {
-        this.filenameRender = '';
+        this.filenameRender = "";
         const pinyinList = fileSplit[2].split(String.fromCharCode(160));
         let i = 0;
-        fileSplit[1].split(' ').forEach(word => {
+        fileSplit[1].split(" ").forEach((word) => {
           const pinyin = [];
           // eslint-disable-next-line
           for (const w of word) {

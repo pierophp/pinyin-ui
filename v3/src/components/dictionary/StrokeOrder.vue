@@ -13,28 +13,38 @@
 
     <div id="partial-hanzi-writer" v-show="partial"></div>
 
-    <md-button class="md-icon-button md-dense md-raised md-primary" @click.native="previous">
+    <md-button
+      class="md-icon-button md-dense md-raised md-primary"
+      @click.native="previous"
+    >
       <md-icon>chevron_left</md-icon>
     </md-button>
 
-    <md-button class="md-icon-button md-dense md-raised md-primary" @click.native="animate">
+    <md-button
+      class="md-icon-button md-dense md-raised md-primary"
+      @click.native="animate"
+    >
       <md-icon>play_arrow</md-icon>
     </md-button>
 
-    <md-button class="md-icon-button md-dense md-raised md-primary" @click.native="next">
+    <md-button
+      class="md-icon-button md-dense md-raised md-primary"
+      @click.native="next"
+    >
       <md-icon>chevron_right</md-icon>
     </md-button>
   </div>
 </template>
-<script>
-import axios from 'axios';
+
+<script lang="ts">
+import axios from "axios";
 
 function renderFanningStrokes(HanziWriter, target, strokes) {
-  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.style.width = '230px';
-  svg.style.height = '230px';
-  svg.style.border = '1px solid #EEE';
-  svg.style.marginRight = '3px';
+  var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.style.width = "230px";
+  svg.style.height = "230px";
+  svg.style.border = "1px solid #EEE";
+  svg.style.marginRight = "3px";
 
   while (target.firstChild) {
     target.removeChild(target.firstChild);
@@ -42,25 +52,25 @@ function renderFanningStrokes(HanziWriter, target, strokes) {
 
   target.appendChild(svg);
 
-  const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
   const transformData = HanziWriter.getScalingTransform(230, 230);
 
-  group.setAttributeNS(null, 'transform', transformData.transform);
+  group.setAttributeNS(null, "transform", transformData.transform);
 
   svg.appendChild(group);
 
-  strokes.forEach(function(strokePath) {
-    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttributeNS(null, 'd', strokePath);
+  strokes.forEach(function (strokePath) {
+    var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttributeNS(null, "d", strokePath);
 
-    path.style.fill = '#555';
+    path.style.fill = "#555";
     group.appendChild(path);
   });
 }
 
 export default {
-  name: 'dictionary-stroke-order',
+  name: "dictionary-stroke-order",
   watch: {
     ideograms() {
       this.update();
@@ -77,12 +87,13 @@ export default {
     };
   },
   async mounted() {
-    const HanziWriter = (await import(/* webpackChunkName: "hanzi-writer" */ 'hanzi-writer'))
-      .default;
+    const HanziWriter = (
+      await import(/* webpackChunkName: "hanzi-writer" */ "hanzi-writer")
+    ).default;
     this.hanziWriterClass = HanziWriter;
 
-    this.writer = new HanziWriter('hanzi-writer', '', {
-      onLoadCharDataSuccess: charData => {
+    this.writer = new HanziWriter("hanzi-writer", "", {
+      onLoadCharDataSuccess: (charData) => {
         this.charData = charData;
       },
       // this method doesn't work async
@@ -91,7 +102,7 @@ export default {
           return;
         }
 
-        this.loadIdeogram(char).then(response => onComplete(response));
+        this.loadIdeogram(char).then((response) => onComplete(response));
       },
       showOutline: true,
       showCharacter: true,
@@ -102,11 +113,11 @@ export default {
       delayBetweenStrokes: 300, // delay between drawing subsequent strokes in ms
       strokeFadeDuration: 400,
       delayBetweenStrokes: 200,
-      strokeColor: '#555',
-      radicalColor: '#143dd9',
-      highlightColor: '#AAF', // color used to highlight strokes as a hint during quizzing
-      outlineColor: '#DDD',
-      drawingColor: '#333', // color of the line drawn by the user during quizzing
+      strokeColor: "#555",
+      radicalColor: "#143dd9",
+      highlightColor: "#AAF", // color used to highlight strokes as a hint during quizzing
+      outlineColor: "#DDD",
+      drawingColor: "#333", // color of the line drawn by the user during quizzing
       showHintAfterMisses: 3, // give a hint after this many subsequent mistakes during quizzing
       highlightOnComplete: true, // flash the character when the quiz is successfully completed
       leniency: 1,
@@ -122,7 +133,7 @@ export default {
       });
     },
     previous() {
-      const target = document.getElementById('partial-hanzi-writer');
+      const target = document.getElementById("partial-hanzi-writer");
 
       this.currentStroke -= 1;
       if (this.currentStroke < 0) {
@@ -136,7 +147,7 @@ export default {
       renderFanningStrokes(this.hanziWriterClass, target, strokesPortion);
     },
     next() {
-      const target = document.getElementById('partial-hanzi-writer');
+      const target = document.getElementById("partial-hanzi-writer");
 
       this.currentStroke += 1;
       if (this.currentStroke > this.charData.strokes.length) {
@@ -151,9 +162,9 @@ export default {
     },
     changeIdeogram(itemId) {
       this.items.forEach((item, i) => {
-        this.items[i].classActive = '';
+        this.items[i].classActive = "";
       });
-      this.items[itemId].classActive = 'active';
+      this.items[itemId].classActive = "active";
       this.currentStroke = 0;
       this.partial = false;
       if (this.writer) {
@@ -165,9 +176,11 @@ export default {
         return this.hanziWriterCache[char];
       }
 
-      this.hanziWriterCache[char] = (await axios.get(
-        `https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${char}.json`,
-      )).data;
+      this.hanziWriterCache[char] = (
+        await axios.get(
+          `https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${char}.json`
+        )
+      ).data;
 
       return this.hanziWriterCache[char];
     },
@@ -185,7 +198,7 @@ export default {
         }
 
         this.items.push({
-          classActive: '',
+          classActive: "",
           ideogram: this.ideograms[i],
         });
 

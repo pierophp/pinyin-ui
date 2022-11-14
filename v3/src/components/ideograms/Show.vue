@@ -2,17 +2,21 @@
   <div class="ideogram-show">
     <span
       v-for="(data, index) in printData"
-      :class="[data.ideogramClass, highlights && highlights[index] ? 'highlight' : '']"
+      :class="[
+        data.ideogramClass,
+        highlights && highlights[index] ? 'highlight' : '',
+      ]"
       :style="{ color: data.toneColor }"
       v-bind:key="index"
-    >{{data.character}}</span>
+      >{{ data.character }}</span
+    >
   </div>
 </template>
 
-<script>
-import ideogramsShow from 'src/helpers/ideograms.show';
+<script lang="ts">
+import ideogramsShow from "@/helpers/ideograms.show";
 export default {
-  name: 'ideograms-show',
+  name: "ideograms-show",
   data() {
     return {
       printData: [],
@@ -20,8 +24,8 @@ export default {
   },
   props: {
     useSpaces: false,
-    pinyin: '',
-    character: '',
+    pinyin: "",
+    character: "",
     highlights: {},
   },
   created() {

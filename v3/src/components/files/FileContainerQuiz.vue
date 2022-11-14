@@ -2,13 +2,21 @@
   <div class="print-container">
     <div class="print-scroll" ref="fileScroll">
       <div class="print" :class="[sizeClass, typeClass]">
-        <folder-structure :show-last="true" v-if="parent"/>
-        <h2 v-if="filename && filename.split('|||').length != 3">{{filename}}</h2>
+        <folder-structure :show-last="true" v-if="parent" />
+        <h2 v-if="filename && filename.split('|||').length != 3">
+          {{ filename }}
+        </h2>
 
         <div
-          v-if="lines && lines[0] && lines[0][0] && lines[0][0].line !== undefined && lines[0][0].line.audio !== undefined"
+          v-if="
+            lines &&
+            lines[0] &&
+            lines[0][0] &&
+            lines[0][0].line !== undefined &&
+            lines[0][0].line.audio !== undefined
+          "
         >
-          <audio :src="lines[0][0].line.audio" controls/>
+          <audio :src="lines[0][0].line.audio" controls />
         </div>
 
         <template v-for="(line, lineIndex) in lines">
@@ -17,13 +25,21 @@
             :lineIndex="lineIndex"
             @click.native="openBottomBarClick"
             ref="fileRowPrint"
-            :key="'file-row-' + (line[0] && line[0].key ? `key-${line[0].key}` : `no-key-${lineIndex}`)"
+            :key="
+              'file-row-' +
+              (line[0] && line[0].key
+                ? `key-${line[0].key}`
+                : `no-key-${lineIndex}`)
+            "
             v-if="line && !line.small"
           />
         </template>
 
         <div class="loading-container">
-          <md-progress-spinner md-mode="indeterminate" v-if="fileLoading"></md-progress-spinner>
+          <md-progress-spinner
+            md-mode="indeterminate"
+            v-if="fileLoading"
+          ></md-progress-spinner>
         </div>
       </div>
     </div>
@@ -31,23 +47,23 @@
 </template>
 
 <script>
-import FileRowQuiz from 'src/components/files/FileRowQuiz';
-import AddRemoveCharacterModal from 'src/components/modals/AddRemoveCharacter';
-import OptionsManager from 'src/domain/options-manager';
-import FolderStructure from 'src/components/files/FolderStructure';
+import FileRowQuiz from "@/components/files/FileRowQuiz";
+import AddRemoveCharacterModal from "@/components/modals/AddRemoveCharacter";
+import OptionsManager from "@/domain/options-manager";
+import FolderStructure from "@/components/files/FolderStructure";
 
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 
 import {
   FILE_ACTION_FETCH_MY_CJK,
   FILE_GETTER_FOOTNOTES,
-} from 'src/data/file/types';
+} from "@/data/file/types";
 
 // eslint-disable-next-line
-const PinyinWorker = require('worker-loader!src/workers/pinyin.js');
+const PinyinWorker = require("worker-loader!@/workers/pinyin.js");
 
 export default {
-  name: 'file-container-quiz',
+  name: "file-container-quiz",
 
   components: {
     FileRowQuiz,
@@ -64,23 +80,23 @@ export default {
       type: Array,
       default: () => [],
     },
-    filename: '',
+    filename: "",
     fileLoading: false,
     parent: false,
   },
 
   data() {
     return {
-      imageZoom: '',
-      sizeClass: '',
-      typeClass: '',
-      ideogramSpacedClass: '',
+      imageZoom: "",
+      sizeClass: "",
+      typeClass: "",
+      ideogramSpacedClass: "",
       footnoteLine: null,
       footnoteLineIndex: null,
       bible: {
         bookIndex: 0,
-        chapter: '',
-        verse: '',
+        chapter: "",
+        verse: "",
       },
     };
   },
@@ -108,9 +124,9 @@ export default {
     this.options = optionsManager.getOptions();
     this.worker = new PinyinWorker();
 
-    this.worker.addEventListener('message', async e => {
-      if (e.data.type === 'changeCharacter') {
-        const filteredElements = this.$refs.fileRowPrint.filter(item => {
+    this.worker.addEventListener("message", async (e) => {
+      if (e.data.type === "changeCharacter") {
+        const filteredElements = this.$refs.fileRowPrint.filter((item) => {
           return item.lineIndex === e.data.lineIndex;
         });
 
@@ -122,9 +138,9 @@ export default {
 
     this.updateCss();
 
-    let type = 'known';
-    if (this.options.type === '4') {
-      type = 'unknown';
+    let type = "known";
+    if (this.options.type === "4") {
+      type = "unknown";
     }
 
     const source = this.options.hidePinyinSource;
@@ -158,30 +174,30 @@ export default {
 
     openBottomBarClick(e) {
       let element = e.target.parentNode;
-      if (!element.classList.contains('character')) {
+      if (!element.classList.contains("character")) {
         element = e.target;
       }
 
-      if (!element.classList.contains('character')) {
+      if (!element.classList.contains("character")) {
         return;
       }
 
       if (
-        element.getAttribute('data-line') === null &&
-        element.getAttribute('data-block') === null
+        element.getAttribute("data-line") === null &&
+        element.getAttribute("data-block") === null
       ) {
         return;
       }
 
-      const lineIndex = element.getAttribute('data-line');
-      const blockIndex = element.getAttribute('data-block');
+      const lineIndex = element.getAttribute("data-line");
+      const blockIndex = element.getAttribute("data-block");
 
       if (
         this.lines[lineIndex] &&
         this.lines[lineIndex][blockIndex] &&
         this.lines[lineIndex][blockIndex].b
       ) {
-        const bible = this.lines[lineIndex][blockIndex].b.split(':');
+        const bible = this.lines[lineIndex][blockIndex].b.split(":");
         this.bible.bookIndex = bible[0];
         this.bible.chapter = bible[1];
         this.bible.verse = bible[2];
@@ -190,7 +206,7 @@ export default {
       }
 
       if (!this.parent) {
-        this.$emit('open-bottom-bar', {
+        this.$emit("open-bottom-bar", {
           pinyin: this.lines[lineIndex][blockIndex].p,
           character: this.lines[lineIndex][blockIndex].c,
           lineIndex,
@@ -203,7 +219,7 @@ export default {
       this.openBottomBarByLineAndBlock(
         lineIndex,
         blockIndex,
-        e.ctrlKey || e.metaKey,
+        e.ctrlKey || e.metaKey
       );
     },
 
@@ -226,28 +242,28 @@ export default {
 
     updateCss() {
       document.body.style.setProperty(
-        '--character-font-size',
-        this.options.ideogramSize,
+        "--character-font-size",
+        this.options.ideogramSize
       );
 
       document.body.style.setProperty(
-        '--pinyin-font-size',
-        this.options.pinyinSize,
+        "--pinyin-font-size",
+        this.options.pinyinSize
       );
 
       document.body.style.setProperty(
-        '--block-margin-bottom',
-        this.options.blockMarginBottom,
+        "--block-margin-bottom",
+        this.options.blockMarginBottom
       );
 
-      this.typeClass = '';
-      if (this.options.type === '2') {
-        this.typeClass = 'character-only';
+      this.typeClass = "";
+      if (this.options.type === "2") {
+        this.typeClass = "character-only";
       }
 
-      this.ideogramSpacedClass = 'ideogram-spaced';
-      if (this.options.ideogramSpaced === '0') {
-        this.ideogramSpacedClass = '';
+      this.ideogramSpacedClass = "ideogram-spaced";
+      if (this.options.ideogramSpaced === "0") {
+        this.ideogramSpacedClass = "";
       }
     },
 
@@ -257,7 +273,7 @@ export default {
 
     addCharacter(character) {
       this.worker.postMessage({
-        type: 'addCharacter',
+        type: "addCharacter",
         character,
         lines: this.lines,
         options: this.options,
@@ -266,7 +282,7 @@ export default {
 
     removeCharacter(character) {
       this.worker.postMessage({
-        type: 'removeCharacter',
+        type: "removeCharacter",
         character,
         lines: this.lines,
         options: this.options,
@@ -328,7 +344,7 @@ export default {
 .print .character,
 .print .character span {
   min-width: 0;
-  font-family: 'Noto Sans SC', 'Noto Sans TC', sans-serif;
+  font-family: "Noto Sans SC", "Noto Sans TC", sans-serif;
   font-weight: lighter;
   font-weight: 300;
 }

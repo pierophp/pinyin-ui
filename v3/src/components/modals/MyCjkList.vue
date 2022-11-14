@@ -3,24 +3,32 @@
     <md-dialog ref="dialogKnownWords" :md-active.sync="this.active">
       <md-dialog-title>
         {{ $t(action) }}
-        <span v-if="type === 'words' && hsk !== 999">- HSK {{hsk}}</span>
-        <span v-if="type === 'ideograms' && frequency !== 999">- {{ $t('frequency') }} {{frequency}}</span>
+        <span v-if="type === 'words' && hsk !== 999">- HSK {{ hsk }}</span>
+        <span v-if="type === 'ideograms' && frequency !== 999"
+          >- {{ $t("frequency") }} {{ frequency }}</span
+        >
       </md-dialog-title>
       <md-dialog-content>
         <table class="spaced-table">
           <thead>
             <tr>
-              <th>{{ $t('ideogram') }}</th>
-              <th>{{ $t('pronunciation') }}</th>
+              <th>{{ $t("ideogram") }}</th>
+              <th>{{ $t("pronunciation") }}</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in renderItems" :key="item.ideogram + item.pronunciation">
+            <tr
+              v-for="(item, index) in renderItems"
+              :key="item.ideogram + item.pronunciation"
+            >
               <td class="ideogram">
-                <ideograms-show :pinyin="item.pronunciation" :character="item.ideogram"/>
+                <ideograms-show
+                  :pinyin="item.pronunciation"
+                  :character="item.ideogram"
+                />
               </td>
-              <td>{{item.pronunciation}}</td>
+              <td>{{ item.pronunciation }}</td>
 
               <td v-if="action === 'unknown'" class="cell-button">
                 <md-button
@@ -61,7 +69,9 @@
       </md-dialog-content>
 
       <md-dialog-actions>
-        <md-button class="md-primary" @click.native="closeDialog()">OK</md-button>
+        <md-button class="md-primary" @click.native="closeDialog()"
+          >OK</md-button
+        >
       </md-dialog-actions>
     </md-dialog>
 
@@ -74,19 +84,19 @@
 </template>
 
 <script>
-import OptionsManager from 'src/domain/options-manager';
-import IdeogramsShow from 'src/components/ideograms/Show';
-import AddRemoveCharacterModal from 'src/components/modals/AddRemoveCharacter';
+import OptionsManager from "@/domain/options-manager";
+import IdeogramsShow from "@/components/ideograms/Show";
+import AddRemoveCharacterModal from "@/components/modals/AddRemoveCharacter";
 
-import { mapMutations } from 'vuex';
+import { mapMutations } from "vuex";
 
-import { FILE_MUTATION_SET_MY_CJK_TEMP } from 'src/data/file/types';
+import { FILE_MUTATION_SET_MY_CJK_TEMP } from "@/data/file/types";
 
 const optionsManager = new OptionsManager(undefined);
 const options = optionsManager.getOptions();
 
 export default {
-  name: 'modal-my-cjk',
+  name: "modal-my-cjk",
   data() {
     return {
       options,
@@ -94,11 +104,11 @@ export default {
     };
   },
   props: {
-    active: '',
-    type: '',
-    action: '',
-    hsk: '',
-    frequency: '',
+    active: "",
+    type: "",
+    action: "",
+    hsk: "",
+    frequency: "",
     items: {
       type: Array,
       default: () => [],
@@ -124,7 +134,7 @@ export default {
     },
 
     closeDialog() {
-      this.$emit('close', true);
+      this.$emit("close", true);
     },
     openModal(add, cjk, selectedCharacter) {
       this.selectedCharacter = selectedCharacter;
@@ -133,7 +143,7 @@ export default {
     },
 
     addRemoveCharacter() {
-      this.$emit('change', this.selectedCharacter);
+      this.$emit("change", this.selectedCharacter);
       setTimeout(() => {
         this.forceUpdate();
       }, 100);

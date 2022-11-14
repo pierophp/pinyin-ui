@@ -6,38 +6,43 @@
       :highlights="highlights"
       ref="first-ideogram-show"
     />
-    <template v-if="secondOnlyDiff">[
-      <ideograms-show :pinyin="pinyin" :character="secondOnlyDiff" ref="second-ideogram-show"/>]
+    <template v-if="secondOnlyDiff"
+      >[
+      <ideograms-show
+        :pinyin="pinyin"
+        :character="secondOnlyDiff"
+        ref="second-ideogram-show"
+      />]
     </template>
   </div>
 </template>
 
-<script>
-import IdeogramsShow from 'src/components/ideograms/Show';
+<script lang="ts">
+import IdeogramsShow from "@/components/ideograms/Show";
 
 export default {
-  name: 'traditional-simplified-show',
+  name: "traditional-simplified-show",
   components: {
     IdeogramsShow,
   },
   props: {
-    pinyin: '',
-    ideograms: '',
+    pinyin: "",
+    ideograms: "",
     highlights: {},
     variants: Array,
   },
   watch: {
     ideograms() {
-      if (this.$refs['first-ideogram-show']) {
+      if (this.$refs["first-ideogram-show"]) {
         this.$nextTick(() => {
-          this.$refs['first-ideogram-show'].updateRender();
+          this.$refs["first-ideogram-show"].updateRender();
         });
       }
     },
     secondOnlyDiff() {
-      if (this.$refs['second-ideogram-show']) {
+      if (this.$refs["second-ideogram-show"]) {
         this.$nextTick(() => {
-          this.$refs['second-ideogram-show'].updateRender();
+          this.$refs["second-ideogram-show"].updateRender();
         });
       }
     },
@@ -46,18 +51,18 @@ export default {
     secondOnlyDiff() {
       const secondWithDiffList = [];
       if (!this.variants) {
-        return '';
+        return "";
       }
 
       for (const variant of this.variants) {
         const total = variant.length;
-        let secondWithDiff = '';
+        let secondWithDiff = "";
         for (let i = 0; i < total; i += 1) {
           const firstChar = this.ideograms[i];
           const secondChar = variant[i];
 
           if (firstChar === secondChar) {
-            secondWithDiff += '-';
+            secondWithDiff += "-";
           } else {
             secondWithDiff += secondChar;
           }
@@ -65,7 +70,7 @@ export default {
         secondWithDiffList.push(secondWithDiff);
       }
 
-      return secondWithDiffList.join('/');
+      return secondWithDiffList.join("/");
     },
   },
 };

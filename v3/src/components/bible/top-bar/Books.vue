@@ -30,7 +30,7 @@
   </div>
 </template>
 
-<script type="ts">
+<script lang="ts">
 import { mapMutations, mapGetters } from "vuex";
 
 import {

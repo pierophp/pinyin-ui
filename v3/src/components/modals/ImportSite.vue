@@ -1,7 +1,9 @@
 <template>
   <v-dialog v-model="modalOpen" width="500">
     <v-card>
-      <v-card-title class="headline grey lighten-2" primary-title>{{ $t('import_site') }}</v-card-title>
+      <v-card-title class="headline grey lighten-2" primary-title>{{
+        $t("import_site")
+      }}</v-card-title>
 
       <v-card-text>
         <div class="field-container">
@@ -14,28 +16,30 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn flat @click="closeDialog()">{{ $t('cancel') }}</v-btn>
-        <v-btn flat color="primary" @click="confirm()">{{ $t('import') }}</v-btn>
+        <v-btn flat @click="closeDialog()">{{ $t("cancel") }}</v-btn>
+        <v-btn flat color="primary" @click="confirm()">{{
+          $t("import")
+        }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 
-import { FILE_ACTION_IMPORT_FILE } from 'src/data/file/types';
+import { FILE_ACTION_IMPORT_FILE } from "@/data/file/types";
 
 export default {
-  name: 'modal-import-site',
+  name: "modal-import-site",
   data() {
     return {
-      siteUrl: '',
+      siteUrl: "",
       modalOpen: false,
     };
   },
   props: {
-    filename: '',
+    filename: "",
   },
   methods: {
     confirm() {
@@ -44,7 +48,7 @@ export default {
         content: this.siteUrl,
         filename: this.filename,
       });
-      this.siteUrl = '';
+      this.siteUrl = "";
     },
     onOpen() {
       setTimeout(() => {
@@ -66,7 +70,7 @@ export default {
 </script>
 
 <style scoped>
-input[type='text'] {
+input[type="text"] {
   width: 100%;
 }
 </style>

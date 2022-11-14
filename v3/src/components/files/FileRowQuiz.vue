@@ -17,21 +17,23 @@
           v-if="!block.small && !block.footnote && !block.noIdeogram"
         >
           <template
-            v-for="(data) in block.printDataCharacters"
+            v-for="data in block.printDataCharacters"
             v-if="!ideogramsToLearn[block.character]"
           >
             <template>{{ data.character }}</template>
           </template>
 
           <template
-            v-for="(data) in block.printDataCharacters"
+            v-for="data in block.printDataCharacters"
             v-if="ideogramsToLearn[block.character]"
-          >&nbsp;&nbsp;&nbsp;&nbsp;</template>
+            >&nbsp;&nbsp;&nbsp;&nbsp;</template
+          >
 
           <span
             class="tip-pinyin"
             v-if="ideogramsToLearn[block.character] && block.pinyin"
-          >({{ block.pinyin }})</span>
+            >({{ block.pinyin }})</span
+          >
         </div>
       </div>
     </template>
@@ -40,16 +42,16 @@
 </template>
 
 <script>
-import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
-import ideogramsShow from 'src/helpers/ideograms.show';
-import OptionsManager from 'src/domain/options-manager';
+import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
+import ideogramsShow from "@/helpers/ideograms.show";
+import OptionsManager from "@/domain/options-manager";
 
 export default {
-  name: 'file-row-quiz',
+  name: "file-row-quiz",
   components: {},
   data() {
     return {
-      type: '',
+      type: "",
       loading: true,
       ideogramsToLearn: {
         喜樂: 1,
@@ -73,7 +75,7 @@ export default {
     },
   },
   async created() {
-    this.type = '';
+    this.type = "";
     if (this.line[0] !== undefined && this.line[0].line !== undefined) {
       const type = this.line[0].line.type;
       this.type = `type-${type}`;
@@ -109,17 +111,17 @@ export default {
 
       const optionsManager = new OptionsManager(this.$i18n);
       const options = optionsManager.getOptions();
-      generatedBlock.classBold = '';
+      generatedBlock.classBold = "";
       if (block.isBold === 1) {
-        generatedBlock.classBold = 'bold';
+        generatedBlock.classBold = "bold";
       }
 
-      generatedBlock.classItalic = '';
+      generatedBlock.classItalic = "";
       if (block.isItalic === 1) {
-        generatedBlock.classItalic = 'italic';
+        generatedBlock.classItalic = "italic";
       }
 
-      generatedBlock.classExtra = '';
+      generatedBlock.classExtra = "";
 
       const chars = block.c.toString();
 
@@ -127,7 +129,7 @@ export default {
       const pinyin = separatePinyinInSyllables(block.p, true);
 
       generatedBlock.character = block.c;
-      generatedBlock.pinyin = pinyin.join('');
+      generatedBlock.pinyin = pinyin.join("");
       generatedBlock.printDataCharacters = ideogramsShow({
         character: block.c,
         pinyin: block.p,

@@ -2,21 +2,22 @@
   <div>
     <div v-if="isMobile" class="pleco-container">
       <v-btn
-        :href="
-          `plecoapi://x-callback-url/s?hw=${dictionary.ideograms}&mode=df&py=${pinyinNumbers}`
-        "
+        :href="`plecoapi://x-callback-url/s?hw=${dictionary.ideograms}&mode=df&py=${pinyinNumbers}`"
         target="_blank"
         small
-      >{{ $t('open_pleco') }}</v-btn>
+        >{{ $t("open_pleco") }}</v-btn
+      >
     </div>
     <div v-if="dictionary.measure_words && dictionary.measure_words.length">
-      <b>{{ $t('measure_words') }}:</b>
-      {{ dictionary.measure_words.join(', ') }}
+      <b>{{ $t("measure_words") }}:</b>
+      {{ dictionary.measure_words.join(", ") }}
     </div>
 
     <div class="labels">
-      <span v-if="dictionary.is_separable">{{ $t('separable_verb') }}</span>
-      <span v-if="dictionary.hsk && dictionary.hsk < 999">HSK{{ dictionary.hsk }}</span>
+      <span v-if="dictionary.is_separable">{{ $t("separable_verb") }}</span>
+      <span v-if="dictionary.hsk && dictionary.hsk < 999"
+        >HSK{{ dictionary.hsk }}</span
+      >
     </div>
 
     <dictionary-render
@@ -30,14 +31,14 @@
 </template>
 
 <script>
-import DictionaryRender from 'src/components/dictionary/DictionaryRender';
-import OptionsManager from 'src/domain/options-manager';
-import isMobile from 'src/helpers/is-mobile';
-import pinyinAccentsToNumbers from 'src/helpers/pinyin.accents.to.numbers';
-import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
+import DictionaryRender from "@/components/dictionary/DictionaryRender";
+import OptionsManager from "@/domain/options-manager";
+import isMobile from "@/helpers/is-mobile";
+import pinyinAccentsToNumbers from "@/helpers/pinyin.accents.to.numbers";
+import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 
 export default {
-  name: 'dictionary-details',
+  name: "dictionary-details",
   components: {
     DictionaryRender,
   },
@@ -46,35 +47,26 @@ export default {
     const options = optionsManager.getOptions();
     const translationLanguage = options.translationLanguage;
 
-    const languagesPt = ['pt', 'chinese_tools_pt', 'glosbe_pt'];
-    const languagesEs = ['chinese_tools_es', 'glosbe_es', 'es'];
+    const languagesPt = ["pt", "chinese_tools_pt", "glosbe_pt"];
+    const languagesEs = ["chinese_tools_es", "glosbe_es", "es"];
     const languagesEn = [
-      'unihan',
-      'cedict',
-      'chinese_tools_en',
-      'glosbe_en',
-      'en',
+      "unihan",
+      "cedict",
+      "chinese_tools_en",
+      "glosbe_en",
+      "en",
     ];
 
     let types = [];
-    if (translationLanguage === 'pt') {
-      types = types
-        .concat(languagesPt)
-        .concat(languagesEs)
-        .concat(languagesEn);
-    } else if (translationLanguage === 'es') {
-      types = types
-        .concat(languagesEs)
-        .concat(languagesPt)
-        .concat(languagesEn);
+    if (translationLanguage === "pt") {
+      types = types.concat(languagesPt).concat(languagesEs).concat(languagesEn);
+    } else if (translationLanguage === "es") {
+      types = types.concat(languagesEs).concat(languagesPt).concat(languagesEn);
     } else {
-      types = types
-        .concat(languagesEn)
-        .concat(languagesEs)
-        .concat(languagesPt);
+      types = types.concat(languagesEn).concat(languagesEs).concat(languagesPt);
     }
 
-    types.push('moedict');
+    types.push("moedict");
 
     return {
       types: types,
@@ -90,12 +82,12 @@ export default {
   computed: {
     pinyinNumbers() {
       if (!this.pinyin) {
-        return '';
+        return "";
       }
 
       return separatePinyinInSyllables(this.pinyin)
-        .map(item => pinyinAccentsToNumbers(item))
-        .join('');
+        .map((item) => pinyinAccentsToNumbers(item))
+        .join("");
     },
   },
 };

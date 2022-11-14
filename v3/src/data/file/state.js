@@ -1,8 +1,8 @@
-import LocalStorage from 'src/helpers/local-storage';
+import LocalStorage from "@/helpers/local-storage";
 
 let myCjk = {};
-if (LocalStorage.has('my-cjk')) {
-  myCjk = LocalStorage.get('my-cjk');
+if (LocalStorage.has("my-cjk")) {
+  myCjk = LocalStorage.get("my-cjk");
 }
 
 export default {
@@ -10,15 +10,15 @@ export default {
   file: [],
   fileSelecteds: {},
   fullFile: undefined, // not reactive
-  fullFileString: '[]',
+  fullFileString: "[]",
   footnotes: [],
   fileLoading: false,
   fileParsing: false,
   fileImporting: false,
   fileChangeTimestamp: null,
-  filePasteAction: '',
+  filePasteAction: "",
   myCjk,
-  myCjkTemp: '',
+  myCjkTemp: "",
   perPage: 25 * 6,
   currentPage: 1,
 };

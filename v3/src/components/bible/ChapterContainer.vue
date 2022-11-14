@@ -2,19 +2,24 @@
   <span class="bible-chapter-container">
     <div class="verses-container" v-show="showVerses && !versesShowAsModal">
       <div class="bible-verse special-action" @click="selectAll()">
-        <md-icon>done_all</md-icon>
+        <v-icon icon="mdi-check-all"></v-icon>
       </div>
 
       <div class="bible-verse special-action" @click="clear()">
-        <md-icon>delete_sweep</md-icon>
+        <v-icon icon="mdi-delete-sweep"></v-icon>
       </div>
 
       <div
         v-for="(verse, verseId) in verses"
         v-bind:key="verseId"
-        :class="['bible-verse', (selecteds.indexOf(verse) != -1) ? 'selected' : '']"
+        :class="[
+          'bible-verse',
+          selecteds.indexOf(verse) != -1 ? 'selected' : '',
+        ]"
         @click="selectVerseClick(verse)"
-      >{{ verse }}</div>
+      >
+        {{ verse }}
+      </div>
     </div>
 
     <file-container
@@ -40,61 +45,95 @@
       <md-dialog-content>
         <div class="verses-container" v-show="showVerses">
           <div class="bible-verse special-action" @click="selectAll()">
-            <md-icon>done_all</md-icon>
+            <v-icon icon="mdi-check-all"></v-icon>
           </div>
 
           <div class="bible-verse special-action" @click="clear()">
-            <md-icon>delete_sweep</md-icon>
+            <v-icon icon="mdi-delete-sweep"></v-icon>
           </div>
 
           <div
             v-for="(verse, verseId) in verses"
             v-bind:key="verseId"
-            :class="['bible-verse', (selecteds.indexOf(verse) != -1) ? 'selected' : '']"
+            :class="[
+              'bible-verse',
+              selecteds.indexOf(verse) != -1 ? 'selected' : '',
+            ]"
             @click="selectVerseClick(verse)"
-          >{{ verse }}</div>
+          >
+            {{ verse }}
+          </div>
         </div>
       </md-dialog-content>
 
       <md-dialog-actions>
-        <md-button class="md-primary" @click.native="closeVersesDialog()">{{ $t('close') }}</md-button>
+        <md-button class="md-primary" @click.native="closeVersesDialog()">{{
+          $t("close")
+        }}</md-button>
       </md-dialog-actions>
     </md-dialog>
 
-    <md-snackbar md-position="center" :md-duration="3000" :md-active.sync="showSnackbarNoInternet">
-      <span>{{ $t('no_internet') }}</span>
-    </md-snackbar>
+    <v-snackbar v-model="showSnackbarNoInternet" multi-line :timeout="3000">
+      {{ $t("no_internet") }}
+
+      <template v-slot:actions>
+        <v-btn
+          color="red"
+          variant="text"
+          @click="showSnackbarNoInternet = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </span>
 </template>
 
-<script>
-import chaptersData from 'shared/data/bible/chapters';
-import axios from 'axios';
-import sortBy from 'lodash/sortBy';
-import OptionsManager from 'src/domain/options-manager';
-import LocalStorage from 'src/helpers/local-storage';
-import replaceall from 'replaceall';
+<script lang="ts">
+import chaptersData from "@/data/bible/chapters";
+import axios from "axios";
+import sortBy from "lodash/sortBy";
+import OptionsManager from "@/domain/options-manager";
+import LocalStorage from "@/helpers/local-storage";
+import replaceall from "replaceall";
 
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from "vuex";
 
 import {
   BIBLE_GETTER_VERSES_SHOW_AS_MODAL,
   BIBLE_GETTER_VERSES_MODAL_VISIBLE,
   BIBLE_GETTER_OPEN_CHAPTER_ON_LOAD,
   BIBLE_MUTATION_SET_VERSES_MODAL_VISIBLE,
-} from 'src/data/bible/types';
+} from "@/data/bible/types";
+
+import FileContainer from "@/components/files/FileContainer.vue";
 
 let options = {};
 
 const CACHE_VERSION = 14;
 
 export default {
-  name: 'bible-chapter',
+  name: "bible-chapter",
   props: {
-    book: '',
-    chapter: 0,
-    verse: '',
-    parent: false,
+    book: {
+      type: String,
+      default: "",
+    },
+    chapter: {
+      type: Number,
+      default: 0,
+    },
+    verse: {
+      type: String,
+      default: "",
+    },
+    parent: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  components: {
+    FileContainer,
   },
   data() {
     return {
@@ -168,7 +207,7 @@ export default {
       this.fileLoadingLanguage = loading;
     },
     openBottomBar(data) {
-      this.$emit('open-bottom-bar', data);
+      this.$emit("open-bottom-bar", data);
     },
     selectAll() {
       this.setFileLoading(true);
@@ -190,7 +229,7 @@ export default {
 
       const lineKeys = {};
 
-      this.selecteds.forEach(v => {
+      this.selecteds.forEach((v) => {
         if (!this.versesMap) {
           return;
         }
@@ -219,7 +258,7 @@ export default {
             i += 1
           ) {
             lines[verseMapLine.line].blocks.push(
-              this.fullLines[verseMapLine.line][i],
+              this.fullLines[verseMapLine.line][i]
             );
           }
         }
@@ -250,7 +289,7 @@ export default {
 
       const lineKeys = {};
 
-      this.selectedsLanguage.forEach(v => {
+      this.selectedsLanguage.forEach((v) => {
         if (!this.versesMapLanguage) {
           return;
         }
@@ -283,26 +322,25 @@ export default {
           ) {
             this.fullLinesLanguage[verseMapLine.line][i].p = replaceall(
               String.fromCharCode(160),
-              ' ',
-              this.fullLinesLanguage[verseMapLine.line][i].p,
+              " ",
+              this.fullLinesLanguage[verseMapLine.line][i].p
             ); // Convert NO-BREAK SPACE to SPACE
 
             this.fullLinesLanguage[verseMapLine.line][i].p = replaceall(
               String.fromCharCode(8201),
-              ' ',
-              this.fullLinesLanguage[verseMapLine.line][i].p,
+              " ",
+              this.fullLinesLanguage[verseMapLine.line][i].p
             ); // Convert THIN SPACE to SPACE
 
-            let words = this.fullLinesLanguage[verseMapLine.line][i].p.split(
-              ' ',
-            );
-            if (options.translationLanguage === 'ja') {
-              words = this.fullLinesLanguage[verseMapLine.line][i].p.split('');
+            let words =
+              this.fullLinesLanguage[verseMapLine.line][i].p.split(" ");
+            if (options.translationLanguage === "ja") {
+              words = this.fullLinesLanguage[verseMapLine.line][i].p.split("");
             }
 
-            words.forEach(word => {
+            words.forEach((word) => {
               const block = {};
-              block.c = ' ';
+              block.c = " ";
               block.noIdeogram = true;
               block.p = word;
               lines[verseMapLine.line].blocks.push(block);
@@ -316,7 +354,7 @@ export default {
         const line = lines[lineIndex];
         // generate new key
         lines[lineIndex].blocks[0].key =
-          'language-' + lineKeys[lineIndex].join();
+          "language-" + lineKeys[lineIndex].join();
         newLines.push(line.blocks);
       }
 
@@ -413,10 +451,10 @@ export default {
       const language = `cmn-han${options.ideogramType}`;
 
       if (LocalStorage.get(`BIBLE_SAVE_${language}`)) {
-        await window.frames['iframe-storage'].indexedDBOpen();
-        const chapterCache = await window.frames['iframe-storage'].indexedDBGet(
-          'bible',
-          `${language}_${this.book}_${this.chapter}`,
+        await window.frames["iframe-storage"].indexedDBOpen();
+        const chapterCache = await window.frames["iframe-storage"].indexedDBGet(
+          "bible",
+          `${language}_${this.book}_${this.chapter}`
         );
 
         if (chapterCache) {
@@ -424,7 +462,7 @@ export default {
           this.parseVerses(this.fullLines);
           if (this.verse) {
             this.selecteds = [];
-            const splitVerse = this.verse.split('-');
+            const splitVerse = this.verse.split("-");
             const startVerse = splitVerse[0];
             let endVerse = splitVerse[0];
             if (splitVerse[1]) {
@@ -446,16 +484,14 @@ export default {
 
       axios
         .get(
-          `https://pinyin-bible.pinzi.org/${language}/${this.book}/${
-            this.chapter
-          }.json?v=${CACHE_VERSION}`,
+          `https://pinyin-bible.pinzi.org/${language}/${this.book}/${this.chapter}.json?v=${CACHE_VERSION}`
         )
-        .then(async content => {
+        .then(async (content) => {
           this.fullLines = content.data.lines;
           this.parseVerses(content.data.lines);
           if (this.verse) {
             this.selecteds = [];
-            const splitVerse = this.verse.split('-');
+            const splitVerse = this.verse.split("-");
             const startVerse = splitVerse[0];
             let endVerse = splitVerse[0];
             if (splitVerse[1]) {
@@ -476,7 +512,7 @@ export default {
           this.$refs.fileContainer.updateRender();
 
           if (LocalStorage.get(`BIBLE_SAVE_${language}`)) {
-            await window.frames['iframe-storage'].indexedDBPut('bible', {
+            await window.frames["iframe-storage"].indexedDBPut("bible", {
               key: `${language}_${this.book}_${this.chapter}`,
               language,
               book: this.book,
@@ -487,17 +523,17 @@ export default {
         });
 
       if (LocalStorage.get(`BIBLE_SAVE_${options.translationLanguage}`)) {
-        await window.frames['iframe-storage'].indexedDBOpen();
-        const chapterCache = await window.frames['iframe-storage'].indexedDBGet(
-          'bible',
-          `${options.translationLanguage}_${this.book}_${this.chapter}`,
+        await window.frames["iframe-storage"].indexedDBOpen();
+        const chapterCache = await window.frames["iframe-storage"].indexedDBGet(
+          "bible",
+          `${options.translationLanguage}_${this.book}_${this.chapter}`
         );
         if (chapterCache) {
           this.fullLinesLanguage = JSON.parse(chapterCache.text).lines;
           this.parseVersesLanguage(this.fullLinesLanguage);
           if (this.verse) {
             this.selectedsLanguage = [];
-            const splitVerse = this.verse.split('-');
+            const splitVerse = this.verse.split("-");
             const startVerse = splitVerse[0];
             let endVerse = splitVerse[0];
             if (splitVerse[1]) {
@@ -517,16 +553,14 @@ export default {
 
       axios
         .get(
-          `https://pinyin-bible.pinzi.org/${options.translationLanguage}/${
-            this.book
-          }/${this.chapter}.json?v=${CACHE_VERSION}`,
+          `https://pinyin-bible.pinzi.org/${options.translationLanguage}/${this.book}/${this.chapter}.json?v=${CACHE_VERSION}`
         )
-        .then(async content => {
+        .then(async (content) => {
           this.fullLinesLanguage = content.data.lines;
           this.parseVersesLanguage(content.data.lines);
           if (this.verse) {
             this.selectedsLanguage = [];
-            const splitVerse = this.verse.split('-');
+            const splitVerse = this.verse.split("-");
             const startVerse = splitVerse[0];
             let endVerse = splitVerse[0];
             if (splitVerse[1]) {
@@ -545,10 +579,8 @@ export default {
           this.$refs.fileContainer.updateRender();
 
           if (LocalStorage.get(`BIBLE_SAVE_${options.translationLanguage}`)) {
-            await window.frames['iframe-storage'].indexedDBPut('bible', {
-              key: `${options.translationLanguage}_${this.book}_${
-                this.chapter
-              }`,
+            await window.frames["iframe-storage"].indexedDBPut("bible", {
+              key: `${options.translationLanguage}_${this.book}_${this.chapter}`,
               language,
               book: this.book,
               chapter: this.chapter,
@@ -595,7 +627,7 @@ export default {
       await this.loadBook();
     } else {
       this.showSnackbarNoInternet = true;
-      window.addEventListener('online', () => {
+      window.addEventListener("online", () => {
         this.loadBook();
       });
     }

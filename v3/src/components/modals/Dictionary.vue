@@ -118,13 +118,13 @@
 
 <script>
 import http from "@/helpers/http";
-import Tabs from "src/components/common/Tabs";
-import Tab from "src/components/common/Tab";
-import TraditionalSimplifiedShow from "src/components/ideograms/TraditionalSimplifiedShow";
-import Links from "src/components/ideograms/Links";
-import DictionaryStrokeOrder from "src/components/dictionary/StrokeOrder";
-import DictionaryList from "src/components/dictionary/List";
-import DictionaryDetails from "src/components/dictionary/Details";
+import Tabs from "@/components/common/Tabs";
+import Tab from "@/components/common/Tab";
+import TraditionalSimplifiedShow from "@/components/ideograms/TraditionalSimplifiedShow";
+import Links from "@/components/ideograms/Links";
+import DictionaryStrokeOrder from "@/components/dictionary/StrokeOrder";
+import DictionaryList from "@/components/dictionary/List";
+import DictionaryDetails from "@/components/dictionary/Details";
 
 let memoryDictionary = {};
 const loadingDictionary = {};

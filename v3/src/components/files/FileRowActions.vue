@@ -7,7 +7,7 @@
     </template>
 
     <div class="list-container">
-      <div class="list-item" @click="addEmptyBlock({lineIndex})">
+      <div class="list-item" @click="addEmptyBlock({ lineIndex })">
         <div class="icon">
           <md-icon>add</md-icon>
         </div>
@@ -15,7 +15,7 @@
           {{ $t("add_empty_block") }}
         </div>
       </div>
-      <div class="list-item" @click="convertToPinyin({lineIndex})">
+      <div class="list-item" @click="convertToPinyin({ lineIndex })">
         <div class="icon">
           <md-icon>font_download</md-icon>
         </div>
@@ -31,7 +31,7 @@
           {{ $t("paste") }}
         </div>
       </div>
-      <div class="list-item" @click="removeLine({lineIndex})">
+      <div class="list-item" @click="removeLine({ lineIndex })">
         <div class="icon">
           <md-icon>delete</md-icon>
         </div>
@@ -44,19 +44,19 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex';
+import { mapActions, mapMutations } from "vuex";
 
 import {
   FILE_ACTION_CONVERT_TO_PINYIN,
   FILE_MUTATION_ADD_EMPTY_BLOCK,
   FILE_MUTATION_PASTE_ACTION,
   FILE_MUTATION_REMOVE_LINE,
-} from 'src/data/file/types';
+} from "@/data/file/types";
 
-import MenuContent from 'src/components/common/MenuContent';
+import MenuContent from "@/components/common/MenuContent";
 
 export default {
-  name: 'file-row-actions',
+  name: "file-row-actions",
   props: {
     lineIndex: {
       default: 0,
@@ -75,7 +75,7 @@ export default {
       convertToPinyin: FILE_ACTION_CONVERT_TO_PINYIN,
     }),
     openModalClipBoard(lineIndex) {
-      this.$emit('open-file-paste-modal');
+      this.$emit("open-file-paste-modal");
       this.pasteAction({
         lineIndex,
       });

@@ -1,15 +1,15 @@
-import Vue from 'vue';
-import http from 'src/helpers/http';
-import clipboard01 from 'src/domain/clipboard-01';
-import clipboard02 from 'src/domain/clipboard-02';
-import clipboard03 from 'src/domain/clipboard-03';
-import clipboard04 from 'src/domain/clipboard-04';
-import clipboardUrl from 'src/domain/clipboard-url';
-import LocalStorage from 'src/helpers/local-storage';
-import replaceall from 'replaceall';
-import trimStart from 'lodash/trimStart';
-import * as types from './types';
-import separatePinyinInSyllables from 'src/helpers/separate-pinyin-in-syllables';
+import Vue from "vue";
+import http from "@/helpers/http";
+import clipboard01 from "@/domain/clipboard-01";
+import clipboard02 from "@/domain/clipboard-02";
+import clipboard03 from "@/domain/clipboard-03";
+import clipboard04 from "@/domain/clipboard-04";
+import clipboardUrl from "@/domain/clipboard-url";
+import LocalStorage from "@/helpers/local-storage";
+import replaceall from "replaceall";
+import trimStart from "lodash/trimStart";
+import * as types from "./types";
+import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 
 function parseLines(lines) {
   if (!lines) {
@@ -29,15 +29,15 @@ function parseLines(lines) {
 
     line.forEach((block, blockIndex) => {
       if (block.h === undefined) {
-        line[blockIndex].h = '';
+        line[blockIndex].h = "";
       }
 
       if (block.p === undefined) {
-        line[blockIndex].p = '';
+        line[blockIndex].p = "";
       }
 
       if (block.c === undefined) {
-        line[blockIndex].c = '';
+        line[blockIndex].c = "";
       }
 
       if (lines[0] && (!lines[0][0].line || !lines[0][0].line.pinyinSpaced)) {
@@ -54,7 +54,7 @@ function parseLines(lines) {
 
 function sortFiles(files) {
   files.sort((a, b) =>
-    a.path.toLowerCase().localeCompare(b.path.toLowerCase()),
+    a.path.toLowerCase().localeCompare(b.path.toLowerCase())
   );
 }
 
@@ -128,12 +128,12 @@ function loadFile({
 
     if (storage && !notFetch) {
       http
-        .get('files/file', {
+        .get("files/file", {
           params: {
             filename: `${filename}.json`,
           },
         })
-        .then(response => {
+        .then((response) => {
           commit(types.FILE_MUTATION_SET_FILE_LOADING, true);
 
           const linesParsed = parseLines(response.data.lines);
@@ -153,7 +153,7 @@ function loadFile({
             pageLineIndex: 0,
           });
         })
-        .catch(error => commit(types.FILE_MUTATION_FAILURE, error));
+        .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
     }
     return;
   }
@@ -255,19 +255,19 @@ export default {
   },
 
   [types.FILES_ACTION_FETCH]({ commit }) {
-    if (LocalStorage.has('files')) {
-      const files = LocalStorage.get('files');
+    if (LocalStorage.has("files")) {
+      const files = LocalStorage.get("files");
       commit(types.FILES_MUTATION_SET, files);
     }
 
     http
-      .get('files')
-      .then(response => {
+      .get("files")
+      .then((response) => {
         sortFiles(response.data);
-        LocalStorage.save('files', response.data);
+        LocalStorage.save("files", response.data);
         commit(types.FILES_MUTATION_SET, response.data);
       })
-      .catch(error => commit(types.FILE_MUTATION_FAILURE, error));
+      .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
   },
 
   async [types.FILE_ACTION_SAVE]({ commit, state }, data) {
@@ -306,15 +306,15 @@ export default {
   [types.FILE_ACTION_CONVERT_TO_PINYIN]({ commit, state }, data) {
     return new Promise((resolve, reject) => {
       const ideograms = [];
-      state.fullFile[data.lineIndex].forEach(block => {
+      state.fullFile[data.lineIndex].forEach((block) => {
         ideograms.push(block.c);
       });
 
       http
-        .post('unihan/to_pinyin', {
+        .post("unihan/to_pinyin", {
           ideograms,
         })
-        .then(response => {
+        .then((response) => {
           response.data.forEach((item, blockIndex) => {
             commit(types.FILE_MUTATION_UPDATE_PINYIN, {
               lineIndex: data.lineIndex,
@@ -324,7 +324,7 @@ export default {
           });
           resolve();
         })
-        .catch(error => {
+        .catch((error) => {
           commit(types.FILE_MUTATION_FAILURE, error);
           reject();
         });
@@ -336,19 +336,19 @@ export default {
     let content;
     let convertToPinyin = false;
 
-    if (data.action === '1') {
+    if (data.action === "1") {
       content = await clipboard01(data.content);
     }
 
-    if (data.action === '2') {
+    if (data.action === "2") {
       content = await clipboard02(data.content);
     }
 
-    if (data.action === '3') {
+    if (data.action === "3") {
       content = await clipboard03(data.content);
     }
 
-    if (data.action === '4') {
+    if (data.action === "4") {
       convertToPinyin = true;
       content = await clipboard04(data.content);
     }
@@ -371,7 +371,7 @@ export default {
 
       if (convertToPinyin) {
         pinyinPromises.push(
-          dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex }),
+          dispatch(types.FILE_ACTION_CONVERT_TO_PINYIN, { lineIndex })
         );
       }
     });
@@ -410,16 +410,16 @@ export default {
   },
 
   [types.FILE_ACTION_NEW_FILE]({ commit, state }, data) {
-    let filename = replaceall('/', '-', data.filename);
+    let filename = replaceall("/", "-", data.filename);
     const type = data.type;
     const dirname = data.dirname;
-    if (type === 'file') {
-      filename += '.json';
+    if (type === "file") {
+      filename += ".json";
     }
 
-    let path = '';
-    if (trimStart(dirname, '/')) {
-      path = `${trimStart(dirname, '/')}/`;
+    let path = "";
+    if (trimStart(dirname, "/")) {
+      path = `${trimStart(dirname, "/")}/`;
     }
 
     path += data.filename;
@@ -437,9 +437,9 @@ export default {
         });
         sortFiles(state.files);
 
-        LocalStorage.save('files', state.files);
+        LocalStorage.save("files", state.files);
       })
-      .catch(error => commit(types.FILE_MUTATION_FAILURE, error));
+      .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
   },
 
   [types.FILE_ACTION_DELETE_FILE]({ commit, state }, data) {
@@ -448,8 +448,8 @@ export default {
     const dirname = data.dirname;
 
     let filename = data.filename;
-    if (type === 'file') {
-      filename += '.json';
+    if (type === "file") {
+      filename += ".json";
     }
 
     http
@@ -457,27 +457,27 @@ export default {
       .then(() => {
         LocalStorage.remove(fileKey);
         state.files.splice(
-          arrayObjectIndexOf(state.files, data.filename, 'path'),
-          1,
+          arrayObjectIndexOf(state.files, data.filename, "path"),
+          1
         );
       })
-      .catch(error => commit(types.FILE_MUTATION_FAILURE, error));
+      .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
   },
 
   [types.FILE_ACTION_FETCH_MY_CJK]({ commit }, data) {
     setTimeout(() => {
       http
-        .post('my-cjk/get', data)
-        .then(response => {
+        .post("my-cjk/get", data)
+        .then((response) => {
           const myCjkIdeograms = {};
-          response.data.ideograms.forEach(item => {
+          response.data.ideograms.forEach((item) => {
             myCjkIdeograms[item.ideogram] = true;
           });
 
-          LocalStorage.save('my-cjk', myCjkIdeograms);
+          LocalStorage.save("my-cjk", myCjkIdeograms);
           commit(types.FILE_MUTATION_SET_MY_CJK, myCjkIdeograms);
         })
-        .catch(error => commit(types.FILE_MUTATION_FAILURE, error));
+        .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
     }, 5000);
   },
 
@@ -490,13 +490,9 @@ export default {
       return;
     }
 
-    const character = `${state.fullFile[lineIndex][previousBlockIndex].c}${
-      state.fullFile[lineIndex][blockIndex].c
-    }`;
+    const character = `${state.fullFile[lineIndex][previousBlockIndex].c}${state.fullFile[lineIndex][blockIndex].c}`;
 
-    const pinyin = `${state.fullFile[lineIndex][previousBlockIndex].p}${
-      state.fullFile[lineIndex][blockIndex].p
-    }`;
+    const pinyin = `${state.fullFile[lineIndex][previousBlockIndex].p}${state.fullFile[lineIndex][blockIndex].p}`;
 
     await commit(types.FILE_MUTATION_REMOVE_BLOCK, data);
 
@@ -514,8 +510,8 @@ export default {
 
     try {
       if (
-        ['pdf', 'ruby'].includes(
-          state.fullFile[lineIndex][0].line.pinyin_source,
+        ["pdf", "ruby"].includes(
+          state.fullFile[lineIndex][0].line.pinyin_source
         )
       ) {
         return;
@@ -529,17 +525,17 @@ export default {
     const pinyinList = separatePinyinInSyllables(data.pinyin);
 
     const separatedBlocks = data.separateCharacter
-      .split(' ')
-      .filter(character => character)
-      .map(character => ({
+      .split(" ")
+      .filter((character) => character)
+      .map((character) => ({
         c: character,
-        p: '',
+        p: "",
       }));
 
     let i = 0;
     let pinyinId = 0;
     for (const separatedBlock of separatedBlocks) {
-      for (const ideogram of separatedBlock.c.split('')) {
+      for (const ideogram of separatedBlock.c.split("")) {
         separatedBlocks[i].p += pinyinList[pinyinId] + String.fromCharCode(160);
         pinyinId++;
       }
@@ -566,8 +562,8 @@ export default {
 
     try {
       if (
-        ['pdf', 'ruby'].includes(
-          state.fullFile[lineIndex][0].line.pinyin_source,
+        ["pdf", "ruby"].includes(
+          state.fullFile[lineIndex][0].line.pinyin_source
         )
       ) {
         return;
@@ -579,21 +575,21 @@ export default {
 
   [types.FILE_ACTION_ADD_MY_CJK]({ commit, state }, data) {
     return http
-      .post('my-cjk', {
+      .post("my-cjk", {
         ideogram: data.myCjk,
         type: data.type,
         source: data.source,
       })
       .then(() => {
         commit(types.FILE_MUTATION_ADD_MY_CJK, data.myCjk);
-        LocalStorage.save('my-cjk', state.myCjk);
+        LocalStorage.save("my-cjk", state.myCjk);
       })
-      .catch(error => commit(types.FILE_MUTATION_FAILURE, error));
+      .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
   },
 
   [types.FILE_ACTION_REMOVE_MY_CJK]({ commit, state }, data) {
     return http
-      .delete('my-cjk', {
+      .delete("my-cjk", {
         data: {
           ideogram: data.myCjk,
           type: data.type,
@@ -602,9 +598,9 @@ export default {
       })
       .then(() => {
         commit(types.FILE_MUTATION_REMOVE_MY_CJK, data.myCjk);
-        LocalStorage.save('my-cjk', state.myCjk);
+        LocalStorage.save("my-cjk", state.myCjk);
       })
-      .catch(error => commit(types.FILE_MUTATION_FAILURE, error));
+      .catch((error) => commit(types.FILE_MUTATION_FAILURE, error));
   },
 
   [types.FILE_ACTION_CAN_HIDE_PINYIN]({ state }, ideograms) {

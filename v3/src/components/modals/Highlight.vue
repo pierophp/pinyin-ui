@@ -1,5 +1,9 @@
 <template>
-  <div class="highlight-modal" v-show="visible" :style="{ top: top  + 'px', left: left + 'px'  }">
+  <div
+    class="highlight-modal"
+    v-show="visible"
+    :style="{ top: top + 'px', left: left + 'px' }"
+  >
     <div class="circle highlight-1" @click="addHighlight(1)"></div>
     <div class="circle highlight-2" @click="addHighlight(2)"></div>
     <div class="circle highlight-3" @click="addHighlight(3)"></div>
@@ -12,14 +16,14 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations } from "vuex";
 
 import {
   FILE_MUTATION_ADD_HIGHLIGHT,
   FILE_MUTATION_REMOVE_HIGHLIGHT,
-} from 'src/data/file/types';
+} from "@/data/file/types";
 
-import isMobileChecker from 'src/helpers/is-mobile';
+import isMobileChecker from "@/helpers/is-mobile";
 
 let selectionIndex = 0;
 let currentSelectionIndex = 0;
@@ -29,13 +33,13 @@ function getParentBlockSelected(element) {
     return null;
   }
 
-  if (typeof element.getAttribute === 'undefined') {
+  if (typeof element.getAttribute === "undefined") {
     return getParentBlockSelected(element.parentElement);
   }
 
   if (
-    element.getAttribute('data-line') !== null &&
-    element.getAttribute('data-block') !== null
+    element.getAttribute("data-line") !== null &&
+    element.getAttribute("data-block") !== null
   ) {
     return element;
   }
@@ -63,29 +67,29 @@ function selectionChange(isMobile, that) {
 
   that.visible = true;
 
-  let startLine = parseInt(startNode.getAttribute('data-line'), 10);
-  let startBlock = parseInt(startNode.getAttribute('data-block'), 10);
+  let startLine = parseInt(startNode.getAttribute("data-line"), 10);
+  let startBlock = parseInt(startNode.getAttribute("data-block"), 10);
 
-  let endLine = parseInt(endNode.getAttribute('data-line'), 10);
-  let endBlock = parseInt(endNode.getAttribute('data-block'), 10);
+  let endLine = parseInt(endNode.getAttribute("data-line"), 10);
+  let endBlock = parseInt(endNode.getAttribute("data-block"), 10);
   let startBounds = startNode.getBoundingClientRect();
   let endBounds = endNode.getBoundingClientRect();
 
   if (startLine > endLine) {
-    startLine = endNode.getAttribute('data-line');
-    startBlock = endNode.getAttribute('data-block');
+    startLine = endNode.getAttribute("data-line");
+    startBlock = endNode.getAttribute("data-block");
 
-    endLine = startNode.getAttribute('data-line');
-    endBlock = startNode.getAttribute('data-block');
+    endLine = startNode.getAttribute("data-line");
+    endBlock = startNode.getAttribute("data-block");
 
     startBounds = endNode.getBoundingClientRect();
     endBounds = startNode.getBoundingClientRect();
   } else if (startLine === endLine && startBlock > endBlock) {
-    startLine = endNode.getAttribute('data-line');
-    startBlock = endNode.getAttribute('data-block');
+    startLine = endNode.getAttribute("data-line");
+    startBlock = endNode.getAttribute("data-block");
 
-    endLine = startNode.getAttribute('data-line');
-    endBlock = startNode.getAttribute('data-block');
+    endLine = startNode.getAttribute("data-line");
+    endBlock = startNode.getAttribute("data-block");
 
     startBounds = endNode.getBoundingClientRect();
     endBounds = startNode.getBoundingClientRect();
@@ -117,7 +121,7 @@ function selectionChange(isMobile, that) {
 }
 
 export default {
-  name: 'modal-highlight',
+  name: "modal-highlight",
   data() {
     return {
       top: 0,
@@ -131,19 +135,19 @@ export default {
     };
   },
   props: {
-    worker: '',
+    worker: "",
   },
   created() {
     // eslint-disable-next-line
     document.addEventListener(
-      'selectionchange',
+      "selectionchange",
       this.selectionChangeEvent,
-      false,
+      false
     );
   },
 
   beforeDestroy() {
-    window.removeEventListener('selectionchange', this.selectionChangeEvent);
+    window.removeEventListener("selectionchange", this.selectionChangeEvent);
   },
 
   methods: {
@@ -212,7 +216,7 @@ export default {
   top: 39px;
   border-width: 8px 8px 0 8px;
   border-style: solid;
-  content: '';
+  content: "";
   display: block;
   height: 0;
   left: 50%;

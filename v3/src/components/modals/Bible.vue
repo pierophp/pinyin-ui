@@ -1,5 +1,5 @@
 <template>
-  <md-dialog
+  <!-- <md-dialog
     ref="modal"
     class="dialog-bible"
     :md-active.sync="modalOpen"
@@ -17,20 +17,24 @@
     </md-dialog-content>
 
     <md-dialog-actions>
-      <span class="bible-title">{{ booksName(book, exhibitionType ) }} {{ chapter }}:{{ verse }}</span>
-      <md-button class="md-primary" @click.native="closeDialog()">{{ $t('close') }}</md-button>
+      <span class="bible-title"
+        >{{ booksName(book, exhibitionType) }} {{ chapter }}:{{ verse }}</span
+      >
+      <md-button class="md-primary" @click.native="closeDialog()">{{
+        $t("close")
+      }}</md-button>
     </md-dialog-actions>
-  </md-dialog>
+  </md-dialog> -->
 </template>
 
-<script>
-import chaptersData from 'shared/data/bible/chapters';
-import ChapterContainer from 'src/components/bible/ChapterContainer';
-import booksName from 'src/data/bible/names';
-import OptionsManager from 'src/domain/options-manager';
+<script lang="ts">
+import chaptersData from "@/data/bible/chapters";
+import ChapterContainer from "@/components/bible/ChapterContainer.vue";
+import booksName from "@/data/bible/names";
+import OptionsManager from "@/domain/options-manager";
 
 export default {
-  name: 'modal-bible',
+  name: "modal-bible",
   data() {
     return {
       options: {},
@@ -49,14 +53,14 @@ export default {
     book() {
       const key = this.bookIndex - 1;
       if (key < 0) {
-        return '';
+        return "";
       }
 
       return Object.keys(chaptersData)[key];
     },
   },
   components: {
-    ChapterContainer,
+    // ChapterContainer,
   },
   created() {
     const optionsManager = new OptionsManager(this.$i18n);
@@ -65,7 +69,7 @@ export default {
   methods: {
     booksName,
     openBottomBar(data) {
-      this.$emit('open-bottom-bar', data);
+      this.$emit("open-bottom-bar", data);
     },
     openDialog() {
       this.modalOpen = true;

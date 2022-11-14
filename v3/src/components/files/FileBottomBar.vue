@@ -120,15 +120,15 @@
 
 <script>
 import http from "@/helpers/http";
-import IdeogramsShow from "src/components/ideograms/Show";
-import Links from "src/components/ideograms/Links";
-import OptionsManager from "src/domain/options-manager";
-import separatePinyinInSyllables from "src/helpers/separate-pinyin-in-syllables";
+import IdeogramsShow from "@/components/ideograms/Show";
+import Links from "@/components/ideograms/Links";
+import OptionsManager from "@/domain/options-manager";
+import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 import replaceall from "replaceall";
-import pinyinHelper from "src/helpers/pinyin";
-import isMobile from "src/helpers/is-mobile";
-import DictionaryModal from "src/components/modals/Dictionary";
-import MenuContent from "src/components/common/MenuContent";
+import pinyinHelper from "@/helpers/pinyin";
+import isMobile from "@/helpers/is-mobile";
+import DictionaryModal from "@/components/modals/Dictionary";
+import MenuContent from "@/components/common/MenuContent";
 import { mapActions, mapMutations, mapGetters } from "vuex";
 
 import {
@@ -137,7 +137,7 @@ import {
   FILE_MUTATION_SET_MY_CJK_TEMP,
   FILE_MUTATION_UPDATE_PINYIN,
   FILE_GETTER_MY_CJK,
-} from "src/data/file/types";
+} from "@/data/file/types";
 
 export default {
   name: "file-bottom-bar",

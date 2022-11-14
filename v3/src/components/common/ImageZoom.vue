@@ -1,25 +1,32 @@
 <template>
-  <md-dialog ref="modal" id="image-zoom-modal" :md-active.sync="modalOpen" :md-fullscreen="false">
+  <md-dialog
+    ref="modal"
+    id="image-zoom-modal"
+    :md-active.sync="modalOpen"
+    :md-fullscreen="false"
+  >
     <md-dialog-title>
       <div class="top-actions"></div>
     </md-dialog-title>
 
     <md-dialog-content>
-      <vue-pinch-zoom :src="src" :min-zoom="1" :max-zoom="2.5"/>
+      <vue-pinch-zoom :src="src" :min-zoom="1" :max-zoom="2.5" />
     </md-dialog-content>
 
     <md-dialog-actions>
-      <md-button class="md-primary" @click.native="closeDialog()">{{ $t('close') }}</md-button>
+      <md-button class="md-primary" @click.native="closeDialog()">{{
+        $t("close")
+      }}</md-button>
     </md-dialog-actions>
   </md-dialog>
 </template>
 
 <script>
-import VuePinchZoom from 'src/components/common/VuePinchZoom';
+import VuePinchZoom from "@/components/common/VuePinchZoom";
 export default {
-  name: 'image-zoom',
+  name: "image-zoom",
   props: {
-    src: '',
+    src: "",
   },
   components: { VuePinchZoom },
   data() {
