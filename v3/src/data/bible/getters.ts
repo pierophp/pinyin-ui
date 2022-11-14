@@ -1,4 +1,4 @@
-import * as types from './types';
+import * as types from "./types";
 
 export default {
   [types.BIBLE_GETTER_BOOKS_EXHIBITION_TYPE]({ booksExhibitionType }) {

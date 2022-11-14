@@ -48,6 +48,7 @@ const router = createRouter({
 
 const app = createApp(App);
 
+app.use(await store());
 app.use(router);
 app.use(i18n);
 

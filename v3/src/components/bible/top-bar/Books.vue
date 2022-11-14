@@ -49,10 +49,10 @@ export default {
     }),
   },
   computed: {
-    // ...mapGetters({
-    //   booksExhibitionType: BIBLE_GETTER_BOOKS_EXHIBITION_TYPE,
-    //   showPinyin: BIBLE_GETTER_BOOKS_SHOW_PINIYN,
-    // }),
+    ...mapGetters({
+      booksExhibitionType: BIBLE_GETTER_BOOKS_EXHIBITION_TYPE,
+      showPinyin: BIBLE_GETTER_BOOKS_SHOW_PINIYN,
+    }),
   },
 };
 </script>
