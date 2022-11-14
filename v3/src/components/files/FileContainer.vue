@@ -6,10 +6,10 @@
       ref="footnote"
     />
     <image-zoom :src="imageZoom" ref="imageZoom" />
-    <portal-target
+    <!-- <portal-target
       name="portal-file-container-header"
       v-if="portal"
-    ></portal-target>
+    ></portal-target> -->
     <div class="print-scroll" ref="fileScroll">
       <div class="print" :class="[sizeClass, typeClass, ideogramSpacedClass]">
         <folder-structure
@@ -109,15 +109,15 @@
 </template>
 
 <script lang="ts">
-import FileRowPrint from "@/components/files/FileRowPrint";
-import FileBottomBar from "@/components/files/FileBottomBar";
-import AddRemoveCharacterModal from "@/components/modals/AddRemoveCharacter";
-import FootnoteModal from "@/components/modals/Footnote";
-import HighlightModal from "@/components/modals/Highlight";
-import BibleModal from "@/components/modals/Bible";
+import FileRowPrint from "@/components/files/FileRowPrint.vue";
+import FileBottomBar from "@/components/files/FileBottomBar.vue";
+import AddRemoveCharacterModal from "@/components/modals/AddRemoveCharacter.vue";
+import FootnoteModal from "@/components/modals/Footnote.vue";
+import HighlightModal from "@/components/modals/Highlight.vue";
+import BibleModal from "@/components/modals/Bible.vue";
 import OptionsManager from "@/domain/options-manager";
-import ImageZoom from "@/components/common/ImageZoom";
-import FolderStructure from "@/components/files/FolderStructure";
+import ImageZoom from "@/components/common/ImageZoom.vue";
+import FolderStructure from "@/components/files/FolderStructure.vue";
 
 import { mapActions, mapGetters, mapMutations } from "vuex";
 
@@ -155,13 +155,34 @@ export default {
       type: Array,
       default: () => [],
     },
-    filename: "",
-    fileLoading: false,
-    parent: false,
-    portal: false,
-    showMenuNavigation: true,
-    pagination: false,
-    useFullLines: true,
+    filename: {
+      type: String,
+      default: "",
+    },
+    fileLoading: {
+      type: Boolean,
+      default: false,
+    },
+    parent: {
+      type: Boolean,
+      default: false,
+    },
+    portal: {
+      type: Boolean,
+      default: false,
+    },
+    showMenuNavigation: {
+      type: Boolean,
+      default: true,
+    },
+    pagination: {
+      type: Boolean,
+      default: false,
+    },
+    useFullLines: {
+      type: Boolean,
+      default: true,
+    },
     showHighlight: {
       type: Boolean,
       default: true,
@@ -581,9 +602,6 @@ audio {
   page-break-inside: avoid;
   padding: 1px 0;
   min-width: 0;
-}
-
-.print .block {
   margin-bottom: var(--block-margin-bottom);
 }
 

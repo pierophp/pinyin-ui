@@ -72,7 +72,7 @@
 
     <dictionary-modal ref="dictionaryModal" @change-show="changeShow" />
 
-    <md-dialog
+    <!-- <md-dialog
       ref="dialogSeparate"
       :md-active.sync="modalSeparateOpen"
       :md-fullscreen="false"
@@ -114,7 +114,7 @@
       <md-dialog-actions>
         <md-button class="md-primary" @click.native="confirmEdit">OK</md-button>
       </md-dialog-actions>
-    </md-dialog>
+    </md-dialog> -->
   </div>
 </template>
 

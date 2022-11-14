@@ -1,18 +1,22 @@
 <template>
-  <div class="bible-chapters-container">
-    <div
-      v-for="(chapter, chapterId) in chapters"
-      v-bind:key="chapterId"
-      class="bible-chapter"
-      @click="goTo(chapter.c)"
-    >
-      {{ chapter.c }}
+  <tool-bar></tool-bar>
+  <v-main>
+    <div class="bible-chapters-container">
+      <div
+        v-for="(chapter, chapterId) in chapters"
+        v-bind:key="chapterId"
+        class="bible-chapter"
+        @click="goTo(chapter.c)"
+      >
+        {{ chapter.c }}
+      </div>
     </div>
-  </div>
+  </v-main>
 </template>
 
-<script>
+<script lang="ts">
 import chaptersData from "@/data/bible/chapters";
+import ToolBar from "@/components/layout/ToolBar.vue";
 
 export default {
   name: "bible-chapters",
@@ -29,6 +33,7 @@ export default {
   created() {
     this.chapters = chaptersData[this.$route.params.book];
   },
+  components: { ToolBar },
 };
 </script>
 

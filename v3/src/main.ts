@@ -12,6 +12,8 @@ import routes from "./routes/bible";
 import { createRouter, createWebHashHistory } from "vue-router";
 import store from "@/data/store";
 
+import "@/css/default.css";
+
 import "vue-router";
 
 declare module "vue-router" {

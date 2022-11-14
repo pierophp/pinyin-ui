@@ -1,5 +1,5 @@
 <template>
-  <md-dialog
+  <!-- <md-dialog
     ref="modal"
     id="image-zoom-modal"
     :md-active.sync="modalOpen"
@@ -18,7 +18,7 @@
         $t("close")
       }}</md-button>
     </md-dialog-actions>
-  </md-dialog>
+  </md-dialog> -->
 </template>
 
 <script>

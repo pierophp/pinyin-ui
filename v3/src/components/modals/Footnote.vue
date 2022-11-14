@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-dialog ref="modal" :md-active.sync="modalOpen" :md-fullscreen="false">
+    <!-- <md-dialog ref="modal" :md-active.sync="modalOpen" :md-fullscreen="false">
       <md-dialog-title> </md-dialog-title>
 
       <md-dialog-content>
@@ -18,7 +18,7 @@
           $t("close")
         }}</md-button>
       </md-dialog-actions>
-    </md-dialog>
+    </md-dialog> -->
   </div>
 </template>
 

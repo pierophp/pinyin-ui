@@ -1,5 +1,5 @@
 <template>
-  <md-dialog
+  <!-- <md-dialog
     md-open-from="#filePasteModal"
     md-close-to="#filePasteModal"
     ref="modal"
@@ -32,7 +32,7 @@
         $t("ok")
       }}</md-button>
     </md-dialog-actions>
-  </md-dialog>
+  </md-dialog> -->
 </template>
 
 <script>

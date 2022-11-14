@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-dialog
+    <!-- <md-dialog
       ref="dialogDictionary"
       :md-active.sync="modalDictionaryOpen"
       :md-fullscreen="false"
@@ -112,7 +112,7 @@
       :md-active.sync="clipboardOpen"
     >
       <span>{{ $t("copied_to_clipboard") }}</span>
-    </md-snackbar>
+    </md-snackbar> -->
   </div>
 </template>
 

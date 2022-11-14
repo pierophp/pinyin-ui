@@ -34,7 +34,7 @@
       :useFullLines="false"
     />
 
-    <md-dialog
+    <!-- <md-dialog
       ref="modal"
       class="dialog-bible-verses"
       :md-active.sync="versesModalOpenTemp"
@@ -71,9 +71,9 @@
           $t("close")
         }}</md-button>
       </md-dialog-actions>
-    </md-dialog>
+    </md-dialog> -->
 
-    <v-snackbar v-model="showSnackbarNoInternet" multi-line :timeout="3000">
+    <!-- <v-snackbar v-model="showSnackbarNoInternet" multi-line :timeout="3000">
       {{ $t("no_internet") }}
 
       <template v-slot:actions>
@@ -85,7 +85,7 @@
           Close
         </v-btn>
       </template>
-    </v-snackbar>
+    </v-snackbar> -->
   </span>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn icon @click.native="editionMode">
+    <!-- <v-btn icon @click.native="editionMode">
       <v-icon color="#fff">create</v-icon>
     </v-btn>
     <v-btn icon @click.native="copy">
@@ -18,7 +18,7 @@
         :bottom="true"
         >{{ $t("copied_to_clipboard") }}</v-snackbar
       >
-    </portal>
+    </portal> -->
   </div>
 </template>
 <script>

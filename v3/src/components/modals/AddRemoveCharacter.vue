@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-dialog
+    <!-- <md-dialog
       md-open-from="#addCharacterModal"
       md-close-to="#addCharacterModal"
       ref="modal"
@@ -41,7 +41,7 @@
           >{{ $t("ok") }}</md-button
         >
       </md-dialog-actions>
-    </md-dialog>
+    </md-dialog> -->
   </div>
 </template>
 

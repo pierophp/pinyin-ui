@@ -21,7 +21,7 @@
         <md-icon>more_vert</md-icon>
       </md-button>
     </div>
-
+    <!--
     <md-dialog
       ref="modal"
       class="dialog-chapter-options"
@@ -61,7 +61,7 @@
           $t("close")
         }}</md-button>
       </md-dialog-actions>
-    </md-dialog>
+    </md-dialog> -->
   </div>
 </template>
 <script>
