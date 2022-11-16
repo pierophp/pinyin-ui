@@ -1,9 +1,8 @@
 <template>
   <div>
-    <span @click="goToBible" class="bible-title">
-      <md-icon>arrow_back</md-icon>
-      {{ booksName($route.params.book, exhibitionType) }}
-    </span>
+    <v-btn prepend-icon="mdi-arrow-left" variant="text" @click="goToBible">{{
+      booksName($route.params.book, exhibitionType)
+    }}</v-btn>
   </div>
 </template>
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <div :class="[topBarClass, 'top-bar-container']">
+  <div :class="['top-bar-container']">
     <dictionary-top-bar v-if="topBar == 'dictionary'" />
     <video-top-bar v-if="topBar == 'videos'" />
     <file-details-top-bar v-if="topBar == 'file-details'" />
@@ -41,20 +41,10 @@ export default {
   watch: {
     $route() {
       this.topBar = this.$route.meta.topBar;
-      this.topBarClass = "md-toolbar-section-end";
-      if (this.$route.meta.topBarLeft) {
-        this.topBarClass = "";
-      }
     },
   },
   data() {
-    let topBarClass = "md-toolbar-section-end";
-    if (this.$route.meta.topBarLeft) {
-      topBarClass = "";
-    }
-
     return {
-      topBarClass,
       topBar: this.$route.meta.topBar,
     };
   },

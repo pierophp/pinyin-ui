@@ -39,7 +39,9 @@
 
       <v-toolbar-title v-if="!hideTitle">{{ $t(title) }}</v-toolbar-title>
 
-      <template v-slot:append>
+      <dynamic :options="topBar" v-if="$route.meta.topBarLeft" />
+
+      <template v-slot:append v-if="!$route.meta.topBarLeft">
         <dynamic :options="topBar" />
       </template>
     </v-app-bar>

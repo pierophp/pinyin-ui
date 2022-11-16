@@ -1,11 +1,10 @@
 <template>
   <div class="chapter-top-bar-container">
     <div class="left">
-      <span @click="goToChapters" class="bible-title">
-        <md-icon>arrow_back</md-icon>
-        {{ booksName($route.params.book, exhibitionType) }}
-        {{ $route.params.chapter }}
-      </span>
+      <v-btn prepend-icon="mdi-arrow-left" variant="text" @click="goToBible"
+        >{{ booksName($route.params.book, exhibitionType)
+        }}{{ $route.params.chapter }}</v-btn
+      >
 
       <md-button
         class="md-icon-button"

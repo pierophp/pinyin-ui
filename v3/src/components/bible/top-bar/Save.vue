@@ -1,13 +1,15 @@
 <template>
   <div>
-    <span @click="$router.push('/bible')" class="md-title">
-      <md-icon>arrow_back</md-icon>
-    </span>
+    <v-btn
+      icon="mdi-arrow-left"
+      variant="text"
+      @click="$router.push('/bible')"
+    ></v-btn>
   </div>
 </template>
-<script>
 
+<script lang="ts">
 export default {
-  name: 'bible-save-top-bar',
+  name: "bible-save-top-bar",
 };
 </script>
