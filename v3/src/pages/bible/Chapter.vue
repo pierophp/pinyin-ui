@@ -1,11 +1,13 @@
 <template>
   <tool-bar></tool-bar>
   <v-main>
-    <chapter-container
-      :book="$route.params.book"
-      :chapter="$route.params.chapter"
-      :parent="true"
-    />
+    <div class="content">
+      <chapter-container
+        :book="$route.params.book"
+        :chapter="$route.params.chapter"
+        :parent="true"
+      />
+    </div>
   </v-main>
 </template>
 

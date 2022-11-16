@@ -13,26 +13,19 @@
 
     <div id="partial-hanzi-writer" v-show="partial"></div>
 
-    <md-button
-      class="md-icon-button md-dense md-raised md-primary"
+    <v-btn
+      icon="mdi-chevron-left"
+      variant="elevated"
       @click.native="previous"
-    >
-      <md-icon>chevron_left</md-icon>
-    </md-button>
+    ></v-btn>
 
-    <md-button
-      class="md-icon-button md-dense md-raised md-primary"
-      @click.native="animate"
-    >
-      <md-icon>play_arrow</md-icon>
-    </md-button>
+    <v-btn icon="mdi-play" variant="elevated" @click.native="animate"></v-btn>
 
-    <md-button
-      class="md-icon-button md-dense md-raised md-primary"
+    <v-btn
+      icon="mdi-chevron-right"
+      variant="elevated"
       @click.native="next"
-    >
-      <md-icon>chevron_right</md-icon>
-    </md-button>
+    ></v-btn>
   </div>
 </template>
 

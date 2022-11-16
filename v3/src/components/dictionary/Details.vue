@@ -30,7 +30,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import DictionaryRender from "@/components/dictionary/DictionaryRender";
 import OptionsManager from "@/domain/options-manager";
 import isMobile from "@/helpers/is-mobile";

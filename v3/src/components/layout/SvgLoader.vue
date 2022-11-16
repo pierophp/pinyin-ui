@@ -2,11 +2,11 @@
   <i class="svg-loader" v-html="html"></i>
 </template>
 
-<script>
+<script lang="ts">
 let svgStore = {};
 
 export default {
-  name: 'SVGLoader',
+  name: "SVGLoader",
   props: {
     src: {
       type: String,
@@ -25,17 +25,17 @@ export default {
   },
   methods: {
     isSVG(mimetype) {
-      if (typeof mimetype !== 'string') return false;
-      return mimetype.indexOf('svg') >= 0;
+      if (typeof mimetype !== "string") return false;
+      return mimetype.indexOf("svg") >= 0;
     },
     setHtml(value) {
       svgStore[this.src]
-        .then(html => {
+        .then((html) => {
           this.html = html;
 
           return this.$nextTick();
         })
-        .then(() => this.$emit('svg-loaded'));
+        .then(() => this.$emit("svg-loaded"));
     },
     unexpectedError(reject) {
       this.error = `Something bad happened trying to fetch ${this.src}.`;
@@ -46,10 +46,10 @@ export default {
         svgStore[this.src] = new Promise((resolve, reject) => {
           const request = new window.XMLHttpRequest();
 
-          request.open('GET', this.src, true);
+          request.open("GET", this.src, true);
 
           request.onload = () => {
-            const mimetype = request.getResponseHeader('content-type');
+            const mimetype = request.getResponseHeader("content-type");
 
             if (request.status === 200) {
               if (this.isSVG(mimetype)) {

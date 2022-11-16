@@ -1,13 +1,7 @@
 <template>
-  <div>
-    <!-- <md-dialog
-      ref="dialogDictionary"
-      :md-active.sync="modalDictionaryOpen"
-      :md-fullscreen="false"
-      :md-close-on-esc="true"
-      id="dialog-dictionary"
-    >
-      <md-dialog-title>
+  <v-dialog v-model="modalDictionaryOpen">
+    <v-card>
+      <v-card-title>
         <traditional-simplified-show
           :pinyin="block.pinyin"
           :ideograms="block.character"
@@ -15,116 +9,134 @@
           :highlights="selectedIndexes"
         />
         - {{ block.pinyin }}
-        <md-button
-          class="md-icon-button md-primary clipboard-btn"
+        <v-btn
+          icon="mdi-clipboard-multiple-outline"
+          variant="text"
+          color="primary"
           @click="clipboard(block.character)"
-        >
-          <md-icon>content_copy</md-icon>
-        </md-button>
+        ></v-btn>
 
-        <a
+        <v-btn
+          icon="mdi-volume-high"
+          variant="text"
+          color="red"
           :href="'https://pt.forvo.com/word/' + block.character + '#zh'"
           target="_blank"
+        ></v-btn>
+      </v-card-title>
+      <v-card-text>
+        <v-card>
+          <v-tabs v-model="tab">
+            <v-tab value="dict">{{ $t("definition") }}</v-tab>
+            <v-tab value="stroke">{{ $t("stroke") }}</v-tab>
+            <v-tab value="links">Links</v-tab>
+          </v-tabs>
+
+          <v-card-text>
+            <v-window v-model="tab">
+              <v-window-item value="dict">
+                <div class="loadable-loader" v-show="dictionaryLoading">
+                  <md-progress-spinner
+                    class="md-accent"
+                    md-mode="indeterminate"
+                    :visible="dictionaryLoading"
+                  ></md-progress-spinner>
+                </div>
+
+                <dictionary-details
+                  :dictionary="dictionary"
+                  :pinyin="block.pinyin"
+                  @change-show="changeShow"
+                  ref="dictionaryDetails"
+                  v-show="!dictionaryLoading"
+                />
+
+                <dictionary-list
+                  :list="dictionaryList"
+                  v-show="!dictionaryLoading"
+                />
+              </v-window-item>
+              <v-window-item value="stroke">
+                <dictionary-stroke-order :ideograms="block.character" />
+              </v-window-item>
+              <v-window-item value="links">
+                <Links list="1" :character="block.character" />
+              </v-window-item>
+            </v-window>
+          </v-card-text>
+        </v-card>
+      </v-card-text>
+      <v-card-actions> </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!-- <md-dialog
+    ref="dialogDictionary"
+    :md-active.sync="modalDictionaryOpen"
+    :md-fullscreen="false"
+    :md-close-on-esc="true"
+    id="dialog-dictionary"
+  >
+    <md-dialog-title>
+    </md-dialog-title>
+
+    <md-dialog-content>
+
+    </md-dialog-content>
+
+    <md-dialog-actions>
+      <div class="navigation-container">
+        <md-button
+          class="md-icon-button md-primary clipboard-btn"
+          @click="goLeft(block.character)"
         >
-          <md-button class="md-icon-button md-accent sound-btn">
-            <md-icon>volume_up</md-icon>
-          </md-button>
-        </a>
-      </md-dialog-title>
-
-      <md-dialog-content>
-        <tabs>
-          <tab id="dict" :label="$t('definition')">
-            <div class="loadable-loader" v-show="dictionaryLoading">
-              <md-progress-spinner
-                class="md-accent"
-                md-mode="indeterminate"
-                :visible="dictionaryLoading"
-              ></md-progress-spinner>
-            </div>
-
-            <dictionary-details
-              :dictionary="dictionary"
-              :pinyin="block.pinyin"
-              @change-show="changeShow"
-              ref="dictionaryDetails"
-              v-show="!dictionaryLoading"
-            />
-
-            <dictionary-list
-              :list="dictionaryList"
-              v-show="!dictionaryLoading"
-            />
-          </tab>
-
-          <tab id="stroke" :label="$t('stroke')">
-            <dictionary-stroke-order :ideograms="block.character" />
-          </tab>
-
-          <tab id="links" label="Links">
-            <Links list="1" :character="block.character" />
-          </tab>
-        </tabs>
-      </md-dialog-content>
-
-      <md-dialog-actions>
-        <div class="navigation-container">
-          <md-button
-            class="md-icon-button md-primary clipboard-btn"
-            @click="goLeft(block.character)"
-          >
-            <md-icon>first_page</md-icon>
-          </md-button>
-
-          <md-button
-            class="md-icon-button md-primary clipboard-btn"
-            @click="goRight(block.character)"
-          >
-            <md-icon>last_page</md-icon>
-          </md-button>
-
-          <md-button
-            class="md-icon-button md-primary clipboard-btn"
-            @click="selectLeft(block.character)"
-          >
-            <md-icon>chevron_left</md-icon>
-          </md-button>
-
-          <md-button
-            class="md-icon-button md-primary clipboard-btn"
-            @click="selectRight(block.character)"
-          >
-            <md-icon>chevron_right</md-icon>
-          </md-button>
-        </div>
+          <md-icon>first_page</md-icon>
+        </md-button>
 
         <md-button
-          class="md-primary"
-          @click.native="modalDictionaryOpen = false"
-          >OK</md-button
+          class="md-icon-button md-primary clipboard-btn"
+          @click="goRight(block.character)"
         >
-      </md-dialog-actions>
-    </md-dialog>
+          <md-icon>last_page</md-icon>
+        </md-button>
 
-    <md-snackbar
-      md-position="center"
-      :md-duration="1300"
-      :md-active.sync="clipboardOpen"
-    >
-      <span>{{ $t("copied_to_clipboard") }}</span>
-    </md-snackbar> -->
-  </div>
+        <md-button
+          class="md-icon-button md-primary clipboard-btn"
+          @click="selectLeft(block.character)"
+        >
+          <md-icon>chevron_left</md-icon>
+        </md-button>
+
+        <md-button
+          class="md-icon-button md-primary clipboard-btn"
+          @click="selectRight(block.character)"
+        >
+          <md-icon>chevron_right</md-icon>
+        </md-button>
+      </div>
+
+      <md-button class="md-primary" @click.native="modalDictionaryOpen = false"
+        >OK</md-button
+      >
+    </md-dialog-actions>
+  </md-dialog>
+
+  <md-snackbar
+    md-position="center"
+    :md-duration="1300"
+    :md-active.sync="clipboardOpen"
+  >
+    <span>{{ $t("copied_to_clipboard") }}</span>
+  </md-snackbar> -->
 </template>
 
-<script>
+<script lang="ts">
 import http from "@/helpers/http";
-import Tabs from "@/components/common/Tabs";
-import Tab from "@/components/common/Tab";
-import TraditionalSimplifiedShow from "@/components/ideograms/TraditionalSimplifiedShow";
-import Links from "@/components/ideograms/Links";
-import DictionaryStrokeOrder from "@/components/dictionary/StrokeOrder";
-import DictionaryList from "@/components/dictionary/List";
-import DictionaryDetails from "@/components/dictionary/Details";
+import TraditionalSimplifiedShow from "@/components/ideograms/TraditionalSimplifiedShow.vue";
+import Links from "@/components/ideograms/Links.vue";
+import DictionaryStrokeOrder from "@/components/dictionary/StrokeOrder.vue";
+import DictionaryList from "@/components/dictionary/List.vue";
+import DictionaryDetails from "@/components/dictionary/Details.vue";
 
 let memoryDictionary = {};
 const loadingDictionary = {};
@@ -137,8 +149,6 @@ export default {
     DictionaryList,
     Links,
     TraditionalSimplifiedShow,
-    Tabs,
-    Tab,
   },
   data() {
     const baseDictionary = {
@@ -152,6 +162,7 @@ export default {
     };
 
     return {
+      tab: null,
       block: {},
       modalDictionaryOpen: false,
       dictionaryLoading: false,

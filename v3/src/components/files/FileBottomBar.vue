@@ -16,14 +16,23 @@
 
       <span class="bottom-bar-pinyin">{{ block.pinyin }}</span>
 
-      <md-button
+      <!-- <md-button
         class="md-icon-button md-primary"
         @click.native="loadDictionary(block)"
       >
         <md-icon>find_in_page</md-icon>
-      </md-button>
+      </md-button> -->
 
-      <menu-content position="top">
+      <v-btn
+        icon="mdi-file-find"
+        variant="text"
+        color="primary"
+        @click.native="loadDictionary(block)"
+      ></v-btn>
+
+      <v-btn icon="mdi-dots-vertical" variant="text" color="primary"></v-btn>
+
+      <!-- <menu-content position="top">
         <template slot="click">
           <md-button class="md-icon-button md-primary md-2">
             <md-icon>more_vert</md-icon>
@@ -66,8 +75,8 @@
             <div class="content">Links</div>
           </div>
         </div>
-      </menu-content>
-      <Links list="0" :character="block.character" ref="links" />
+      </menu-content> -->
+      <!-- <Links list="0" :character="block.character" ref="links" /> -->
     </div>
 
     <dictionary-modal ref="dictionaryModal" @change-show="changeShow" />
@@ -118,17 +127,17 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import http from "@/helpers/http";
-import IdeogramsShow from "@/components/ideograms/Show";
-import Links from "@/components/ideograms/Links";
+import IdeogramsShow from "@/components/ideograms/Show.vue";
+import Links from "@/components/ideograms/Links.vue";
 import OptionsManager from "@/domain/options-manager";
 import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 import replaceall from "replaceall";
 import pinyinHelper from "@/helpers/pinyin";
 import isMobile from "@/helpers/is-mobile";
-import DictionaryModal from "@/components/modals/Dictionary";
-import MenuContent from "@/components/common/MenuContent";
+import DictionaryModal from "@/components/modals/Dictionary.vue";
+import MenuContent from "@/components/common/MenuContent.vue";
 import { mapActions, mapMutations, mapGetters } from "vuex";
 
 import {
