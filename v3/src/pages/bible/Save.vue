@@ -1,78 +1,90 @@
 <template>
-  <div class="bible-save-container">
-    <table class="spaced-table">
-      <thead>
-        <tr>
-          <th>{{ $t("language") }}</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(language, index) in languages" :key="index">
-          <td>{{ language.language }}</td>
-          <td class="cell-button">
-            <md-button
-              class="md-icon-button md-raised"
-              @click.native="openModalConfirm('download', language.code, index)"
-              v-if="!language.downloaded"
-            >
-              <md-icon>cloud_download</md-icon>
-            </md-button>
+  <tool-bar></tool-bar>
+  <v-main>
+    <div class="bible-save-container">
+      <table class="spaced-table">
+        <thead>
+          <tr>
+            <th>{{ $t("language") }}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(language, index) in languages" :key="index">
+            <td>{{ language.language }}</td>
+            <td class="cell-button">
+              <v-btn
+                icon="mdi-cloud-download"
+                variant="elevated"
+                size="small"
+                @click.native="
+                  openModalConfirm('download', language.code, index)
+                "
+                v-if="!language.downloaded"
+              ></v-btn>
 
-            <md-button
-              class="md-icon-button md-raised downloaded"
-              @click.native="openModalConfirm('delete', language.code, index)"
-              v-if="language.downloaded"
-            >
-              <md-icon>cloud_download</md-icon>
-            </md-button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+              <v-btn
+                icon="mdi-cloud-download"
+                variant="elevated"
+                size="small"
+                class="downloaded"
+                @click.native="openModalConfirm('delete', language.code, index)"
+                v-if="language.downloaded"
+              ></v-btn>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-    <md-dialog :md-active.sync="modalConfirmOpened" :md-fullscreen="false">
-      <md-dialog-title>{{ $t("confirmation") }}</md-dialog-title>
-      <md-dialog-content>
-        <span v-if="modalType === 'download'">{{
-          $t("confirmation_download_bible")
-        }}</span>
-        <span v-if="modalType === 'delete'">{{
-          $t("confirmation_delete_bible")
-        }}</span>
-        <div style="text-align: center; width: 100%">
-          <br />
-          <md-progress-bar
-            class="md-accent"
-            md-mode="determinate"
-            :md-value="percent"
-            v-if="downloading"
-          ></md-progress-bar>
-        </div>
-      </md-dialog-content>
-
-      <md-dialog-actions>
-        <md-button class="md-primary" @click.native="modalCancel">{{
-          $t("cancel")
-        }}</md-button>
-        <md-button class="md-primary" @click.native.prevent="modalConfirm">{{
-          $t("ok")
-        }}</md-button>
-      </md-dialog-actions>
-    </md-dialog>
-  </div>
+      <v-dialog v-model="modalConfirmOpened" :max-width="400">
+        <v-card>
+          <v-card-title>{{ $t("confirmation") }}</v-card-title>
+          <v-card-text>
+            <span v-if="modalType === 'download'">{{
+              $t("confirmation_download_bible")
+            }}</span>
+            <span v-if="modalType === 'delete'">{{
+              $t("confirmation_delete_bible")
+            }}</span>
+            <div style="text-align: center; width: 100%">
+              <br />
+              <v-progress-linear
+                :model-value="percent"
+                :height="6"
+                v-if="downloading"
+                color="orange"
+              ></v-progress-linear>
+            </div>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn color="primary" @click.native="modalCancel">{{
+              $t("cancel")
+            }}</v-btn>
+            <v-btn color="primary" @click.native.prevent="modalConfirm">{{
+              $t("ok")
+            }}</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
+  </v-main>
 </template>
 
-<script>
-import chaptersData from "shared/data/bible/chapters";
+<script lang="ts">
+import chaptersData from "@/data/bible/chapters";
 import axios from "axios";
 import OptionsManager from "@/domain/options-manager";
 import LocalStorage from "@/helpers/local-storage";
+import ToolBar from "@/components/layout/ToolBar.vue";
 
 const CACHE_VERSION = 1;
 
 export default {
   name: "bible-save",
+  components: {
+    ToolBar,
+  },
   data() {
     const optionsManager = new OptionsManager(this.$i18n);
     const languages = optionsManager.getLanguages(true);

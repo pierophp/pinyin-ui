@@ -16,15 +16,15 @@
 /**
  * @todo change that
  */
-import DictionaryTopBar from "@/components/dictionary/top-bar/Dictionary";
-import VideoTopBar from "@/components/video/top-bar/Video";
-import FileDetailsTopBar from "@/components/files/top-bar/FileDetails";
-import FilePrintTopBar from "@/components/files/top-bar/FilePrint";
-import BibleBooksTopBar from "@/components/bible/top-bar/Books";
-import BibleChaptersTopBar from "@/components/bible/top-bar/Chapters";
-import BibleChapterTopBar from "@/components/bible/top-bar/Chapter";
-import BibleSaveTopBar from "@/components/bible/top-bar/Save";
-import BrowserTopBar from "@/components/browser/top-bar/Browser";
+import DictionaryTopBar from "@/components/dictionary/top-bar/Dictionary.vue";
+import VideoTopBar from "@/components/video/top-bar/Video.vue";
+import FileDetailsTopBar from "@/components/files/top-bar/FileDetails.vue";
+import FilePrintTopBar from "@/components/files/top-bar/FilePrint.vue";
+import BibleBooksTopBar from "@/components/bible/top-bar/Books.vue";
+import BibleChaptersTopBar from "@/components/bible/top-bar/Chapters.vue";
+import BibleChapterTopBar from "@/components/bible/top-bar/Chapter.vue";
+import BibleSaveTopBar from "@/components/bible/top-bar/Save.vue";
+import BrowserTopBar from "@/components/browser/top-bar/Browser.vue";
 
 export default {
   components: {
