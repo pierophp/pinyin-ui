@@ -19,8 +19,9 @@
   </div>
 </template>
 <script lang="ts">
+// @ts-nocheck
 import axios from "axios";
-import MenuContent from "@/components/common/MenuContent";
+import MenuContent from "@/components/common/MenuContent.vue";
 const http = axios.create();
 export default {
   components: {

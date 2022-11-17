@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 /**
  * https://github.com/tolpit/vue-pinch-image
  *  */

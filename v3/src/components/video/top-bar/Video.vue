@@ -58,6 +58,7 @@
   </div>
 </template>
 <script lang="ts">
+// @ts-nocheck
 import http from "@/helpers/http";
 import { mapGetters, mapMutations } from "vuex";
 import {

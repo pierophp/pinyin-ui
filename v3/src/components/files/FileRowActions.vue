@@ -44,6 +44,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import { mapActions, mapMutations } from "vuex";
 
 import {
@@ -53,7 +54,7 @@ import {
   FILE_MUTATION_REMOVE_LINE,
 } from "@/data/file/types";
 
-import MenuContent from "@/components/common/MenuContent";
+import MenuContent from "@/components/common/MenuContent.vue";
 
 export default {
   name: "file-row-actions",

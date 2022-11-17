@@ -22,6 +22,7 @@
   </div>
 </template>
 <script lang="ts">
+// @ts-nocheck
 import { FILE_GETTER_FULL_FILE } from "@/data/file/types";
 import { mapGetters } from "vuex";
 

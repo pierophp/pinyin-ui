@@ -46,6 +46,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import { mapGetters, mapActions } from "vuex";
 import OptionsManager from "@/domain/options-manager";
 

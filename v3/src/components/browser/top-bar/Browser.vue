@@ -20,6 +20,7 @@
 </style>
 
 <script lang="ts">
+// @ts-nocheck
 import { mapMutations, mapGetters } from "vuex";
 
 import {

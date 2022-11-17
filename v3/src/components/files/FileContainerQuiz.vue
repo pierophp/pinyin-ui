@@ -47,6 +47,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import FileRowQuiz from "@/components/files/FileRowQuiz";
 import AddRemoveCharacterModal from "@/components/modals/AddRemoveCharacter";
 import OptionsManager from "@/domain/options-manager";

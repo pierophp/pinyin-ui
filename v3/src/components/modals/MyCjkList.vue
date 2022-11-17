@@ -84,6 +84,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import OptionsManager from "@/domain/options-manager";
 import IdeogramsShow from "@/components/ideograms/Show.vue";
 import AddRemoveCharacterModal from "@/components/modals/AddRemoveCharacter.vue";

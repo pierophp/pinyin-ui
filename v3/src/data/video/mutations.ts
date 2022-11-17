@@ -1,4 +1,5 @@
-import * as types from './types';
+// @ts-nocheck
+import * as types from "./types";
 
 export default {
   [types.VIDEO_MUTATION_SET_VIDEO_URL](state, videoUrl) {

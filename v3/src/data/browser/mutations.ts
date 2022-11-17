@@ -1,3 +1,4 @@
+// @ts-nocheck
 import LocalStorage from "@/helpers/local-storage";
 import * as types from "./types";
 

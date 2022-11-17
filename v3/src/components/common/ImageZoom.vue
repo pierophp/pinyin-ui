@@ -22,7 +22,8 @@
 </template>
 
 <script lang="ts">
-import VuePinchZoom from "@/components/common/VuePinchZoom";
+// @ts-nocheck
+import VuePinchZoom from "@/components/common/VuePinchZoom.vue";
 export default {
   name: "image-zoom",
   props: {

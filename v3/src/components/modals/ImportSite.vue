@@ -26,6 +26,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import { mapActions } from "vuex";
 
 import { FILE_ACTION_IMPORT_FILE } from "@/data/file/types";

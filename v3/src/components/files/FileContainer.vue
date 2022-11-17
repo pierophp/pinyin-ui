@@ -109,6 +109,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import FileRowPrint from "@/components/files/FileRowPrint.vue";
 import FileBottomBar from "@/components/files/FileBottomBar.vue";
 import AddRemoveCharacterModal from "@/components/modals/AddRemoveCharacter.vue";

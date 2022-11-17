@@ -3,6 +3,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 let svgStore = {};
 
 export default {

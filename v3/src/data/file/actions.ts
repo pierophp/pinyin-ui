@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Vue from "vue";
 import http from "@/helpers/http";
 import clipboard01 from "@/domain/clipboard-01";

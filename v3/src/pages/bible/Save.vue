@@ -72,6 +72,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import chaptersData from "@/data/bible/chapters";
 import axios from "axios";
 import OptionsManager from "@/domain/options-manager";

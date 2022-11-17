@@ -23,6 +23,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import FileRowPrint from "@/components/files/FileRowPrint.vue";
 
 export default {

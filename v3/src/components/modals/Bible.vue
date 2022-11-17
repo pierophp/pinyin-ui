@@ -28,6 +28,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import chaptersData from "@/data/bible/chapters";
 import ChapterContainer from "@/components/bible/ChapterContainer.vue";
 import booksName from "@/data/bible/names";

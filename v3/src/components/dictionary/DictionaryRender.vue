@@ -431,7 +431,7 @@
 </template>
 
 <script lang="ts">
-// @ts-ignore
+// @ts-nocheck
 import replaceall from "replaceall";
 import http from "@/helpers/http";
 import User from "@/domain/user";
@@ -449,6 +449,7 @@ export default {
   },
   watch: {
     dictionary() {
+      // @ts-ignore
       this.dictionaryEntry = this.getDictionaryEntry();
     },
   },

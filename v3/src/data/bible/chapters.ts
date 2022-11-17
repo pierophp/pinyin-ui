@@ -1,5 +1,11 @@
 /* eslint-disable */
-export default {
+const chapters: {
+  [book: string]: {
+    c: number;
+    t: number;
+    i?: number;
+  }[];
+} = {
   genesis: [
     { c: 1, t: 31 },
     { c: 2, t: 25 },
@@ -1312,3 +1318,5 @@ export default {
     { c: 22, t: 21 },
   ],
 };
+
+export default chapters;

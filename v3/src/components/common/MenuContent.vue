@@ -13,6 +13,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 export default {
   name: "menu-content",
   data() {

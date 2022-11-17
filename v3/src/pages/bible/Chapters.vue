@@ -26,7 +26,7 @@ export default {
     };
   },
   methods: {
-    goTo(link) {
+    goTo(link: string) {
       this.$router.push(`/bible/${this.$route.params.book}/${link}`);
     },
   },
