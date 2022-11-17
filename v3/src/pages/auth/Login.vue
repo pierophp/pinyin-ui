@@ -88,8 +88,10 @@ export default {
     }
 
     let parsed: any = this.$route.query;
+
     if (!parsed.code) {
-      parsed = new URLSearchParams(location.search);
+      const urlSearchParams = new URLSearchParams(location.search);
+      parsed.code = urlSearchParams.get("code");
     }
     parsed.route = this.$route.name;
 
