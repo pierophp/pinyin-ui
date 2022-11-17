@@ -24,12 +24,12 @@
             />
           </div>
 
-          <md-button
+          <!-- <md-button
             v-if="user.admin"
             class="md-raised md-primary"
             @click.native="edit()"
             >{{ $t("edit") }}</md-button
-          >
+          > -->
         </div>
         <div v-if="editing">
           <div class="field-container">
@@ -39,12 +39,12 @@
               :cols="isMobile ? 30 : 50"
             ></textarea>
           </div>
-          <md-button class="md-raised md-primary" @click.native="save()">{{
+          <!-- <md-button class="md-raised md-primary" @click.native="save()">{{
             $t("save")
           }}</md-button>
           <md-button class="md-raised md-accent" @click.native="cancelEdit()">{{
             $t("cancel")
-          }}</md-button>
+          }}</md-button> -->
         </div>
       </div>
     </div>
@@ -431,13 +431,14 @@
 </template>
 
 <script lang="ts">
+// @ts-ignore
 import replaceall from "replaceall";
 import http from "@/helpers/http";
 import User from "@/domain/user";
 import OptionsManager from "@/domain/options-manager";
 import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
-import GoogleTranslateLink from "@/components/dictionary/GoogleTranslateLink";
-import LoadableContent from "@/components/common/loading/LoadableContent";
+import GoogleTranslateLink from "@/components/dictionary/GoogleTranslateLink.vue";
+import LoadableContent from "@/components/common/loading/LoadableContent.vue";
 import isMobile from "@/helpers/is-mobile";
 
 export default {

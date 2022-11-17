@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import FileRowPrint from "@/components/files/FileRowPrint";
+import FileRowPrint from "@/components/files/FileRowPrint.vue";
 
 export default {
   name: "modal-footnote",

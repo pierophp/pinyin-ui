@@ -51,6 +51,7 @@ export default {
   },
   methods: {
     confirm() {
+      // @ts-ignore
       this.closeDialog("filePasteModal");
       this.parsePaste({
         action: this.action,
@@ -66,6 +67,7 @@ export default {
     },
     onOpen() {
       setTimeout(() => {
+        // @ts-ignore
         this.$refs.textareas.focus();
       }, 500);
     },

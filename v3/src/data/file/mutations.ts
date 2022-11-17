@@ -1,9 +1,11 @@
+// @ts-nocheck
+
 import Vue from "vue";
 import pinyin from "@/helpers/pinyin";
 import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 import * as types from "./types";
 
-function addHighlight(state, data) {
+function addHighlight(state: any, data: any) {
   for (
     let i = parseInt(data.startLine, 10);
     i <= parseInt(data.endLine, 10);
@@ -20,10 +22,13 @@ function addHighlight(state, data) {
     }
 
     for (
+      // @ts-ignore
       let j = parseInt(startBlock, 10);
+      // @ts-ignore
       j <= parseInt(endBlock, 10);
       j += 1
     ) {
+      // @ts-ignore
       state.file.find((item) => Number(item[0].lineIndex) === Number(i))[j].h =
         data.type;
       state.fullFile[i][j].h = data.type;
@@ -40,17 +45,18 @@ function addHighlight(state, data) {
 
   state.fileChangeTimestamp = Date.now();
   state.fullFileString = JSON.stringify(state.fullFile);
+  // @ts-ignore
   window.getSelection().removeAllRanges();
 }
 
-function findRange(state, data) {
+function findRange(state: any, data: any) {
   let startLine = parseInt(data.startLine, 10);
   let startBlock = parseInt(data.startBlock, 10);
   let endLine = parseInt(data.endtLine, 10);
   let endBlock = parseInt(data.endBlock, 10);
   const highlight = state.fullFile[startLine][startBlock].h;
 
-  function findRangeStart(line, block) {
+  function findRangeStart(line: any, block: any) {
     if (state.fullFile[line][block].h !== highlight) {
       return;
     }
@@ -73,7 +79,7 @@ function findRange(state, data) {
 
   findRangeStart(startLine, startBlock);
 
-  function findRangeEnd(line, block) {
+  function findRangeEnd(line: any, block: any) {
     if (state.fullFile[line][block].h !== highlight) {
       return;
     }

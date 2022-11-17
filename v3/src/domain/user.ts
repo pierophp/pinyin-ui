@@ -6,7 +6,7 @@ import http from "@/helpers/http";
 const apiUrl = Config.get("apiUrl");
 
 class User {
-  static async login(parsed) {
+  static async login(parsed: { code: string; route: string }) {
     let auth = "google";
     if (parsed.route === "login-baidu") {
       auth = "baidu";
@@ -22,6 +22,8 @@ class User {
       response = await http.get(`${apiUrl}auth/baidu/callback`, {
         params: { code: parsed.code },
       });
+    } else {
+      throw new Error("Invalid provider");
     }
 
     Cookies.set("token", response.data.token, {
@@ -39,7 +41,7 @@ class User {
     Cookies.remove("token", { domain: this.getDomain() });
     // LocalStorage.remove('token');
     LocalStorage.remove("user");
-    window.location = "/";
+    window.location.href = "/";
   }
 
   static isLogged() {

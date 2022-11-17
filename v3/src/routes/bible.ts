@@ -49,10 +49,11 @@ const routes: RouteRecordRaw[] = [
     path: "/",
     name: "login",
     component: () =>
-      import(/* webpackChunkName: "bible" */ "@/pages/auth/Login"),
+      import(/* webpackChunkName: "bible" */ "@/pages/auth/Login.vue"),
     meta: {
       hideTopBar: true,
       redirectTo: "/#/bible",
+      protected: false,
       ...appOptions,
     },
   },
@@ -60,9 +61,10 @@ const routes: RouteRecordRaw[] = [
     path: "/login/baidu",
     name: "login-baidu",
     component: () =>
-      import(/* webpackChunkName: "bible" */ "@/pages/auth/Login"),
+      import(/* webpackChunkName: "bible" */ "@/pages/auth/Login.vue"),
     meta: {
       hideTopBar: true,
+      protected: false,
       ...appOptions,
     },
   },
@@ -70,7 +72,7 @@ const routes: RouteRecordRaw[] = [
     path: "/bible",
     name: "bible",
     component: () =>
-      import(/* webpackChunkName: "bible" */ "@/pages/bible/Books"),
+      import(/* webpackChunkName: "bible" */ "@/pages/bible/Books.vue"),
     meta: {
       protected: true,
       topBar: "bible-books",
@@ -82,7 +84,7 @@ const routes: RouteRecordRaw[] = [
     path: "/bible/save",
     name: "bible-save",
     component: () =>
-      import(/* webpackChunkName: "bible" */ "@/pages/bible/Save"),
+      import(/* webpackChunkName: "bible" */ "@/pages/bible/Save.vue"),
     meta: {
       protected: true,
       hideTitle: true,
@@ -95,7 +97,7 @@ const routes: RouteRecordRaw[] = [
     path: "/bible/:book",
     name: "bible-chapters",
     component: () =>
-      import(/* webpackChunkName: "bible" */ "@/pages/bible/Chapters"),
+      import(/* webpackChunkName: "bible" */ "@/pages/bible/Chapters.vue"),
     meta: {
       protected: true,
       hideTitle: true,
@@ -108,7 +110,7 @@ const routes: RouteRecordRaw[] = [
     path: "/bible/:book/:chapter",
     name: "bible-chapter",
     component: () =>
-      import(/* webpackChunkName: "bible" */ "@/pages/bible/Chapter"),
+      import(/* webpackChunkName: "bible" */ "@/pages/bible/Chapter.vue"),
     meta: {
       protected: true,
       hideTitle: true,

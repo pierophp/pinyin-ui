@@ -1,11 +1,11 @@
-export default function (pinyin) {
+export default function (pinyin?: string) {
   if (pinyin === undefined) {
     return 0;
   }
 
   pinyin = pinyin.toLowerCase();
 
-  const tones = {
+  const tones: { [code: string]: number } = {
     ā: 1,
     ē: 1,
     ī: 1,

@@ -8,6 +8,7 @@ const token = Cookies.get("token");
 const instance = axios.create({
   baseURL,
   headers: {
+    // @ts-ignore
     Authorization: {
       toString() {
         return `Bearer ${token}`;

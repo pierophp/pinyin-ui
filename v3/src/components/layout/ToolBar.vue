@@ -85,6 +85,7 @@ export default {
       } else if (action === "logout") {
         this.logout();
       } else if (action === "reload") {
+        // @ts-ignore
         window.location.reload(true);
       }
     },

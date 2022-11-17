@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <a
-      href
+      href="javascript:void(0)"
       class="remove"
       @click.prevent="removeBlock({ lineIndex, blockIndex })"
       >X</a
@@ -28,7 +28,8 @@
 
 <script lang="ts">
 // import autosizeInput from 'autosize-input';
-import MediumEditor from "@/components/common/editor/MediumEditor";
+import MediumEditor from "@/components/common/editor/MediumEditor.vue";
+// @ts-ignore
 import replaceall from "replaceall";
 import { mapMutations } from "vuex";
 

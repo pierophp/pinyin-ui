@@ -79,7 +79,10 @@ export default {
   components: {
     ToolBar,
   },
-  data() {
+  data(): {
+    options: any;
+    books: any;
+  } {
     return {
       options: {},
       books: booksData,

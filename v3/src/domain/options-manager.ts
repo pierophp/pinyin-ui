@@ -2,7 +2,7 @@ import LocalStorage from "@/helpers/local-storage";
 // import Vue from "vue";
 import orderBy from "lodash/orderBy";
 
-const languageCodes = {
+const languageCodes: { [lang: string]: string } = {
   pt: "portuguese",
   en: "english",
   es: "spanish",
@@ -14,11 +14,11 @@ const languageCodes = {
 };
 
 class OptionsManager {
-  options;
+  protected options: any;
 
-  i18n;
+  protected i18n;
 
-  constructor(i18n) {
+  constructor(i18n: any) {
     this.i18n = i18n;
   }
 
@@ -51,7 +51,7 @@ class OptionsManager {
     };
   }
 
-  getLanguages(chinese) {
+  getLanguages(chinese: any) {
     const languages = [];
 
     for (const languageCode of Object.keys(languageCodes)) {
@@ -71,6 +71,7 @@ class OptionsManager {
         language: this.i18n.t("chinese.traditional"),
       });
     }
+
     return orderBy(languages, ["language"]);
   }
 
@@ -89,6 +90,7 @@ class OptionsManager {
 
     for (const prop in options) {
       if (Object.prototype.hasOwnProperty.call(options, prop)) {
+        // @ts-ignore
         returnOptions[prop] = options[prop];
       }
     }
@@ -97,7 +99,7 @@ class OptionsManager {
     return this.options;
   }
 
-  save(newOptions) {
+  save(newOptions: any) {
     if (!this.options) {
       this.getOptions();
     }

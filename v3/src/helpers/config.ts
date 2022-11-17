@@ -1,7 +1,9 @@
+// @ts-ignore
 import config from "@/.config";
 
 class Config {
-  static get(key) {
+  static get(key: string) {
+    // @ts-ignore
     return config[process.env.NODE_ENV][key];
   }
 }

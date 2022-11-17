@@ -1,6 +1,6 @@
 const vowels = "aāáǎàeēéěèiīíǐìoōóǒòuūúǔùüǖǘǚǜ";
 const tones = "āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ";
-function separate(pinyin) {
+function separate(pinyin: string): string {
   if (!pinyin) {
     return pinyin;
   }
@@ -28,7 +28,10 @@ function separate(pinyin) {
   //.replace(new RegExp('([^e\w\s])(r)'), '$1 $2'); // r an initial, except in er
 }
 
-export default function separatePinyinInSyllables(pinyin, separateBySpaces) {
+export default function separatePinyinInSyllables(
+  pinyin: string,
+  separateBySpaces: boolean = false
+): string[] {
   if (!pinyin) {
     return [];
   }
@@ -38,7 +41,7 @@ export default function separatePinyinInSyllables(pinyin, separateBySpaces) {
   }
 
   const pinyinSeparated = separate(pinyin).split(" ");
-  const newPinyin = [];
+  const newPinyin: string[] = [];
 
   pinyinSeparated.forEach((p) => {
     let totalTones = 1;

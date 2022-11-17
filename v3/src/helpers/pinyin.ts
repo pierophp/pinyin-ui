@@ -1,4 +1,4 @@
-function getUpperCaseIndices(str) {
+function getUpperCaseIndices(str: string) {
   const indices = [];
   for (let i = 0; i < str.length; i += 1) {
     if (str[i] === str[i].toUpperCase()) {
@@ -8,7 +8,7 @@ function getUpperCaseIndices(str) {
   return indices;
 }
 
-function revertToUpperCase(str, indices) {
+function revertToUpperCase(str: string, indices: number[]) {
   const chars = str.split("");
   // eslint-disable-next-line
   indices.map((idx) => {
@@ -17,11 +17,11 @@ function revertToUpperCase(str, indices) {
   return chars.join("");
 }
 
-export default function (text) {
+export default function (text: string) {
   // eslint-disable-next-line
   const tonePtn =
     /([aeiouvüAEIOUVÜ]{1,2}(n|ng|r|\'er|N|NG|R|\'ER){0,1}[1234])/g;
-  const toneMap = {
+  const toneMap: { [code: string]: string[] } = {
     a: ["ā", "á", "ǎ", "à"],
     ai: ["āi", "ái", "ǎi", "ài"],
     ao: ["āo", "áo", "ǎo", "ào"],

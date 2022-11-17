@@ -34,7 +34,7 @@ export default {
     document.removeEventListener("click", this.hideOnClickOutside);
   },
   methods: {
-    hideOnClickOutside(e) {
+    hideOnClickOutside(e: any) {
       if (this.opening) {
         return;
       }

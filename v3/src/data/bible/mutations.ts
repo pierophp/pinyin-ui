@@ -2,27 +2,42 @@ import LocalStorage from "@/helpers/local-storage";
 import * as types from "./types";
 
 export default {
-  [types.BIBLE_MUTATION_SET_BOOKS_EXHIBITION_TYPE](state, booksExhibitionType) {
+  [types.BIBLE_MUTATION_SET_BOOKS_EXHIBITION_TYPE](
+    state: any,
+    booksExhibitionType: string
+  ) {
     LocalStorage.save("books-exhibition-type", booksExhibitionType);
     state.booksExhibitionType = booksExhibitionType;
   },
 
-  [types.BIBLE_MUTATION_SET_BOOKS_SHOW_PINYIN](state, booksShowPinyin) {
+  [types.BIBLE_MUTATION_SET_BOOKS_SHOW_PINYIN](
+    state: any,
+    booksShowPinyin: string
+  ) {
     LocalStorage.save("books-show-pinyin", booksShowPinyin);
     state.booksShowPinyin = booksShowPinyin;
   },
 
-  [types.BIBLE_MUTATION_SET_VERSES_SHOW_AS_MODAL](state, versesShowAsModal) {
+  [types.BIBLE_MUTATION_SET_VERSES_SHOW_AS_MODAL](
+    state: any,
+    versesShowAsModal: any
+  ) {
     versesShowAsModal = versesShowAsModal ? 1 : 0;
     LocalStorage.save("verses-show-as-modal", versesShowAsModal);
     state.versesShowAsModal = versesShowAsModal;
   },
 
-  [types.BIBLE_MUTATION_SET_VERSES_MODAL_VISIBLE](state, versesModalVisible) {
+  [types.BIBLE_MUTATION_SET_VERSES_MODAL_VISIBLE](
+    state: any,
+    versesModalVisible: any
+  ) {
     state.versesModalVisible = versesModalVisible;
   },
 
-  [types.BIBLE_MUTATION_SET_OPEN_CHAPTER_ON_LOAD](state, openChapterOnLoad) {
+  [types.BIBLE_MUTATION_SET_OPEN_CHAPTER_ON_LOAD](
+    state: any,
+    openChapterOnLoad: any
+  ) {
     openChapterOnLoad = openChapterOnLoad ? 1 : 0;
     LocalStorage.save("open-chapter-on-load", openChapterOnLoad);
     state.openChapterOnLoad = openChapterOnLoad;

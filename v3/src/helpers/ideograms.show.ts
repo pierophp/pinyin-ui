@@ -3,22 +3,22 @@ import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 import extractPinyinTone from "@/helpers/extract-pinyin-tone";
 import specialIdeograms from "@/helpers/special-ideograms-chars";
 
-export default function (params) {
+export default function (params: any) {
   if (!params.pinyin && !params.character) {
     return [];
   }
 
-  const printData = [];
+  const printData: any[] = [];
   const optionsManager = new OptionsManager(undefined);
   const options = optionsManager.getOptions();
-  const colors = {};
+  const colors: any = {};
   colors[1] = options.color1;
   colors[2] = options.color2;
   colors[3] = options.color3;
   colors[4] = options.color4;
   colors[0] = options.color0;
 
-  let pinyin = "";
+  let pinyin: string[] = [];
   if (params.pinyin) {
     pinyin = separatePinyinInSyllables(params.pinyin, params.useSpaces);
   }

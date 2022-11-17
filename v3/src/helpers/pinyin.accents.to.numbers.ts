@@ -1,6 +1,6 @@
 import extractPinyinTone from "./extract-pinyin-tone";
 
-export default function pinyinAccentsToNumbers(pinyin) {
+export default function pinyinAccentsToNumbers(pinyin: string): string {
   let tone = extractPinyinTone(pinyin);
   if (!tone) {
     tone = 5;

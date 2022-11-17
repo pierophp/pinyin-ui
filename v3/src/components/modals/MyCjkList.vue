@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-dialog ref="dialogKnownWords" :md-active.sync="this.active">
+    <!-- <md-dialog ref="dialogKnownWords" :md-active.sync="this.active">
       <md-dialog-title>
         {{ $t(action) }}
         <span v-if="type === 'words' && hsk !== 999">- HSK {{ hsk }}</span>
@@ -73,7 +73,7 @@
           >OK</md-button
         >
       </md-dialog-actions>
-    </md-dialog>
+    </md-dialog> -->
 
     <add-remove-character-modal
       @add-character="addRemoveCharacter"
@@ -85,8 +85,8 @@
 
 <script lang="ts">
 import OptionsManager from "@/domain/options-manager";
-import IdeogramsShow from "@/components/ideograms/Show";
-import AddRemoveCharacterModal from "@/components/modals/AddRemoveCharacter";
+import IdeogramsShow from "@/components/ideograms/Show.vue";
+import AddRemoveCharacterModal from "@/components/modals/AddRemoveCharacter.vue";
 
 import { mapMutations } from "vuex";
 
@@ -104,11 +104,11 @@ export default {
     };
   },
   props: {
-    active: "",
-    type: "",
-    action: "",
-    hsk: "",
-    frequency: "",
+    active: { type: String },
+    type: { type: String },
+    action: { type: String },
+    hsk: { type: String },
+    frequency: { type: String },
     items: {
       type: Array,
       default: () => [],

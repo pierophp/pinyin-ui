@@ -6,6 +6,7 @@ import clipboard03 from "@/domain/clipboard-03";
 import clipboard04 from "@/domain/clipboard-04";
 import clipboardUrl from "@/domain/clipboard-url";
 import LocalStorage from "@/helpers/local-storage";
+// @ts-ignore
 import replaceall from "replaceall";
 import trimStart from "lodash/trimStart";
 import * as types from "./types";
