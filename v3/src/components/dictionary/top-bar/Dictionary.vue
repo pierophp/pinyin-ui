@@ -18,7 +18,7 @@
     </menu-content>
   </div>
 </template>
-<script>
+<script lang="ts">
 import axios from "axios";
 import MenuContent from "@/components/common/MenuContent";
 const http = axios.create();

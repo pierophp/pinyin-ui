@@ -35,7 +35,7 @@
   </md-dialog> -->
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions } from "vuex";
 
 import { FILE_ACTION_PARSE_PASTE } from "@/data/file/types";

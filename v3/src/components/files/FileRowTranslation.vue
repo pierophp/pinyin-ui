@@ -1,16 +1,18 @@
 <template>
   <div class="translation" v-if="translation">
-    <a href="javascript:void(0)" @click="openTranslation">{{$t('translation')}}</a>
+    <a href="javascript:void(0)" @click="openTranslation">{{
+      $t("translation")
+    }}</a>
     <div class="text" v-html="translation" v-show="show"></div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
-  name: 'file-row-translation',
+  name: "file-row-translation",
   data() {
     return {
-      translation: '',
+      translation: "",
     };
   },
   props: {
@@ -25,7 +27,7 @@ export default {
   },
   methods: {
     openTranslation() {
-      this.$emit('toogle-translation');
+      this.$emit("toogle-translation");
     },
   },
   mounted() {

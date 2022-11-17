@@ -46,7 +46,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import FileRowQuiz from "@/components/files/FileRowQuiz";
 import AddRemoveCharacterModal from "@/components/modals/AddRemoveCharacter";
 import OptionsManager from "@/domain/options-manager";

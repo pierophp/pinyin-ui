@@ -21,7 +21,7 @@
   </md-dialog> -->
 </template>
 
-<script>
+<script lang="ts">
 import VuePinchZoom from "@/components/common/VuePinchZoom";
 export default {
   name: "image-zoom",

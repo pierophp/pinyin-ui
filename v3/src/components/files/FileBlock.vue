@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // import autosizeInput from 'autosize-input';
 import MediumEditor from "@/components/common/editor/MediumEditor";
 import replaceall from "replaceall";

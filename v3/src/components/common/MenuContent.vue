@@ -12,9 +12,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
-  name: 'menu-content',
+  name: "menu-content",
   data() {
     return {
       show: false,
@@ -28,10 +28,10 @@ export default {
     position: null,
   },
   mounted() {
-    document.addEventListener('click', this.hideOnClickOutside);
+    document.addEventListener("click", this.hideOnClickOutside);
   },
   destroy() {
-    document.removeEventListener('click', this.hideOnClickOutside);
+    document.removeEventListener("click", this.hideOnClickOutside);
   },
   methods: {
     hideOnClickOutside(e) {
@@ -48,7 +48,7 @@ export default {
 
       this.show = true;
       let top = e.clientY;
-      if (this.position === 'top') {
+      if (this.position === "top") {
         top = top - 217;
       } else {
         top = top - 30;
@@ -88,4 +88,3 @@ export default {
   color: rgba(0, 0, 0, 0.54) !important;
 }
 </style>
-

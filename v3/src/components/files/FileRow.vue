@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import FileBlock from "@/components/files/FileBlock";
 import FileRowActions from "@/components/files/FileRowActions";
 

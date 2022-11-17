@@ -5,12 +5,12 @@
     </md-button>
   </div>
 </template>
-<script>
+<script lang="ts">
 export default {
   methods: {
     visualizationMode() {
       this.$router.push({
-        name: 'print',
+        name: "print",
         params: { filename: this.$route.params.filename },
         query: { d: this.$route.query.d },
       });

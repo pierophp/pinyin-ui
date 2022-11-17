@@ -43,7 +43,7 @@
   </menu-content>
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions, mapMutations } from "vuex";
 
 import {

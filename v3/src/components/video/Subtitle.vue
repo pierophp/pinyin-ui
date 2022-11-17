@@ -7,7 +7,7 @@
   />
 </template>
 
-<script>
+<script lang="ts">
 import http from "@/helpers/http";
 import webVTTParser from "src/domain/webvtt-parser";
 import replaceall from "replaceall";

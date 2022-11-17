@@ -83,7 +83,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import OptionsManager from "@/domain/options-manager";
 import IdeogramsShow from "@/components/ideograms/Show";
 import AddRemoveCharacterModal from "@/components/modals/AddRemoveCharacter";

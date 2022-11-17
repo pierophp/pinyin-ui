@@ -19,7 +19,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { mapMutations, mapGetters } from "vuex";
 
 import {

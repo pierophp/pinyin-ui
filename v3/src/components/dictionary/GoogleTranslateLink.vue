@@ -1,26 +1,28 @@
 <template>
   <span v-if="sourceLanguage !== targetLanguage">
     &nbsp;
-    <a :href="url" target="google_translate" class="translate">{{$t('translate')}}</a>
+    <a :href="url" target="google_translate" class="translate">{{
+      $t("translate")
+    }}</a>
   </span>
 </template>
 
-<script>
+<script lang="ts">
 export default {
-  name: 'google-translate-link',
+  name: "google-translate-link",
   props: {
-    word: '',
-    sourceLanguage: '',
-    targetLanguage: '',
+    word: "",
+    sourceLanguage: "",
+    targetLanguage: "",
   },
   data() {
     return {
       url:
-        'https://translate.google.com.br/#view=home&op=translate&sl=' +
+        "https://translate.google.com.br/#view=home&op=translate&sl=" +
         this.sourceLanguage +
-        '&tl=' +
+        "&tl=" +
         this.targetLanguage +
-        '&text=' +
+        "&text=" +
         encodeURIComponent(this.word),
     };
   },

@@ -21,7 +21,7 @@
     </portal> -->
   </div>
 </template>
-<script>
+<script lang="ts">
 import { FILE_GETTER_FULL_FILE } from "@/data/file/types";
 import { mapGetters } from "vuex";
 

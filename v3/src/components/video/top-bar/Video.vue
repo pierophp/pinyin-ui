@@ -57,7 +57,7 @@
     </v-dialog>
   </div>
 </template>
-<script>
+<script lang="ts">
 import http from "@/helpers/http";
 import { mapGetters, mapMutations } from "vuex";
 import {

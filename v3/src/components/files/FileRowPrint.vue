@@ -88,7 +88,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import FileRowTranslation from "@/components/files/FileRowTranslation";
 import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 import ideogramsShow from "@/helpers/ideograms.show";

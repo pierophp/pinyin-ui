@@ -430,7 +430,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import replaceall from "replaceall";
 import http from "@/helpers/http";
 import User from "@/domain/user";

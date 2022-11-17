@@ -1,15 +1,15 @@
 <template>
   <div ref="editor" class="div-input">
-    {{content}}
+    {{ content }}
   </div>
 </template>
 
-<script>
-import 'medium-editor/dist/css/medium-editor.css';
-import 'medium-editor/dist/css/themes/default.css';
+<script lang="ts">
+import "medium-editor/dist/css/medium-editor.css";
+import "medium-editor/dist/css/themes/default.css";
 
 export default {
-  name: 'medium-editor',
+  name: "medium-editor",
   data() {
     return {
       internalContent: this.content,
@@ -18,7 +18,7 @@ export default {
   props: {
     content: {
       // eslint-disable-next-line quote-props
-      default: () => '',
+      default: () => "",
     },
   },
   watch: {
@@ -32,11 +32,12 @@ export default {
   async mounted() {
     const editorToDataSync = (data, editable) => {
       this.internalContent = editable.innerText.trim();
-      this.$emit('content', this.internalContent);
+      this.$emit("content", this.internalContent);
     };
 
-    const MediumEditor = (await import(/* webpackChunkName: "medium-editor" */ 'medium-editor'))
-      .default;
+    const MediumEditor = (
+      await import(/* webpackChunkName: "medium-editor" */ "medium-editor")
+    ).default;
     this.editor = new MediumEditor(this.$el, {
       disableReturn: true,
       placeholder: false,
@@ -44,7 +45,7 @@ export default {
       toolbar: false,
       mode: MediumEditor.inlineMode,
     });
-    this.editor.subscribe('editableInput', editorToDataSync);
+    this.editor.subscribe("editableInput", editorToDataSync);
     setTimeout(() => {
       // editor.setContent('teste', 0);
     }, 5000);

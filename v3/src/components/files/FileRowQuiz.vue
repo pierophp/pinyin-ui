@@ -41,7 +41,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 import ideogramsShow from "@/helpers/ideograms.show";
 import OptionsManager from "@/domain/options-manager";

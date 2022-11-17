@@ -1,4 +1,3 @@
-
 <template>
   <div
     class="pinch-wrapper"
@@ -7,11 +6,17 @@
     @touchmove="move"
     @touchend="end"
   >
-    <img :src="src" :alt="alt" class="pinch-img" ref="image" referrerpolicy="no-referrer">
+    <img
+      :src="src"
+      :alt="alt"
+      class="pinch-img"
+      ref="image"
+      referrerpolicy="no-referrer"
+    />
   </div>
 </template>
 
-<script >
+<script lang="ts">
 /**
  * https://github.com/tolpit/vue-pinch-image
  *  */
@@ -54,21 +59,19 @@ export default {
       inMovement: false,
       transition: {
         transform: null,
-        origin: 'transform-origin 400ms linear',
+        origin: "transform-origin 400ms linear",
       },
     };
   },
   computed: {
     zoomStyles() {
-      let transition = '';
+      let transition = "";
       if (this.transition.transform) transition += this.transition.transform;
       if (this.transition.origin)
         transition +=
-          (transition.length > 0 ? ', ' : '') + this.transition.origin;
+          (transition.length > 0 ? ", " : "") + this.transition.origin;
       return {
-        transform: `scale(${this.zoom}) translate3d(${this.x}px, ${
-          this.y
-        }px, 0px)`,
+        transform: `scale(${this.zoom}) translate3d(${this.x}px, ${this.y}px, 0px)`,
         transformOrigin: `${this.zoomCenter.x}px ${this.zoomCenter.y}px 0px`,
         transition,
       };
@@ -121,7 +124,7 @@ export default {
     },
     handlePinchStart(event) {
       const { x, y } = this.getTouchCenter(
-        this.getTouchesCenter(event.touches[0], event.touches[1]),
+        this.getTouchesCenter(event.touches[0], event.touches[1])
       );
       if (this.zoom < this.maxZoom) {
         this.zoomCenter.x = x;
@@ -129,7 +132,7 @@ export default {
       }
       this.lastDistance = this.getZoomDistance(
         event.touches[0],
-        event.touches[1],
+        event.touches[1]
       );
     },
     handlePinchMove(event) {
@@ -138,7 +141,7 @@ export default {
       const scale = this.calcZoom(
         this.minZoom - this.minZoomBounce,
         this.maxZoom + this.maxZoomBounce,
-        this.zoom * last,
+        this.zoom * last
       );
       if (
         this.zoom < this.maxZoom ||
@@ -209,8 +212,8 @@ export default {
       });
       clearTimeout(this.clickTimeout);
       this.inMovement = true;
-      this.transition.origin = 'transform-origin 400ms linear';
-      this.transition.transform = 'transform 200ms linear';
+      this.transition.origin = "transform-origin 400ms linear";
+      this.transition.transform = "transform 200ms linear";
       if (this.zoom > this.minZoom) {
         this.zoom = 1;
         this.x = 0;
@@ -225,7 +228,7 @@ export default {
         this.zoomCenter.x = x;
         this.zoomCenter.y = y;
         this.clickTimeout = setTimeout(() => {
-          this.transition.origin = 'transform-origin 400ms linear';
+          this.transition.origin = "transform-origin 400ms linear";
           this.zoom = this.maxZoom;
           this.inMovement = false;
         }, 200);
@@ -243,7 +246,7 @@ export default {
     },
     getZoomDistance(e, t) {
       return Math.sqrt(
-        Math.pow(e.clientY - t.clientY, 2) + Math.pow(e.clientX - t.clientX, 2),
+        Math.pow(e.clientY - t.clientY, 2) + Math.pow(e.clientX - t.clientX, 2)
       );
     },
     getTouchesCenter(touch1, touch2) {

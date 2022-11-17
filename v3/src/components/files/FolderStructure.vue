@@ -2,16 +2,19 @@
   <div class="folders-container no-print" v-if="dirs.length">
     <span v-for="(dir, index) in dirs" v-bind:key="index">
       <span v-if="index < dirs.length - 1 || showLast">
-        <a href="javascript:void(0)" @click="goToDir(dir.path)">{{ dir.title }}</a> /
+        <a href="javascript:void(0)" @click="goToDir(dir.path)">{{
+          dir.title
+        }}</a>
+        /
       </span>
       <span v-if="index == dirs.length - 1 && !showLast">{{ dir.title }}</span>
     </span>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
-  name: 'folder-structure',
+  name: "folder-structure",
   props: {
     showLast: {
       type: Boolean,
@@ -34,7 +37,7 @@ export default {
   methods: {
     goToDir(d) {
       this.$router.push({
-        name: 'files',
+        name: "files",
         query: { d },
       });
     },
@@ -42,18 +45,18 @@ export default {
       const dirs = [];
 
       if (this.$route.query.d) {
-        let dirsList = this.$route.query.d.split('/');
-        dirsList = dirsList.filter(item => item);
+        let dirsList = this.$route.query.d.split("/");
+        dirsList = dirsList.filter((item) => item);
 
-        let path = '';
+        let path = "";
         if (dirsList.length) {
           dirs.push({
-            title: 'Home',
-            path: '/',
+            title: "Home",
+            path: "/",
           });
         }
 
-        dirsList.forEach(item => {
+        dirsList.forEach((item) => {
           path += `/${item}`;
           dirs.push({
             title: item,

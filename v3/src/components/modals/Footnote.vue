@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import FileRowPrint from "@/components/files/FileRowPrint";
 
 export default {
