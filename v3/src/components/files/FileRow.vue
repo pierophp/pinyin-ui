@@ -21,8 +21,9 @@
 </template>
 
 <script lang="ts">
-import FileBlock from "@/components/files/FileBlock";
-import FileRowActions from "@/components/files/FileRowActions";
+// @ts-nocheck
+import FileBlock from "@/components/files/FileBlock.vue";
+import FileRowActions from "@/components/files/FileRowActions.vue";
 
 export default {
   name: "file-row",

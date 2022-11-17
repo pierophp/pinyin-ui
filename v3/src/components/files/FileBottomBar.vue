@@ -128,6 +128,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import http from "@/helpers/http";
 import IdeogramsShow from "@/components/ideograms/Show.vue";
 import Links from "@/components/ideograms/Links.vue";

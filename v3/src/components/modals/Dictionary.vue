@@ -131,6 +131,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import http from "@/helpers/http";
 import TraditionalSimplifiedShow from "@/components/ideograms/TraditionalSimplifiedShow.vue";
 import Links from "@/components/ideograms/Links.vue";

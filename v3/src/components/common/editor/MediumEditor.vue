@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import "medium-editor/dist/css/medium-editor.css";
 import "medium-editor/dist/css/themes/default.css";
 

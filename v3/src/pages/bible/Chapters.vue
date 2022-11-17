@@ -15,6 +15,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import chaptersData from "@/data/bible/chapters";
 import ToolBar from "@/components/layout/ToolBar.vue";
 

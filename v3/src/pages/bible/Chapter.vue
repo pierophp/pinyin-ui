@@ -12,6 +12,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import ChapterContainer from "@/components/bible/ChapterContainer.vue";
 import ToolBar from "@/components/layout/ToolBar.vue";
 

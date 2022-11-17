@@ -16,6 +16,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import { mapMutations } from "vuex";
 
 import {

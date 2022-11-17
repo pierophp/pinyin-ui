@@ -8,10 +8,11 @@
 </template>
 
 <script lang="ts">
-import webVTTParser from "src/domain/webvtt-parser";
+// @ts-nocheck
+import webVTTParser from "@/domain/webvtt-parser";
 import replaceall from "replaceall";
-import FilePrint from "src/pages/files/FilePrint";
-import separatePinyinInSyllables from "src/helpers/separate-pinyin-in-syllables";
+import FilePrint from "@/pages/files/FilePrint";
+import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 
 import { mapGetters, mapMutations } from "vuex";
 

@@ -30,6 +30,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import axios from "axios";
 
 function renderFanningStrokes(HanziWriter, target, strokes) {
@@ -103,9 +104,8 @@ export default {
       height: 230,
       padding: 0,
       strokeAnimationDuration: 300, // duration of each stroke in ms
-      delayBetweenStrokes: 300, // delay between drawing subsequent strokes in ms
       strokeFadeDuration: 400,
-      delayBetweenStrokes: 200,
+      delayBetweenStrokes: 200, // delay between drawing subsequent strokes in ms
       strokeColor: "#555",
       radicalColor: "#143dd9",
       highlightColor: "#AAF", // color used to highlight strokes as a hint during quizzing

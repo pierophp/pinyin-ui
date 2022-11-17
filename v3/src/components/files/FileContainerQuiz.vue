@@ -320,7 +320,7 @@ export default {
 }
 
 @media print {
-  padding-top: 0;
+  /* padding-top: 0; */
 }
 
 .character-only .pinyin {

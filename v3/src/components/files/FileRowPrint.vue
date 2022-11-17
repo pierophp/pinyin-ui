@@ -89,7 +89,8 @@
 </template>
 
 <script lang="ts">
-import FileRowTranslation from "@/components/files/FileRowTranslation";
+// @ts-nocheck
+import FileRowTranslation from "@/components/files/FileRowTranslation.vue";
 import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 import ideogramsShow from "@/helpers/ideograms.show";
 import OptionsManager from "@/domain/options-manager";

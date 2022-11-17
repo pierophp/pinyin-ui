@@ -8,6 +8,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 export default {
   name: "google-translate-link",
   props: {

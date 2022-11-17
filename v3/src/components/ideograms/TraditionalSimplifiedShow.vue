@@ -18,7 +18,8 @@
 </template>
 
 <script lang="ts">
-import IdeogramsShow from "@/components/ideograms/Show";
+// @ts-nocheck
+import IdeogramsShow from "@/components/ideograms/Show.vue";
 
 export default {
   name: "traditional-simplified-show",

@@ -6,6 +6,7 @@
   </div>
 </template>
 <script lang="ts">
+// @ts-nocheck
 import booksName from "@/data/bible/names";
 import OptionsManager from "@/domain/options-manager";
 

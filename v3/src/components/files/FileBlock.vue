@@ -27,6 +27,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 // import autosizeInput from 'autosize-input';
 import MediumEditor from "@/components/common/editor/MediumEditor.vue";
 // @ts-ignore

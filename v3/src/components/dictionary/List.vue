@@ -33,6 +33,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import TraditionalSimplifiedShow from "@/components/ideograms/TraditionalSimplifiedShow";
 import DictionaryDetails from "@/components/dictionary/Details";
 

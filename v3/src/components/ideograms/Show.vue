@@ -14,6 +14,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import ideogramsShow from "@/helpers/ideograms.show";
 export default {
   name: "ideograms-show",
