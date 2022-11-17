@@ -24,11 +24,11 @@ export default {
     },
   },
   methods: {
-    isSVG(mimetype) {
+    isSVG(mimetype: string | null) {
       if (typeof mimetype !== "string") return false;
       return mimetype.indexOf("svg") >= 0;
     },
-    setHtml(value) {
+    setHtml() {
       svgStore[this.src]
         .then((html) => {
           this.html = html;
@@ -82,10 +82,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.svg-loader {
-  svg {
-    width: 100%;
-  }
+<style>
+.svg-loader svg {
+  width: 100%;
 }
 </style>

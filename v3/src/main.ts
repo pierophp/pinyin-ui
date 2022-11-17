@@ -17,7 +17,8 @@ import "vue-router";
 
 declare module "vue-router" {
   interface RouteMeta {
-    topBar: string;
+    hideTopBar?: boolean;
+    topBar?: string;
     protected: boolean;
     showMenu: boolean;
     title: string;

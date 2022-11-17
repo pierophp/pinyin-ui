@@ -45,34 +45,24 @@ const appOptions = {
 };
 
 const routes: RouteRecordRaw[] = [
-  // {
-  //   path: "/",
-  //   name: "login",
-  //   component: () =>
-  //     import(/* webpackChunkName: "bible" */ "src/pages/auth/Login"),
-  //   meta: {
-  //     hideTopBar: true,
-  //     redirectTo: "/#/bible",
-  //   },
-  // },
-  // {
-  //   path: "/login/baidu",
-  //   name: "login-baidu",
-  //   component: () =>
-  //     import(/* webpackChunkName: "bible" */ "src/pages/auth/Login"),
-  //   meta: {
-  //     hideTopBar: true,
-  //   },
-  // },
-  // @todo remove thatr after login
   {
     path: "/",
     name: "login",
     component: () =>
-      import(/* webpackChunkName: "bible" */ "@/pages/bible/Books"),
+      import(/* webpackChunkName: "bible" */ "@/pages/auth/Login"),
     meta: {
-      protected: true,
-      topBar: "bible-books",
+      hideTopBar: true,
+      redirectTo: "/#/bible",
+      ...appOptions,
+    },
+  },
+  {
+    path: "/login/baidu",
+    name: "login-baidu",
+    component: () =>
+      import(/* webpackChunkName: "bible" */ "@/pages/auth/Login"),
+    meta: {
+      hideTopBar: true,
       ...appOptions,
     },
   },

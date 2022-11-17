@@ -1,22 +1,34 @@
 <template>
   <div class="loadable-content">
-    <portal to="portal-loadable" v-if="portal">
+    <Teleport to="#portal-loadable" v-if="portal">
       <div class="loadable-loader" v-show="loading">
-        <md-progress-spinner class="md-accent" md-mode="indeterminate" :visible="loading"></md-progress-spinner>
+        <v-progress-circular
+          color="primary"
+          indeterminate
+          :size="62"
+          :width="8"
+          :visible="loading"
+        ></v-progress-circular>
       </div>
-    </portal>
+    </Teleport>
 
     <div class="loadable-loader" v-show="loading" v-if="!portal">
-      <md-progress-spinner class="md-accent" md-mode="indeterminate" :visible="loading"></md-progress-spinner>
+      <v-progress-circular
+        color="primary"
+        indeterminate
+        :size="62"
+        :width="8"
+        :visible="loading"
+      ></v-progress-circular>
     </div>
 
     <slot></slot>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
-  name: 'loadable-content',
+  name: "loadable-content",
 
   props: {
     loading: {
