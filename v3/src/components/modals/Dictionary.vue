@@ -207,7 +207,7 @@ export default {
 
     goLeft() {
       if (Object.keys(this.selectedIndexes).length === 0) {
-        this.$set(this.selectedIndexes, 0, true);
+        this.selectedIndexes[0] = true;
       } else {
         const lastIndex = Object.keys(this.selectedIndexes)
           .map((item) => parseInt(item, 10))
@@ -222,7 +222,7 @@ export default {
 
     goRight() {
       if (Object.keys(this.selectedIndexes).length === 0) {
-        this.$set(this.selectedIndexes, 0, true);
+        this.selectedIndexes[0] = true;
       } else {
         const lastIndex = Object.keys(this.selectedIndexes)
           .map((item) => parseInt(item, 10))
@@ -231,7 +231,7 @@ export default {
 
         if (lastIndex + 1 < this.block.character.length) {
           const nextValue = lastIndex + 1;
-          this.$set(this.selectedIndexes, nextValue, true);
+          this.selectedIndexes[nextValue] = true;
         }
       }
 
@@ -240,14 +240,14 @@ export default {
 
     selectLeft() {
       if (Object.keys(this.selectedIndexes).length === 0) {
-        this.$set(this.selectedIndexes, 0, true);
+        this.selectedIndexes[0] = true;
       } else {
         const firstIndex = Object.keys(this.selectedIndexes)
           .map((item) => parseInt(item, 10))
           .sort()[0];
 
         this.selectedIndexes = {};
-        this.$set(this.selectedIndexes, firstIndex - 1, true);
+        this.selectedIndexes[firstIndex - 1] = true;
       }
 
       this.loadDictionary();
@@ -255,7 +255,7 @@ export default {
 
     selectRight() {
       if (Object.keys(this.selectedIndexes).length === 0) {
-        this.$set(this.selectedIndexes, 0, true);
+        this.selectedIndexes[0] = true;
       } else {
         const lastIndex = Object.keys(this.selectedIndexes)
           .map((item) => parseInt(item, 10))
@@ -264,7 +264,7 @@ export default {
 
         if (lastIndex + 1 < this.block.character.length) {
           this.selectedIndexes = {};
-          this.$set(this.selectedIndexes, lastIndex + 1, true);
+          this.selectedIndexes[lastIndex + 1] = true;
         }
       }
       this.loadDictionary();

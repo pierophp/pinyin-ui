@@ -23,15 +23,7 @@
           {{ filename }}
         </h2>
 
-        <div
-          v-if="
-            fullLines &&
-            fullLines[0] &&
-            fullLines[0][0] &&
-            fullLines[0][0].line !== undefined &&
-            fullLines[0][0].line.audio !== undefined
-          "
-        >
+        <div v-if="fullLines?.[0]?.[0]?.line?.audio !== undefined">
           <audio :src="fullLines[0][0].line.audio" controls />
         </div>
 

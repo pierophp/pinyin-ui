@@ -597,7 +597,7 @@ export default {
         definitions: newDefinitions,
       };
 
-      this.$set(this, "moedict", moedict);
+      this.moedict = moedict;
 
       this.moedictLoading = false;
     },

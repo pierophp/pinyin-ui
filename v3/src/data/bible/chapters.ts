@@ -1,11 +1,12 @@
-/* eslint-disable */
-const chapters: {
+type Chapters = {
   [book: string]: {
     c: number;
     t: number;
     i?: number;
   }[];
-} = {
+};
+
+const chapters: Chapters = {
   genesis: [
     { c: 1, t: 31 },
     { c: 2, t: 25 },

@@ -193,7 +193,7 @@ export default {
       this.selectVerseLanguage(verse);
     },
     setLine(line) {
-      this.$set(this.lines, line.lineIndex, line.line);
+      this.lines[line.lineIndex] = line.line;
     },
     setFileContent(lines) {
       this.lines = lines;

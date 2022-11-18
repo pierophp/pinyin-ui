@@ -8,7 +8,6 @@
 </template>
 
 <script lang="ts">
-// @ts-nocheck
 export default {
   name: "file-row-translation",
   data() {
