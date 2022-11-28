@@ -479,6 +479,8 @@ const { pinyin, dictionary, type } = defineProps({
   type: String,
 });
 
+const emit = defineEmits(["change-show"]);
+
 const editing = ref(false);
 const moedictLoading = ref(false);
 
@@ -507,12 +509,12 @@ function getDictionaryEntry() {
 
 function cancelEdit() {
   editing.value = false;
-  // this.$emit("change-show", this.editing);
+  emit("change-show", editing);
 }
 
 function edit() {
   editing.value = true;
-  // this.$emit("change-show", this.editing);
+  emit("change-show", editing);
 }
 
 function openChineseTools(language: string) {
@@ -634,7 +636,7 @@ function save() {
     .then(() => {
       dictionary.pt = dictionatyList;
       editing.value = false;
-      // this.$emit("change-show", this.editing);
+      emit("change-show", editing);
     });
 }
 
