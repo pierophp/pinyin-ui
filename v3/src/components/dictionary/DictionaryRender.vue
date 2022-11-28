@@ -7,7 +7,7 @@
     >
       <div class="dict-title">
         Português
-        <google-translate-link
+        <GoogleTranslateLink
           :word="dictionary.pt ? dictionary.pt.join('\n') : ''"
           sourceLanguage="pt"
           :targetLanguage="translationLanguage"
@@ -17,34 +17,33 @@
         <div v-if="!editing">
           <div v-for="(pt, dictId) in dictionary.pt" v-bind:key="dictId">
             {{ pt }}
-            <google-translate-link
+            <GoogleTranslateLink
               :word="pt"
               sourceLanguage="pt"
               :targetLanguage="translationLanguage"
             />
           </div>
 
-          <!-- <md-button
-            v-if="user.admin"
-            class="md-raised md-primary"
-            @click.native="edit()"
-            >{{ $t("edit") }}</md-button
-          > -->
+          <v-btn v-if="user.admin" color="primary" @click="edit()">{{
+            $t("edit")
+          }}</v-btn>
         </div>
         <div v-if="editing">
           <div class="field-container">
             <textarea
               v-model="dictionaryEntry"
               autocapitalize="none"
-              :cols="isMobile ? 30 : 50"
+              :cols="isMobile() ? 30 : 50"
             ></textarea>
           </div>
-          <!-- <md-button class="md-raised md-primary" @click.native="save()">{{
+
+          <v-btn v-if="user.admin" color="primary" @click="save()">{{
             $t("save")
-          }}</md-button>
-          <md-button class="md-raised md-accent" @click.native="cancelEdit()">{{
+          }}</v-btn>
+
+          <v-btn v-if="user.admin" color="secondary" @click="cancelEdit()">{{
             $t("cancel")
-          }}</md-button> -->
+          }}</v-btn>
         </div>
       </div>
     </div>
@@ -68,7 +67,7 @@
         <a href="javascript:void(0)" @click="openChineseTools('pt')"
           >Chinese Tools - Português</a
         >
-        <google-translate-link
+        <GoogleTranslateLink
           :word="dictionary.chinese_tools_pt.join('\n')"
           sourceLanguage="pt"
           :targetLanguage="translationLanguage"
@@ -80,7 +79,7 @@
           v-bind:key="dictId"
         >
           {{ chinese_tools_pt }}
-          <google-translate-link
+          <GoogleTranslateLink
             :word="chinese_tools_pt"
             sourceLanguage="pt"
             :targetLanguage="translationLanguage"
@@ -102,7 +101,7 @@
           target="_blank"
           >GLOSBE - Português</a
         >
-        <google-translate-link
+        <GoogleTranslateLink
           :word="dictionary.glosbe_pt.join('\n')"
           sourceLanguage="pt"
           :targetLanguage="translationLanguage"
@@ -114,7 +113,7 @@
           v-bind:key="dictId"
         >
           {{ glosbe_pt }}
-          <google-translate-link
+          <GoogleTranslateLink
             :word="glosbe_pt"
             sourceLanguage="pt"
             :targetLanguage="translationLanguage"
@@ -142,7 +141,7 @@
         <a href="javascript:void(0)" @click="openChineseTools('es')"
           >Chinese Tools - Español</a
         >
-        <google-translate-link
+        <GoogleTranslateLink
           :word="dictionary.chinese_tools_es.join('\n')"
           sourceLanguage="es"
           :targetLanguage="translationLanguage"
@@ -154,7 +153,7 @@
           v-bind:key="dictId"
         >
           {{ chinese_tools_es }}
-          <google-translate-link
+          <GoogleTranslateLink
             :word="chinese_tools_es"
             sourceLanguage="es"
             :targetLanguage="translationLanguage"
@@ -176,7 +175,7 @@
           target="_blank"
           >GLOSBE - Español</a
         >
-        <google-translate-link
+        <GoogleTranslateLink
           :word="dictionary.glosbe_es.join('\n')"
           sourceLanguage="es"
           :targetLanguage="translationLanguage"
@@ -188,7 +187,7 @@
           v-bind:key="dictId"
         >
           {{ glosbe_es }}
-          <google-translate-link
+          <GoogleTranslateLink
             :word="glosbe_es"
             sourceLanguage="es"
             :targetLanguage="translationLanguage"
@@ -207,7 +206,7 @@
           target="_blank"
           >Unihan - English</a
         >
-        <google-translate-link
+        <GoogleTranslateLink
           :word="dictionary.unihan.join('\n')"
           sourceLanguage="en"
           :targetLanguage="translationLanguage"
@@ -216,7 +215,7 @@
       <div class="dict-block">
         <div v-for="(unihan, dictId) in dictionary.unihan" v-bind:key="dictId">
           {{ unihan }}
-          <google-translate-link
+          <GoogleTranslateLink
             :word="unihan"
             sourceLanguage="en"
             :targetLanguage="translationLanguage"
@@ -235,7 +234,7 @@
           target="_blank"
           >CC-CEDICT - English</a
         >
-        <google-translate-link
+        <GoogleTranslateLink
           :word="dictionary.cedict.join('\n')"
           sourceLanguage="en"
           :targetLanguage="translationLanguage"
@@ -244,7 +243,7 @@
       <div class="dict-block">
         <div v-for="(cedict, dictId) in dictionary.cedict" v-bind:key="dictId">
           {{ cedict }}
-          <google-translate-link
+          <GoogleTranslateLink
             :word="cedict"
             sourceLanguage="en"
             :targetLanguage="translationLanguage"
@@ -272,7 +271,7 @@
         <a href="javascript:void(0)" @click="openChineseTools('en')"
           >Chinese Tools - English</a
         >
-        <google-translate-link
+        <GoogleTranslateLink
           :word="dictionary.chinese_tools_en.join('\n')"
           sourceLanguage="en"
           :targetLanguage="translationLanguage"
@@ -284,7 +283,7 @@
           v-bind:key="dictId"
         >
           {{ chinese_tools_en }}
-          <google-translate-link
+          <GoogleTranslateLink
             :word="chinese_tools_en"
             sourceLanguage="en"
             :targetLanguage="translationLanguage"
@@ -306,7 +305,7 @@
           target="_blank"
           >GLOSBE - English</a
         >
-        <google-translate-link
+        <GoogleTranslateLink
           :word="dictionary.glosbe_en.join('\n')"
           sourceLanguage="en"
           :targetLanguage="translationLanguage"
@@ -318,7 +317,7 @@
           v-bind:key="dictId"
         >
           {{ glosbe_en }}
-          <google-translate-link
+          <GoogleTranslateLink
             :word="glosbe_en"
             sourceLanguage="en"
             :targetLanguage="translationLanguage"
@@ -330,7 +329,7 @@
     <div v-if="type === 'en' && dictionary.en && dictionary.en.length">
       <div class="dict-title">
         English
-        <google-translate-link
+        <GoogleTranslateLink
           :word="dictionary.en.join('\n')"
           sourceLanguage="en"
           :targetLanguage="translationLanguage"
@@ -339,7 +338,7 @@
       <div class="dict-block">
         <div v-for="(en, dictId) in dictionary.en" v-bind:key="dictId">
           {{ en }}
-          <google-translate-link
+          <GoogleTranslateLink
             :word="en"
             sourceLanguage="en"
             :targetLanguage="translationLanguage"
@@ -351,7 +350,7 @@
     <div v-if="type === 'es' && dictionary.es && dictionary.es.length">
       <div class="dict-title">
         Español
-        <google-translate-link
+        <GoogleTranslateLink
           :word="dictionary.es.join('\n')"
           sourceLanguage="es"
           :targetLanguage="translationLanguage"
@@ -360,7 +359,7 @@
       <div class="dict-block">
         <div v-for="(es, dictId) in dictionary.es" v-bind:key="dictId">
           {{ es }}
-          <google-translate-link
+          <GoogleTranslateLink
             :word="es"
             sourceLanguage="es"
             :targetLanguage="translationLanguage"
@@ -370,7 +369,7 @@
     </div>
 
     <div v-if="type === 'moedict' && moedict">
-      <loadable-content :loading="moedictLoading" :portal="false">
+      <LoadableContent :loading="moedictLoading" :portal="false">
         <div class="dict-title">
           <a
             :href="'https://www.moedict.tw/' + dictionary.ideograms"
@@ -425,206 +424,228 @@
             </div>
           </div>
         </div>
-      </loadable-content>
+      </LoadableContent>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-// @ts-nocheck
-import replaceall from "replaceall";
-import http from "@/helpers/http";
-import User from "@/domain/user";
+<script lang="ts" setup>
 import OptionsManager from "@/domain/options-manager";
-import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
+import { defineProps, PropType, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import User from "@/domain/user";
+import isMobile from "@/helpers/is-mobile";
 import GoogleTranslateLink from "@/components/dictionary/GoogleTranslateLink.vue";
 import LoadableContent from "@/components/common/loading/LoadableContent.vue";
-import isMobile from "@/helpers/is-mobile";
+import http from "@/helpers/http";
+import replaceall from "replaceall";
+import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 
-export default {
-  name: "dictionary-render",
-  components: {
-    GoogleTranslateLink,
-    LoadableContent,
-  },
-  watch: {
-    dictionary() {
-      // @ts-ignore
-      this.dictionaryEntry = this.getDictionaryEntry();
-    },
-  },
-  data() {
-    return {
-      editing: false,
-      moedictLoading: false,
-      dictionaryEntry: this.getDictionaryEntry(),
-      user: User.getUser(),
-      moedict: null,
-      translationLanguage: null,
-      isMobile: isMobile(),
-    };
-  },
-  created() {
-    const optionsManager = new OptionsManager(this.$i18n);
-    const options = optionsManager.getOptions();
-    const translationLanguage = options.translationLanguage;
-
-    this.translationLanguage = translationLanguage;
-
-    if (this.type === "moedict") {
-      this.loadMoedict();
-    }
-  },
-  methods: {
-    openChineseTools(language) {
-      document.getElementById(`form-ct-${language}`).submit();
-    },
-    getDictionaryEntry() {
-      let dictionaryEntry = "";
-      if (!this.dictionary.pt) {
-        this.dictionary.pt = [];
-      }
-
-      this.dictionary.pt.forEach((entry) => {
-        dictionaryEntry += `${entry}\n`;
-      });
-
-      dictionaryEntry = dictionaryEntry.trim("\n");
-
-      return dictionaryEntry;
-    },
-    cancelEdit() {
-      this.editing = false;
-      this.$emit("change-show", this.editing);
-    },
-    edit() {
-      this.editing = true;
-      this.$emit("change-show", this.editing);
-    },
-
-    async loadMoedict() {
-      if (!this.dictionary.ideograms) {
-        setTimeout(() => {
-          this.loadMoedict();
-        }, 500);
-
-        return;
-      }
-
-      this.moedictLoading = true;
-
-      const optionsManager = new OptionsManager(this.$i18n);
-      const options = optionsManager.getOptions();
-
-      const moedictResponse = (
-        await http.get("dictionary/moedict", {
-          params: {
-            ideogram: this.dictionary.ideograms,
-            pronunciation: this.pinyin,
-          },
-        })
-      ).data.definition;
-
-      const definitions =
-        options.ideogramType === "t"
-          ? moedictResponse.traditionalDefinitions
-          : moedictResponse.simplifiedDefinitions;
-
-      const newDefinitions = [];
-
-      function parsePinyin(pinyinObject, ideogramsObject, parseKey) {
-        if (!pinyinObject[parseKey]) {
-          return;
-        }
-
-        let blockCount = 0;
-        let characterCounter = 0;
-
-        const line = [];
-
-        for (const pinyinDef of pinyinObject[parseKey]) {
-          const pinyinList = separatePinyinInSyllables(
-            replaceall(" ", String.fromCharCode(160), pinyinDef || ""),
-            false
-          )
-            .join(String.fromCharCode(160))
-            .split(String.fromCharCode(160));
-
-          for (const pinyin of pinyinList) {
-            if (!line[blockCount]) {
-              line[blockCount] = { c: "", p: "" };
-
-              if (blockCount === 0) {
-                line[blockCount].pinyinSpaced = 1;
-              }
-            }
-
-            line[blockCount].c += ideogramsObject[parseKey][characterCounter];
-            line[blockCount].p += pinyin + String.fromCharCode(160);
-
-            characterCounter++;
-          }
-
-          blockCount++;
-        }
-
-        return line;
-      }
-
-      let i = 0;
-      for (const definition of definitions) {
-        newDefinitions.push({
-          def: parsePinyin(
-            moedictResponse.pinyinDefinitions[i],
-            definition,
-            "def"
-          ),
-          antonyms: parsePinyin(
-            moedictResponse.pinyinDefinitions[i],
-            definition,
-            "antonyms"
-          ),
-          synonyms: parsePinyin(
-            moedictResponse.pinyinDefinitions[i],
-            definition,
-            "synonyms"
-          ),
-        });
-        i++;
-      }
-
-      const moedict = {
-        definitions: newDefinitions,
-      };
-
-      this.moedict = moedict;
-
-      this.moedictLoading = false;
-    },
-    save() {
-      const dictionatyList = this.dictionaryEntry
-        .split("\n")
-        .filter((item) => item.trim());
-
-      http
-        .post("unihan/save", {
-          pinyin: this.pinyin,
-          ideograms: this.dictionary.ideograms,
-          dictionary: dictionatyList,
-        })
-        .then(() => {
-          this.dictionary.pt = dictionatyList;
-          this.editing = false;
-          this.$emit("change-show", this.editing);
-        });
-    },
-  },
-  props: {
-    pinyin: {},
-    dictionary: {},
-    type: "",
-  },
+type Dictionary = {
+  ideograms: string;
+  pt: string[];
+  en: string[];
+  es: string[];
+  chinese_tools_pt: string[];
+  chinese_tools_es: string[];
+  chinese_tools_en: string[];
+  glosbe_pt: string[];
+  glosbe_es: string[];
+  glosbe_en: string[];
+  unihan: string[];
+  cedict: string[];
 };
+
+type Block = {
+  pinyinSpaced?: number;
+  c: string;
+  p: string;
+};
+
+type MoeDictionary = {
+  definitions: {
+    def?: Block[];
+    antonyms?: Block[];
+    synonyms?: Block[];
+  }[];
+};
+
+const { pinyin, dictionary, type } = defineProps({
+  pinyin: Object,
+  dictionary: {
+    type: Object as PropType<Dictionary>,
+    required: true,
+  },
+  type: String,
+});
+
+const editing = ref(false);
+const moedictLoading = ref(false);
+
+const dictionaryEntry = ref(getDictionaryEntry());
+const i18n = useI18n();
+
+const optionsManager = new OptionsManager(i18n);
+const options = optionsManager.getOptions();
+const translationLanguage = options.translationLanguage;
+const user = User.getUser();
+
+function getDictionaryEntry() {
+  let dictionaryEntry = "";
+  if (!dictionary.pt) {
+    dictionary.pt = [];
+  }
+
+  dictionary.pt.forEach((entry) => {
+    dictionaryEntry += `${entry}\n`;
+  });
+
+  dictionaryEntry = dictionaryEntry.trim("\n");
+
+  return dictionaryEntry;
+}
+
+function cancelEdit() {
+  editing.value = false;
+  // this.$emit("change-show", this.editing);
+}
+
+function edit() {
+  editing.value = true;
+  // this.$emit("change-show", this.editing);
+}
+
+function openChineseTools(language: string) {
+  const form = document.getElementById(
+    `form-ct-${language}`
+  ) as HTMLFormElement;
+  form.submit();
+}
+
+async function loadMoedict() {
+  if (!dictionary.ideograms) {
+    setTimeout(() => {
+      loadMoedict();
+    }, 500);
+
+    return;
+  }
+
+  moedictLoading.value = true;
+
+  const optionsManager = new OptionsManager(i18n);
+  const options = optionsManager.getOptions();
+
+  const moedictResponse = (
+    await http.get("dictionary/moedict", {
+      params: {
+        ideogram: dictionary.ideograms,
+        pronunciation: pinyin,
+      },
+    })
+  ).data.definition;
+
+  const definitions =
+    options.ideogramType === "t"
+      ? moedictResponse.traditionalDefinitions
+      : moedictResponse.simplifiedDefinitions;
+
+  const newDefinitions = [];
+
+  function parsePinyin(
+    pinyinObject: any,
+    ideogramsObject: any,
+    parseKey: string
+  ): undefined | Block[] {
+    if (!pinyinObject[parseKey]) {
+      return;
+    }
+
+    let blockCount = 0;
+    let characterCounter = 0;
+
+    const line: Block[] = [];
+
+    for (const pinyinDef of pinyinObject[parseKey]) {
+      const pinyinList = separatePinyinInSyllables(
+        replaceall(" ", String.fromCharCode(160), pinyinDef || ""),
+        false
+      )
+        .join(String.fromCharCode(160))
+        .split(String.fromCharCode(160));
+
+      for (const pinyin of pinyinList) {
+        if (!line[blockCount]) {
+          line[blockCount] = { c: "", p: "" };
+
+          if (blockCount === 0) {
+            line[blockCount].pinyinSpaced = 1;
+          }
+        }
+
+        line[blockCount].c += ideogramsObject[parseKey][characterCounter];
+        line[blockCount].p += pinyin + String.fromCharCode(160);
+
+        characterCounter++;
+      }
+
+      blockCount++;
+    }
+
+    return line;
+  }
+
+  let i = 0;
+  for (const definition of definitions) {
+    newDefinitions.push({
+      def: parsePinyin(moedictResponse.pinyinDefinitions[i], definition, "def"),
+      antonyms: parsePinyin(
+        moedictResponse.pinyinDefinitions[i],
+        definition,
+        "antonyms"
+      ),
+      synonyms: parsePinyin(
+        moedictResponse.pinyinDefinitions[i],
+        definition,
+        "synonyms"
+      ),
+    });
+    i++;
+  }
+
+  moedict.value = {
+    definitions: newDefinitions,
+  };
+
+  moedictLoading.value = false;
+}
+
+function save() {
+  const dictionatyList = dictionaryEntry.value
+    .split("\n")
+    .filter((item) => item.trim());
+
+  http
+    .post("unihan/save", {
+      pinyin: pinyin,
+      ideograms: dictionary.ideograms,
+      dictionary: dictionatyList,
+    })
+    .then(() => {
+      dictionary.pt = dictionatyList;
+      editing.value = false;
+      // this.$emit("change-show", this.editing);
+    });
+}
+
+watch([dictionary], () => {
+  dictionaryEntry.value = getDictionaryEntry();
+});
+
+const moedict = ref<MoeDictionary | null>(null);
+if (type === "moedict") {
+  loadMoedict();
+}
 </script>
 
 <style>

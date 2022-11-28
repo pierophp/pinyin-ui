@@ -51,7 +51,7 @@ class OptionsManager {
     };
   }
 
-  getLanguages(chinese: any) {
+  getLanguages(chinese: boolean) {
     const languages = [];
 
     for (const languageCode of Object.keys(languageCodes)) {

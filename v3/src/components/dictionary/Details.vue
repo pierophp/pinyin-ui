@@ -20,13 +20,13 @@
       >
     </div>
 
-    <!-- <dictionary-render
-      v-for="type in types"
-      v-bind:key="type"
-      :pinyin="pinyin"
-      :dictionary="dictionary"
-      :type="type"
-    /> -->
+    <template v-for="type in types" :key="type">
+      <dictionary-render
+        :pinyin="pinyin"
+        :dictionary="dictionary"
+        :type="type"
+      />
+    </template>
   </div>
 </template>
 
