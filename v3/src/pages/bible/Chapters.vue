@@ -1,6 +1,6 @@
 <template>
   <tool-bar></tool-bar>
-  <v-main>
+  <Main>
     <div class="bible-chapters-container">
       <div
         v-for="(chapter, chapterId) in chapters"
@@ -11,31 +11,25 @@
         {{ chapter.c }}
       </div>
     </div>
-  </v-main>
+  </Main>
 </template>
 
-<script lang="ts">
-// @ts-nocheck
+<script lang="ts" setup>
 import chaptersData from "@/data/bible/chapters";
 import ToolBar from "@/components/layout/ToolBar.vue";
+import Main from "@/components/layout/Main.vue";
+import { useRoute, useRouter } from "vue-router";
 
-export default {
-  name: "bible-chapters",
-  data() {
-    return {
-      chapters: [],
-    };
-  },
-  methods: {
-    goTo(link: string) {
-      this.$router.push(`/bible/${this.$route.params.book}/${link}`);
-    },
-  },
-  created() {
-    this.chapters = chaptersData[this.$route.params.book];
-  },
-  components: { ToolBar },
-};
+const router = useRouter();
+const route = useRoute();
+
+const book = route.params.book as string;
+
+function goTo(chapter: number) {
+  router.push(`/bible/${book}/${chapter}`);
+}
+
+const chapters = chaptersData[book];
 </script>
 
 <style>

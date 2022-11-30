@@ -1,6 +1,6 @@
 <template>
   <tool-bar></tool-bar>
-  <v-main>
+  <Main>
     <div
       class="bible-books-container"
       :class="[exhibitionClass, exhibitionClassPinyin]"
@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-  </v-main>
+  </Main>
 </template>
 
 <script lang="ts">
@@ -67,6 +67,7 @@ import booksData from "@/data/bible/books";
 import booksName from "@/data/bible/names";
 import OptionsManager from "@/domain/options-manager";
 import ToolBar from "@/components/layout/ToolBar.vue";
+import Main from "@/components/layout/Main.vue";
 import { mapGetters } from "vuex";
 
 import {
@@ -78,6 +79,7 @@ export default {
   name: "bible-books",
   components: {
     ToolBar,
+    Main,
   },
   data(): {
     options: any;

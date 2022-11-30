@@ -1,26 +1,18 @@
 <template>
-  <tool-bar></tool-bar>
-  <v-main>
+  <ToolBar />
+  <Main>
     <div class="content">
-      <chapter-container
-        :book="$route.params.book"
-        :chapter="$route.params.chapter"
+      <ChapterContainer
+        :book="($route.params.book as string)"
+        :chapter="($route.params.chapter as string)"
         :parent="true"
       />
     </div>
-  </v-main>
-  <v-footer>Teste</v-footer>
+  </Main>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import ChapterContainer from "@/components/bible/ChapterContainer.vue";
 import ToolBar from "@/components/layout/ToolBar.vue";
-
-export default {
-  name: "bible-chapter",
-  components: {
-    ChapterContainer,
-    ToolBar,
-  },
-};
+import Main from "@/components/layout/Main.vue";
 </script>

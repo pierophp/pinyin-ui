@@ -24,48 +24,48 @@
           target="_blank"
         ></v-btn>
       </v-card-title>
-      <v-card-text>
-        <v-card>
-          <v-tabs v-model="tab">
-            <v-tab value="dict">{{ $t("definition") }}</v-tab>
-            <v-tab value="stroke">{{ $t("stroke") }}</v-tab>
-            <v-tab value="links">Links</v-tab>
-          </v-tabs>
 
-          <v-card-text>
-            <v-window v-model="tab">
-              <v-window-item value="dict">
-                <div class="loadable-loader" v-show="dictionaryLoading">
-                  <md-progress-spinner
-                    class="md-accent"
-                    md-mode="indeterminate"
-                    :visible="dictionaryLoading"
-                  ></md-progress-spinner>
-                </div>
+      <v-card>
+        <v-tabs v-model="tab">
+          <v-tab value="dict">{{ $t("definition") }}</v-tab>
+          <v-tab value="stroke">{{ $t("stroke") }}</v-tab>
+          <v-tab value="links">Links</v-tab>
+        </v-tabs>
 
-                <dictionary-details
-                  :dictionary="dictionary"
-                  :pinyin="block.pinyin"
-                  @change-show="changeShow"
-                  ref="dictionaryDetails"
-                  v-show="!dictionaryLoading"
-                />
+        <v-card-text>
+          <v-window v-model="tab">
+            <v-window-item value="dict">
+              <div class="loadable-loader" v-show="dictionaryLoading">
+                <md-progress-spinner
+                  class="md-accent"
+                  md-mode="indeterminate"
+                  :visible="dictionaryLoading"
+                ></md-progress-spinner>
+              </div>
 
-                <dictionary-list
-                  :list="dictionaryList"
-                  v-show="!dictionaryLoading"
-                />
-              </v-window-item>
-              <v-window-item value="stroke">
-                <dictionary-stroke-order :ideograms="block.character" />
-              </v-window-item>
-              <v-window-item value="links">
-                <Links list="1" :character="block.character" />
-              </v-window-item>
-            </v-window>
-          </v-card-text>
-        </v-card>
-      </v-card-text>
+              <dictionary-details
+                :dictionary="dictionary"
+                :pinyin="block.pinyin"
+                @change-show="changeShow"
+                ref="dictionaryDetails"
+                v-show="!dictionaryLoading"
+              />
+
+              <dictionary-list
+                :list="dictionaryList"
+                v-show="!dictionaryLoading"
+              />
+            </v-window-item>
+            <v-window-item value="stroke">
+              <dictionary-stroke-order :ideograms="block.character" />
+            </v-window-item>
+            <v-window-item value="links">
+              <Links list="1" :character="block.character" />
+            </v-window-item>
+          </v-window>
+        </v-card-text>
+      </v-card>
+
       <v-card-actions> </v-card-actions>
     </v-card>
   </v-dialog>
@@ -366,6 +366,15 @@ export default {
 </script>
 
 <style scoped>
+.v-card-title {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.v-tab.v-tab.v-tab {
+  height: 35px;
+}
+
 .sound-btn,
 .clipboard-btn {
   padding: 0 !important;
