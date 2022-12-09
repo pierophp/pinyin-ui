@@ -1,5 +1,5 @@
 <template>
-  <md-dialog ref="modal" :md-active.sync="modalOpen" :md-fullscreen="false">
+  <!-- <md-dialog ref="modal" :md-active.sync="modalOpen" :md-fullscreen="false">
     <md-dialog-title>{{ $t("delete_file") }}</md-dialog-title>
 
     <md-dialog-content>
@@ -14,7 +14,7 @@
         $t("delete")
       }}</md-button>
     </md-dialog-actions>
-  </md-dialog>
+  </md-dialog> -->
 </template>
 
 <script lang="ts">

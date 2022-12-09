@@ -1,6 +1,5 @@
 // @ts-nocheck
-
-import Vue from "vue";
+// import Vue from "vue";
 import pinyin from "@/helpers/pinyin";
 import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 import * as types from "./types";
@@ -127,11 +126,11 @@ export default {
   },
 
   [types.FILE_MUTATION_SET_LINE](state, { line, lineIndex }) {
-    Vue.set(state.file, lineIndex, line);
+    state.file[lineIndex] = line;
   },
 
   [types.FILE_MUTATION_SET_LINE_AND_SAVE](state, { line, lineIndex }) {
-    Vue.set(state.fullFile, lineIndex, line);
+    state.fullFile[lineIndex] = line;
     const relativeIndex = state.file.findIndex(
       (blocks) => blocks[0] && Number(blocks[0].lineIndex) === Number(lineIndex)
     );
@@ -141,7 +140,7 @@ export default {
         line[0].lineIndex = lineIndex;
       }
 
-      Vue.set(state.file, relativeIndex, line);
+      state.file[relativeIndex] = line;
     }
 
     state.fileChangeTimestamp = Date.now();
@@ -291,7 +290,7 @@ export default {
       (block, index) => index !== blockIndex
     );
 
-    Vue.set(state.fullFile, lineIndex, line);
+    state.fullFile[lineIndex] = line;
 
     const fileIndex = state.file.findIndex(
       (item) => Number(item[0].lineIndex) === Number(data.lineIndex)
@@ -299,7 +298,7 @@ export default {
 
     if (fileIndex >= 0) {
       line[0].lineIndex = lineIndex;
-      Vue.set(state.file, fileIndex, line);
+      state.file[fileIndex] = line;
     }
 
     state.fileChangeTimestamp = Date.now();
@@ -319,11 +318,11 @@ export default {
   },
 
   [types.FILE_MUTATION_ADD_MY_CJK](state, myCjk) {
-    Vue.set(state.myCjk, myCjk, true);
+    state.myCjk[myCjk] = true;
   },
 
   [types.FILE_MUTATION_REMOVE_MY_CJK](state, myCjk) {
-    Vue.delete(state.myCjk, myCjk);
+    delete state.myCjk[myCjk];
   },
 
   [types.FILE_MUTATION_SET_SELECTEDS](state, fileSelecteds) {

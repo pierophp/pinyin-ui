@@ -33,10 +33,10 @@
 <script lang="ts">
 // @ts-nocheck
 // import Vue from 'vue';
-import FileRow from "src/components/files/FileRow";
-import FilePasteModal from "src/components/modals/FilePaste";
-import User from "src/domain/user";
-import LoadableContent from "src/components/common/loading/LoadableContent";
+import FileRow from "@components/files/FileRow";
+import FilePasteModal from "@/components/modals/FilePaste";
+import User from "@/domain/user";
+import LoadableContent from "@/components/common/loading/LoadableContent";
 
 import { mapActions, mapGetters, mapMutations } from "vuex";
 

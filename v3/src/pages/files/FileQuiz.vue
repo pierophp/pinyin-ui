@@ -12,7 +12,7 @@
 <script lang="ts">
 // @ts-nocheck
 import { mapActions, mapGetters } from "vuex";
-import FileContainerQuiz from "src/components/files/FileContainerQuiz";
+import FileContainerQuiz from "@/components/files/FileContainerQuiz";
 
 import {
   FILE_ACTION_FETCH,

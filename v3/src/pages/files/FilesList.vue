@@ -1,124 +1,132 @@
 <template>
-  <div class="files-wrapper" ref="fileWrapper">
-    <div class="files-container">
-      <loadable-content :loading="loading">
-        <folder-structure />
+  <tool-bar></tool-bar>
+  <Main>
+    <div class="files-wrapper" ref="fileWrapper">
+      <div class="files-container">
+        <loadable-content :loading="loading">
+          <folder-structure />
 
-        <div class="list-container">
-          <div
-            class="list-item"
-            v-for="(file, fileId) in filesList"
-            @click="openOptions(fileId, $event)"
-            v-bind:key="fileId"
-          >
-            <div class="icon">
-              <md-button
-                class="md-icon-button list-icon"
-                v-if="file.type === 'file'"
-              >
-                <md-icon class="md-primary">note</md-icon>
-              </md-button>
+          <div class="list-container">
+            <div
+              class="list-item"
+              v-for="(file, fileId) in filesList"
+              @click="openOptions(fileId, $event)"
+              v-bind:key="fileId"
+            >
+              <div class="icon">
+                <md-button
+                  class="md-icon-button list-icon"
+                  v-if="file.type === 'file'"
+                >
+                  <md-icon class="md-primary">note</md-icon>
+                </md-button>
 
-              <md-button
-                class="md-icon-button list-icon"
-                v-if="file.type !== 'file'"
-              >
-                <md-icon class="md-accent">folder</md-icon>
-              </md-button>
-            </div>
+                <md-button
+                  class="md-icon-button list-icon"
+                  v-if="file.type !== 'file'"
+                >
+                  <md-icon class="md-accent">folder</md-icon>
+                </md-button>
+              </div>
 
-            <div class="content">
-              <filename :filename="file.filename" />
-            </div>
+              <div class="content">
+                <filename :filename="file.filename" />
+              </div>
 
-            <div class="actions">
-              <menu-content>
-                <template slot="click">
-                  <md-button class="md-icon-button md-list-action">
-                    <md-icon>more_vert</md-icon>
-                  </md-button>
-                </template>
+              <div class="actions">
+                <menu-content>
+                  <template slot="click">
+                    <md-button class="md-icon-button md-list-action">
+                      <md-icon>more_vert</md-icon>
+                    </md-button>
+                  </template>
 
-                <div class="list-container">
-                  <div class="list-item" @click="openImportDialog(file.path)">
-                    <div class="icon">
-                      <md-icon>cloud_upload</md-icon>
+                  <div class="list-container">
+                    <div class="list-item" @click="openImportDialog(file.path)">
+                      <div class="icon">
+                        <md-icon>cloud_upload</md-icon>
+                      </div>
+                      <div class="content">{{ $t("import_site") }}</div>
                     </div>
-                    <div class="content">{{ $t("import_site") }}</div>
-                  </div>
 
-                  <div
-                    class="list-item"
-                    @click="visualizationMode(file.filename, file.dirname)"
-                    v-if="file.type == 'file'"
-                  >
-                    <div class="icon">
-                      <md-icon>visibility</md-icon>
+                    <div
+                      class="list-item"
+                      @click="visualizationMode(file.filename, file.dirname)"
+                      v-if="file.type == 'file'"
+                    >
+                      <div class="icon">
+                        <md-icon>visibility</md-icon>
+                      </div>
+                      <div class="content">{{ $t("visualization_mode") }}</div>
                     </div>
-                    <div class="content">{{ $t("visualization_mode") }}</div>
-                  </div>
 
-                  <div
-                    class="list-item"
-                    @click="goToFile(file.filename, file.dirname)"
-                    v-if="file.type == 'file'"
-                  >
-                    <div class="icon">
-                      <md-icon>edit</md-icon>
+                    <div
+                      class="list-item"
+                      @click="goToFile(file.filename, file.dirname)"
+                      v-if="file.type == 'file'"
+                    >
+                      <div class="icon">
+                        <md-icon>edit</md-icon>
+                      </div>
+                      <div class="content">{{ $t("edition_mode") }}</div>
                     </div>
-                    <div class="content">{{ $t("edition_mode") }}</div>
-                  </div>
 
-                  <div
-                    class="list-item"
-                    @click="goToDir(file.path)"
-                    v-if="file.type == 'dir'"
-                  >
-                    <div class="icon">
-                      <md-icon>visibility</md-icon>
+                    <div
+                      class="list-item"
+                      @click="goToDir(file.path)"
+                      v-if="file.type == 'dir'"
+                    >
+                      <div class="icon">
+                        <md-icon>visibility</md-icon>
+                      </div>
+                      <div class="content">{{ $t("visualization_mode") }}</div>
                     </div>
-                    <div class="content">{{ $t("visualization_mode") }}</div>
-                  </div>
 
-                  <div class="list-item" @click="openDeleteDialog(file)">
-                    <div class="icon">
-                      <md-icon>delete</md-icon>
+                    <div class="list-item" @click="openDeleteDialog(file)">
+                      <div class="icon">
+                        <md-icon>delete</md-icon>
+                      </div>
+                      <div class="content">{{ $t("delete") }}</div>
                     </div>
-                    <div class="content">{{ $t("delete") }}</div>
                   </div>
-                </div>
-              </menu-content>
+                </menu-content>
+              </div>
             </div>
           </div>
-        </div>
-      </loadable-content>
+        </loadable-content>
+      </div>
+      <new-file-modal></new-file-modal>
+      <delete-file-modal
+        :file="deleteFile"
+        ref="deleteModal"
+      ></delete-file-modal>
+      <import-site-modal
+        :filename="importFilename"
+        ref="importModal"
+      ></import-site-modal>
     </div>
-    <new-file-modal></new-file-modal>
-    <delete-file-modal :file="deleteFile" ref="deleteModal"></delete-file-modal>
-    <import-site-modal
-      :filename="importFilename"
-      ref="importModal"
-    ></import-site-modal>
-  </div>
+  </Main>
 </template>
 
 <script lang="ts">
 // @ts-nocheck
 
-import NewFileModal from "src/components/modals/NewFile";
-import Filename from "src/components/files/Filename";
-import FolderStructure from "src/components/files/FolderStructure";
-import DeleteFileModal from "src/components/modals/DeleteFile";
-import ImportSiteModal from "src/components/modals/ImportSite";
-import LoadableContent from "src/components/common/loading/LoadableContent";
-import MenuContent from "src/components/common/MenuContent";
+import ToolBar from "@/components/layout/ToolBar.vue";
+import Main from "@/components/layout/Main.vue";
+import NewFileModal from "@/components/modals/NewFile";
+import Filename from "@/components/files/Filename";
+import FolderStructure from "@/components/files/FolderStructure";
+import DeleteFileModal from "@/components/modals/DeleteFile";
+import ImportSiteModal from "@/components/modals/ImportSite";
+import LoadableContent from "@/components/common/loading/LoadableContent";
+import MenuContent from "@/components/common/MenuContent";
 import { mapActions, mapGetters } from "vuex";
 import trimStart from "lodash/trimStart";
 import {
   FILES_ACTION_FETCH,
   FILES_GETTER,
   FILE_GETTER_IMPORTING,
-} from "src/data/file/types";
+} from "@/data/file/types";
 
 export default {
   name: "files-list",
@@ -131,6 +139,8 @@ export default {
     Filename,
     FolderStructure,
     MenuContent,
+    ToolBar,
+    Main,
   },
 
   watch: {

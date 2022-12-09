@@ -1,9 +1,9 @@
 // JW ORG (spaced)
-import http from "src/helpers/http";
+import http from "@/helpers/http";
 // @ts-ignore
 import replaceall from "replaceall";
-import OptionsManager from "src/domain/options-manager";
-import isChinese from "src/helpers/is-chinese";
+import OptionsManager from "@/domain/options-manager";
+import isChinese from "@/helpers/is-chinese";
 
 async function parseLink(link: any) {
   const optionsManager = new OptionsManager(undefined);

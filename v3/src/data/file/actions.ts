@@ -1,5 +1,6 @@
 // @ts-nocheck
-import Vue from "vue";
+// import { nextTick } from "vue";
+
 import http from "@/helpers/http";
 import clipboard01 from "@/domain/clipboard-01";
 import clipboard02 from "@/domain/clipboard-02";
@@ -13,7 +14,7 @@ import trimStart from "lodash/trimStart";
 import * as types from "./types";
 import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 
-function parseLines(lines) {
+function parseLines(lines: any[]) {
   if (!lines) {
     return [];
   }
@@ -29,7 +30,7 @@ function parseLines(lines) {
       continue;
     }
 
-    line.forEach((block, blockIndex) => {
+    line.forEach((block: any, blockIndex: number) => {
       if (block.h === undefined) {
         line[blockIndex].h = "";
       }
@@ -54,7 +55,7 @@ function parseLines(lines) {
   return returnLines;
 }
 
-function sortFiles(files) {
+function sortFiles(files: any[]) {
   files.sort((a, b) =>
     a.path.toLowerCase().localeCompare(b.path.toLowerCase())
   );
@@ -173,7 +174,7 @@ function loadFile({
 
   lineIndex += 1;
   if (storage) {
-    Vue.nextTick(() => {
+    nextTick(() => {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           loadFile({

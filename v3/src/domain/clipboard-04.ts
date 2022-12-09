@@ -1,5 +1,5 @@
 // Ideograms
-import http from "src/helpers/http";
+import http from "@/helpers/http";
 // @ts-ignore
 import replaceall from "replaceall";
 

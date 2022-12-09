@@ -22,7 +22,7 @@ import {
   FILE_GETTER,
   FILE_GETTER_LOADING,
   FILE_GETTER_FULL_FILE,
-} from "src/data/file/types";
+} from "@/data/file/types";
 
 export default {
   name: "file-quiz",

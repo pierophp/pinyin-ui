@@ -2,9 +2,12 @@
   "name": "vuetify-project",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite serve ./src/main/bible",
-    "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "dev:editor": "vite serve ./src/main/editor",
+    "build:editor": "vue-tsc --noEmit && vite build ./src/main/editor",
+    "preview:editor": "vite preview ./src/main/editor",
+    "dev:bible": "vite serve ./src/main/bible",
+    "build:bible": "vue-tsc --noEmit && vite build ./src/main/bible",
+    "preview:bible": "vite preview ./src/main/bible"
   },
   "dependencies": {
     "@mdi/font": "5.9.55",

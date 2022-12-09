@@ -1,13 +1,10 @@
-import Vue from "vue";
 import { createStore } from "vuex";
 import bible from "./bible";
-
-// Vue.use(Vuex);
-
+import file from "./file";
 export default () => {
   const store = createStore({
     modules: {
-      // FILE: (await import('./file')).default,
+      FILE: file,
       // BROWSER: (await import('./browser')).default,
       BIBLE: bible,
       // VIDEO: (await import('./video')).default,

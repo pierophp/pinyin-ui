@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import separatePinyinInSyllables from "src/helpers/separate-pinyin-in-syllables";
+import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
 import compact from "lodash/compact";
 export default function (content: any) {
   const rows: any[] = [];

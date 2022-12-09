@@ -1,10 +1,10 @@
 <template>
   <div>
-    <md-button class="md-fab md-fab-bottom-right" @click.native="openDialog()">
+    <!-- <md-button class="md-fab md-fab-bottom-right" @click.native="openDialog()">
       <md-icon>add</md-icon>
-    </md-button>
+    </md-button> -->
 
-    <md-dialog
+    <!-- <md-dialog
       md-open-from="#newFileModal"
       md-close-to="#newFileModal"
       ref="modal"
@@ -48,7 +48,7 @@
           $t("ok")
         }}</md-button>
       </md-dialog-actions>
-    </md-dialog>
+    </md-dialog> -->
   </div>
 </template>
 
