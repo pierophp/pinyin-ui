@@ -438,8 +438,8 @@ import isMobile from "@/helpers/is-mobile";
 import GoogleTranslateLink from "@/components/dictionary/GoogleTranslateLink.vue";
 import LoadableContent from "@/components/common/loading/LoadableContent.vue";
 import http from "@/helpers/http";
-import replaceall from "replaceall";
 import separatePinyinInSyllables from "@/helpers/separate-pinyin-in-syllables";
+import trim from "lodash/trim";
 
 type Dictionary = {
   ideograms: string;
@@ -502,7 +502,7 @@ function getDictionaryEntry() {
     dictionaryEntry += `${entry}\n`;
   });
 
-  dictionaryEntry = dictionaryEntry.trim("\n");
+  dictionaryEntry = trim(dictionaryEntry, "\n");
 
   return dictionaryEntry;
 }
@@ -570,7 +570,7 @@ async function loadMoedict() {
 
     for (const pinyinDef of pinyinObject[parseKey]) {
       const pinyinList = separatePinyinInSyllables(
-        replaceall(" ", String.fromCharCode(160), pinyinDef || ""),
+        (pinyinDef || "").replaceAll(" ", String.fromCharCode(160)),
         false
       )
         .join(String.fromCharCode(160))

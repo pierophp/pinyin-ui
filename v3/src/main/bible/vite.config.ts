@@ -11,7 +11,7 @@ import { resolve, dirname } from "node:path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({}),
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
     vuetify({
       autoImport: true,
@@ -21,14 +21,14 @@ export default defineConfig({
       // locale messages resource pre-compile option
       include: resolve(
         dirname(fileURLToPath(import.meta.url)),
-        "./src/data/locale/**"
+        "../../data/locale/**"
       ),
     }),
   ],
   define: { "process.env": {} },
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "@": fileURLToPath(new URL("../../", import.meta.url)),
     },
     extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
   },

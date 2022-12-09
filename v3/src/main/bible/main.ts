@@ -1,4 +1,4 @@
-import App from "./App.vue";
+import App from "../../App.vue";
 
 import { createApp } from "vue";
 import { createI18n } from "vue-i18n";
@@ -7,8 +7,8 @@ import localeEn from "@/data/locale/en";
 import localePt from "@/data/locale/pt";
 
 import { registerPlugins } from "@/plugins";
-import vuetify from "./plugins/vuetify";
-import routes from "./routes/bible";
+import vuetify from "../../plugins/vuetify";
+import routes from "./routes";
 import { createRouter, createWebHashHistory } from "vue-router";
 import store from "@/data/store";
 import "@/helpers/array";

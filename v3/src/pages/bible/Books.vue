@@ -63,6 +63,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import booksData from "@/data/bible/books";
 import booksName from "@/data/bible/names";
 import OptionsManager from "@/domain/options-manager";

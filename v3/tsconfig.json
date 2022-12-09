@@ -24,6 +24,6 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "vite.config.ts"
+    "src/main/bible/vite.config.ts"
   ]
 }
