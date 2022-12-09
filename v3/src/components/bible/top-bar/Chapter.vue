@@ -1,7 +1,7 @@
 <template>
   <div class="chapter-top-bar-container">
     <div class="left">
-      <v-btn prepend-icon="mdi-arrow-left" variant="text" @click="goToChapters"
+      <v-btn prepend-icon="mdi-arrow-left" @click="goToChapters"
         >{{ booksName($route.params.book, exhibitionType)
         }}{{ $route.params.chapter }}</v-btn
       >
@@ -16,11 +16,7 @@
     </div>
 
     <div class="right">
-      <v-btn
-        icon="mdi-dots-vertical"
-        variant="text"
-        @click="openDialog()"
-      ></v-btn>
+      <v-btn icon="mdi-dots-vertical" @click="openDialog()"></v-btn>
     </div>
 
     <!--

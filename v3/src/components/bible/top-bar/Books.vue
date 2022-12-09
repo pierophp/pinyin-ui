@@ -3,27 +3,23 @@
     <div class="books-top-bar-container">
       <v-btn
         icon="mdi-translate"
-        variant="text"
         @click="setShowPinyin(showPinyin ? 0 : 1)"
       ></v-btn>
 
       <v-btn
         icon="mdi-view-compact"
-        variant="text"
         v-if="booksExhibitionType === '1'"
         @click="setType('2')"
       ></v-btn>
 
       <v-btn
         icon="mdi-view-module"
-        variant="text"
         v-if="booksExhibitionType === '2'"
         @click="setType('1')"
       ></v-btn>
 
       <v-btn
         icon="mdi-cloud-download"
-        variant="text"
         @click="$router.push('/bible/save')"
       ></v-btn>
     </div>

@@ -1,10 +1,6 @@
 <template>
   <div>
-    <v-btn
-      icon="mdi-arrow-left"
-      variant="text"
-      @click="$router.push('/bible')"
-    ></v-btn>
+    <v-btn icon="mdi-arrow-left" @click="$router.push('/bible')"></v-btn>
   </div>
 </template>
 

@@ -30,7 +30,6 @@
   <v-app-bar color="primary" prominent>
     <template v-slot:prepend>
       <v-app-bar-nav-icon
-        variant="text"
         v-if="!hideTopBar && showMenu"
         @click.stop="showNavigation = !showNavigation"
       ></v-app-bar-nav-icon>

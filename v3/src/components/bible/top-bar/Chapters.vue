@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn prepend-icon="mdi-arrow-left" variant="text" @click="goToBible">{{
+    <v-btn prepend-icon="mdi-arrow-left" @click="goToBible">{{
       booksName($route.params.book, exhibitionType)
     }}</v-btn>
   </div>
