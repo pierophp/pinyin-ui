@@ -6,7 +6,34 @@
         <loadable-content :loading="loading">
           <folder-structure />
 
-          <div class="list-container">
+          <v-list lines="two">
+            <v-list-item
+              v-for="(file, fileId) in filesList"
+              @click="openOptions(fileId, $event)"
+              :key="fileId"
+            >
+              <template v-slot:prepend>
+                <v-icon v-if="file.type === 'file'" color="blue-darken-2"
+                  >mdi-note</v-icon
+                >
+                <v-icon v-if="file.type !== 'file'" color="purple-darken-2"
+                  >mdi-folder</v-icon
+                >
+              </template>
+
+              <filename :filename="file.filename" />
+
+              <template v-slot:append>
+                <v-btn
+                  color="grey-lighten-1"
+                  icon="mdi-dots-vertical"
+                  variant="text"
+                ></v-btn>
+              </template>
+            </v-list-item>
+          </v-list>
+
+          <!-- <div class="list-container">
             <div
               class="list-item"
               v-for="(file, fileId) in filesList"
@@ -29,9 +56,10 @@
               <div class="actions">
                 <menu-content>
                   <template slot="click">
-                    <md-button class="md-icon-button md-list-action">
-                      <md-icon>more_vert</md-icon>
-                    </md-button>
+                    X
+                    <v-btn icon>
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
                   </template>
 
                   <div class="list-container">
@@ -85,7 +113,7 @@
                 </menu-content>
               </div>
             </div>
-          </div>
+          </div> -->
         </loadable-content>
       </div>
       <new-file-modal></new-file-modal>

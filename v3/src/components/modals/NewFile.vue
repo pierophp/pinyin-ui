@@ -1,20 +1,16 @@
 <template>
-  <div>
-    <!-- <md-button class="md-fab md-fab-bottom-right" @click.native="openDialog()">
-      <md-icon>add</md-icon>
-    </md-button> -->
+  <v-btn
+    @click.native="openDialog()"
+    color="secondary"
+    class="pn-floating-action-button"
+    icon="mdi-plus"
+  >
+  </v-btn>
 
-    <!-- <md-dialog
-      md-open-from="#newFileModal"
-      md-close-to="#newFileModal"
-      ref="modal"
-      @md-opened="onOpen"
-      :md-active.sync="modalOpen"
-      :md-fullscreen="false"
-    >
-      <md-dialog-title>{{ $t("new") }}</md-dialog-title>
-
-      <md-dialog-content>
+  <v-dialog v-model="this.modalOpen" width="auto">
+    <v-card>
+      <v-toolbar color="primary" :title="$t('new')"></v-toolbar>
+      <v-card-text>
         <div class="field-container">
           <label>{{ $t("type") }}</label>
           <select
@@ -38,18 +34,18 @@
             ref="inputFilename"
           />
         </div>
-      </md-dialog-content>
-
-      <md-dialog-actions>
-        <md-button class="md-primary" @click.native="closeDialog()">{{
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary" @click.native="closeDialog()">{{
           $t("cancel")
-        }}</md-button>
-        <md-button class="md-primary" @click.native.prevent="confirm">{{
+        }}</v-btn>
+
+        <v-btn color="primary" @click.native.prevent="confirm">{{
           $t("ok")
-        }}</md-button>
-      </md-dialog-actions>
-    </md-dialog> -->
-  </div>
+        }}</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script lang="ts">
@@ -68,6 +64,11 @@ export default {
     };
   },
   watch: {
+    modalOpen() {
+      if (this.modalOpen) {
+        this.onOpen();
+      }
+    },
     type() {
       setTimeout(() => {
         if (!this.$refs.inputFilename) {

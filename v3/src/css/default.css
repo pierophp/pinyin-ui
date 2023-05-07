@@ -230,7 +230,7 @@ body {
   font-size: 12px;
   cursor: pointer;
 }
-.field-container input[type='text'] {
+.field-container input[type="text"] {
   padding: 5px 10px;
 }
 
@@ -251,4 +251,16 @@ textarea {
 
 .md-dialog-content {
   -webkit-overflow-scrolling: touch;
+}
+
+/**
+ * Vuetify (3.2) still does not support FABs
+ * https://github.com/vuetifyjs/vuetify/issues/16387#issuecomment-1374903574 
+ * https://github.com/vuetifyjs/vuetify/issues/13508
+ */
+.pn-floating-action-button {
+  position: fixed !important;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
 }
