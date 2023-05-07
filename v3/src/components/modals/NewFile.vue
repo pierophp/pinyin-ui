@@ -35,7 +35,7 @@
           />
         </div>
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions class="justify-end">
         <v-btn color="primary" @click.native="closeDialog()">{{
           $t("cancel")
         }}</v-btn>
