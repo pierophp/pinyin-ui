@@ -14,19 +14,12 @@
               v-bind:key="fileId"
             >
               <div class="icon">
-                <md-button
-                  class="md-icon-button list-icon"
-                  v-if="file.type === 'file'"
+                <v-icon v-if="file.type === 'file'" color="blue-darken-2"
+                  >mdi-note</v-icon
                 >
-                  <md-icon class="md-primary">note</md-icon>
-                </md-button>
-
-                <md-button
-                  class="md-icon-button list-icon"
-                  v-if="file.type !== 'file'"
+                <v-icon v-if="file.type !== 'file'" color="purple-darken-2"
+                  >mdi-folder</v-icon
                 >
-                  <md-icon class="md-accent">folder</md-icon>
-                </md-button>
               </div>
 
               <div class="content">

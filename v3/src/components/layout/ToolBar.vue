@@ -29,10 +29,14 @@
 
   <v-app-bar color="primary" prominent>
     <template v-slot:prepend>
-      <v-app-bar-nav-icon
+      <v-btn
         v-if="!hideTopBar && showMenu"
         @click.stop="showNavigation = !showNavigation"
-      ></v-app-bar-nav-icon>
+        icon
+        color="white"
+      >
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
     </template>
 
     <v-toolbar-title v-if="!hideTitle">{{ $t(title) }}</v-toolbar-title>
