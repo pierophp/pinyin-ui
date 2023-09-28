@@ -29,28 +29,29 @@ module.exports = {
         /favicon\.ico$/,
         /manifest\.json$/,
       ],
-      runtimeCaching: [
-        {
-          urlPattern: /^https:\/\/fonts\.googleapis\.com/,
-          handler: 'staleWhileRevalidate',
-          options: {
-            cacheName: 'google-fonts-stylesheets',
-          },
-        },
-        {
-          urlPattern: /^https:\/\/fonts\.gstatic\.com/,
-          handler: 'cacheFirst',
-          options: {
-            cacheName: 'google-fonts-webfonts',
-            expiration: {
-              maxAgeSeconds: 60 * 60 * 24 * 365,
-            },
-            cacheableResponse: {
-              statuses: [0, 200],
-            },
-          },
-        },
-      ],
+      // COMMENTED OUT BECAUSE BUILD ERRORS
+      // runtimeCaching: [
+      //   {
+      //     urlPattern: /^https:\/\/fonts\.googleapis\.com/,
+      //     handler: 'staleWhileRevalidate',
+      //     options: {
+      //       cacheName: 'google-fonts-stylesheets',
+      //     },
+      //   },
+      //   {
+      //     urlPattern: /^https:\/\/fonts\.gstatic\.com/,
+      //     handler: 'cacheFirst',
+      //     options: {
+      //       cacheName: 'google-fonts-webfonts',
+      //       expiration: {
+      //         maxAgeSeconds: 60 * 60 * 24 * 365,
+      //       },
+      //       cacheableResponse: {
+      //         statuses: [0, 200],
+      //       },
+      //     },
+      //   },
+      // ],
       skipWaiting: true,
     },
   },
