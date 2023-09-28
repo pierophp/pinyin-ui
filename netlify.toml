@@ -32,9 +32,12 @@ to = "/index.html"
 status = 200
 
 [[headers]]
+for = "/*"
+[headers.values]
+Origin-Agent-Cluster = '?0'
+
+[[headers]]
 # Define which paths this specific [[headers]] block will cover.
 for = "/service.worker.js"
-
 [headers.values]
 Cache-Control = 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0'
-Origin-Agent-Cluster = '?0'
